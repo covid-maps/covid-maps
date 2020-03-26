@@ -21,6 +21,16 @@ function SubmitForm() {
         <Form.Label>Location</Form.Label>
         <Form.Control type="text" placeholder="Location / Address" />
       </Form.Group>
+      
+      <Form.Group controlId="formBasicServiceType">
+        <Form.Label>Service Type</Form.Label>
+        <Form.Control type="text" placeholder="Choose service type" />
+      </Form.Group>
+
+      <Form.Group controlId="formBasicStoreTimings">
+        <Form.Label>Timings</Form.Label>
+        <Form.Control type="text" placeholder="Enter store timings" />
+      </Form.Group>
 
       <Button variant="primary" type="submit">
         Submit

@@ -15,7 +15,7 @@ function SubmitForm() {
     >
       <Form.Group controlId="formBasicStore">
         <Form.Label>Store Name</Form.Label>
-        <Form.Control size = "sm" type="text" placeholder="Enter store name" />
+        <Form.Control size = "sm" type="text" placeholder="Enter store name" required/>
       </Form.Group>
 
       <Form.Group controlId="formBasicLocation">

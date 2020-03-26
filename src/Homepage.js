@@ -27,7 +27,9 @@ function ResultBlock({ name, location, commodity, timestamp, update }) {
         <span>{commodity}</span> <strong>{timestamp}</strong>
       </div>
       <div>
-        <span><Link to="/submit">{update}</Link></span> 
+        <span>
+          <Link to="/submit">{update}</Link>
+        </span>
       </div>
     </div>
   );
@@ -53,11 +55,10 @@ const SEARCH_RESULTS = [
 function Homepage() {
   return (
     <div>
-      <hr />
       <Map width={"100%"} height={300} />
 
       {SEARCH_RESULTS.map(result => {
-        return <ResultBlock {...result} />;
+        return <ResultBlock {...result} key={result.name} />;
       })}
 
       <hr />

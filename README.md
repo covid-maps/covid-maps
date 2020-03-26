@@ -5,7 +5,7 @@
 * This is a react app built with the create-react-app scaffolding
   * Using react-router for navigation ([docs](https://reacttraining.com/react-router/web/guides/quick-start))
 * Using bootstrap (with the react-bootsrap package) basic css styling
-  * For UI changes, use [these docs](https://react-bootstrap.netlify.com/components/alerts) for components etc that bootstrap give out of the box
+  * For UI changes, use [these docs](https://react-bootstrap.netlify.com/components/alerts) for components etc that bootstrap gives out of the box
 * Integration with google maps and google sheets as database (sheets to be built out)
 
 ## Usage

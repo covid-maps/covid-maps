@@ -1,6 +1,6 @@
 # toilet-paper-app
 
-## Structure
+## Project structure
 
 * This is a react app built with the create-react-app scaffolding
   * Using react-router for navigation ([docs](https://reacttraining.com/react-router/web/guides/quick-start))
@@ -27,4 +27,4 @@ The app is deployed at https://peaceful-rosalind-47c3e2.netlify.com
 
 ## Contribute
 
-Let's push directly to master for now, and use the group chat for coordination.
+Let's push directly to master for now, and use the group chat / issues for coordination.

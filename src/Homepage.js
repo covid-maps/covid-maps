@@ -38,8 +38,8 @@ const SEARCH_RESULTS = [
     timestamp: "4 hours ago"
   },
   {
-    name: "IGA",
-    location: "Burrard St",
+    name: "No Frills",
+    location: "Pine and 4th",
     commodity: "10 rolls",
     timestamp: "2 hours ago"
   }

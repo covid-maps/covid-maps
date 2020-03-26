@@ -1,12 +1,6 @@
 import React from "react";
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
 
-const containerStyle = {
-  position: "relative",
-  width: "100px",
-  height: "100px"
-};
-
 export class MapContainer extends React.Component {
   state = {
     showingInfoWindow: false,

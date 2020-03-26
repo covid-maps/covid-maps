@@ -1,13 +1,34 @@
 import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
 import "./App.css";
-import Maps from "./Maps";
+import Homepage from "./Homepage";
+import SubmitPage from "./SubmitPage";
 
-function App() {
+export default function App() {
   return (
-    <div className="App">
-      <Maps width={500} height={500} />
-    </div>
+    <Router>
+      <div className="App">
+        <Switch>
+          <Route path="/submit">
+            <SubmitPage />
+          </Route>
+          <Route path="/">
+            <Homepage />
+          </Route>
+        </Switch>
+      </div>
+    </Router>
   );
 }
 
-export default App;
+function Home() {
+  return <h2>Home</h2>;
+}
+
+function About() {
+  return <h2>About</h2>;
+}
+
+function Users() {
+  return <h2>Users</h2>;
+}

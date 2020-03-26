@@ -48,14 +48,16 @@ const SEARCH_RESULTS = [
 function Homepage() {
   return (
     <div>
-      <h1>
+      <h3>
         Home <Link to="/submit">Submit</Link>
-      </h1>
+      </h3>
       <hr />
       <Map width={"100%"} height={300} />
+
       {SEARCH_RESULTS.map(result => {
         return <ResultBlock {...result} />;
       })}
+
       <hr />
       <SpecLink />
     </div>

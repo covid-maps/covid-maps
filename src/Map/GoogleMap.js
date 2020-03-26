@@ -35,6 +35,9 @@ export class MapContainer extends React.Component {
         }}
         center={this.props.position}
         google={this.props.google}
+        mapTypeControl={false}
+        streetViewControl={false}
+        fullscreenControl={false}
         onClick={this.onMapClicked}
       >
         <Marker

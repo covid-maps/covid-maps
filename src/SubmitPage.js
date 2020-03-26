@@ -42,9 +42,7 @@ function SubmitForm() {
 export default function SubmitPage() {
   return (
     <div>
-      <h3>
-        Submit <Link to="/">Go back</Link>
-      </h3>
+      <hr />
       <Map width={"100%"} height={300} />
       <SubmitForm />
     </div>

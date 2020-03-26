@@ -48,9 +48,6 @@ const SEARCH_RESULTS = [
 function Homepage() {
   return (
     <div>
-      <h3>
-        Home <Link to="/submit">Submit</Link>
-      </h3>
       <hr />
       <Map width={"100%"} height={300} />
 

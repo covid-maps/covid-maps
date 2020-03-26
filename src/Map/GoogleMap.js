@@ -5,7 +5,8 @@ export class MapContainer extends React.Component {
   state = {
     showingInfoWindow: false,
     activeMarker: {},
-    selectedPlace: {}
+    selectedPlace: {},
+    centerPosition: undefined
   };
 
   onMarkerClick = (props, marker, e) =>
@@ -32,10 +33,15 @@ export class MapContainer extends React.Component {
           width: this.props.width,
           height: this.props.height
         }}
+        center={this.props.position}
         google={this.props.google}
         onClick={this.onMapClicked}
       >
-        <Marker onClick={this.onMarkerClick} name={"Current location"} />
+        <Marker
+          position={this.props.position}
+          onClick={this.onMarkerClick}
+          name={"Current location"}
+        />
 
         <InfoWindow
           marker={this.state.activeMarker}

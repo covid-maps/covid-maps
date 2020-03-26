@@ -1,6 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import Maps from "./Maps";
+import Map from "./Map";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 
@@ -30,8 +30,7 @@ export default function SubmitPage() {
       <h1>
         Submit <Link to="/">Go back</Link>
       </h1>
-      <Maps width={"100%"} height={500} />
-      <SubmitForm />
+      <Map width={"100%"} height={300} />
     </div>
   );
 }

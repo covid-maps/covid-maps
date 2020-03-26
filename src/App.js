@@ -5,7 +5,7 @@ import Maps from "./Maps";
 function App() {
   return (
     <div className="App">
-      <Maps />
+      <Maps width={500} height={500} />
     </div>
   );
 }

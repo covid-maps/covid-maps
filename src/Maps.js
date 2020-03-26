@@ -1,7 +1,13 @@
-import React, { Component } from "react";
+import React from "react";
 import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
 
-export class MapContainer extends Component {
+const containerStyle = {
+  position: "relative",
+  width: "100px",
+  height: "100px"
+};
+
+export class MapContainer extends React.Component {
   state = {
     showingInfoWindow: false,
     activeMarker: {},
@@ -26,7 +32,15 @@ export class MapContainer extends Component {
 
   render() {
     return (
-      <Map google={this.props.google} onClick={this.onMapClicked}>
+      <Map
+        containerStyle={{
+          position: "relative",
+          width: this.props.width,
+          height: this.props.height
+        }}
+        google={this.props.google}
+        onClick={this.onMapClicked}
+      >
         <Marker onClick={this.onMarkerClick} name={"Current location"} />
 
         <InfoWindow

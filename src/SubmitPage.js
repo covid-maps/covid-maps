@@ -6,7 +6,12 @@ import Button from "react-bootstrap/Button";
 
 function SubmitForm() {
   return (
-    <Form className="my-3">
+    <Form
+      className="my-3"
+      onSubmit={e => {
+        e.preventDefault();
+      }}
+    >
       <Form.Group controlId="formBasicStore">
         <Form.Label>Store</Form.Label>
         <Form.Control type="text" placeholder="Enter store name" />
@@ -31,6 +36,7 @@ export default function SubmitPage() {
         Submit <Link to="/">Go back</Link>
       </h1>
       <Map width={"100%"} height={300} />
+      <SubmitForm />
     </div>
   );
 }

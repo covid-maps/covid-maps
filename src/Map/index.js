@@ -18,18 +18,9 @@ class MapWithLocation extends React.Component {
         ) : !this.props.isGeolocationEnabled ? (
           <div>Geolocation is not enabled</div>
         ) : this.props.coords ? (
-          <table>
-            <tbody>
-              <tr>
-                <td>latitude</td>
-                <td>{this.props.coords.latitude}</td>
-              </tr>
-              <tr>
-                <td>longitude</td>
-                <td>{this.props.coords.longitude}</td>
-              </tr>
-            </tbody>
-          </table>
+          <div>
+            lat {this.props.coords.latitude}, lng {this.props.coords.longitude}
+          </div>
         ) : (
           <div>Getting the location data&hellip; </div>
         )}

@@ -6,6 +6,7 @@ import Homepage from "./Homepage";
 import SubmitPage from "./SubmitPage";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
+import logo from "./logo192.png";
 
 export default function App() {
   return (
@@ -14,10 +15,10 @@ export default function App() {
         <Navbar bg="dark" variant="dark">
           <Navbar.Brand href="/">
             <img
-              alt=""
-              src="../public/logo192.png"
-              width="10"
-              height="10"
+              alt="Logo"
+              src={logo}
+              width="30"
+              height="30"
               className="d-inline-block align-top"
             />{" "}
             The Toilet Paper App

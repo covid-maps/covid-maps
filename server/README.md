@@ -29,11 +29,12 @@ Some quick notes on the setup.
   ```
 
 - Procfile defines the web dyno command
-- Auth: Setup a
+- Auth: The contents of the service account json are defined as an environment variable on Heroku.
+  - The app uses the environment variable, instead of a json file
 
 ## Local
 
-This will run the server on localhost:500
+This will run the server on localhost:5000. Ensure that you have auth setup with the local JSON file (at `server/eco-theater-119616-2905c4812c35.json`).
 
 ```
 node index.js

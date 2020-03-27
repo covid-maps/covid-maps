@@ -21,6 +21,7 @@ async function authenticate() {
     credentials = require("./eco-theater-119616-2905c4812c35.json");
   }
 
+  console.log("credentials", credentials);
   await doc.useServiceAccountAuth(credentials);
 }
 

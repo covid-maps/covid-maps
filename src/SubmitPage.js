@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Map from "./Map";
+import LocationSearchControl from "./LocationSearch";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Col } from "react-bootstrap";
@@ -25,11 +26,7 @@ function SubmitForm() {
 
       <Form.Group controlId="formBasicLocation">
         <Form.Label>Location</Form.Label>
-        <Form.Control
-          size="sm"
-          type="text"
-          placeholder="Address/landmark if not found on Google Maps"
-        />
+        <LocationSearchControl text={"text"} />
       </Form.Group>
 
       <Form.Group controlId="formBasicServiceType">

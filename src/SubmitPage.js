@@ -6,7 +6,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Col } from "react-bootstrap";
 
-
 function SubmitForm() {
   return (
     <Form
@@ -15,7 +14,6 @@ function SubmitForm() {
         e.preventDefault();
       }}
     >
-
       <Form.Group controlId="formBasicLocation">
         <Form.Label>Location</Form.Label>
         <LocationSearchControl text={"text"} />
@@ -50,7 +48,12 @@ function SubmitForm() {
         <Col>
           <Form.Group controlId="formBasicOpenTimings">
             <Form.Label>Opening Time</Form.Label>
-             <Form.Control size="sm" type="time" step = "60" placeholder="Open time" />
+            <Form.Control
+              size="sm"
+              type="time"
+              step="60"
+              placeholder="Open time"
+            />
           </Form.Group>
         </Col>
         <Col>

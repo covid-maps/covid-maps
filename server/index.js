@@ -2,7 +2,7 @@ const express = require("express");
 const bodyParser = require("body-parser");
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 
-const SERVICE_ACCOUNT =
+const GOOGLE_SERVICE_ACCOUNT_EMAIL =
   "toilet-paper-app@eco-theater-119616.iam.gserviceaccount.com";
 
 const doc = new GoogleSpreadsheet(
@@ -12,19 +12,16 @@ const doc = new GoogleSpreadsheet(
 async function authenticate() {
   // Creds are either in a json file on disk
   // or in the process.env.GOOGLE_CREDS_JSON variable
-  let credentials = undefined;
-  console.log(process.env.GOOGLE_CREDS_JSON);
-  console.log(JSON.parse(process.env.GOOGLE_CREDS_JSON));
-
-  if (process.env.GOOGLE_CREDS_JSON) {
-    credentials = JSON.parse(credentials);
+  if (process.env.GOOGLE_PRIVATE_KEY) {
+    await doc.useServiceAccountAuth({
+      client_email: GOOGLE_SERVICE_ACCOUNT_EMAIL,
+      private_key: process.env.GOOGLE_PRIVATE_KEY
+    });
   } else {
     // service account auth file
     credentials = require("./eco-theater-119616-2905c4812c35.json");
+    await doc.useServiceAccountAuth(credentials);
   }
-
-  console.log("credentials", credentials);
-  await doc.useServiceAccountAuth(credentials);
 }
 
 function rowValue(headerValues, row) {
@@ -64,6 +61,7 @@ app.get("/v0/query", async (req, res) => {
   try {
     res.send(await getRows());
   } catch (error) {
+    console.log("Error in query:", error);
     res.status(500).send({ error });
   }
 });
@@ -72,6 +70,7 @@ app.post("/v0/submit", async (req, res) => {
   try {
     res.send(await addRow(req.body));
   } catch (error) {
+    console.log("Error in submit:", error);
     res.status(500).send({ error });
   }
 });

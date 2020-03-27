@@ -34,7 +34,9 @@ export class MapContainer extends React.Component {
           width: this.props.width,
           height: this.props.height
         }}
+        zoom={12}
         center={this.props.position}
+        initialCenter={this.props.position}
         google={this.props.google}
         mapTypeControl={false}
         streetViewControl={false}

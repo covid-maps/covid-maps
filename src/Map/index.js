@@ -2,6 +2,14 @@ import React from "react";
 import Map from "./GoogleMap";
 import { geolocated } from "react-geolocated";
 
+function Status(props) {
+  return (
+    <div>
+      <small>{props.children}</small>
+    </div>
+  );
+}
+
 function MapWithLocation(props) {
   const position = props.coords
     ? {
@@ -13,17 +21,15 @@ function MapWithLocation(props) {
     <>
       <Map {...props} position={position} />
       {!props.isGeolocationAvailable ? (
-        <div>Your browser does not support Geolocation</div>
+        <Status>Your browser does not support Geolocation</Status>
       ) : !props.isGeolocationEnabled ? (
-        <div>Geolocation is not enabled</div>
+        <Status>Geolocation is not enabled</Status>
       ) : props.coords ? (
-        <div>
-          <small>
-            lat {props.coords.latitude}, lng {props.coords.longitude}
-          </small>
-        </div>
+        <Status>
+          lat {props.coords.latitude}, lng {props.coords.longitude}
+        </Status>
       ) : (
-        <div>Getting the location data&hellip; </div>
+        <Status>Getting the location data</Status>
       )}
     </>
   );

@@ -4,11 +4,11 @@
 
 ## Project structure
 
-* This is a react app built with the create-react-app scaffolding
-  * Using react-router for navigation ([docs](https://reacttraining.com/react-router/web/guides/quick-start))
-* Using bootstrap (with the react-bootsrap package) basic css styling
-  * For UI changes, use [these docs](https://react-bootstrap.netlify.com/components/alerts) for components etc that bootstrap gives out of the box
-* Integration with google maps and google sheets as database (sheets to be built out)
+- This is a react app built with the create-react-app scaffolding
+  - Using react-router for navigation ([docs](https://reacttraining.com/react-router/web/guides/quick-start))
+- Using bootstrap (with the react-bootsrap package) basic css styling
+  - For UI changes, use [these docs](https://react-bootstrap.netlify.com/components/alerts) for components etc that bootstrap gives out of the box
+- Integration with google maps and google sheets as database (sheets to be built out)
 
 ## Usage
 
@@ -26,6 +26,13 @@ Strictly optional: setup Prettier in your editor for code formatting.
 We have continuous deployment on every push to `master` with a Netlify integration. Give a minute or two for the changes to deploy after a push.
 
 The app is deployed at https://peaceful-rosalind-47c3e2.netlify.com
+
+## Google sheets integration
+
+The sheet is at https://docs.google.com/spreadsheets/d/1dWBcbwapI4ZtlbJD257b3v8wjTfFECwLl5W_Y_DYVws/edit#gid=0
+
+- The app depends on the column names and sheet ordering for now
+- If any of these need to be changed, remember to update the code (the react app only)
 
 ## Contribute
 

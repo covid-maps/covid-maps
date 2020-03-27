@@ -7,7 +7,7 @@ class LocationSearchControl extends React.Component {
       <Form.Control
         size="sm"
         type="text"
-        placeholder="Address/landmark if not found on Google Maps"
+        placeholder="Search by store name, address or landmark"
       />
     );
   }

@@ -41,6 +41,7 @@ function SubmitForm() {
           <option>Restaurant</option>
           <option>ATM</option>
           <option>Clinic</option>
+          <option>Pharmacy</option>
           <option>Other</option>
         </Form.Control>
       </Form.Group>
@@ -64,16 +65,16 @@ function SubmitForm() {
         <Form.Control
           size="sm"
           type="text"
-          placeholder="Crowd/social distancing information"
+          placeholder="Queues at store and Covid-19 precautions"
         />
       </Form.Group>
 
       <Form.Group controlId="formBasicComments">
-        <Form.Label>Comments</Form.Label>
+        <Form.Label>Useful Information</Form.Label>
         <Form.Control
           size="sm"
           type="text"
-          placeholder="Stock information/special hours/etc."
+          placeholder="Contact no./Stock availability/delivery options"
         />
       </Form.Group>
 
@@ -87,7 +88,7 @@ function SubmitForm() {
 export default function SubmitPage() {
   return (
     <div>
-      <h3>Add Store Details</h3>
+      <h3>Update Store Details</h3>
       <SubmitForm />
       <Link to="/">
         {" "}

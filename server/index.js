@@ -10,10 +10,18 @@ const doc = new GoogleSpreadsheet(
 );
 
 async function authenticate() {
-  await doc.useServiceAccountAuth(
+  // Creds are either in a json file on disk
+  // or in the process.env.GOOGLE_CREDS_JSON variable
+  let credentials = undefined;
+
+  if (process.env.GOOGLE_CREDS_JSON) {
+    credentials = JSON.parse(credentials);
+  } else {
     // service account auth file
-    require("./eco-theater-119616-2905c4812c35.json")
-  );
+    credentials = require("./eco-theater-119616-2905c4812c35.json");
+  }
+
+  await doc.useServiceAccountAuth(credentials);
 }
 
 function rowValue(headerValues, row) {

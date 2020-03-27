@@ -6,7 +6,7 @@ export default function SubmitPage() {
   return (
     <div>
       <div className="container">
-        <h3>Update Store Details</h3>
+        <h4>Update Store Details</h4>
       </div>
       <SubmitForm />
       <div className="container">

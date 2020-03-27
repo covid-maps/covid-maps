@@ -64,17 +64,12 @@ class SubmitForm extends React.Component {
         <div className="container">
           <Form.Group controlId="formBasicStore">
             <Form.Label>Store Name</Form.Label>
-            <Form.Control
-              size="sm"
-              type="text"
-              placeholder="Enter store name"
-              required
-            />
+            <Form.Control type="text" placeholder="Enter store name" required />
           </Form.Group>
 
           <Form.Group controlId="formBasicServiceType">
             <Form.Label>Service Type</Form.Label>
-            <Form.Control size="sm" as="select">
+            <Form.Control as="select">
               <option>Kirana Store</option>
               <option>Supermarket</option>
               <option>Restaurant</option>
@@ -89,29 +84,19 @@ class SubmitForm extends React.Component {
             <Col>
               <Form.Group controlId="formBasicOpenTimings">
                 <Form.Label>Opening Time</Form.Label>
-                <Form.Control
-                  size="sm"
-                  type="time"
-                  step="60"
-                  placeholder="Open time"
-                />
+                <Form.Control type="time" step="60" placeholder="Open time" />
               </Form.Group>
             </Col>
             <Col>
               <Form.Group controlId="formBasicCloseTimings">
                 <Form.Label>Closing Time</Form.Label>
-                <Form.Control
-                  size="sm"
-                  type="time"
-                  placeholder="Closing time"
-                />
+                <Form.Control type="time" placeholder="Closing time" />
               </Form.Group>
             </Col>
           </Form.Row>
           <Form.Group controlId="formBasicCrowdDetails">
             <Form.Label>Safety</Form.Label>
             <Form.Control
-              size="sm"
               type="text"
               placeholder="Queues at store and Covid-19 precautions"
             />
@@ -120,7 +105,6 @@ class SubmitForm extends React.Component {
           <Form.Group controlId="formBasicComments">
             <Form.Label>Useful Information</Form.Label>
             <Form.Control
-              size="sm"
               type="text"
               placeholder="Contact no./Stock availability/delivery options"
             />

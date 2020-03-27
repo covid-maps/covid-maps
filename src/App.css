@@ -10,15 +10,3 @@
 .navbar {
   padding: 0.25em 0.5em;
 }
-
-/* 
-Disabling zooming-in behavior on iOS
-https://www.warrenchandler.com/2019/04/02/stop-iphones-from-zooming-in-on-form-fields/
-*/
-body {
-  font-size: 16px;
-}
-input,
-select {
-  font-size: 100%;
-}

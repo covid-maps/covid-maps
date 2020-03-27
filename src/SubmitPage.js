@@ -44,13 +44,13 @@ function SubmitForm() {
         <Col>
           <Form.Group controlId="formBasicOpenTimings">
             <Form.Label>Opening Time</Form.Label>
-            <Form.Control size="sm" type="text" placeholder="Open time" />
+            <Form.Control size="sm" type="time" placeholder="Open time" />
           </Form.Group>
         </Col>
         <Col>
           <Form.Group controlId="formBasicCloseTimings">
             <Form.Label>Closing Time</Form.Label>
-            <Form.Control size="sm" type="text" placeholder="Closing time" />
+            <Form.Control size="sm" type="time" placeholder="Closing time" />
           </Form.Group>
         </Col>
       </Form.Row>

@@ -5,11 +5,13 @@ import SubmitForm from "./SubmitForm";
 export default function SubmitPage() {
   return (
     <div>
-      <h3>Update Store Details</h3>
+      <div className="container">
+        <h3>Update Store Details</h3>
+      </div>
       <SubmitForm />
-      <Link to="/">
-        <h5>Go back</h5>
-      </Link>
+      <div className="container">
+        <Link to="/">Go back</Link>
+      </div>
     </div>
   );
 }

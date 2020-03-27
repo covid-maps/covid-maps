@@ -22,7 +22,7 @@ class SearchResults extends React.Component {
       <div>Loading...</div>
     ) : (
       this.state.results.map(result => (
-        <ResultBlock {...result} key={result.name} />
+        <ResultBlock {...result} key={result.Timestamp} />
       ))
     );
   }

@@ -3,6 +3,10 @@
   margin: 0;
 }
 
-.page {
+.container {
   padding: 0.5em;
+}
+
+.navbar {
+  padding: 0.25em 0.5em;
 }

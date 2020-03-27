@@ -5,8 +5,10 @@ import SearchResults from "./SearchResults";
 function Homepage() {
   return (
     <div>
-      <Map width={"100%"} height={300} />
-      <SearchResults />
+      <Map width={"100%"} height={400} />
+      <div className="container">
+        <SearchResults />
+      </div>
     </div>
   );
 }

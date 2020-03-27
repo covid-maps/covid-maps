@@ -32,8 +32,8 @@ The app is deployed at https://peaceful-rosalind-47c3e2.netlify.com
 The sheet is at https://docs.google.com/spreadsheets/d/1dWBcbwapI4ZtlbJD257b3v8wjTfFECwLl5W_Y_DYVws/edit#gid=0
 
 - The app depends on the column names and sheet ordering for now
-- Column ordering can be changed without app changes
 - If any of these need to be changed, remember to update the code (the react app only)
+- Column ordering can be changed without app changes
 
 ## Contribute
 

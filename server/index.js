@@ -57,4 +57,4 @@ app.post("/v0/submit", async (req, res) => {
   res.send(await addRow(req.body));
 });
 
-app.listen(5000);
+app.listen(process.env.PORT || 5000);

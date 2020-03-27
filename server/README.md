@@ -10,9 +10,11 @@ Primarily to talk to Google Sheets with a service account credential.
 
 ## Deployment
 
-Deployed on Heroku. Some quick notes on the setup.
+Deployed on Heroku. https://toilet-paper-app.herokuapp.com/
 
-- Since deployment is from a subdirectory, heroku+git needs to be configured to use that instead. This is the push command for heroku, which would deploy the app.
+Some quick notes on the setup.
+
+- Since deployment is from a subdirectory, heroku+git needs to be configured to use that instead. This is the push command for heroku, which would deploy the app. (Run this from the root of the repo)
 
   ```
   git subtree push --prefix server heroku master

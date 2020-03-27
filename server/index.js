@@ -50,11 +50,19 @@ app.get("/", (req, res) => {
 });
 
 app.get("/v0/query", async (req, res) => {
-  res.send(await getRows());
+  try {
+    res.send(await getRows());
+  } catch (error) {
+    res.status(500).send({ error });
+  }
 });
 
 app.post("/v0/submit", async (req, res) => {
-  res.send(await addRow(req.body));
+  try {
+    res.send(await addRow(req.body));
+  } catch (error) {
+    res.status(500).send({ error });
+  }
 });
 
 app.listen(process.env.PORT || 5000);

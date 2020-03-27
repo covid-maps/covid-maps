@@ -11,7 +11,7 @@ const doc = new GoogleSpreadsheet(
 
 async function authenticate() {
   // Creds are either in a json file on disk
-  // or in the process.env.GOOGLE_CREDS_JSON variable
+  // or in the process.env.GOOGLE_PRIVATE_KEY variable
   if (process.env.GOOGLE_PRIVATE_KEY) {
     await doc.useServiceAccountAuth({
       client_email: GOOGLE_SERVICE_ACCOUNT_EMAIL,

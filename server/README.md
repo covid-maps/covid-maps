@@ -29,8 +29,8 @@ Some quick notes on the setup.
   ```
 
 - Procfile defines the web dyno command
-- Auth: The contents of the service account json are defined as an environment variable on Heroku.
-  - The app uses the environment variable, instead of a json file
+- Auth: The private key of the service account (defined in the JSON) are defined as an environment variable on Heroku.
+  - [See section on Heroku](https://theoephraim.github.io/node-google-spreadsheet/#/getting-started/authentication?id=service-account)
 
 ## Local
 

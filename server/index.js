@@ -6,7 +6,7 @@ const GOOGLE_SERVICE_ACCOUNT_EMAIL =
   "toilet-paper-app@eco-theater-119616.iam.gserviceaccount.com";
 
 const doc = new GoogleSpreadsheet(
-  "1tq6s8uHfLpu2QS61P2qxSawL2LjD48-_-NUI4QM_ZRo"
+  "1dWBcbwapI4ZtlbJD257b3v8wjTfFECwLl5W_Y_DYVws"
 );
 
 async function authenticate() {

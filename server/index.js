@@ -13,6 +13,7 @@ async function authenticate() {
   // Creds are either in a json file on disk
   // or in the process.env.GOOGLE_CREDS_JSON variable
   let credentials = undefined;
+  console.log(process.env.GOOGLE_CREDS_JSON);
 
   if (process.env.GOOGLE_CREDS_JSON) {
     credentials = JSON.parse(credentials);

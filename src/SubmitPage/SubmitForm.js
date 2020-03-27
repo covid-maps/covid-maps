@@ -1,19 +1,28 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import Map from "./Map";
-import LocationSearchControl from "./LocationSearch";
+import Map from "../Map";
+import LocationSearchControl from "../LocationSearch";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Col } from "react-bootstrap";
+import * as api from "../api";
+
+function onSubmit(event) {
+  event.preventDefault();
+  const elements = event.target.elements;
+  const data = {
+    Name: elements.formBasicStore.value,
+    Category: elements.formBasicServiceType.value,
+    "Opening Time": elements.formBasicOpenTimings.value,
+    "Closing Time": elements.formBasicCloseTimings.value,
+    Notes: elements.formBasicComments.value,
+    Timestamp: new Date().toISOString()
+  };
+  api.submit(data).then(response => console.log(response));
+}
 
 function SubmitForm() {
   return (
-    <Form
-      className="my-3"
-      onSubmit={e => {
-        e.preventDefault();
-      }}
-    >
+    <Form className="my-3" onSubmit={onSubmit}>
       <Form.Group controlId="formBasicLocation">
         <Form.Label>Location</Form.Label>
         <LocationSearchControl text={"text"} />
@@ -88,15 +97,4 @@ function SubmitForm() {
   );
 }
 
-export default function SubmitPage() {
-  return (
-    <div>
-      <h3>Update Store Details</h3>
-      <SubmitForm />
-      <Link to="/">
-        {" "}
-        <h5> Go back</h5>
-      </Link>
-    </div>
-  );
-}
+export default SubmitForm;

@@ -7,6 +7,10 @@ export async function query() {
   return response.data;
 }
 
-export async function submit() {
-  return axios.post("https://toilet-paper-app.herokuapp.com/v0/submit");
+export async function submit(data) {
+  const response = await axios.post(
+    "https://toilet-paper-app.herokuapp.com/v0/submit",
+    data
+  );
+  return response.data;
 }

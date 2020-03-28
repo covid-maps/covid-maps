@@ -1,6 +1,15 @@
+body {
+  background-color: #f7f7f7;
+}
+
 .App {
   padding: 0;
   margin: 0;
+  min-height: 1000px;
+}
+
+.page {
+  background-color: #fff;
 }
 
 .container {
@@ -9,6 +18,16 @@
 
 .navbar {
   padding: 0.25em 0.5em;
+}
+
+footer {
+  background-color: #f7f7f7;
+  font-size: smaller;
+  margin-top: 1.5em;
+}
+
+.about-page p {
+  max-width: 480px;
 }
 
 /* Location autocomplete */

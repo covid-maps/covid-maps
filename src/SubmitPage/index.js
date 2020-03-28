@@ -6,8 +6,8 @@ export default function SubmitPage() {
   return (
     <div>
       <div className="container">
-        <h4>Update Store Details</h4>
-      </div>
+        <h4>Store Status</h4>
+    </div>
       <SubmitForm />
       <div className="container">
         <Link to="/">Go back</Link>

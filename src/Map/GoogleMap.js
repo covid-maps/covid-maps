@@ -1,67 +1,45 @@
 import React from "react";
-import { Map, InfoWindow, Marker, GoogleApiWrapper } from "google-maps-react";
+import {
+  withScriptjs,
+  withGoogleMap,
+  GoogleMap,
+  Marker
+} from "react-google-maps";
 import { GOOGLE_API_KEY } from "../utils";
 
-export class MapContainer extends React.Component {
-  state = {
-    showingInfoWindow: false,
-    activeMarker: {},
-    selectedPlace: {},
-    centerPosition: undefined
-  };
+const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
 
-  onMarkerClick = (props, marker, e) =>
-    this.setState({
-      selectedPlace: props,
-      activeMarker: marker,
-      showingInfoWindow: true
-    });
+const defaultMapOptions = {
+  fullscreenControl: false,
+  mapTypeControl: false,
+  streetViewControl: false
+};
 
-  onMapClicked = props => {
-    if (this.state.showingInfoWindow) {
-      this.setState({
-        showingInfoWindow: false,
-        activeMarker: null
-      });
-    }
-  };
+const MyMapComponent = withScriptjs(
+  withGoogleMap(props => (
+    <GoogleMap
+      defaultZoom={13}
+      defaultOptions={defaultMapOptions}
+      defaultCenter={props.position}
+      center={props.position}
+    >
+      {props.isMarkerShown && <Marker position={props.position} />}
+    </GoogleMap>
+  ))
+);
 
-  render() {
-    return (
-      <Map
-        containerStyle={{
-          position: "relative",
-          width: this.props.width,
-          height: this.props.height
-        }}
-        zoom={12}
-        center={this.props.position}
-        initialCenter={this.props.position}
-        google={this.props.google}
-        mapTypeControl={false}
-        streetViewControl={false}
-        fullscreenControl={false}
-        onClick={this.onMapClicked}
-      >
-        <Marker
-          position={this.props.position}
-          onClick={this.onMarkerClick}
-          name={"Current location"}
-        />
-
-        <InfoWindow
-          marker={this.state.activeMarker}
-          visible={this.state.showingInfoWindow}
-        >
-          <div>
-            <h1>{this.state.selectedPlace.name}</h1>
-          </div>
-        </InfoWindow>
-      </Map>
-    );
-  }
+function Map({ style, position }) {
+  return (
+    <MyMapComponent
+      isMarkerShown
+      position={position}
+      googleMapURL={URL}
+      mapTypeControl={false}
+      loadingElement={<div style={{ height: `100%` }} />}
+      containerElement={<div style={style} />}
+      mapElement={<div style={{ height: `100%` }} />}
+    />
+  );
 }
 
-export default GoogleApiWrapper({
-  apiKey: GOOGLE_API_KEY
-})(MapContainer);
+export default Map;

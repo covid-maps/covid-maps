@@ -59,7 +59,7 @@ class SubmitForm extends React.Component {
           </Form.Group>
         </div>
 
-        <Map width={"100%"} height={200} />
+        <Map style={{ height: 200 }} />
 
         <div className="container">
           <Form.Group controlId="formBasicStore">

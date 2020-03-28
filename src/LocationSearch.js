@@ -5,7 +5,6 @@ class LocationSearchControl extends React.Component {
   render() {
     return (
       <Form.Control
-        size="sm"
         type="text"
         placeholder="Search by store name, address or landmark"
       />

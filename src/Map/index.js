@@ -37,7 +37,8 @@ function MapWithLocation(props) {
 
 export default geolocated({
   positionOptions: {
-    enableHighAccuracy: false
+    enableHighAccuracy: false,
+    timeout: Infinity
   },
   userDecisionTimeout: 5000
 })(MapWithLocation);

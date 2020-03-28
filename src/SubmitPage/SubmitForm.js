@@ -46,6 +46,11 @@ class SubmitForm extends React.Component {
       "Opening Time": elements.formBasicOpenTimings.value,
       "Closing Time": elements.formBasicCloseTimings.value,
       "Useful Information": elements.formBasicComments.value,
+      Latitude: "",
+      Longitude: "",
+      City: "",
+      "Place Id": "",
+      Address: "",
       Safety: elements.formBasicCrowdDetails,
       Timestamp: new Date().toISOString()
     };

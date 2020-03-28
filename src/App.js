@@ -21,7 +21,7 @@ export default function App() {
               height="30"
               className="d-inline-block align-top"
             />{" "}
-            The Toilet Paper App
+            covidmaps.in
           </Navbar.Brand>
           <Nav className="ml-auto">
             <Nav.Link href="/submit">Submit</Nav.Link>

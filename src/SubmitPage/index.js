@@ -8,7 +8,7 @@ export default function SubmitPage(props) {
     <div>
       <ScrollToTopOnMount />
       <div className="container">
-        <h4>Update Store Details</h4>
+        <h4>Store Status</h4>
       </div>
       <SubmitForm {...props} />
       <div className="container">

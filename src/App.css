@@ -10,3 +10,16 @@
 .navbar {
   padding: 0.25em 0.5em;
 }
+
+/* Location autocomplete */
+.autocomplete-dropdown-container {
+  position: absolute;
+  max-height: 300px;
+  overflow: auto;
+  z-index: 100;
+  width: 100%;
+}
+.autocomplete-dropdown-container div {
+  padding: 0.375rem 0.75rem;
+  height: calc(1.5em + 0.75rem + 2px);
+}

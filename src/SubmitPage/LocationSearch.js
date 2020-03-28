@@ -1,5 +1,7 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
+import { Typeahead } from "react-bootstrap-typeahead";
+import "react-bootstrap-typeahead/css/Typeahead.css";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
@@ -19,6 +21,7 @@ class LocationSearchInput extends React.Component {
     geocodeByAddress(address)
       .then(results => {
         console.log(address);
+        this.setState({ address });
         console.log(results);
         return getLatLng(results[0]);
       })
@@ -35,6 +38,12 @@ class LocationSearchInput extends React.Component {
         value={this.state.address}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
+        searchOptions={
+          {
+            // Use this to bias the search results to current location
+            // location: new google.maps.LatLng(-34, 151)
+          }
+        }
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
@@ -54,6 +63,7 @@ class LocationSearchInput extends React.Component {
                 const style = suggestion.active
                   ? { backgroundColor: "#fafafa", cursor: "pointer" }
                   : { backgroundColor: "#ffffff", cursor: "pointer" };
+
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {

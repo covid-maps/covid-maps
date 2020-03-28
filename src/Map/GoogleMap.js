@@ -16,16 +16,18 @@ const defaultMapOptions = {
 };
 
 const MyMapComponent = withScriptjs(
-  withGoogleMap(props => (
-    <GoogleMap
-      defaultZoom={13}
-      defaultOptions={defaultMapOptions}
-      defaultCenter={props.position}
-      center={props.position}
-    >
-      {props.isMarkerShown && <Marker position={props.position} />}
-    </GoogleMap>
-  ))
+  withGoogleMap(props => {
+    return (
+      <GoogleMap
+        defaultZoom={13}
+        defaultOptions={defaultMapOptions}
+        defaultCenter={props.position}
+        center={props.position}
+      >
+        {props.isMarkerShown && <Marker position={props.position} />}
+      </GoogleMap>
+    );
+  })
 );
 
 function Map({ style, position }) {

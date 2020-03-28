@@ -23,7 +23,9 @@
   cursor: pointer;
   background-color: #ffffff;
   padding: 0.375rem 0.75rem;
-  height: calc(1.5em + 0.75rem + 2px);
+  min-height: calc(1.5em + 0.75rem + 2px);
+  line-height: 1.5em;
+  border-bottom: 1px solid #bbb;
 }
 .autocomplete-dropdown-container div.suggestion-item--active {
   background-color: #fafafa;

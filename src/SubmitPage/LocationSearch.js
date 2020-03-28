@@ -21,11 +21,21 @@ class LocationSearchInput extends React.Component {
         console.log(address);
         this.setState({ address });
         console.log(results);
-        return getLatLng(results[0]);
-      })
-      .then(latLng => {
-        console.log("Success", latLng);
-        this.props.onSuccess({ position: latLng, name: address });
+        const result = results[0];
+        return getLatLng(result).then(latLng => {
+          console.log("Success", latLng);
+          const localities = result.address_components
+            .filter(c => c.types.find(t => t === "locality"))
+            .map(c => c.long_name);
+          this.props.onSuccess({
+            latLng: latLng,
+            name: address,
+            address: result.formatted_address,
+            place_id: result.place_id,
+            types: result.types,
+            city: localities.length ? localities[0] : ""
+          });
+        });
       })
       .catch(error => console.error("Error", error));
   };
@@ -80,7 +90,7 @@ class LocationSearchControl extends React.Component {
   render() {
     return (
       <>
-        <Form.Label>Location</Form.Label>
+        {/* <Form.Label>Location</Form.Label> */}
         <LocationSearchInput {...this.props} />
       </>
     );

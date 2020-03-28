@@ -29,7 +29,7 @@ The app is deployed at https://peaceful-rosalind-47c3e2.netlify.com
 
 ## Google sheets integration
 
-The sheet is at https://docs.google.com/spreadsheets/d/1dWBcbwapI4ZtlbJD257b3v8wjTfFECwLl5W_Y_DYVws/edit#gid=0
+The sheet is at https://docs.google.com/spreadsheets/d/1jFQrYwbhPIaRL6t4TnpTO7W905U0B-W1FXS-GBYwz7M/edit#gid=0
 
 - The app depends on the column names and sheet ordering for now
 - If any of these need to be changed, remember to update the code (the react app only)

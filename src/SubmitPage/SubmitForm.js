@@ -29,11 +29,40 @@ class SubmitForm extends React.Component {
   state = {
     isLoading: false,
     hasSubmitted: false,
-    position: undefined
+    position: undefined,
+    data: {
+      "Store Name": "",
+      "Store Category": "",
+      "Useful Information": "",
+      Latitude: "",
+      Longitude: "",
+      City: "",
+      "Place Id": "",
+      Address: "",
+      Safety: ""
+    }
   };
 
-  onLocationSearchCompleted = ({ position, name }) => {
-    this.setState({ position });
+  onLocationSearchCompleted = ({
+    latLng,
+    name,
+    address,
+    city,
+    place_id,
+    types
+  }) => {
+    this.setState({
+      position: latLng,
+      data: {
+        ...this.state.data,
+        "Store Name": name,
+        Latitude: latLng.lat,
+        Longitude: latLng.lng,
+        City: city,
+        "Place Id": place_id,
+        Address: address
+      }
+    });
   };
 
   onSubmit(event) {
@@ -41,17 +70,18 @@ class SubmitForm extends React.Component {
     this.setState({ isLoading: true });
     const elements = event.target.elements;
     const data = {
-      "Store Name": elements.formBasicStore.value,
-      "Store Category": elements.formBasicServiceType.value,
-      "Opening Time": elements.formBasicOpenTimings.value,
-      "Closing Time": elements.formBasicCloseTimings.value,
-      "Useful Information": elements.formBasicComments.value,
-      Latitude: "",
-      Longitude: "",
-      City: "",
-      "Place Id": "",
-      Address: "",
-      Safety: elements.formBasicCrowdDetails,
+      ...this.state.data,
+      // "Store Name": elements.formBasicStore.value,
+      // "Store Category": elements.formBasicServiceType.value,
+      // "Opening Time": elements.formBasicOpenTimings.value,
+      // "Closing Time": elements.formBasicCloseTimings.value,
+      // "Useful Information": elements.formBasicComments.value,
+      // Latitude: "",
+      // Longitude: "",
+      // City: "",
+      // "Place Id": "",
+      // Address: "",
+      Safety: elements.formBasicCrowdDetails.value,
       Timestamp: new Date().toISOString()
     };
     api.submit(data).then(response => {

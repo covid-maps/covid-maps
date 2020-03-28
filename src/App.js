@@ -27,7 +27,7 @@ function AppNavbar() {
         </Link>
       </Navbar.Brand>
       <Nav className="ml-auto">
-        <Link to="/">
+        <Link to="/submit">
           <Button size="sm" variant="info">
             <strong>Submit</strong>
           </Button>

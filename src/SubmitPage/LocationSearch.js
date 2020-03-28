@@ -4,13 +4,7 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from "react-places-autocomplete";
-
-function getAddressComponent(addressComponents, component) {
-  const filtered = addressComponents
-    .filter(c => c.types.find(t => t === component))
-    .map(c => c.long_name);
-  return filtered.length ? filtered[0] : "";
-}
+import { getAddressComponent } from "../utils";
 
 class LocationSearchInput extends React.Component {
   constructor(props) {
@@ -49,7 +43,6 @@ class LocationSearchInput extends React.Component {
   };
 
   render() {
-    console.log(this.props);
     return (
       <PlacesAutocomplete
         value={this.state.address}
@@ -98,12 +91,7 @@ class LocationSearchInput extends React.Component {
 
 class LocationSearchControl extends React.Component {
   render() {
-    return (
-      <>
-        {/* <Form.Label>Location</Form.Label> */}
-        <LocationSearchInput {...this.props} />
-      </>
-    );
+    return <LocationSearchInput {...this.props} />;
   }
 }
 

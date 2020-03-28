@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import * as api from "../api";
+import { geocodeByLatlng, getAddressComponent } from "../utils";
 
 function ButtonWithLoading(props) {
   return props.isLoading ? (
@@ -116,6 +117,27 @@ class SubmitForm extends React.Component {
 
         <Map
           style={{ height: 200 }}
+          onMarkerDragged={async latLng => {
+            const results = await geocodeByLatlng(latLng);
+            if (results.length) {
+              const result = results[0];
+              this.onLocationSearchCompleted({
+                latLng,
+                name: result.formatted_address,
+                address: result.formatted_address,
+                city: getAddressComponent(
+                  result.address_components,
+                  "locality"
+                ),
+                locality: getAddressComponent(
+                  result.address_components,
+                  "neighborhood"
+                ),
+                place_id: result.place_id,
+                types: result.types
+              });
+            }
+          }}
           position={
             this.state.data.Latitude
               ? {

@@ -24,16 +24,29 @@ const MyMapComponent = withScriptjs(
         defaultCenter={props.position}
         center={props.position}
       >
-        {props.isMarkerShown && <Marker position={props.position} />}
+        {props.isMarkerShown && (
+          <Marker
+            draggable={!!props.onMarkerDragged}
+            position={props.position}
+            onDragEnd={event =>
+              props.onMarkerDragged &&
+              props.onMarkerDragged({
+                lat: event.latLng.lat(),
+                lng: event.latLng.lng()
+              })
+            }
+          />
+        )}
       </GoogleMap>
     );
   })
 );
 
-function Map({ style, position }) {
+function Map({ style, position, onMarkerDragged }) {
   return (
     <MyMapComponent
       isMarkerShown
+      onMarkerDragged={onMarkerDragged}
       position={position}
       googleMapURL={URL}
       mapTypeControl={false}

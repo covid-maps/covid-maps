@@ -21,7 +21,7 @@ body {
 }
 
 .navbar-brand {
-  letter-spacing: 1.4;
+  letter-spacing: 1.4px;
   text-transform: uppercase;
   color: #e9e9e9;
 }

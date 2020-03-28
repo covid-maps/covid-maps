@@ -8,29 +8,14 @@ import AboutPage from "./AboutPage";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
-import logo from "./logo192.png";
-import splat from "./covidsplat.png";
 
 function AppNavbar() {
   return (
     <Navbar bg="dark" variant="dark">
       <Navbar.Brand className="navbar-brand">
         <Link to="/">
-          <img
-            alt="Covid Maps"
-            src={splat}
-            height={30}
-            className="d-inline-block align-top mx-3"
-          />
-          {/* <img
-            alt="Logo"
-            src={logo}
-            width="30"
-            height="30"
-            className="d-inline-block align-top"
-          />{" "}
           <strong>covidmaps</strong>
-          <span style={{ color: "#999" }}>.in</span> */}
+          <span style={{ color: "#999" }}>.in</span>
         </Link>
       </Navbar.Brand>
       <Nav className="ml-auto">

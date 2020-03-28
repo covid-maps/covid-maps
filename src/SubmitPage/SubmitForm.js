@@ -116,7 +116,7 @@ class SubmitForm extends React.Component {
         </div>
 
         <Map
-          style={{ height: 200 }}
+          style={{ height: 300 }}
           onMarkerDragged={async latLng => {
             const results = await geocodeByLatlng(latLng);
             if (results.length) {

@@ -17,12 +17,19 @@ const defaultMapOptions = {
 
 const MyMapComponent = withScriptjs(
   withGoogleMap(props => {
+    // let _map = undefined;
+    // let markerPosition = undefined;
+
     return (
       <GoogleMap
         defaultZoom={13}
         defaultOptions={defaultMapOptions}
         defaultCenter={props.position}
         center={props.position}
+        // ref={map => (_map = map)}
+        // onDrag={() => {
+        //   markerPosition = _map.getCenter().toJSON();
+        // }}
       >
         {props.isMarkerShown && (
           <Marker

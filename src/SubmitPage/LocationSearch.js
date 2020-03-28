@@ -9,7 +9,7 @@ import { getAddressComponent } from "../utils";
 class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { address: props.defaultValue };
+    this.state = { address: props.value };
   }
 
   handleChange = address => {
@@ -45,7 +45,7 @@ class LocationSearchInput extends React.Component {
   render() {
     return (
       <PlacesAutocomplete
-        value={this.state.address}
+        value={this.state.address || this.props.value}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
         searchOptions={

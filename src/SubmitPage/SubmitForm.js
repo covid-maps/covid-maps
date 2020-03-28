@@ -1,5 +1,5 @@
 import React from "react";
-import Map from "../Map";
+import Map2 from "../Map";
 import LocationSearchControl from "./LocationSearch";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
@@ -40,7 +40,8 @@ class SubmitForm extends React.Component {
       Locality: "",
       "Place Id": "",
       Address: ""
-    }
+    },
+    searchFieldValue: ""
   };
 
   onLocationSearchCompleted = ({
@@ -54,6 +55,7 @@ class SubmitForm extends React.Component {
   }) => {
     this.setState({
       position: latLng,
+      searchFieldValue: name,
       data: {
         ...this.state.data,
         "Store Name": name,
@@ -106,8 +108,10 @@ class SubmitForm extends React.Component {
             <LocationSearchControl
               text={"text"}
               onSuccess={this.onLocationSearchCompleted}
-              defaultValue={
-                this.props.location.state
+              value={
+                this.state.searchFieldValue
+                  ? this.state.searchFieldValue
+                  : this.props.location.state
                   ? this.props.location.state.item["Store Name"]
                   : ""
               }
@@ -115,8 +119,16 @@ class SubmitForm extends React.Component {
           </Form.Group>
         </div>
 
-        <Map
+        <Map2
           style={{ height: 300 }}
+          position={
+            this.state.data.Latitude
+              ? {
+                  lat: parseFloat(this.state.data.Latitude),
+                  lng: parseFloat(this.state.data.Longitude)
+                }
+              : undefined
+          }
           onMarkerDragged={async latLng => {
             const results = await geocodeByLatlng(latLng);
             if (results.length) {
@@ -138,14 +150,6 @@ class SubmitForm extends React.Component {
               });
             }
           }}
-          position={
-            this.state.data.Latitude
-              ? {
-                  lat: parseFloat(this.state.data.Latitude),
-                  lng: parseFloat(this.state.data.Longitude)
-                }
-              : undefined
-          }
         />
 
         <Form onSubmit={e => this.onSubmit(e)}>

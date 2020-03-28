@@ -41,6 +41,7 @@ class SubmitForm extends React.Component {
       "Opening Time": elements.formBasicOpenTimings.value,
       "Closing Time": elements.formBasicCloseTimings.value,
       Notes: elements.formBasicComments.value,
+      Safety: elements.formBasicCrowdDetails,
       Timestamp: new Date().toISOString()
     };
     api.submit(data).then(response => {
@@ -84,7 +85,7 @@ class SubmitForm extends React.Component {
             <Col>
               <Form.Group controlId="formBasicOpenTimings">
                 <Form.Label>Opening Time</Form.Label>
-                <Form.Control type="time" step="60" placeholder="Open time" />
+                <Form.Control type="text" id="time" data-format="HH:mm" data-template="HH : mm" name="datetime" placeholder="Open time" />
               </Form.Group>
             </Col>
             <Col>

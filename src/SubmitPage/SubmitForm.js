@@ -41,11 +41,11 @@ class SubmitForm extends React.Component {
     this.setState({ isLoading: true });
     const elements = event.target.elements;
     const data = {
-      Name: elements.formBasicStore.value,
-      Category: elements.formBasicServiceType.value,
+      "Store Name": elements.formBasicStore.value,
+      "Store Category": elements.formBasicServiceType.value,
       "Opening Time": elements.formBasicOpenTimings.value,
       "Closing Time": elements.formBasicCloseTimings.value,
-      Notes: elements.formBasicComments.value,
+      "Useful Information": elements.formBasicComments.value,
       Safety: elements.formBasicCrowdDetails,
       Timestamp: new Date().toISOString()
     };
@@ -92,7 +92,14 @@ class SubmitForm extends React.Component {
             <Col>
               <Form.Group controlId="formBasicOpenTimings">
                 <Form.Label>Opening Time</Form.Label>
-                <Form.Control type="text" id="time" data-format="HH:mm" data-template="HH : mm" name="datetime" placeholder="Open time" />
+                <Form.Control
+                  type="text"
+                  id="time"
+                  data-format="HH:mm"
+                  data-template="HH : mm"
+                  name="datetime"
+                  placeholder="Open time"
+                />
               </Form.Group>
             </Col>
             <Col>

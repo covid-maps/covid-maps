@@ -81,10 +81,6 @@ class LocationSearchControl extends React.Component {
     return (
       <>
         <Form.Label>Location</Form.Label>
-        {/* <Form.Control
-          type="text"
-          placeholder="Search by store name, address or landmark"
-        /> */}
         <LocationSearchInput {...this.props} />
       </>
     );

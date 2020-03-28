@@ -29,7 +29,7 @@ function AppNavbar() {
       <Nav className="ml-auto">
         <Link to="/submit">
           <Button size="sm" variant="info">
-            <strong>Leave an Update</strong>
+            <strong>Update a Store</strong>
           </Button>
         </Link>
       </Nav>

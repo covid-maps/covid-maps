@@ -3,7 +3,6 @@ import Map from "../Map";
 import LocationSearchControl from "./LocationSearch";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Col from "react-bootstrap/Col";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import * as api from "../api";
@@ -113,8 +112,7 @@ class SubmitForm extends React.Component {
           <Form.Group controlId="formBasicServiceType">
             <Form.Label>Service Type</Form.Label>
             <Form.Control as="select">
-              <option>Kirana Store</option>
-              <option>Supermarket</option>
+              <option>Grocery</option>
               <option>Restaurant</option>
               <option>ATM</option>
               <option>Clinic</option>
@@ -123,40 +121,21 @@ class SubmitForm extends React.Component {
             </Form.Control>
           </Form.Group>
 
-          <Form.Row>
-            <Col>
-              <Form.Group controlId="formBasicOpenTimings">
-                <Form.Label>Opening Time</Form.Label>
-                <Form.Control
-                  type="text"
-                  id="time"
-                  data-format="HH:mm"
-                  data-template="HH : mm"
-                  name="datetime"
-                  placeholder="Open time"
-                />
-              </Form.Group>
-            </Col>
-            <Col>
-              <Form.Group controlId="formBasicCloseTimings">
-                <Form.Label>Closing Time</Form.Label>
-                <Form.Control type="time" placeholder="Closing time" />
-              </Form.Group>
-            </Col>
-          </Form.Row>
           <Form.Group controlId="formBasicCrowdDetails">
-            <Form.Label>Safety</Form.Label>
+            <Form.Label>Safety Observations</Form.Label>
             <Form.Control
-              type="text"
-              placeholder="Queues at store and Covid-19 precautions"
+              as="textarea"
+              rows="2"
+              placeholder="Queues, crowd level &amp; safety precautions"
             />
           </Form.Group>
 
           <Form.Group controlId="formBasicComments">
             <Form.Label>Useful Information</Form.Label>
             <Form.Control
-              type="text"
-              placeholder="Contact no./Stock availability/delivery options"
+              as="textarea"
+              rows="3"
+              placeholder="Contact number, timing, stock availability, etc."
             />
           </Form.Group>
 

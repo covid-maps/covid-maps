@@ -1,7 +1,5 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
-import { Typeahead } from "react-bootstrap-typeahead";
-import "react-bootstrap-typeahead/css/Typeahead.css";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng

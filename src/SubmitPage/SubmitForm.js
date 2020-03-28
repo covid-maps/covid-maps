@@ -159,7 +159,7 @@ class SubmitForm extends React.Component {
               variant="primary"
               type="submit"
             >
-              Submit
+              Update
             </ButtonWithLoading>
           </div>
         </Form>

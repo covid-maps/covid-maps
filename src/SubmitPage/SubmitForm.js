@@ -28,7 +28,6 @@ class SubmitForm extends React.Component {
   state = {
     isLoading: false,
     hasSubmitted: false,
-    position: undefined,
     data: {
       "Store Name": "",
       "Store Category": "Grocery", // default selection
@@ -86,6 +85,18 @@ class SubmitForm extends React.Component {
     this.setState({ data: { ...this.state.data, [dataKey]: target.value } });
   }
 
+  componentDidMount() {
+    if (this.props.location.state) {
+      // Initial props from "Share your experience"
+      this.setState({
+        data: {
+          ...this.state.data,
+          ...this.props.location.state.item
+        }
+      });
+    }
+  }
+
   render() {
     return (
       <>
@@ -98,7 +109,17 @@ class SubmitForm extends React.Component {
           </Form.Group>
         </div>
 
-        <Map style={{ height: 200 }} position={this.state.position} />
+        <Map
+          style={{ height: 200 }}
+          position={
+            this.state.data.Latitude
+              ? {
+                  lat: parseFloat(this.state.data.Latitude),
+                  lng: parseFloat(this.state.data.Longitude)
+                }
+              : undefined
+          }
+        />
 
         <Form onSubmit={e => this.onSubmit(e)}>
           <div className="container">

@@ -44,15 +44,9 @@ export default function App() {
         <AppNavbar />
         <div className="page">
           <Switch>
-            <Route path="/submit">
-              <SubmitPage />
-            </Route>
-            <Route path="/about">
-              <AboutPage />
-            </Route>
-            <Route path="/">
-              <Homepage />
-            </Route>
+            <Route path="/submit" component={SubmitPage} />
+            <Route path="/about" component={AboutPage} />
+            <Route path="/" component={Homepage} />
           </Switch>
         </div>
         <footer>

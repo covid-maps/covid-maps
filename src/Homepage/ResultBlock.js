@@ -1,5 +1,16 @@
 import React from "react";
 import { Link } from "react-router-dom";
+const humanizeDuration = require("humanize-duration");
+
+function Timestamp({ Timestamp: value }) {
+  const then = new Date(value);
+  const now = new Date();
+  return (
+    <strong>
+      {humanizeDuration(Math.abs(now - then), { largest: 1 })} ago
+    </strong>
+  );
+}
 
 function ResultBlock(props) {
   return (
@@ -7,12 +18,13 @@ function ResultBlock(props) {
       <h5>{props["Store Name"]}</h5>
       <h6>{props["Manual Address"]}</h6>
       <div>
-        <span>{props["Useful Information"]}</span>{" "}
-        <strong>{props["Timestamp"]}</strong>
+        <span>{props["Useful Information"]}</span> <Timestamp {...props} />
       </div>
       <div>
         <span>
-          <Link to="/submit">Update this information</Link>
+          <Link to={{ pathname: "/submit", state: { item: props } }}>
+          Update this information
+          </Link>
         </span>
       </div>
     </div>

@@ -40,6 +40,12 @@ footer {
   font-size: smaller;
   margin-top: 1.5em;
 }
+footer a {
+  color: #666;
+}
+footer a:hover {
+  color: #888;
+}
 
 .about-page p {
   max-width: 480px;

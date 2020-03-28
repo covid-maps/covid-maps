@@ -22,7 +22,9 @@ function ResultBlock(props) {
       </div>
       <div>
         <span>
-          <Link to="/submit">Share your experience</Link>
+          <Link to={{ pathname: "/submit", state: { item: props } }}>
+            Share your experience
+          </Link>
         </span>
       </div>
     </div>

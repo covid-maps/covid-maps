@@ -32,7 +32,10 @@ The app is deployed at https://peaceful-rosalind-47c3e2.netlify.com
 The sheet is at https://docs.google.com/spreadsheets/d/1jFQrYwbhPIaRL6t4TnpTO7W905U0B-W1FXS-GBYwz7M/edit#gid=0
 
 - The app depends on the column names and sheet ordering for now
-- If any of these need to be changed, remember to update the code (the react app only)
+- If any of these need to be changed, remember to update the code (the react app only), including:
+  - Submit form `onSubmit`
+  - "Share your experience" flow from home page to submit
+  - Showing results in `ResultBlock`
 - Column ordering can be changed without code changes - it will require a server restart
   - So that the cached `header row` is deleted
 

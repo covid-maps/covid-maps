@@ -1,9 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { ScrollToTopOnMount } from "../utils";
 
 function AboutPage() {
   return (
     <div className="container py-5 about-page">
+      <ScrollToTopOnMount />
       <h3>About</h3>
       <p>
         covidmaps.in is a crowd sourced app to find out where to get essential

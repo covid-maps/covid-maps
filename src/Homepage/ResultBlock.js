@@ -12,7 +12,7 @@ function ResultBlock(props) {
       </div>
       <div>
         <span>
-          <Link to="/submit">Share your experience</Link>
+          <Link to="/submit">Update this information</Link>
         </span>
       </div>
     </div>

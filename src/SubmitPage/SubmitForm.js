@@ -41,18 +41,17 @@ class SubmitForm extends React.Component {
     this.setState({ isLoading: true });
     const elements = event.target.elements;
     const data = {
+      Timestamp: new Date().toISOString(),
       "Store Name": elements.formBasicStore.value,
       "Store Category": elements.formBasicServiceType.value,
-      "Opening Time": elements.formBasicOpenTimings.value,
-      "Closing Time": elements.formBasicCloseTimings.value,
       "Useful Information": elements.formBasicComments.value,
+      "Safety Observation": elements.formBasicCrowdDetails,
+      "Place Id": "",
       Latitude: "",
       Longitude: "",
       City: "",
-      "Place Id": "",
-      Address: "",
-      Safety: elements.formBasicCrowdDetails,
-      Timestamp: new Date().toISOString()
+      Locality: "",
+      Address: ""
     };
     api.submit(data).then(response => {
       console.log(response);
@@ -83,8 +82,7 @@ class SubmitForm extends React.Component {
           <Form.Group controlId="formBasicServiceType">
             <Form.Label>Service Type</Form.Label>
             <Form.Control as="select">
-              <option>Kirana Store</option>
-              <option>Supermarket</option>
+              <option>Grocery</option>
               <option>Restaurant</option>
               <option>ATM</option>
               <option>Clinic</option>
@@ -93,6 +91,7 @@ class SubmitForm extends React.Component {
             </Form.Control>
           </Form.Group>
 
+          {/*}
           <Form.Row>
             <Col>
               <Form.Group controlId="formBasicOpenTimings">
@@ -114,19 +113,23 @@ class SubmitForm extends React.Component {
               </Form.Group>
             </Col>
           </Form.Row>
+            */}
+
           <Form.Group controlId="formBasicCrowdDetails">
-            <Form.Label>Safety</Form.Label>
+            <Form.Label>Safety Observations</Form.Label>
             <Form.Control
-              type="text"
-              placeholder="Queues at store and Covid-19 precautions"
+              as="textarea"
+              rows = "2"
+              placeholder="Queues, crowd level &amp; safety precautions"
             />
           </Form.Group>
 
           <Form.Group controlId="formBasicComments">
             <Form.Label>Useful Information</Form.Label>
             <Form.Control
-              type="text"
-              placeholder="Contact no./Stock availability/delivery options"
+              as="textarea"
+              rows = "3"
+              placeholder="Contact number, timing, stock availability, etc."
             />
           </Form.Group>
 

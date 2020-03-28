@@ -23,13 +23,26 @@ function ResultBlock(props) {
       <h5>{props.Name}</h5>
       <h6>{props["Manual Address"]}</h6>
       <div>
-        <span>{props.Notes}</span> <strong>{props.Timestamp}</strong>
-      </div>
-      <div>
         <span>
           <Link to="/submit">Share your experience</Link>
         </span>
       </div>
+      <div class = "card">
+        <div class="card-header"><strong>{props.Timestamp}</strong></div>
+        <div class="card-body">
+          <table class = "table"> 
+            <tr>
+              <th scope="row">Notes</th>
+              <td>{props.Notes}</td>
+            </tr>
+            <tr>
+              <th scope="row">Safety</th>
+              <td>{props.Safety}</td>
+            </tr>
+          </table>
+          </div>
+      </div>
+      
     </div>
   );
 }

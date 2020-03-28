@@ -105,6 +105,11 @@ class SubmitForm extends React.Component {
             <LocationSearchControl
               text={"text"}
               onSuccess={this.onLocationSearchCompleted}
+              defaultValue={
+                this.props.location.state
+                  ? this.props.location.state.item["Store Name"]
+                  : ""
+              }
             />
           </Form.Group>
         </div>

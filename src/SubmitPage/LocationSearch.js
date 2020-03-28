@@ -15,7 +15,7 @@ function getAddressComponent(addressComponents, component) {
 class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { address: "" };
+    this.state = { address: props.defaultValue };
   }
 
   handleChange = address => {
@@ -49,6 +49,7 @@ class LocationSearchInput extends React.Component {
   };
 
   render() {
+    console.log(this.props);
     return (
       <PlacesAutocomplete
         value={this.state.address}
@@ -66,6 +67,7 @@ class LocationSearchInput extends React.Component {
             <Form.Control
               {...getInputProps({
                 placeholder: "Search by store name, address or landmark",
+                defaultValue: this.props.defaultValue,
                 className: "location-search-input"
               })}
             />

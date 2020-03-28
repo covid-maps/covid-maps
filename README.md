@@ -33,7 +33,8 @@ The sheet is at https://docs.google.com/spreadsheets/d/1jFQrYwbhPIaRL6t4TnpTO7W9
 
 - The app depends on the column names and sheet ordering for now
 - If any of these need to be changed, remember to update the code (the react app only)
-- Column ordering can be changed without app changes
+- Column ordering can be changed without code changes - it will require a server restart
+  - So that the cached `header row` is deleted
 
 ## Contribute
 

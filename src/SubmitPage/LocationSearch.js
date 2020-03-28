@@ -5,6 +5,13 @@ import PlacesAutocomplete, {
   getLatLng
 } from "react-places-autocomplete";
 
+function getAddressComponent(addressComponents, component) {
+  const filtered = addressComponents
+    .filter(c => c.types.find(t => t === component))
+    .map(c => c.long_name);
+  return filtered.length ? filtered[0] : "";
+}
+
 class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
@@ -24,16 +31,17 @@ class LocationSearchInput extends React.Component {
         const result = results[0];
         return getLatLng(result).then(latLng => {
           console.log("Success", latLng);
-          const localities = result.address_components
-            .filter(c => c.types.find(t => t === "locality"))
-            .map(c => c.long_name);
           this.props.onSuccess({
             latLng: latLng,
             name: address,
             address: result.formatted_address,
             place_id: result.place_id,
             types: result.types,
-            city: localities.length ? localities[0] : ""
+            city: getAddressComponent(result.address_components, "locality"),
+            locality: getAddressComponent(
+              result.address_components,
+              "neighborhood"
+            )
           });
         });
       })

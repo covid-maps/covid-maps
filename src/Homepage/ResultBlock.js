@@ -4,10 +4,11 @@ import { Link } from "react-router-dom";
 function ResultBlock(props) {
   return (
     <div className="my-3">
-      <h5>{props.Name}</h5>
+      <h5>{props["Store Name"]}</h5>
       <h6>{props["Manual Address"]}</h6>
       <div>
-        <span>{props.Notes}</span> <strong>{props.Timestamp}</strong>
+        <span>{props["Useful Information"]}</span>{" "}
+        <strong>{props["Timestamp"]}</strong>
       </div>
       <div>
         <span>

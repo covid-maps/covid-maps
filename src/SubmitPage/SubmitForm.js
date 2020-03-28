@@ -31,14 +31,15 @@ class SubmitForm extends React.Component {
     position: undefined,
     data: {
       "Store Name": "",
-      "Store Category": "",
+      "Store Category": "Grocery", // default selection
       "Useful Information": "",
+      "Safety Observations": "",
       Latitude: "",
       Longitude: "",
       City: "",
+      Locality: "",
       "Place Id": "",
-      Address: "",
-      Safety: ""
+      Address: ""
     }
   };
 
@@ -47,6 +48,7 @@ class SubmitForm extends React.Component {
     name,
     address,
     city,
+    locality,
     place_id,
     types
   }) => {
@@ -58,6 +60,7 @@ class SubmitForm extends React.Component {
         Latitude: latLng.lat,
         Longitude: latLng.lng,
         City: city,
+        Locality: locality,
         "Place Id": place_id,
         Address: address
       }
@@ -70,16 +73,6 @@ class SubmitForm extends React.Component {
     const elements = event.target.elements;
     const data = {
       ...this.state.data,
-      // "Store Name": elements.formBasicStore.value,
-      // "Store Category": elements.formBasicServiceType.value,
-      // "Opening Time": elements.formBasicOpenTimings.value,
-      // "Closing Time": elements.formBasicCloseTimings.value,
-      // "Useful Information": elements.formBasicComments.value,
-      // Latitude: "",
-      // Longitude: "",
-      // City: "",
-      // "Place Id": "",
-      // Address: "",
       Safety: elements.formBasicCrowdDetails.value,
       Timestamp: new Date().toISOString()
     };
@@ -89,9 +82,13 @@ class SubmitForm extends React.Component {
     });
   }
 
+  onChangeInput({ target }, dataKey) {
+    this.setState({ data: { ...this.state.data, [dataKey]: target.value } });
+  }
+
   render() {
     return (
-      <Form onSubmit={e => this.onSubmit(e)}>
+      <>
         <div className="container">
           <Form.Group controlId="formBasicLocation">
             <LocationSearchControl
@@ -103,55 +100,70 @@ class SubmitForm extends React.Component {
 
         <Map style={{ height: 200 }} position={this.state.position} />
 
-        <div className="container">
-          <Form.Group controlId="formBasicStore">
-            <Form.Label>Store Name</Form.Label>
-            <Form.Control type="text" placeholder="Enter store name" required />
-          </Form.Group>
+        <Form onSubmit={e => this.onSubmit(e)}>
+          <div className="container">
+            <Form.Group controlId="formBasicStore">
+              <Form.Label>Store Name</Form.Label>
+              <Form.Control
+                type="text"
+                onChange={e => this.onChangeInput(e, "Store Name")}
+                value={this.state.data["Store Name"]}
+                placeholder="Enter store name"
+                required
+              />
+            </Form.Group>
 
-          <Form.Group controlId="formBasicServiceType">
-            <Form.Label>Service Type</Form.Label>
-            <Form.Control as="select">
-              <option>Grocery</option>
-              <option>Restaurant</option>
-              <option>ATM</option>
-              <option>Clinic</option>
-              <option>Pharmacy</option>
-              <option>Other</option>
-            </Form.Control>
-          </Form.Group>
+            <Form.Group controlId="formBasicServiceType">
+              <Form.Label>Service Type</Form.Label>
+              <Form.Control
+                as="select"
+                onChange={e => this.onChangeInput(e, "Store Category")}
+              >
+                <option>Grocery</option>
+                <option>Restaurant</option>
+                <option>ATM</option>
+                <option>Clinic</option>
+                <option>Pharmacy</option>
+                <option>Other</option>
+              </Form.Control>
+            </Form.Group>
 
-          <Form.Group controlId="formBasicCrowdDetails">
-            <Form.Label>Safety Observations</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows="2"
-              placeholder="Queues, crowd level &amp; safety precautions"
-            />
-          </Form.Group>
+            <Form.Group controlId="formBasicCrowdDetails">
+              <Form.Label>Safety Observations</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows="2"
+                onChange={e => this.onChangeInput(e, "Safety Observations")}
+                value={this.state.data["Safety Observations"]}
+                placeholder="Queues, crowd level &amp; safety precautions"
+              />
+            </Form.Group>
 
-          <Form.Group controlId="formBasicComments">
-            <Form.Label>Useful Information</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows="3"
-              placeholder="Contact number, timing, stock availability, etc."
-            />
-          </Form.Group>
+            <Form.Group controlId="formBasicComments">
+              <Form.Label>Useful Information</Form.Label>
+              <Form.Control
+                as="textarea"
+                rows="3"
+                onChange={e => this.onChangeInput(e, "Useful Information")}
+                value={this.state.data["Useful Information"]}
+                placeholder="Contact number, timing, stock availability, etc."
+              />
+            </Form.Group>
 
-          {this.state.hasSubmitted ? (
-            <Alert variant="success">Submitted!</Alert>
-          ) : null}
+            {this.state.hasSubmitted ? (
+              <Alert variant="success">Submitted!</Alert>
+            ) : null}
 
-          <ButtonWithLoading
-            isLoading={this.state.isLoading}
-            variant="primary"
-            type="submit"
-          >
-            Submit
-          </ButtonWithLoading>
-        </div>
-      </Form>
+            <ButtonWithLoading
+              isLoading={this.state.isLoading}
+              variant="primary"
+              type="submit"
+            >
+              Submit
+            </ButtonWithLoading>
+          </div>
+        </Form>
+      </>
     );
   }
 }

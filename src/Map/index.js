@@ -19,7 +19,7 @@ function MapWithLocation(props) {
     : undefined;
   return (
     <>
-      <Map {...props} position={position} />
+      <Map {...props} position={props.position || position} />
       {!props.isGeolocationAvailable ? (
         <Status>Your browser does not support Geolocation</Status>
       ) : !props.isGeolocationEnabled ? (

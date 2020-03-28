@@ -19,7 +19,7 @@ function MapWithLocation(props) {
     : undefined;
   return (
     <>
-      <Map {...props} position={position} />
+      <Map {...props} position={props.position || position} />
       {!props.isGeolocationAvailable ? (
         <Status>Your browser does not support Geolocation</Status>
       ) : !props.isGeolocationEnabled ? (
@@ -37,7 +37,8 @@ function MapWithLocation(props) {
 
 export default geolocated({
   positionOptions: {
-    enableHighAccuracy: false
+    enableHighAccuracy: false,
+    timeout: Infinity
   },
   userDecisionTimeout: 5000
 })(MapWithLocation);

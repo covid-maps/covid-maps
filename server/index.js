@@ -35,14 +35,12 @@ function rowValue(headerValues, row) {
 async function getRows() {
   await authenticate();
   await doc.loadInfo();
-  console.log(doc.title);
   const sheet = doc.sheetsByIndex[0];
-  const rows = await sheet.getRows({ limit: 100 });
+  const rows = await sheet.getRows({ limit: 1000 });
   return rows.map(row => rowValue(sheet.headerValues, row));
 }
 
 async function addRow(values) {
-  console.log(values);
   await authenticate();
   await doc.loadInfo();
   const sheet = doc.sheetsByIndex[0];

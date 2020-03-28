@@ -1,6 +1,6 @@
 import React from "react";
 import Map from "../Map";
-import LocationSearchControl from "../LocationSearch";
+import LocationSearchControl from "./LocationSearch";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Col from "react-bootstrap/Col";
@@ -28,7 +28,12 @@ function ButtonWithLoading(props) {
 class SubmitForm extends React.Component {
   state = {
     isLoading: false,
-    hasSubmitted: false
+    hasSubmitted: false,
+    position: undefined
+  };
+
+  onLocationSearchCompleted = ({ position, name }) => {
+    this.setState({ position });
   };
 
   onSubmit(event) {
@@ -55,12 +60,14 @@ class SubmitForm extends React.Component {
       <Form onSubmit={e => this.onSubmit(e)}>
         <div className="container">
           <Form.Group controlId="formBasicLocation">
-            <Form.Label>Location</Form.Label>
-            <LocationSearchControl text={"text"} />
+            <LocationSearchControl
+              text={"text"}
+              onSuccess={this.onLocationSearchCompleted}
+            />
           </Form.Group>
         </div>
 
-        <Map width={"100%"} height={200} />
+        <Map style={{ height: 200 }} position={this.state.position} />
 
         <div className="container">
           <Form.Group controlId="formBasicStore">

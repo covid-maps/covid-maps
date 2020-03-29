@@ -73,11 +73,16 @@ const MyMap = withScriptjs(withGoogleMap(MyGoogleMap));
 
 class Map extends React.Component {
 
+  shouldComponentUpdate(nextProps, nextState) {
+    // TODO: implement properly
+    return !this.props.coords || !this.props.locations || !this.props.locations.length;
+  }
+
   render() {
     return (
       <MyMap
         locations={this.props.locations}
-        // position={this.props.position}// TODO: fix geolocation init
+        position={this.props.position}
         onMarkerDragged={this.props.onMarkerDragged}
         onBoundsChanged={this.props.onBoundsChanged}
         isMarkerShown

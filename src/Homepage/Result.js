@@ -28,9 +28,8 @@ function Result({ entries }) {
           <Link to={{ pathname: "/submit", state: { item: result } }}>
           Update this information
           </Link>
-          <small class="text-muted"> (Last updated <Timestamp {...result} />)</small>
+          <small className="text-muted"> (Last updated <Timestamp {...result} />)</small>
         </div>
-        <p class="card-text"></p>
       </div>
     )
   ));

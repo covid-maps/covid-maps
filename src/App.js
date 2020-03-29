@@ -8,6 +8,7 @@ import AboutPage from "./AboutPage";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
+import ReactGA from 'react-ga';
 
 function AppNavbar() {
   return (
@@ -49,4 +50,9 @@ export default function App() {
       </div>
     </Router>
   );
+}
+
+function initializeReactGA() {
+  ReactGA.initialize('UA-162047555-1');
+  ReactGA.pageview('/');
 }

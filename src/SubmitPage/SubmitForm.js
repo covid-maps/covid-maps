@@ -1,12 +1,11 @@
 import React from "react";
-import Map2 from "../Map";
-import LocationSearchControl from "./LocationSearch";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import Alert from "react-bootstrap/Alert";
 import * as api from "../api";
 import { geocodeByLatlng, getAddressComponent } from "../utils";
+import MapWithSearch from "../MapWithSearch";
 
 function getFirstComma(address) {
   const split = address.split(", ");
@@ -58,6 +57,7 @@ class SubmitForm extends React.Component {
     place_id,
     types
   }) => {
+    console.log("called");
     this.setState({
       position: latLng,
       searchFieldValue: name,
@@ -123,17 +123,9 @@ class SubmitForm extends React.Component {
   render() {
     return (
       <>
-        <div className="container">
-          <Form.Group controlId="formBasicLocation">
-            <LocationSearchControl
-              text={"text"}
-              onSuccess={this.onLocationSearchCompleted}
-              value={this.getSearchValue()}
-            />
-          </Form.Group>
-        </div>
-
-        <Map2
+        <MapWithSearch
+          onSuccess={this.onLocationSearchCompleted}
+          value={this.getSearchValue()}
           style={{ height: 300 }}
           position={
             this.state.data.Latitude

@@ -18,25 +18,24 @@ class LocationSearchInput extends React.Component {
 
   handleSelect = address => {
     geocodeByAddress(address)
-      .then(results => {
+      .then(async results => {
         console.log(address);
         this.setState({ address });
         console.log(results);
         const result = results[0];
-        return getLatLng(result).then(latLng => {
-          console.log("Success", latLng);
-          this.props.onSuccess({
-            latLng: latLng,
-            name: address,
-            address: result.formatted_address,
-            place_id: result.place_id,
-            types: result.types,
-            city: getAddressComponent(result.address_components, "locality"),
-            locality: getAddressComponent(
-              result.address_components,
-              "neighborhood"
-            )
-          });
+        const latLng = await getLatLng(result);
+        console.log("Success", latLng);
+        this.props.onSuccess({
+          latLng: latLng,
+          name: address,
+          address: result.formatted_address,
+          place_id: result.place_id,
+          types: result.types,
+          city: getAddressComponent(result.address_components, "locality"),
+          locality: getAddressComponent(
+            result.address_components,
+            "neighborhood"
+          )
         });
       })
       .catch(error => console.error("Error", error));

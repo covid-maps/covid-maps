@@ -15,16 +15,22 @@ function Timestamp({ Timestamp: value }) {
 }
 
 function Result(storeResults) {
-  console.log(storeResults)
+  const resultList = []
+  for (const key in storeResults) {
+    if (storeResults[key]["Useful Information"])
+      {
+        resultList.push(storeResults[key]);
+      }
+  }
   return (
-    Object.keys(storeResults).map(resultIndex => (
+    _.sortBy(resultList, 'Timestamp').map(result => (
       <div className="my-3">
         <div>
-          <span>{storeResults[resultIndex]["Useful Information"]}</span> <Timestamp {...storeResults[resultIndex]} />
+          <span>{result["Useful Information"]}</span> <Timestamp {...result} />
         </div>
         <div>
           <span>
-            <Link to={{ pathname: "/submit", state: { item: storeResults[resultIndex] } }}>
+            <Link to={{ pathname: "/submit", state: { item: result } }}>
             Update this information
             </Link>
           </span>

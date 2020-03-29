@@ -8,6 +8,11 @@ import Alert from "react-bootstrap/Alert";
 import * as api from "../api";
 import { geocodeByLatlng, getAddressComponent } from "../utils";
 
+function getFirstComma(address) {
+  const split = address.split(", ");
+  return split.length ? split[0] : address;
+}
+
 function ButtonWithLoading(props) {
   return props.isLoading ? (
     <Button variant="primary" disabled>
@@ -58,7 +63,7 @@ class SubmitForm extends React.Component {
       searchFieldValue: name,
       data: {
         ...this.state.data,
-        "Store Name": name,
+        "Store Name": getFirstComma(name),
         Latitude: latLng.lat,
         Longitude: latLng.lng,
         City: city,

@@ -1,34 +1,81 @@
 import React from "react";
 import SearchResults from "./SearchResults";
-import GoogleMap from "../Map";
+import Map from "../Map";
 import { ScrollToTopOnMount } from "../utils";
 import * as api from "../api";
+import { getDistance } from 'geolib';
+import _ from 'lodash'
 
 class Homepage extends React.Component {
   state = {
     results: [],
-    isLoading: true
+    markers: [],
+    isLoading: true,
+    center: {}
   };
 
   componentDidMount() {
     api.query().then(data => {
       console.log(data);
       this.setState({
-        results: data,
+        results: this.formatResults(data),
+        markers: data.map(result => ({ lat: Number(result.Latitude), lng: Number(result.Longitude) })),
         isLoading: false
       });
     });
   }
 
-  render() {
-    const locations = this.state.results.map(result => ({ lat: Number(result.Latitude), lng: Number(result.Longitude) }));
+  calculateDistance(result, center) {
+    if(!result || !center || !center.lat || !center.lng) {
+      return Number.MAX_SAFE_INTEGER;
+    }
+    return getDistance({
+      latitude: result.lat,
+      longitude: result.lng
+    }, {
+      latitude: center.lat,
+      longitude: center.lng
+    });
+  }
 
+  calculateGroupDistance(grouped) {
+    const groupedResult = grouped.map(group => ({ ...group, distance: this.calculateDistance(group, this.state.center)}));
+    return _.sortBy(groupedResult, ['distance']);
+  }
+
+  formatResults(results) {
+    const grouped = Object.values(_.groupBy(results, 'Store Name')).map(entries => ({
+      name: entries[0]['Store Name'],
+      lat: entries[0].Latitude,
+      lng: entries[0].Longitude,
+      entries: _.sortBy(entries, ['Timestamp'])
+    }));
+    return this.calculateGroupDistance(grouped);
+  }
+
+  onBoundsChanged(center) {
+    console.log('bounds', center);
+    this.setState({
+      results: this.calculateGroupDistance(this.state.results),
+      center: center
+    });
+  }
+
+  render() {
     return (
       <div>
         <ScrollToTopOnMount />
-        <GoogleMap style={{ height: 400 }} locations={locations} />
+        <Map
+          style={{ height: 400 }}
+          locations={this.state.markers}
+          onBoundsChanged={(center) => this.onBoundsChanged(center)}
+        />
         <div className="container">
-          <SearchResults loading={this.state.isLoading} results={this.state.results} />
+          <SearchResults
+            loading={this.state.isLoading}
+            results={this.state.results}
+            center={this.state.center}
+          />
         </div>
       </div>
     );

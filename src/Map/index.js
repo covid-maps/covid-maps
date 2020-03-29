@@ -27,6 +27,7 @@ function MyGoogleMap(props) {
   const handleBoundsChanged = () => {
     const mapCenter = refMap.current.getCenter();
     setMarkerPosition(mapCenter);
+    props.onBoundsChanged && props.onBoundsChanged({ lat: mapCenter.lat(), lng: mapCenter.lng() });
   };
 
   const propsToSend = props.position
@@ -70,19 +71,26 @@ function MyGoogleMap(props) {
 
 const MyMap = withScriptjs(withGoogleMap(MyGoogleMap));
 
-function Map({ style, position, onMarkerDragged, locations }) {
-  return (
-    <MyMap
-      locations={locations}
-      position={position}
-      onMarkerDragged={onMarkerDragged}
-      isMarkerShown
-      googleMapURL={URL}
-      loadingElement={<div style={{ height: `100%` }} />}
-      containerElement={<div style={style} />}
-      mapElement={<div style={{ height: `100%` }} />}
-    />
-  );
+class Map extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <MyMap
+        locations={this.props.locations}
+        // position={this.props.position}// TODO: fix geolocation init
+        onMarkerDragged={this.props.onMarkerDragged}
+        onBoundsChanged={this.props.onBoundsChanged}
+        isMarkerShown
+        googleMapURL={URL}
+        loadingElement={<div style={{ height: `100%` }} />}
+        containerElement={<div style={this.props.style} />}
+        mapElement={<div style={{ height: `100%` }} />}
+      />
+    );
+  }
 }
 
 function Status(props) {

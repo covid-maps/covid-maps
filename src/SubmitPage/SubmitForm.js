@@ -140,7 +140,7 @@ class SubmitForm extends React.Component {
           }
           onMarkerDragged={async latLng => {
             const results = await geocodeByLatlng(latLng);
-            if (results.length) {
+            if (results && results.length) {
               const result = results[0];
               this.onLocationSearchCompleted({
                 latLng,

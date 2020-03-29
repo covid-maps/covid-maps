@@ -11,7 +11,13 @@ function MapWithSearch(props) {
           value={props.value}
         />
       </div>
-      <Map {...props} />
+      <Map
+        style={props.style}
+        position={props.position}
+        locations={props.locations}
+        onBoundsChanged={props.onBoundsChanged}
+        onMarkerDragged={props.onMarkerDragged}
+      />
     </>
   );
 }

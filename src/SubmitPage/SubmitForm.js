@@ -8,7 +8,7 @@ import { geocodeByLatlng, getAddressComponent } from "../utils";
 import MapWithSearch from "../MapWithSearch";
 
 function getFirstComma(address) {
-  const split = address.split(", ");
+  const split = address ? address.split(", ") : [];
   return split.length ? split[0] : address;
 }
 
@@ -33,6 +33,7 @@ class SubmitForm extends React.Component {
   state = {
     isLoading: false,
     hasSubmitted: false,
+    ipData: undefined,
     data: {
       "Store Name": "",
       "Store Category": "Grocery", // default selection
@@ -73,7 +74,7 @@ class SubmitForm extends React.Component {
     });
   };
 
-  onSubmit(event) {
+  async onSubmit(event) {
     event.preventDefault();
     this.setState({ isLoading: true });
     const elements = event.target.elements;
@@ -82,10 +83,19 @@ class SubmitForm extends React.Component {
       Safety: elements.formBasicCrowdDetails.value,
       Timestamp: new Date().toISOString()
     };
-    api.submit(data).then(response => {
-      console.log(response);
-      this.setState({ isLoading: false, hasSubmitted: true });
-    });
+
+    // Get IP if possible
+    let ipData = this.state.ipData;
+    if (!this.state.ipData) {
+      ipData = await api.ip();
+    }
+    if (ipData && ipData.ip) {
+      data["User IP"] = ipData.ip;
+    }
+
+    const response = await api.submit(data);
+    console.log(response);
+    this.setState({ isLoading: false, hasSubmitted: true, ipData });
   }
 
   onChangeInput({ target }, dataKey) {

@@ -27,14 +27,12 @@ function MyGoogleMap(props) {
   const refMap = useRef(null);
 
   const handlePositionChanged = center => {
-    // console.log("handle position changed");
     setMarkerPosition(center);
     props.onBoundsChanged &&
       props.onBoundsChanged({ lat: center.lat(), lng: center.lng() });
   };
 
   const handleBoundsChanged = () => {
-    // console.log("handle bounds changed");
     const mapCenter = refMap.current.getCenter();
     handlePositionChanged(mapCenter);
   };

@@ -1,6 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
-import _ from 'lodash'
 import Result from "./Result";
 
 export default class ResultBlock extends React.Component {

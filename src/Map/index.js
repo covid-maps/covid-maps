@@ -72,9 +72,6 @@ function MyGoogleMap(props) {
 const MyMap = withScriptjs(withGoogleMap(MyGoogleMap));
 
 class Map extends React.Component {
-  constructor(props) {
-    super(props);
-  }
 
   render() {
     return (

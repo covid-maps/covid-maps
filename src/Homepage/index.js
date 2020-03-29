@@ -16,7 +16,6 @@ class Homepage extends React.Component {
 
   componentDidMount() {
     api.query().then(data => {
-      console.log(data);
       this.setState({
         results: this.formatResults(data),
         markers: data.map(result => ({ lat: Number(result.Latitude), lng: Number(result.Longitude) })),
@@ -54,7 +53,6 @@ class Homepage extends React.Component {
   }
 
   onBoundsChanged(center) {
-    console.log('bounds', center);
     this.setState({
       results: this.calculateGroupDistance(this.state.results),
       center: center

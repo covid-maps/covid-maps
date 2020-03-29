@@ -46,6 +46,11 @@ function MyGoogleMap(props) {
         props.onMarkerDragged && props.onMarkerDragged(mapCenter);
       }}
     >
+      {props.locations && props.locations.map(location => (
+        <Marker
+          position={location}
+        />
+      ))}
       {props.isMarkerShown && (
         <Marker
           draggable={!!props.onMarkerDragged}
@@ -65,9 +70,10 @@ function MyGoogleMap(props) {
 
 const MyMap = withScriptjs(withGoogleMap(MyGoogleMap));
 
-function Map({ style, position, onMarkerDragged }) {
+function Map({ style, position, onMarkerDragged, locations }) {
   return (
     <MyMap
+      locations={locations}
       position={position}
       onMarkerDragged={onMarkerDragged}
       isMarkerShown

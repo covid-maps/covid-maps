@@ -25,7 +25,7 @@ function AppNavbar() {
         </Link>
       </Navbar.Brand>
       <Nav className="ml-auto">
-        <Link to="/submit">
+        <Link to="/update">
           <Button size="sm" variant="primary">
             <strong>Update a Store</strong>
           </Button>
@@ -42,7 +42,7 @@ export default function App() {
         <AppNavbar />
         <div className="page">
           <Switch>
-            <Route path="/submit" component={SubmitPage} />
+            <Route path="/update" component={SubmitPage} />
             <Route path="/about" component={AboutPage} />
             <Route path="/" component={Homepage} />
           </Switch>

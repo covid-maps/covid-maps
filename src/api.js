@@ -9,7 +9,7 @@ export async function query() {
 
 export async function submit(data) {
   const response = await axios.post(
-    "https://toilet-paper-app.herokuapp.com/v0/submit",
+    "https://toilet-paper-app.herokuapp.com/v0/update",
     data
   );
   return response.data;

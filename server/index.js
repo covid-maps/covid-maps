@@ -72,7 +72,7 @@ app.get("/v0/query", async (req, res) => {
   }
 });
 
-app.post("/v0/submit", async (req, res) => {
+app.post("/v0/update", async (req, res) => {
   try {
     res.send(await addRow(req.body));
   } catch (error) {

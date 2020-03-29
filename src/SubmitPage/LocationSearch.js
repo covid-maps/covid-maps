@@ -42,10 +42,16 @@ class LocationSearchInput extends React.Component {
       .catch(error => console.error("Error", error));
   };
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (prevState.address !== this.props.value) {
+      this.setState({ address: this.props.value });
+    }
+  }
+
   render() {
     return (
       <PlacesAutocomplete
-        value={this.state.address || this.props.value}
+        value={this.state.address}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
         searchOptions={

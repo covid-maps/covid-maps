@@ -100,6 +100,21 @@ class SubmitForm extends React.Component {
     }
   }
 
+  getSearchValue() {
+    if (this.state.searchFieldValue) {
+      // this is set from dragging the marker
+      return this.state.searchFieldValue;
+    }
+
+    if (this.props.location.state) {
+      // this is coming from the "Update info" from
+      // the home page
+      return this.props.location.state.item["Store Name"];
+    }
+
+    return "";
+  }
+
   render() {
     return (
       <>
@@ -108,13 +123,7 @@ class SubmitForm extends React.Component {
             <LocationSearchControl
               text={"text"}
               onSuccess={this.onLocationSearchCompleted}
-              value={
-                this.state.searchFieldValue
-                  ? this.state.searchFieldValue
-                  : this.props.location.state
-                  ? this.props.location.state.item["Store Name"]
-                  : ""
-              }
+              value={this.getSearchValue()}
             />
           </Form.Group>
         </div>

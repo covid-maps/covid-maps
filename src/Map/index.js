@@ -1,4 +1,4 @@
-import React, { useRef, useState, useCallback } from "react";
+import React, { useRef, useState } from "react";
 import {
   GoogleMap,
   withScriptjs,
@@ -19,12 +19,6 @@ const defaultMapOptions = {
 };
 
 const defaultCenter = { lat: 49.281376, lng: -123.111382 };
-
-const dragCross =
-  "https://maps.gstatic.com/mapfiles/api-3/images/drag-cross_hdpi.png";
-
-const marker =
-  "https://maps.gstatic.com/mapfiles/api-3/images/spotlight-poi2.png";
 
 function MyGoogleMap(props) {
   const [markerPosition, setMarkerPosition] = useState();
@@ -125,5 +119,3 @@ export default geolocated({
   },
   userDecisionTimeout: 5000
 })(MapWithLocation);
-
-// export default Map;

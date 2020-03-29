@@ -39,6 +39,13 @@ The sheet is at https://docs.google.com/spreadsheets/d/1jFQrYwbhPIaRL6t4TnpTO7W9
 - Column ordering can be changed without code changes - it will require a server restart
   - So that the cached `header row` is deleted
 
+## Location input - test scenarios
+
+1. "Update info" flow from homepage -> submit.
+2. Type on search field on submit
+3. Drag marker
+4. Drag map (marker stays in the center; "mobile friendly drag")
+
 ## Contribute
 
 Let's push directly to master for now, and use the group chat / issues for coordination.

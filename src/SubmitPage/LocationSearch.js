@@ -9,7 +9,7 @@ import { getAddressComponent } from "../utils";
 class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { address: props.defaultValue };
+    this.state = { address: props.value };
   }
 
   handleChange = address => {
@@ -41,6 +41,14 @@ class LocationSearchInput extends React.Component {
       })
       .catch(error => console.error("Error", error));
   };
+
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    const didValueChange = prevProps.value !== this.props.value;
+    const isAddressDifferent = prevState.address !== this.props.value;
+    if (didValueChange && isAddressDifferent) {
+      this.setState({ address: this.props.value });
+    }
+  }
 
   render() {
     return (

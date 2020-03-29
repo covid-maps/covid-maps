@@ -15,7 +15,6 @@ function Timestamp({ Timestamp: value }) {
 }
 
 function Result(storeResults) {
-  console.log(storeResults)
   return (
     Object.keys(storeResults).map(resultIndex => (
       <div className="my-3">

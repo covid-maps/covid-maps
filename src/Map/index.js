@@ -114,7 +114,7 @@ function MapWithLocation(props) {
         <Status>Geolocation is not enabled</Status>
       ) : props.coords ? (
         <Status>
-          lat {props.coords.latitude}, lng {props.coords.longitude}
+          {/* lat {props.coords.latitude}, lng {props.coords.longitude} */}
         </Status>
       ) : (
         <Status>Getting the location data</Status>

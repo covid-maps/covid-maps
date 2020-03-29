@@ -4,12 +4,12 @@ import Result from "./Result";
 export default class ResultBlock extends React.Component {
   render() {
     return (
-      <div className="my-3">
-        <div>
-          <h4>{this.props.result.name}</h4>
-        </div>
-        <div>
-          <Result {...this.props.result.entries} />
+      <div className="card my-3">
+        <div className="card-body">
+          <h5 className="card-title">{this.props.result.name}</h5>
+          <div>
+            <Result entries={this.props.result.entries} />
+          </div>
         </div>
       </div>
     );

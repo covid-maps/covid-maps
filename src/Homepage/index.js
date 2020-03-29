@@ -47,7 +47,7 @@ class Homepage extends React.Component {
       name: entries[0]['Store Name'],
       lat: entries[0].Latitude,
       lng: entries[0].Longitude,
-      entries: _.sortBy(entries, ['Timestamp'])
+      entries: _.sortBy(entries, ['Timestamp']).reverse()
     }));
     return this.calculateGroupDistance(grouped);
   }

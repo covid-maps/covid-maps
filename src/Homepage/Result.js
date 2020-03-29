@@ -14,27 +14,23 @@ function Timestamp({ Timestamp: value }) {
   );
 }
 
-function Result(storeResults) {
-  const resultList = []
-  for (const key in storeResults) {
-    if (storeResults[key]["Useful Information"])
-      {
-        resultList.push(storeResults[key]);
-      }
-  }
+function Result({ entries }) {
+  const resultList = entries.filter(result => result["Useful Information"] || result["Safety Observations"]);
   return (
-    _.sortBy(resultList, 'Timestamp').map(result => (
+    resultList.map(result => (
       <div className="my-3">
         <div>
-          <span>{result["Useful Information"]}</span> <Timestamp {...result} />
+          {result["Safety Observations"] ? <div>{result["Safety Observations"]}</div> : null}
+          {result["Useful Information"] ? <div>{result["Useful Information"]}</div> : null}
+          
         </div>
-        <div>
-          <span>
-            <Link to={{ pathname: "/submit", state: { item: result } }}>
-            Update this information
-            </Link>
-          </span>
+        <div className="card-link" style={{ fontSize: '0.8em' }}>
+          <Link to={{ pathname: "/submit", state: { item: result } }}>
+          Update this information
+          </Link>
+          <small class="text-muted"> (Last updated <Timestamp {...result} />)</small>
         </div>
+        <p class="card-text"></p>
       </div>
     )
   ));

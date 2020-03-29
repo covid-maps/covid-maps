@@ -6,7 +6,9 @@ class SearchResults extends React.Component {
     return this.props.isLoading ? (
       <div>Loading...</div>
     ) : this.props.results.map(result => (
-      <ResultBlock key={result.name} result={result} />
+      <div key={result.name}>
+        <ResultBlock result={result} />
+      </div>
     ));
   }
 }

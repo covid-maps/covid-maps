@@ -17,7 +17,6 @@ export const geocodeByLatlng = latlng => {
   const geocoder = new window.google.maps.Geocoder();
   return new Promise(resolve => {
     geocoder.geocode({ location: latlng }, (results, status) => {
-      console.log(status);
       resolve(results);
     });
   });

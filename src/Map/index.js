@@ -15,7 +15,9 @@ const defaultMapOptions = {
   fullscreenControl: false,
   mapTypeControl: false,
   streetViewControl: false
-  //gestureHandling: "greedy"
+  // `greedy` will disable the two-finger drag behavior
+  // on mobile.
+  // gestureHandling: "greedy"
 };
 
 const defaultCenter = { lat: 49.281376, lng: -123.111382 };
@@ -25,12 +27,14 @@ function MyGoogleMap(props) {
   const refMap = useRef(null);
 
   const handlePositionChanged = center => {
+    // console.log("handle position changed");
     setMarkerPosition(center);
     props.onBoundsChanged &&
       props.onBoundsChanged({ lat: center.lat(), lng: center.lng() });
   };
 
   const handleBoundsChanged = () => {
+    // console.log("handle bounds changed");
     const mapCenter = refMap.current.getCenter();
     handlePositionChanged(mapCenter);
   };
@@ -40,7 +44,7 @@ function MyGoogleMap(props) {
     handlePositionChanged(location.latLng);
   };
 
-  const propsToSend = props.position
+  const centerProps = props.position
     ? { center: props.position }
     : { defaultCenter };
 
@@ -51,7 +55,7 @@ function MyGoogleMap(props) {
       defaultOptions={defaultMapOptions}
       defaultCenter={{ lat: 54, lng: 25 }}
       onBoundsChanged={handleBoundsChanged}
-      {...propsToSend}
+      {...centerProps}
       onDragEnd={() => {
         const mapCenter = refMap.current.getCenter();
         props.onMarkerDragged && props.onMarkerDragged(mapCenter);
@@ -117,10 +121,7 @@ function Status(props) {
 
 function MapWithLocation(props) {
   const position = props.coords
-    ? {
-        lat: props.coords.latitude,
-        lng: props.coords.longitude
-      }
+    ? { lat: props.coords.latitude, lng: props.coords.longitude }
     : undefined;
   return (
     <>

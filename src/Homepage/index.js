@@ -1,10 +1,10 @@
 import React from "react";
 import SearchResults from "./SearchResults";
-import Map from "../Map";
 import { ScrollToTopOnMount } from "../utils";
 import * as api from "../api";
 import { getDistance } from "geolib";
 import _ from "lodash";
+import MapWithSearch from "../MapWithSearch";
 
 class Homepage extends React.Component {
   state = {
@@ -32,14 +32,8 @@ class Homepage extends React.Component {
       return Number.MAX_SAFE_INTEGER;
     }
     return getDistance(
-      {
-        latitude: result.lat,
-        longitude: result.lng
-      },
-      {
-        latitude: center.lat,
-        longitude: center.lng
-      }
+      { latitude: result.lat, longitude: result.lng },
+      { latitude: center.lat, longitude: center.lng }
     );
   }
 
@@ -75,7 +69,9 @@ class Homepage extends React.Component {
     return (
       <div>
         <ScrollToTopOnMount />
-        <Map
+        <MapWithSearch
+          value=""
+          onSuccess={e => console.log(e)}
           style={{ height: 400 }}
           locations={this.state.markers}
           onBoundsChanged={center => this.onBoundsChanged(center)}

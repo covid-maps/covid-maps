@@ -57,7 +57,6 @@ class SubmitForm extends React.Component {
     place_id,
     types
   }) => {
-    console.log("called");
     this.setState({
       position: latLng,
       searchFieldValue: name,

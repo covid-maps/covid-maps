@@ -43,7 +43,7 @@ class Homepage extends React.Component {
   }
 
   formatResults(results) {
-    const grouped = Object.values(_.groupBy(results, 'Store Name')).map(entries => ({
+    const grouped = Object.values(_.groupBy(results, 'Place Id')).map(entries => ({
       name: entries[0]['Store Name'],
       lat: entries[0].Latitude,
       lng: entries[0].Longitude,

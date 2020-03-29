@@ -95,7 +95,7 @@ class SubmitForm extends React.Component {
 
   componentDidMount() {
     if (this.props.location.state) {
-      // Initial props from "Share your experience"
+      // Initial props from "Update this information"
       this.setState({
         data: {
           ...this.state.data,

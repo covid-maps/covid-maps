@@ -14,7 +14,7 @@ const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,
 const defaultMapOptions = {
   fullscreenControl: false,
   mapTypeControl: false,
-  streetViewControl: false,
+  streetViewControl: false
   //gestureHandling: "greedy"
 };
 
@@ -24,9 +24,10 @@ function MyGoogleMap(props) {
   const [markerPosition, setMarkerPosition] = useState();
   const refMap = useRef(null);
 
-  const handlePositionChanged = (center) => {
+  const handlePositionChanged = center => {
     setMarkerPosition(center);
-    props.onBoundsChanged && props.onBoundsChanged({ lat: center.lat(), lng: center.lng() });
+    props.onBoundsChanged &&
+      props.onBoundsChanged({ lat: center.lat(), lng: center.lng() });
   };
 
   const handleBoundsChanged = () => {
@@ -34,8 +35,7 @@ function MyGoogleMap(props) {
     handlePositionChanged(mapCenter);
   };
 
-  const handleMarkerClicked = (location) => {
-    console.log(location);
+  const handleMarkerClicked = location => {
     refMap.current.panTo(location.latLng);
     handlePositionChanged(location.latLng);
   };
@@ -57,12 +57,10 @@ function MyGoogleMap(props) {
         props.onMarkerDragged && props.onMarkerDragged(mapCenter);
       }}
     >
-      {props.locations && props.locations.map(location => (
-        <Marker
-          position={location}
-          onClick={handleMarkerClicked}
-        />
-      ))}
+      {props.locations &&
+        props.locations.map(location => (
+          <Marker position={location} onClick={handleMarkerClicked} />
+        ))}
       {props.isMarkerShown && (
         <Marker
           draggable={!!props.onMarkerDragged}
@@ -83,10 +81,13 @@ function MyGoogleMap(props) {
 const MyMap = withScriptjs(withGoogleMap(MyGoogleMap));
 
 class Map extends React.Component {
-
   shouldComponentUpdate(nextProps, nextState) {
     // TODO: implement properly
-    return !this.props.coords || !this.props.locations || !this.props.locations.length;
+    return (
+      !this.props.coords ||
+      !this.props.locations ||
+      !this.props.locations.length
+    );
   }
 
   render() {

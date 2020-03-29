@@ -3,8 +3,8 @@ import SearchResults from "./SearchResults";
 import Map from "../Map";
 import { ScrollToTopOnMount } from "../utils";
 import * as api from "../api";
-import { getDistance } from 'geolib';
-import _ from 'lodash'
+import { getDistance } from "geolib";
+import _ from "lodash";
 
 class Homepage extends React.Component {
   state = {
@@ -18,37 +18,48 @@ class Homepage extends React.Component {
     api.query().then(data => {
       this.setState({
         results: this.formatResults(data),
-        markers: data.map(result => ({ lat: Number(result.Latitude), lng: Number(result.Longitude) })),
+        markers: data.map(result => ({
+          lat: Number(result.Latitude),
+          lng: Number(result.Longitude)
+        })),
         isLoading: false
       });
     });
   }
 
   calculateDistance(result, center) {
-    if(!result || !center || !center.lat || !center.lng) {
+    if (!result || !center || !center.lat || !center.lng) {
       return Number.MAX_SAFE_INTEGER;
     }
-    return getDistance({
-      latitude: result.lat,
-      longitude: result.lng
-    }, {
-      latitude: center.lat,
-      longitude: center.lng
-    });
+    return getDistance(
+      {
+        latitude: result.lat,
+        longitude: result.lng
+      },
+      {
+        latitude: center.lat,
+        longitude: center.lng
+      }
+    );
   }
 
   calculateGroupDistance(grouped) {
-    const groupedResult = grouped.map(group => ({ ...group, distance: this.calculateDistance(group, this.state.center)}));
-    return _.sortBy(groupedResult, ['distance']);
+    const groupedResult = grouped.map(group => ({
+      ...group,
+      distance: this.calculateDistance(group, this.state.center)
+    }));
+    return _.sortBy(groupedResult, ["distance"]);
   }
 
   formatResults(results) {
-    const grouped = Object.values(_.groupBy(results, 'Place Id')).map(entries => ({
-      name: entries[0]['Store Name'],
-      lat: entries[0].Latitude,
-      lng: entries[0].Longitude,
-      entries: _.sortBy(entries, ['Timestamp']).reverse()
-    }));
+    const grouped = Object.values(_.groupBy(results, "Place Id")).map(
+      entries => ({
+        name: entries[0]["Store Name"],
+        lat: entries[0].Latitude,
+        lng: entries[0].Longitude,
+        entries: _.sortBy(entries, ["Timestamp"]).reverse()
+      })
+    );
     return this.calculateGroupDistance(grouped);
   }
 
@@ -66,11 +77,11 @@ class Homepage extends React.Component {
         <Map
           style={{ height: 400 }}
           locations={this.state.markers}
-          onBoundsChanged={(center) => this.onBoundsChanged(center)}
+          onBoundsChanged={center => this.onBoundsChanged(center)}
         />
         <div className="container">
           <SearchResults
-            loading={this.state.isLoading}
+            isLoading={this.state.isLoading}
             results={this.state.results}
             center={this.state.center}
           />

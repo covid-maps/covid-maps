@@ -20,14 +20,13 @@ function AppNavbar() {
             alt="Covid Maps"
             src={logo}
             height="24"
-            //width = "200"
             className="d-inline-block align-top"
           />{" "}
         </Link>
       </Navbar.Brand>
       <Nav className="ml-auto">
         <Link to="/submit">
-          <Button size="sm" variant="info">
+          <Button size="sm" variant="primary">
             <strong>Update a Store</strong>
           </Button>
         </Link>

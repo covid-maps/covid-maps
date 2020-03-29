@@ -11,11 +11,11 @@ import Button from "react-bootstrap/Button";
 
 function AppNavbar() {
   return (
-    <Navbar bg="dark" variant="dark">
+    <Navbar bg="light" variant="light" fixed="top">
       <Navbar.Brand className="navbar-brand">
         <Link to="/">
-          <strong>covidmaps</strong>
-          <span style={{ color: "#999" }}>.in</span>
+          <strong style={{ color: "#808080" }}>covidmaps</strong>
+          <span style={{ color: "#b3b3b3" }}>.in</span>
         </Link>
       </Navbar.Brand>
       <Nav className="ml-auto">

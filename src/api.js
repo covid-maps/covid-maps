@@ -17,7 +17,7 @@ export async function submit(data) {
 
 export async function ip() {
   const response = await axios.get(
-    "http://ipinfo.io/json?token=737774ee26668f"
+    "https://ipinfo.io/json?token=737774ee26668f"
   );
   return response.data;
 }

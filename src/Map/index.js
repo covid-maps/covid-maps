@@ -24,10 +24,20 @@ function MyGoogleMap(props) {
   const [markerPosition, setMarkerPosition] = useState();
   const refMap = useRef(null);
 
+  const handlePositionChanged = (center) => {
+    setMarkerPosition(center);
+    props.onBoundsChanged && props.onBoundsChanged({ lat: center.lat(), lng: center.lng() });
+  };
+
   const handleBoundsChanged = () => {
     const mapCenter = refMap.current.getCenter();
-    setMarkerPosition(mapCenter);
-    props.onBoundsChanged && props.onBoundsChanged({ lat: mapCenter.lat(), lng: mapCenter.lng() });
+    handlePositionChanged(mapCenter);
+  };
+
+  const handleMarkerClicked = (location) => {
+    console.log(location);
+    refMap.current.panTo(location.latLng);
+    handlePositionChanged(location.latLng);
   };
 
   const propsToSend = props.position
@@ -50,6 +60,7 @@ function MyGoogleMap(props) {
       {props.locations && props.locations.map(location => (
         <Marker
           position={location}
+          onClick={handleMarkerClicked}
         />
       ))}
       {props.isMarkerShown && (

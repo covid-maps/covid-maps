@@ -43,7 +43,9 @@ class LocationSearchInput extends React.Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (prevState.address !== this.props.value) {
+    const didValueChange = prevProps.value !== this.props.value;
+    const isAddressDifferent = prevState.address !== this.props.value;
+    if (didValueChange && isAddressDifferent) {
       this.setState({ address: this.props.value });
     }
   }

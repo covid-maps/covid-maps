@@ -1,34 +1,25 @@
 import React from "react";
 import { Link } from "react-router-dom";
-const humanizeDuration = require("humanize-duration");
+import _ from 'lodash'
+import Result from "./Result";
+import * as api from "../api";
 
-function Timestamp({ Timestamp: value }) {
-  const then = new Date(value);
-  const now = new Date();
-  return (
-    <strong>
-      {humanizeDuration(Math.abs(now - then), { largest: 1 })} ago
-    </strong>
-  );
+
+export default class ResultBlock extends React.Component {
+  render() {
+    const grouped = _.groupBy(this.props.results, 'Store Name')
+      return (
+       Object.keys(grouped).map(store => (
+        <div className="my-3">
+          <div>
+            <h4>{store}</h4>
+          </div>
+          <div>
+            <Result {...grouped[store]} />
+          </div>
+        </div>
+      ))
+    );
+  }
 }
 
-function ResultBlock(props) {
-  return (
-    <div className="my-3">
-      <h5>{props["Store Name"]}</h5>
-      <h6>{props["Manual Address"]}</h6>
-      <div>
-        <span>{props["Useful Information"]}</span> <Timestamp {...props} />
-      </div>
-      <div>
-        <span>
-          <Link to={{ pathname: "/submit", state: { item: props } }}>
-          Update this information
-          </Link>
-        </span>
-      </div>
-    </div>
-  );
-}
-
-export default ResultBlock;

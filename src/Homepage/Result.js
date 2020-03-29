@@ -23,7 +23,7 @@ function Result(storeResults) {
       }
   }
   return (
-    resultList.map(result => (
+    _.sortBy(resultList, 'Timestamp').map(result => (
       <div className="my-3">
         <div>
           <span>{result["Useful Information"]}</span> <Timestamp {...result} />

@@ -42,11 +42,13 @@ export default function App() {
             <Route path="/" component={Homepage} />
           </Switch>
         </div>
-        <footer>
+       {/*} <footer>
           <div className="container py-4">
             <Link to="/about">About</Link>
           </div>
         </footer>
+      </div>*/}
+<a class = "button" href = "http://google.com>">About</a>
       </div>
     </Router>
   );
@@ -54,5 +56,6 @@ export default function App() {
 
 function initializeReactGA() {
   ReactGA.initialize('UA-162047555-1');
-  ReactGA.pageview('/');
 }
+
+initializeReactGA();

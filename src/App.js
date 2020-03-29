@@ -8,7 +8,7 @@ import AboutPage from "./AboutPage";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
-import ReactGA from 'react-ga';
+import ReactGA from "react-ga";
 import logo from "./Logo.png";
 
 function AppNavbar() {
@@ -16,15 +16,14 @@ function AppNavbar() {
     <Navbar bg="light" variant="light" fixed="top">
       <Navbar.Brand className="navbar-brand">
         <Link to="/">
-          {/*<strong style={{ color: "#808080" }}>covidmaps</strong>
-          <span style={{ color: "#b3b3b3" }}>.in</span>*/}
-        <img
+          <img
             alt="Covid Maps"
             src={logo}
             height="24"
             //width = "200"
             className="d-inline-block align-top"
-            /> </Link>
+          />{" "}
+        </Link>
       </Navbar.Brand>
       <Nav className="ml-auto">
         <Link to="/submit">
@@ -49,7 +48,7 @@ export default function App() {
             <Route path="/" component={Homepage} />
           </Switch>
         </div>
-       <footer>
+        <footer>
           <div className="container py-4">
             <Link to="/about">About</Link>
           </div>
@@ -60,8 +59,8 @@ export default function App() {
 }
 
 function initializeReactGA() {
-  ReactGA.initialize('UA-162047555-1');
-  ReactGA.pageview('/');
+  ReactGA.initialize("UA-162047555-1");
+  ReactGA.pageview("/");
 }
 
 initializeReactGA();

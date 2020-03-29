@@ -15,7 +15,7 @@ const defaultMapOptions = {
   fullscreenControl: false,
   mapTypeControl: false,
   streetViewControl: false,
-  gestureHandling: "greedy"
+  //gestureHandling: "greedy"
 };
 
 const defaultCenter = { lat: 49.281376, lng: -123.111382 };

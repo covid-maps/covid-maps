@@ -1,5 +1,7 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import InputGroup from "react-bootstrap/InputGroup";
 import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
@@ -49,6 +51,10 @@ class LocationSearchInput extends React.Component {
     }
   }
 
+  clearInput() {
+    this.setState({ address: "" });
+  }
+
   render() {
     return (
       <PlacesAutocomplete
@@ -64,14 +70,24 @@ class LocationSearchInput extends React.Component {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <Form.Control
-              {...getInputProps({
-                placeholder: "Search by store name, address or landmark",
-                defaultValue: this.props.defaultValue,
-                className: "location-search-input"
-              })}
-              ref={this.textInput}
-            />
+            <InputGroup>
+              <Form.Control
+                {...getInputProps({
+                  placeholder: "Search by store name, address or landmark",
+                  defaultValue: this.props.defaultValue,
+                  className: "location-search-input"
+                })}
+                ref={this.textInput}
+              />
+              <InputGroup.Append>
+                <Button
+                  onClick={e => this.clearInput(e)}
+                  variant="outline-secondary"
+                >
+                  ×
+                </Button>
+              </InputGroup.Append>
+            </InputGroup>
             <div className="autocomplete-dropdown-container">
               {loading && <div>Loading...</div>}
               {suggestions.map(suggestion => {

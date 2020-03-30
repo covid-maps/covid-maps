@@ -12,6 +12,12 @@ function getFirstComma(address) {
   return split.length ? split[0] : address;
 }
 
+function isFunction(functionToCheck) {
+  return (
+    functionToCheck && {}.toString.call(functionToCheck) === "[object Function]"
+  );
+}
+
 function ButtonWithLoading(props) {
   return props.isLoading ? (
     <Button variant="primary" disabled>
@@ -59,7 +65,6 @@ class SubmitForm extends React.Component {
     types
   }) => {
     this.setState({
-      position: latLng,
       searchFieldValue: name,
       data: {
         ...this.state.data,
@@ -148,6 +153,9 @@ class SubmitForm extends React.Component {
             const results = await geocodeByLatlng(latLng);
             if (results && results.length) {
               const result = results[0];
+              if (isFunction(latLng.lat)) {
+                latLng = { lat: latLng.lat(), lng: latLng.lng() };
+              }
               this.onLocationSearchCompleted({
                 latLng,
                 name: result.formatted_address,

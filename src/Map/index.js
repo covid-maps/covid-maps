@@ -84,6 +84,14 @@ const MyMap = withScriptjs(withGoogleMap(MyGoogleMap));
 
 class Map extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
+    // To move map when search is done on homepage
+    if (
+      this.props.position &&
+      this.props.position.lat !== nextProps.position.lat
+    ) {
+      return true;
+    }
+
     // TODO: implement properly
     return (
       !this.props.coords ||
@@ -121,9 +129,11 @@ function MapWithLocation(props) {
   const position = props.coords
     ? { lat: props.coords.latitude, lng: props.coords.longitude }
     : undefined;
+  const positionProp =
+    props.position && props.position.lat ? props.position : position;
   return (
     <>
-      <Map {...props} position={props.position || position} />
+      <Map {...props} position={positionProp} />
       {!props.isGeolocationAvailable ? (
         <Status>Your browser does not support Geolocation</Status>
       ) : !props.isGeolocationEnabled ? (

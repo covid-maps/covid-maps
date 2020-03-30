@@ -11,7 +11,8 @@ class Homepage extends React.Component {
     results: [],
     markers: [],
     isLoading: true,
-    center: {}
+    center: {},
+    searchResultLatlng: undefined
   };
 
   componentDidMount() {
@@ -71,8 +72,14 @@ class Homepage extends React.Component {
         <ScrollToTopOnMount />
         <MapWithSearch
           value=""
-          onSuccess={e => console.log(e)}
+          onSuccess={({ latLng }) => {
+            this.setState(
+              { searchResultLatlng: latLng },
+              this.onBoundsChanged(latLng)
+            );
+          }}
           style={{ height: 400 }}
+          position={this.state.searchResultLatlng}
           locations={this.state.markers}
           onBoundsChanged={center => this.onBoundsChanged(center)}
         />

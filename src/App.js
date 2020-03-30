@@ -9,7 +9,7 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import ReactGA from "react-ga";
-import logo from "./Logo.png";
+import logo from "./Logo.svg";
 
 function AppNavbar() {
   return (

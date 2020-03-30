@@ -1,21 +1,21 @@
-import React from 'react'
-import Form from 'react-bootstrap/Form'
-import Button from 'react-bootstrap/Button'
-import Spinner from 'react-bootstrap/Spinner'
-import Alert from 'react-bootstrap/Alert'
-import * as api from '../api'
-import { geocodeByLatlng, getAddressComponent } from '../utils'
-import MapWithSearch from '../MapWithSearch'
+import React from "react";
+import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
+import Spinner from "react-bootstrap/Spinner";
+import Alert from "react-bootstrap/Alert";
+import * as api from "../api";
+import { geocodeByLatlng, getAddressComponent } from "../utils";
+import MapWithSearch from "../MapWithSearch";
 
 function getFirstComma(address) {
-  const split = address ? address.split(', ') : []
-  return split.length ? split[0] : address
+  const split = address ? address.split(", ") : [];
+  return split.length ? split[0] : address;
 }
 
 function isFunction(functionToCheck) {
   return (
-    functionToCheck && {}.toString.call(functionToCheck) === '[object Function]'
-  )
+    functionToCheck && {}.toString.call(functionToCheck) === "[object Function]"
+  );
 }
 
 function ButtonWithLoading(props) {
@@ -27,26 +27,26 @@ function ButtonWithLoading(props) {
         size="sm"
         role="status"
         aria-hidden="true"
-      />{' '}
+      />{" "}
       Submitting...
     </Button>
   ) : (
     <Button {...props} />
-  )
+  );
 }
 
 const emptyData = {
-  'Store Name': '',
-  'Store Category': 'Grocery', // default selection
-  'Useful Information': '',
-  'Safety Observations': '',
-  Latitude: '',
-  Longitude: '',
-  City: '',
-  Locality: '',
-  'Place Id': '',
-  Address: '',
-}
+  "Store Name": "",
+  "Store Category": "Grocery", // default selection
+  "Useful Information": "",
+  "Safety Observations": "",
+  Latitude: "",
+  Longitude: "",
+  City: "",
+  Locality: "",
+  "Place Id": "",
+  Address: ""
+};
 
 class SubmitForm extends React.Component {
   state = {
@@ -54,8 +54,8 @@ class SubmitForm extends React.Component {
     hasSubmitted: false,
     ipData: undefined,
     data: { ...emptyData },
-    searchFieldValue: '',
-  }
+    searchFieldValue: ""
+  };
 
   onLocationSearchCompleted = ({
     latLng,
@@ -64,61 +64,61 @@ class SubmitForm extends React.Component {
     city,
     locality,
     place_id,
-    types,
+    types
   }) => {
     if ((latLng && latLng.lat) || name) {
       this.setState({
         searchFieldValue: name,
         data: {
           ...this.state.data,
-          'Store Name': getFirstComma(name),
+          "Store Name": getFirstComma(name),
           Latitude: latLng.lat,
           Longitude: latLng.lng,
           City: city,
           Locality: locality,
-          'Place Id': place_id,
-          Address: address,
-        },
-      })
+          "Place Id": place_id,
+          Address: address
+        }
+      });
     }
-  }
+  };
 
   clearForm() {
     this.setState({
       data: { ...emptyData },
-      searchFieldValue: '',
-    })
+      searchFieldValue: ""
+    });
   }
 
   async onSubmit(event) {
-    event.preventDefault()
-    this.setState({ isLoading: true })
-    const elements = event.target.elements
+    event.preventDefault();
+    this.setState({ isLoading: true });
+    const elements = event.target.elements;
     const data = {
       ...this.state.data,
       Safety: elements.formBasicCrowdDetails.value,
-      Timestamp: new Date().toISOString(),
-    }
+      Timestamp: new Date().toISOString()
+    };
 
     // Get IP if possible
-    let ipData = this.state.ipData
+    let ipData = this.state.ipData;
     if (!this.state.ipData) {
-      ipData = await api.ip()
+      ipData = await api.ip();
     }
     if (ipData && ipData.ip) {
-      data['User IP'] = ipData.ip
+      data["User IP"] = ipData.ip;
     }
 
-    const response = await api.submit(data)
-    console.log(response)
+    const response = await api.submit(data);
+    console.log(response);
     this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
-      window.scrollTo(0, 0)
-      this.clearForm()
-    })
+      window.scrollTo(0, 0);
+      this.clearForm();
+    });
   }
 
   onChangeInput({ target }, dataKey) {
-    this.setState({ data: { ...this.state.data, [dataKey]: target.value } })
+    this.setState({ data: { ...this.state.data, [dataKey]: target.value } });
   }
 
   componentDidMount() {
@@ -127,25 +127,25 @@ class SubmitForm extends React.Component {
       this.setState({
         data: {
           ...this.state.data,
-          ...this.props.location.state.item,
-        },
-      })
+          ...this.props.location.state.item
+        }
+      });
     }
   }
 
   getSearchValue() {
     if (this.state.searchFieldValue) {
       // this is set from dragging the marker
-      return this.state.searchFieldValue
+      return this.state.searchFieldValue;
     }
 
     if (this.props.location.state) {
       // this is coming from the "Update info" from
       // the home page
-      return this.props.location.state.item['Store Name']
+      return this.props.location.state.item["Store Name"];
     }
 
-    return ''
+    return "";
   }
 
   render() {
@@ -160,16 +160,16 @@ class SubmitForm extends React.Component {
             this.state.data.Latitude
               ? {
                   lat: parseFloat(this.state.data.Latitude),
-                  lng: parseFloat(this.state.data.Longitude),
+                  lng: parseFloat(this.state.data.Longitude)
                 }
               : undefined
           }
-          onMarkerDragged={async (latLng) => {
-            const results = await geocodeByLatlng(latLng)
+          onMarkerDragged={async latLng => {
+            const results = await geocodeByLatlng(latLng);
             if (results && results.length) {
-              const result = results[0]
+              const result = results[0];
               if (isFunction(latLng.lat)) {
-                latLng = { lat: latLng.lat(), lng: latLng.lng() }
+                latLng = { lat: latLng.lat(), lng: latLng.lng() };
               }
               this.onLocationSearchCompleted({
                 latLng,
@@ -177,15 +177,15 @@ class SubmitForm extends React.Component {
                 address: result.formatted_address,
                 city: getAddressComponent(
                   result.address_components,
-                  'locality'
+                  "locality"
                 ),
                 locality: getAddressComponent(
                   result.address_components,
-                  'neighborhood'
+                  "neighborhood"
                 ),
                 place_id: result.place_id,
-                types: result.types,
-              })
+                types: result.types
+              });
             }
           }}
         />
@@ -196,7 +196,7 @@ class SubmitForm extends React.Component {
           </div>
         ) : null}
 
-        <Form onSubmit={(e) => this.onSubmit(e)}>
+        <Form onSubmit={e => this.onSubmit(e)}>
           <div className="container p-4">
             <h6 className="text-uppercase font-weight-bold mb-3">
               Update Store Status
@@ -205,8 +205,8 @@ class SubmitForm extends React.Component {
               <Form.Label className="">Store Name (required)</Form.Label>
               <Form.Control
                 type="text"
-                onChange={(e) => this.onChangeInput(e, 'Store Name')}
-                value={this.state.data['Store Name']}
+                onChange={e => this.onChangeInput(e, "Store Name")}
+                value={this.state.data["Store Name"]}
                 placeholder="e.g. Target or Nature's Basket"
                 required
               />
@@ -216,7 +216,7 @@ class SubmitForm extends React.Component {
               <Form.Label>Service Type</Form.Label>
               <Form.Control
                 as="select"
-                onChange={(e) => this.onChangeInput(e, 'Store Category')}
+                onChange={e => this.onChangeInput(e, "Store Category")}
               >
                 <option>Grocery</option>
                 <option>Restaurant</option>
@@ -232,7 +232,7 @@ class SubmitForm extends React.Component {
               <Form.Control
                 as="textarea"
                 rows="2"
-                onChange={(e) => this.onChangeInput(e, 'Safety Observations')}
+                onChange={e => this.onChangeInput(e, "Safety Observations")}
                 placeholder="Queues, crowd level &amp; safety precautions"
               />
             </Form.Group>
@@ -242,7 +242,7 @@ class SubmitForm extends React.Component {
               <Form.Control
                 as="textarea"
                 rows="3"
-                onChange={(e) => this.onChangeInput(e, 'Useful Information')}
+                onChange={e => this.onChangeInput(e, "Useful Information")}
                 placeholder="Contact number, timing, stock availability, etc."
               />
             </Form.Group>
@@ -258,8 +258,8 @@ class SubmitForm extends React.Component {
           </div>
         </Form>
       </>
-    )
+    );
   }
 }
 
-export default SubmitForm
+export default SubmitForm;

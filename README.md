@@ -49,3 +49,9 @@ The sheet is at https://docs.google.com/spreadsheets/d/1jFQrYwbhPIaRL6t4TnpTO7W9
 ## Contribute
 
 Let's push directly to master for now, and use the group chat / issues for coordination.
+
+## Formatting
+
+```
+npx prettier --write --trailing-comma none --arrow-parens avoid src/**/*.js
+```

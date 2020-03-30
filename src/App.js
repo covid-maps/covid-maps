@@ -1,15 +1,15 @@
-import React from 'react'
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom'
-import 'bootstrap/dist/css/bootstrap.min.css'
-import './App.css'
-import Homepage from './Homepage'
-import SubmitPage from './SubmitPage'
-import AboutPage from './AboutPage'
-import Navbar from 'react-bootstrap/Navbar'
-import Nav from 'react-bootstrap/Nav'
-import Button from 'react-bootstrap/Button'
-import ReactGA from 'react-ga'
-import logo from './Logo.svg'
+import React from "react";
+import { BrowserRouter as Router, Switch, Route, Link } from "react-router-dom";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "./App.css";
+import Homepage from "./Homepage";
+import SubmitPage from "./SubmitPage";
+import AboutPage from "./AboutPage";
+import Navbar from "react-bootstrap/Navbar";
+import Nav from "react-bootstrap/Nav";
+import Button from "react-bootstrap/Button";
+import ReactGA from "react-ga";
+import logo from "./Logo.svg";
 
 function AppNavbar() {
   return (
@@ -21,7 +21,7 @@ function AppNavbar() {
             src={logo}
             height="24"
             className="d-inline-block align-top"
-          />{' '}
+          />{" "}
         </Link>
       </Navbar.Brand>
       <Nav className="ml-auto">
@@ -32,7 +32,7 @@ function AppNavbar() {
         </Link>
       </Nav>
     </Navbar>
-  )
+  );
 }
 
 export default function App() {
@@ -49,19 +49,19 @@ export default function App() {
         </div>
         <footer className="m-0 p-0">
           <div className="container py-4 text-center text-uppercase">
-            <Link to="/">Home</Link> ·{' '}
-            <Link to="/update">Submit an update</Link> ·{' '}
+            <Link to="/">Home</Link> ·{" "}
+            <Link to="/update">Submit an update</Link> ·{" "}
             <Link to="/about">About</Link>
           </div>
         </footer>
       </div>
     </Router>
-  )
+  );
 }
 
 function initializeReactGA() {
-  ReactGA.initialize('UA-162047555-1')
-  ReactGA.pageview('/')
+  ReactGA.initialize("UA-162047555-1");
+  ReactGA.pageview("/");
 }
 
-initializeReactGA()
+initializeReactGA();

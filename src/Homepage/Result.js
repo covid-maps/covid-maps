@@ -17,7 +17,7 @@ function ResultEntry({ entries }) {
     result => result["Useful Information"] || result["Safety Observations"]
   );
   return resultList.map(result => (
-    <div className="my-2" key={result["Timestamp"]}>
+    <div className="mt-3" key={result["Timestamp"]}>
       <div>
         {result["Safety Observations"] ? (
           <div>{result["Safety Observations"]}</div>
@@ -27,9 +27,9 @@ function ResultEntry({ entries }) {
         ) : null}
       </div>
       <div className="card-link" style={{ fontSize: "0.8em" }}>
-        <small className="text-muted">
+        <small className="text-muted text-uppercase d-inline-block mt-2">
           {" "}
-          (Last updated <Timestamp {...result} />)
+          Updated <Timestamp {...result} />
         </small>
       </div>
     </div>

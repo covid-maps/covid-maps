@@ -83,7 +83,7 @@ class Homepage extends React.Component {
           locations={this.state.markers}
           onBoundsChanged={center => this.onBoundsChanged(center)}
         />
-        <div className="container">
+        <div className="m-3">
           <SearchResults
             isLoading={this.state.isLoading}
             results={this.state.results}

@@ -26,7 +26,7 @@ function AppNavbar() {
       </Navbar.Brand>
       <Nav className="ml-auto">
         <Link to="/update">
-          <Button size="sm" variant="secondary">
+          <Button size="sm" variant="success" className="text-uppercase">
             <strong>Submit update</strong>
           </Button>
         </Link>
@@ -47,8 +47,8 @@ export default function App() {
             <Route path="/" component={Homepage} />
           </Switch>
         </div>
-        <footer>
-          <div className="container py-4">
+        <footer className="m-0 p-0">
+          <div className="container py-4 text-center text-uppercase">
             <Link to="/">Home</Link> · <Link to="/update">Submit an update</Link> ·{" "}
             <Link to="/about">About</Link>
           </div>

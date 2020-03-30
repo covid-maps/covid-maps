@@ -27,7 +27,7 @@ function AppNavbar() {
       <Nav className="ml-auto">
         <Link to="/update">
           <Button size="sm" variant="secondary">
-            <strong>Update a Store</strong>
+            <strong>Submit update</strong>
           </Button>
         </Link>
       </Nav>
@@ -49,7 +49,7 @@ export default function App() {
         </div>
         <footer>
           <div className="container py-4">
-            <Link to="/">Home</Link> · <Link to="/update">Update store</Link> ·{" "}
+            <Link to="/">Home</Link> · <Link to="/update">Submit an update</Link> ·{" "}
             <Link to="/about">About</Link>
           </div>
         </footer>

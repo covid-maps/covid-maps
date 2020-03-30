@@ -10,8 +10,8 @@ function AboutPage() {
       <p>
         Covid Maps is a crowd sourced app that helps you track the latest
         information on essential services operating around you during covid-19
-        shutdowns. <Link to="/update">Add an update</Link> about a store near you
-        and help others!
+        shutdowns. <Link to="/update">Add an update</Link> about a store near
+        you and help others!
       </p>
       <p>
         We are a small team of volunteers based in Bengaluru, San Francisco and

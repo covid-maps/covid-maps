@@ -3,10 +3,9 @@ import {
   GoogleMap,
   withScriptjs,
   withGoogleMap,
-  Marker
+  Marker,
+  Circle
 } from "react-google-maps";
-import { geolocated } from "react-geolocated";
-
 import { GOOGLE_API_KEY } from "../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
@@ -41,7 +40,10 @@ function MyGoogleMap(props) {
   const handleMarkerClicked = location => {
     refMap.current.panTo(location.latLng);
     handlePositionChanged(location.latLng);
-    setSelectedLocation({lat: location.latLng.lat(), lng: location.latLng.lng()})
+    setSelectedLocation({
+      lat: location.latLng.lat(),
+      lng: location.latLng.lng()
+    });
   };
 
   const centerProps = props.position
@@ -49,21 +51,24 @@ function MyGoogleMap(props) {
     : { defaultCenter };
 
   var defaultIcon = {
-      url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // url
+    url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png" // url
   };
-   var highlightedIcon = {
-      url:  'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // url
+  var highlightedIcon = {
+    url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png" // url
   };
 
-  const getMarkerIcon = (location) => {
-    const isSelected = (selectedLocation && selectedLocation.lat === location.lat && selectedLocation.lng === location.lng)
-    return isSelected ? highlightedIcon : defaultIcon
-  }
+  const getMarkerIcon = location => {
+    const isSelected =
+      selectedLocation &&
+      selectedLocation.lat === location.lat &&
+      selectedLocation.lng === location.lng;
+    return isSelected ? highlightedIcon : defaultIcon;
+  };
 
   return (
     <GoogleMap
       ref={refMap}
-      defaultZoom={14}
+      defaultZoom={13}
       defaultOptions={defaultMapOptions}
       defaultCenter={{ lat: 54, lng: 25 }}
       onBoundsChanged={handleBoundsChanged}
@@ -75,8 +80,25 @@ function MyGoogleMap(props) {
     >
       {props.locations &&
         props.locations.map(location => (
-          <Marker position={location} onClick={handleMarkerClicked} icon={getMarkerIcon(location)}/>
+          <Marker
+            position={location}
+            onClick={handleMarkerClicked}
+            icon={getMarkerIcon(location)}
+          />
         ))}
+
+      <Circle
+        center={props.currentLocation}
+        radius={50}
+        options={{
+          strokeColor: "#2688ff",
+          strokeOpacity: 0.3,
+          strokeWeight: 1,
+          fillColor: "#2688ff",
+          fillOpacity: 0.7
+        }}
+      />
+
       {props.isMarkerShown && (
         <Marker
           draggable={!!props.onMarkerDragged}
@@ -98,31 +120,15 @@ function MyGoogleMap(props) {
 const MyMap = withScriptjs(withGoogleMap(MyGoogleMap));
 
 class Map extends React.Component {
-  shouldComponentUpdate(nextProps, nextState) {
-    // To move map when search is done on homepage
-    if (
-      this.props.position &&
-      this.props.position.lat !== nextProps.position.lat
-    ) {
-      return true;
-    }
-
-    // TODO: implement properly
-    return (
-      !this.props.coords ||
-      !this.props.locations ||
-      !this.props.locations.length
-    );
-  }
-
   render() {
     return (
       <MyMap
         locations={this.props.locations}
         position={this.props.position}
+        currentLocation={this.props.currentLocation}
         onMarkerDragged={this.props.onMarkerDragged}
         onBoundsChanged={this.props.onBoundsChanged}
-        isMarkerShown
+        isMarkerShown={this.props.isMarkerShown}
         googleMapURL={URL}
         loadingElement={<div style={{ height: `100%` }} />}
         containerElement={<div style={this.props.style} />}
@@ -132,42 +138,4 @@ class Map extends React.Component {
   }
 }
 
-function Status(props) {
-  return (
-    <div>
-      <small>{props.children}</small>
-    </div>
-  );
-}
-
-function MapWithLocation(props) {
-  const position = props.coords
-    ? { lat: props.coords.latitude, lng: props.coords.longitude }
-    : undefined;
-  const positionProp =
-    props.position && props.position.lat ? props.position : position;
-  return (
-    <>
-      <Map {...props} position={positionProp} />
-      {!props.isGeolocationAvailable ? (
-        <Status>Your browser does not support Geolocation</Status>
-      ) : !props.isGeolocationEnabled ? (
-        <Status>Geolocation is not enabled</Status>
-      ) : props.coords ? (
-        <Status>
-          {/* lat {props.coords.latitude}, lng {props.coords.longitude} */}
-        </Status>
-      ) : (
-        <Status>Getting the location data</Status>
-      )}
-    </>
-  );
-}
-
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: false,
-    timeout: Infinity
-  },
-  userDecisionTimeout: 5000
-})(MapWithLocation);
+export default Map;

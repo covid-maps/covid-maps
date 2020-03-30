@@ -56,17 +56,21 @@ class LocationSearchInput extends React.Component {
   }
 
   render() {
+    const location = this.props.currentLocation
+      ? new window.google.maps.LatLng(
+          this.props.currentLocation.lat,
+          this.props.currentLocation.lng
+        )
+      : undefined;
     return (
       <PlacesAutocomplete
         value={this.state.address}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
-        searchOptions={
-          {
-            // Use this to bias the search results to current location
-            // location: new google.maps.LatLng(-34, 151)
-          }
-        }
+        searchOptions={{
+          location,
+          radius: 200000 // meters
+        }}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>

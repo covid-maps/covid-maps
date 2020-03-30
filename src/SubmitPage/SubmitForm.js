@@ -66,19 +66,21 @@ class SubmitForm extends React.Component {
     place_id,
     types
   }) => {
-    this.setState({
-      searchFieldValue: name,
-      data: {
-        ...this.state.data,
-        "Store Name": getFirstComma(name),
-        Latitude: latLng.lat,
-        Longitude: latLng.lng,
-        City: city,
-        Locality: locality,
-        "Place Id": place_id,
-        Address: address
-      }
-    });
+    if ((latLng && latLng.lat) || name) {
+      this.setState({
+        searchFieldValue: name,
+        data: {
+          ...this.state.data,
+          "Store Name": getFirstComma(name),
+          Latitude: latLng.lat,
+          Longitude: latLng.lng,
+          City: city,
+          Locality: locality,
+          "Place Id": place_id,
+          Address: address
+        }
+      });
+    }
   };
 
   clearForm() {
@@ -156,6 +158,7 @@ class SubmitForm extends React.Component {
         </div>
 
         <MapWithSearch
+          isMarkerShown
           onSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
           style={{ height: 300 }}

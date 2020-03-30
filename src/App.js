@@ -49,6 +49,7 @@ export default function App() {
         </div>
         <footer>
           <div className="container py-4">
+            <Link to="/">Home</Link> · <Link to="/update">Update store</Link> ·{" "}
             <Link to="/about">About</Link>
           </div>
         </footer>

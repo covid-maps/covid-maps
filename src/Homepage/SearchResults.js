@@ -4,8 +4,8 @@ import ResultBlock from "./ResultBlock";
 class SearchResults extends React.Component {
   render() {
     return this.props.isLoading ? (
-        <div className="text-center">
-            <div className="spinner-border" role="status">
+        <div className="text-center py-5">
+            <div className="spinner-border text-secondary" role="status">
                 <span className="sr-only">Loading...</span>
             </div>
         </div>

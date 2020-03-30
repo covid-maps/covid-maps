@@ -68,3 +68,9 @@ footer a:hover {
 .autocomplete-dropdown-container div.suggestion-item--active {
   background-color: #fafafa;
 }
+
+/* Card */
+.card {
+  font-size: 0.925em;
+  line-height: 1.5;
+}

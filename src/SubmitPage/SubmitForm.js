@@ -197,14 +197,14 @@ class SubmitForm extends React.Component {
         />
 
         <Form onSubmit={e => this.onSubmit(e)}>
-          <div className="container">
+          <div className="container p-4">
             <Form.Group controlId="formBasicStore">
-              <Form.Label>Store Name</Form.Label>
+              <Form.Label className="">Store Name (required)</Form.Label>
               <Form.Control
                 type="text"
                 onChange={e => this.onChangeInput(e, "Store Name")}
                 value={this.state.data["Store Name"]}
-                placeholder="Enter store name"
+                placeholder="e.g. Target or Nature's Basket"
                 required
               />
             </Form.Group>
@@ -246,8 +246,9 @@ class SubmitForm extends React.Component {
 
             <ButtonWithLoading
               isLoading={this.state.isLoading}
-              variant="secondary"
+              variant="success"
               type="submit"
+              className="btn-block text-uppercase font-weight-bold"
             >
               Submit update
             </ButtonWithLoading>

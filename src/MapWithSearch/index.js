@@ -40,7 +40,7 @@ class MapWithSearch extends React.Component {
                 : current;
         return (
             <>
-                <div className="container">
+                <div className="p-2">
                     <LocationSearchControl
                         onSuccess={this.props.onSuccess}
                         value={this.props.value}

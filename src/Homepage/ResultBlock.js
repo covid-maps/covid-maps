@@ -12,7 +12,7 @@ export default class ResultBlock extends React.Component {
           <Link to={{ pathname: "/update", state: { item: entry } }} className="float-right btn btn-sm btn-outline-success text-uppercase">
             Update this information{" "}
           </Link>
-          <h5 className="card-title">{result.name}</h5>
+          <h5 className="card-title m-0 p-0">{result.name}</h5>
           <ResultEntry entries={result.entries} />
         </div>
       </div>

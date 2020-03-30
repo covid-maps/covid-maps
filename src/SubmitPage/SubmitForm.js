@@ -230,7 +230,6 @@ class SubmitForm extends React.Component {
                 as="textarea"
                 rows="2"
                 onChange={e => this.onChangeInput(e, "Safety Observations")}
-                value={this.state.data["Safety Observations"]}
                 placeholder="Queues, crowd level &amp; safety precautions"
               />
             </Form.Group>
@@ -241,7 +240,6 @@ class SubmitForm extends React.Component {
                 as="textarea"
                 rows="3"
                 onChange={e => this.onChangeInput(e, "Useful Information")}
-                value={this.state.data["Useful Information"]}
                 placeholder="Contact number, timing, stock availability, etc."
               />
             </Form.Group>
@@ -251,7 +249,7 @@ class SubmitForm extends React.Component {
               variant="secondary"
               type="submit"
             >
-              Update
+              Submit update
             </ButtonWithLoading>
           </div>
         </Form>

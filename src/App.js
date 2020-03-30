@@ -26,7 +26,7 @@ function AppNavbar() {
       </Navbar.Brand>
       <Nav className="ml-auto">
         <Link to="/update">
-          <Button size="sm" variant="primary">
+          <Button size="sm" variant="secondary">
             <strong>Update a Store</strong>
           </Button>
         </Link>

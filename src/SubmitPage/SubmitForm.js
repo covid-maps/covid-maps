@@ -245,7 +245,7 @@ class SubmitForm extends React.Component {
 
             <ButtonWithLoading
               isLoading={this.state.isLoading}
-              variant="primary"
+              variant="secondary"
               type="submit"
             >
               Update

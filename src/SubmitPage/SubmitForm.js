@@ -35,23 +35,25 @@ function ButtonWithLoading(props) {
   );
 }
 
+const emptyData = {
+  "Store Name": "",
+  "Store Category": "Grocery", // default selection
+  "Useful Information": "",
+  "Safety Observations": "",
+  Latitude: "",
+  Longitude: "",
+  City: "",
+  Locality: "",
+  "Place Id": "",
+  Address: ""
+};
+
 class SubmitForm extends React.Component {
   state = {
     isLoading: false,
     hasSubmitted: false,
     ipData: undefined,
-    data: {
-      "Store Name": "",
-      "Store Category": "Grocery", // default selection
-      "Useful Information": "",
-      "Safety Observations": "",
-      Latitude: "",
-      Longitude: "",
-      City: "",
-      Locality: "",
-      "Place Id": "",
-      Address: ""
-    },
+    data: { ...emptyData },
     searchFieldValue: ""
   };
 
@@ -79,6 +81,13 @@ class SubmitForm extends React.Component {
     });
   };
 
+  clearForm() {
+    this.setState({
+      data: { ...emptyData },
+      searchFieldValue: ""
+    });
+  }
+
   async onSubmit(event) {
     event.preventDefault();
     this.setState({ isLoading: true });
@@ -100,7 +109,10 @@ class SubmitForm extends React.Component {
 
     const response = await api.submit(data);
     console.log(response);
-    this.setState({ isLoading: false, hasSubmitted: true, ipData });
+    this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
+      window.scrollTo(0, 0);
+      this.clearForm();
+    });
   }
 
   onChangeInput({ target }, dataKey) {
@@ -137,6 +149,12 @@ class SubmitForm extends React.Component {
   render() {
     return (
       <>
+        <div className="container">
+          {this.state.hasSubmitted ? (
+            <Alert variant="success">Submitted!</Alert>
+          ) : null}
+        </div>
+
         <MapWithSearch
           onSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
@@ -224,10 +242,6 @@ class SubmitForm extends React.Component {
                 placeholder="Contact number, timing, stock availability, etc."
               />
             </Form.Group>
-
-            {this.state.hasSubmitted ? (
-              <Alert variant="success">Submitted!</Alert>
-            ) : null}
 
             <ButtonWithLoading
               isLoading={this.state.isLoading}

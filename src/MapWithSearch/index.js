@@ -3,14 +3,6 @@ import Map from "./Map";
 import LocationSearchControl from "./LocationSearch";
 import { geolocated } from "react-geolocated";
 
-function Status(props) {
-  return (
-    <div>
-      <small>{props.children}</small>
-    </div>
-  );
-}
-
 class MapWithSearch extends React.Component {
   shouldComponentUpdate(nextProps, nextState) {
     // To move map when search is done on homepage
@@ -57,24 +49,26 @@ class MapWithSearch extends React.Component {
           onBoundsChanged={this.props.onBoundsChanged}
           onMarkerDragged={this.props.onMarkerDragged}
         />
-        <div className="alert alert-danger text-center mb-0">
-          {!this.props.isGeolocationAvailable ? (
-            <strong className="">
-              Your browser does not support geolocation.
-            </strong>
-          ) : !this.props.isGeolocationEnabled ? (
-            <strong className="">
-              <span className="text-uppercase">Gelocation is not enabled.</span>{" "}
-              <small className="d-block">Please enable location sharing.</small>
-            </strong>
-          ) : this.props.coords ? (
-            {
-              /* lat {this.props.coords.latitude}, lng {this.props.coords.longitude} */
-            }
-          ) : (
-            <strong className="">Getting location data!</strong>
-          )}
-        </div>
+        {!this.props.coords ? (
+          <div className="alert alert-danger text-center mb-0">
+            {!this.props.isGeolocationAvailable ? (
+              <strong className="">
+                Your browser does not support geolocation.
+              </strong>
+            ) : !this.props.isGeolocationEnabled ? (
+              <strong className="">
+                <span className="text-uppercase">
+                  Gelocation is not enabled.
+                </span>{" "}
+                <small className="d-block">
+                  Please enable location sharing.
+                </small>
+              </strong>
+            ) : this.props.coords ? null : (
+              <strong className="">Getting location data!</strong>
+            )}
+          </div>
+        ) : null}
       </>
     );
   }

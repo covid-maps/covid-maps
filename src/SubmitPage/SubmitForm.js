@@ -2,7 +2,6 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
-import Alert from "react-bootstrap/Alert";
 import * as api from "../api";
 import { geocodeByLatlng, getAddressComponent } from "../utils";
 import MapWithSearch from "../MapWithSearch";

@@ -151,7 +151,7 @@ class SubmitForm extends React.Component {
   render() {
     return (
       <>
-        <div className="container">
+        <div className="">
           {this.state.hasSubmitted ? (
             <Alert variant="success">Submitted!</Alert>
           ) : null}
@@ -198,6 +198,7 @@ class SubmitForm extends React.Component {
 
         <Form onSubmit={e => this.onSubmit(e)}>
           <div className="container p-4">
+            <h6 className="text-uppercase font-weight-bold mb-3">Update Store Status</h6>
             <Form.Group controlId="formBasicStore">
               <Form.Label className="">Store Name (required)</Form.Label>
               <Form.Control

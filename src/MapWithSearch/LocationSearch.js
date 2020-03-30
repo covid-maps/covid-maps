@@ -62,15 +62,13 @@ class LocationSearchInput extends React.Component {
           this.props.currentLocation.lng
         )
       : undefined;
+    const options = location ? { location, radius: 200000 } : undefined;
     return (
       <PlacesAutocomplete
         value={this.state.address}
         onChange={this.handleChange}
         onSelect={this.handleSelect}
-        searchOptions={{
-          location,
-          radius: 200000 // meters
-        }}
+        searchOptions={options}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>

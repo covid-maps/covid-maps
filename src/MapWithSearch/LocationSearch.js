@@ -10,6 +10,7 @@ class LocationSearchInput extends React.Component {
   constructor(props) {
     super(props);
     this.state = { address: props.value };
+    this.textInput = React.createRef();
   }
 
   handleChange = address => {
@@ -17,6 +18,7 @@ class LocationSearchInput extends React.Component {
   };
 
   handleSelect = address => {
+    this.textInput.current.blur();
     geocodeByAddress(address)
       .then(async results => {
         this.setState({ address });
@@ -68,6 +70,7 @@ class LocationSearchInput extends React.Component {
                 defaultValue: this.props.defaultValue,
                 className: "location-search-input"
               })}
+              ref={this.textInput}
             />
             <div className="autocomplete-dropdown-container">
               {loading && <div>Loading...</div>}

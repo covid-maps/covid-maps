@@ -11,8 +11,10 @@ export default class ResultBlock extends React.Component {
         <div className="card-body">
           <h5 className="card-title">{result.name}</h5>
           <div>
-            <h6 class="card-subtitle mb-2 text-muted">
-              <Link to={{ pathname: "/update", state: { item: entry } }}>Update this information </Link> 
+            <h6 className="card-subtitle mb-2">
+              <Link to={{ pathname: "/update", state: { item: entry } }}>
+                Update this information{" "}
+              </Link>
             </h6>
           </div>
           <ResultEntry entries={result.entries} />

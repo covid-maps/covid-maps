@@ -19,6 +19,7 @@ class MapWithSearch extends React.Component {
     }
     if (
       this.props.position &&
+      nextProps.position &&
       this.props.position.lat !== nextProps.position.lat
     ) {
       return true;

@@ -24,6 +24,7 @@ const defaultCenter = { lat: 49.281376, lng: -123.111382 };
 
 function MyGoogleMap(props) {
   const [markerPosition, setMarkerPosition] = useState();
+  const [selectedLocation, setSelectedLocation] = useState();
   const refMap = useRef(null);
 
   const handlePositionChanged = center => {
@@ -40,11 +41,24 @@ function MyGoogleMap(props) {
   const handleMarkerClicked = location => {
     refMap.current.panTo(location.latLng);
     handlePositionChanged(location.latLng);
+    setSelectedLocation({lat: location.latLng.lat(), lng: location.latLng.lng()})
   };
 
   const centerProps = props.position
     ? { center: props.position }
     : { defaultCenter };
+
+  var defaultIcon = {
+      url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // url
+  };
+   var highlightedIcon = {
+      url:  'http://maps.google.com/mapfiles/ms/icons/blue-dot.png', // url
+  };
+
+  const getMarkerIcon = (location) => {
+    const isSelected = (selectedLocation && selectedLocation.lat === location.lat && selectedLocation.lng === location.lng)
+    return isSelected ? highlightedIcon : defaultIcon
+  }
 
   return (
     <GoogleMap
@@ -61,12 +75,13 @@ function MyGoogleMap(props) {
     >
       {props.locations &&
         props.locations.map(location => (
-          <Marker position={location} onClick={handleMarkerClicked} />
+          <Marker position={location} onClick={handleMarkerClicked} icon={getMarkerIcon(location)}/>
         ))}
       {props.isMarkerShown && (
         <Marker
           draggable={!!props.onMarkerDragged}
           position={markerPosition}
+          icon={defaultIcon}
           onDragEnd={event =>
             props.onMarkerDragged &&
             props.onMarkerDragged({

@@ -1,69 +1,69 @@
-import React, { useRef, useState } from "react";
+import React, { useRef, useState } from 'react'
 import {
   GoogleMap,
   withScriptjs,
   withGoogleMap,
   Marker,
-  Circle
-} from "react-google-maps";
-import { GOOGLE_API_KEY } from "../utils";
+  Circle,
+} from 'react-google-maps'
+import { GOOGLE_API_KEY } from '../utils'
 
-const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
+const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`
 
 const defaultMapOptions = {
   fullscreenControl: false,
   mapTypeControl: false,
-  streetViewControl: false
+  streetViewControl: false,
   // `greedy` will disable the two-finger drag behavior
   // on mobile.
   // gestureHandling: "greedy"
-};
+}
 
-const defaultCenter = { lat: 49.281376, lng: -123.111382 };
+const defaultCenter = { lat: 49.281376, lng: -123.111382 }
 
 function MyGoogleMap(props) {
-  const [markerPosition, setMarkerPosition] = useState();
-  const [selectedLocation, setSelectedLocation] = useState();
-  const refMap = useRef(null);
+  const [markerPosition, setMarkerPosition] = useState()
+  const [selectedLocation, setSelectedLocation] = useState()
+  const refMap = useRef(null)
 
-  const handlePositionChanged = center => {
-    setMarkerPosition(center);
+  const handlePositionChanged = (center) => {
+    setMarkerPosition(center)
     props.onBoundsChanged &&
-      props.onBoundsChanged({ lat: center.lat(), lng: center.lng() });
-  };
+      props.onBoundsChanged({ lat: center.lat(), lng: center.lng() })
+  }
 
   const handleBoundsChanged = () => {
-    const mapCenter = refMap.current.getCenter();
-    handlePositionChanged(mapCenter);
-  };
+    const mapCenter = refMap.current.getCenter()
+    handlePositionChanged(mapCenter)
+  }
 
-  const handleMarkerClicked = location => {
-    refMap.current.panTo(location.latLng);
-    handlePositionChanged(location.latLng);
+  const handleMarkerClicked = (location) => {
+    refMap.current.panTo(location.latLng)
+    handlePositionChanged(location.latLng)
     setSelectedLocation({
       lat: location.latLng.lat(),
-      lng: location.latLng.lng()
-    });
-  };
+      lng: location.latLng.lng(),
+    })
+  }
 
   const centerProps = props.position
     ? { center: props.position }
-    : { defaultCenter };
+    : { defaultCenter }
 
   var defaultIcon = {
-    url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png" // url
-  };
+    url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // url
+  }
   var highlightedIcon = {
-    url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png" // url
-  };
+    url: 'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // url
+  }
 
-  const getMarkerIcon = location => {
+  const getMarkerIcon = (location) => {
     const isSelected =
       selectedLocation &&
       selectedLocation.lat === location.lat &&
-      selectedLocation.lng === location.lng;
-    return isSelected ? highlightedIcon : defaultIcon;
-  };
+      selectedLocation.lng === location.lng
+    return isSelected ? highlightedIcon : defaultIcon
+  }
 
   return (
     <GoogleMap
@@ -74,12 +74,12 @@ function MyGoogleMap(props) {
       onBoundsChanged={handleBoundsChanged}
       {...centerProps}
       onDragEnd={() => {
-        const mapCenter = refMap.current.getCenter();
-        props.onMarkerDragged && props.onMarkerDragged(mapCenter);
+        const mapCenter = refMap.current.getCenter()
+        props.onMarkerDragged && props.onMarkerDragged(mapCenter)
       }}
     >
       {props.locations &&
-        props.locations.map(location => (
+        props.locations.map((location) => (
           <Marker
             position={location}
             onClick={handleMarkerClicked}
@@ -91,11 +91,11 @@ function MyGoogleMap(props) {
         center={props.currentLocation}
         radius={70}
         options={{
-          strokeColor: "#2688ff",
+          strokeColor: '#2688ff',
           strokeOpacity: 0.3,
           strokeWeight: 1,
-          fillColor: "#2688ff",
-          fillOpacity: 0.7
+          fillColor: '#2688ff',
+          fillOpacity: 0.7,
         }}
       />
 
@@ -104,20 +104,20 @@ function MyGoogleMap(props) {
           draggable={!!props.onMarkerDragged}
           position={markerPosition}
           icon={defaultIcon}
-          onDragEnd={event =>
+          onDragEnd={(event) =>
             props.onMarkerDragged &&
             props.onMarkerDragged({
               lat: event.latLng.lat(),
-              lng: event.latLng.lng()
+              lng: event.latLng.lng(),
             })
           }
         />
       )}
     </GoogleMap>
-  );
+  )
 }
 
-const MyMap = withScriptjs(withGoogleMap(MyGoogleMap));
+const MyMap = withScriptjs(withGoogleMap(MyGoogleMap))
 
 class Map extends React.Component {
   render() {
@@ -134,8 +134,8 @@ class Map extends React.Component {
         containerElement={<div style={this.props.style} />}
         mapElement={<div style={{ height: `100%` }} />}
       />
-    );
+    )
   }
 }
 
-export default Map;
+export default Map

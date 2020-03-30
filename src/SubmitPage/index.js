@@ -1,6 +1,6 @@
-import React from "react";
-import SubmitForm from "./SubmitForm";
-import { ScrollToTopOnMount } from "../utils";
+import React from 'react'
+import SubmitForm from './SubmitForm'
+import { ScrollToTopOnMount } from '../utils'
 
 export default function SubmitPage(props) {
   return (
@@ -8,5 +8,5 @@ export default function SubmitPage(props) {
       <ScrollToTopOnMount />
       <SubmitForm {...props} />
     </div>
-  );
+  )
 }

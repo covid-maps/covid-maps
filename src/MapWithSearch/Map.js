@@ -89,7 +89,7 @@ function MyGoogleMap(props) {
 
       <Circle
         center={props.currentLocation}
-        radius={50}
+        radius={70}
         options={{
           strokeColor: "#2688ff",
           strokeOpacity: 0.3,

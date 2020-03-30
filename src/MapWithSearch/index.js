@@ -31,7 +31,6 @@ class MapWithSearch extends React.Component {
   }
 
   render() {
-    console.log("render");
     const current = this.props.coords
       ? { lat: this.props.coords.latitude, lng: this.props.coords.longitude }
       : undefined;

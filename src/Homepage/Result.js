@@ -17,7 +17,7 @@ function ResultEntry({ entries }) {
     result => result["Useful Information"] || result["Safety Observations"]
   );
   return resultList.map(result => (
-    <div className="my-3" key={result["Timestamp"]}>
+    <div className="my-2" key={result["Timestamp"]}>
       <div>
         {result["Safety Observations"] ? (
           <div>{result["Safety Observations"]}</div>

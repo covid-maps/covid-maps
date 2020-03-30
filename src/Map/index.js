@@ -49,10 +49,10 @@ function MyGoogleMap(props) {
     : { defaultCenter };
 
   var defaultIcon = {
-      url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // url
+      url: 'https://maps.google.com/mapfiles/ms/icons/red-dot.png', // url
   };
    var highlightedIcon = {
-      url:  'http://maps.google.com/mapfiles/ms/icons/blue-dot.png', // url
+      url:  'https://maps.google.com/mapfiles/ms/icons/blue-dot.png', // url
   };
 
   const getMarkerIcon = (location) => {

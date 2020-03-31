@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
-import { GOOGLE_API_KEY, iconSvgs } from "../utils";
+import { GOOGLE_API_KEY, iconSvgs, convertSvgUrl } from "../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
 
@@ -33,10 +33,11 @@ function MyGoogleMap(props) {
   const handleMarkerClicked = location => {
     refMap.current.panTo(location.latLng);
     handlePositionChanged(location.latLng);
-    props.onPositionChanged && props.onPositionChanged({
-      lat: location.latLng.lat(),
-      lng: location.latLng.lng()
-    });
+    props.onPositionChanged &&
+      props.onPositionChanged({
+        lat: location.latLng.lat(),
+        lng: location.latLng.lng()
+      });
   };
 
   const centerProps = props.position
@@ -44,10 +45,12 @@ function MyGoogleMap(props) {
     : { defaultCenter };
 
   const defaultIcon = {
-    url: 'data:image/svg+xml;charset=UTF-8;base64,' + btoa(iconSvgs.default)
+    url: convertSvgUrl(iconSvgs.default),
+    scaledSize: { height: 40, width: 30 }
   };
   const highlightedIcon = {
-    url: 'data:image/svg+xml;charset=UTF-8;base64,' + btoa(iconSvgs.highlighted)
+    url: convertSvgUrl(iconSvgs.highlighted),
+    scaledSize: { height: 40, width: 30 }
   };
 
   const getMarkerIcon = location => {

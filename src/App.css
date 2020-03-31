@@ -8,7 +8,6 @@ body {
 }
 
 .page {
-  background-color: #fff;
   margin-top: 48px; /* Since the navbar is fixed. */
 }
 

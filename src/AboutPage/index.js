@@ -20,8 +20,8 @@ function AboutPage() {
       <h4 className="mt-4 text-uppercase mb-1">Contribute</h4>
       <p className="text-black-50">
         We are looking for volunteers that can help with operations and
-        technology. Join our <a href="https://t.me/covidmaps">Telegram group</a>{" "}
-        or find us on <a href="https://github.com/arjun27/covid-maps">GitHub</a>
+        technology. Join our <a href="https://t.me/covidmaps" target="_blank">Telegram group</a>{" "}
+        or find us on <a href="https://github.com/arjun27/covid-maps" target="_blank">GitHub</a>
         .
       </p>
       <h4 className="mt-4 text-uppercase mb-1">Privacy Policy</h4>

@@ -17,7 +17,6 @@ const defaultCenter = { lat: 49.281376, lng: -123.111382 };
 
 function MyGoogleMap(props) {
   const [markerPosition, setMarkerPosition] = useState();
-  const [selectedLocation, setSelectedLocation] = useState();
   const refMap = useRef(null);
 
   const handlePositionChanged = center => {
@@ -34,7 +33,7 @@ function MyGoogleMap(props) {
   const handleMarkerClicked = location => {
     refMap.current.panTo(location.latLng);
     handlePositionChanged(location.latLng);
-    setSelectedLocation({
+    props.onPositionChanged && props.onPositionChanged({
       lat: location.latLng.lat(),
       lng: location.latLng.lng()
     });
@@ -53,9 +52,9 @@ function MyGoogleMap(props) {
 
   const getMarkerIcon = location => {
     const isSelected =
-      selectedLocation &&
-      selectedLocation.lat === location.lat &&
-      selectedLocation.lng === location.lng;
+      props.position &&
+      props.position.lat === location.lat &&
+      props.position.lng === location.lng;
     return isSelected ? highlightedIcon : defaultIcon;
   };
 
@@ -122,6 +121,7 @@ class Map extends React.Component {
         currentLocation={this.props.currentLocation}
         onMarkerDragged={this.props.onMarkerDragged}
         onBoundsChanged={this.props.onBoundsChanged}
+        onPositionChanged={this.props.onPositionChanged}
         isMarkerShown={this.props.isMarkerShown}
         googleMapURL={URL}
         loadingElement={<div style={{ height: `100%` }} />}

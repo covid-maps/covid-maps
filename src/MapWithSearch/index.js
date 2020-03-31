@@ -48,6 +48,7 @@ class MapWithSearch extends React.Component {
           isMarkerShown={this.props.isMarkerShown}
           onBoundsChanged={this.props.onBoundsChanged}
           onMarkerDragged={this.props.onMarkerDragged}
+          onPositionChanged={this.props.onPositionChanged}
         />
         {!this.props.coords ? (
           <div className="alert alert-danger text-center mb-0">

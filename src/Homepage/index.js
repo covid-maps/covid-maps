@@ -67,7 +67,6 @@ class Homepage extends React.Component {
   }
 
   onCardClick(card) {
-    console.log('clicked', card);
     this.setState({
       center: { lat: Number(card.lat), lng: Number(card.lng) },
       results: this.calculateGroupDistance(this.state.results),
@@ -91,6 +90,7 @@ class Homepage extends React.Component {
           position={this.state.searchResultLatlng}
           locations={this.state.markers}
           onBoundsChanged={center => this.onBoundsChanged(center)}
+          onPositionChanged={position => this.setState({ searchResultLatlng: position })}
         />
         <div className="m-3">
           <SearchResults

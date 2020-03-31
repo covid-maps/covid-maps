@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
-import { GOOGLE_API_KEY } from "../utils";
+import { GOOGLE_API_KEY, iconSvgs } from "../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
 
@@ -43,11 +43,11 @@ function MyGoogleMap(props) {
     ? { center: props.position }
     : { defaultCenter };
 
-  var defaultIcon = {
-    url: "https://maps.google.com/mapfiles/ms/icons/red-dot.png" // url
+  const defaultIcon = {
+    url: 'data:image/svg+xml;charset=UTF-8;base64,' + btoa(iconSvgs.default)
   };
-  var highlightedIcon = {
-    url: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png" // url
+  const highlightedIcon = {
+    url: 'data:image/svg+xml;charset=UTF-8;base64,' + btoa(iconSvgs.highlighted)
   };
 
   const getMarkerIcon = location => {

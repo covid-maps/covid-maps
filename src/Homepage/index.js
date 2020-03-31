@@ -93,6 +93,9 @@ class Homepage extends React.Component {
           onPositionChanged={position => this.setState({ searchResultLatlng: position })}
         />
         <div className="m-3">
+          <h6 className="text-uppercase font-weight-bold mb-3">
+            Stores Nearby
+          </h6>
           <SearchResults
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}

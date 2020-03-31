@@ -10,6 +10,7 @@
     "axios": "^0.19.2",
     "bootstrap": "^4.4.1",
     "geolib": "^3.2.1",
+    "history": "^4.10.1",
     "humanize-duration": "^3.22.0",
     "lodash": "^4.17.15",
     "pg": "^8.0.0",

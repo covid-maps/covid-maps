@@ -2,6 +2,14 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { ScrollToTopOnMount } from "../utils";
 
+function NewTabLink({ href, children }) {
+  return (
+    <a href={href} rel="noopener noreferrer" target="_blank">
+      {children}
+    </a>
+  );
+}
+
 function AboutPage() {
   return (
     <div className="container p-4 about-page">
@@ -20,8 +28,12 @@ function AboutPage() {
       <h4 className="mt-4 text-uppercase mb-1">Contribute</h4>
       <p className="text-black-50">
         We are looking for volunteers that can help with operations and
-        technology. Join our <a href="https://t.me/covidmaps" target="_blank">Telegram group</a>{" "}
-        or find us on <a href="https://github.com/arjun27/covid-maps" target="_blank">GitHub</a>
+        technology. Join our{" "}
+        <NewTabLink href="https://t.me/covidmaps">Telegram group</NewTabLink> or
+        find us on{" "}
+        <NewTabLink href="https://github.com/arjun27/covid-maps">
+          GitHub
+        </NewTabLink>
         .
       </p>
       <h4 className="mt-4 text-uppercase mb-1">Privacy Policy</h4>

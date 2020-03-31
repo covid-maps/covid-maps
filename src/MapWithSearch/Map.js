@@ -1,11 +1,5 @@
 import React, { useRef, useState } from "react";
-import {
-  GoogleMap,
-  withScriptjs,
-  withGoogleMap,
-  Marker,
-  Circle
-} from "react-google-maps";
+import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
 import { GOOGLE_API_KEY } from "../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
@@ -117,7 +111,7 @@ function MyGoogleMap(props) {
   );
 }
 
-const MyMap = withScriptjs(withGoogleMap(MyGoogleMap));
+const MyMap = withGoogleMap(MyGoogleMap);
 
 class Map extends React.Component {
   render() {

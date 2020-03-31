@@ -12,7 +12,7 @@ class SearchResults extends React.Component {
     ) : (
       this.props.results.map(result => (
         <div key={result.name}>
-          <ResultBlock result={result} />
+          <ResultBlock onClick={() => this.props.onCardClick(result)} result={result} />
         </div>
       ))
     );

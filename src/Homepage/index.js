@@ -66,6 +66,15 @@ class Homepage extends React.Component {
     });
   }
 
+  onCardClick(card) {
+    console.log('clicked', card);
+    this.setState({
+      center: { lat: Number(card.lat), lng: Number(card.lng) },
+      results: this.calculateGroupDistance(this.state.results),
+      searchResultLatlng: { lat: Number(card.lat), lng: Number(card.lng) }
+    });
+  }
+
   render() {
     return (
       <div>
@@ -85,6 +94,7 @@ class Homepage extends React.Component {
         />
         <div className="m-3">
           <SearchResults
+            onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
             results={this.state.results}
             center={this.state.center}

@@ -1,6 +1,12 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { GoogleSpreadsheet } = require("google-spreadsheet");
+const { Pool } = require('pg');
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: true
+});
 
 const GOOGLE_SERVICE_ACCOUNT_EMAIL =
   "toilet-paper-app@eco-theater-119616.iam.gserviceaccount.com";
@@ -62,6 +68,19 @@ app.use((req, res, next) => {
 app.get("/", (req, res) => {
   res.send("hello, world!");
 });
+
+app.get('/db', async (req, res) => {
+  try {
+    const client = await pool.connect()
+    const result = await client.query('SELECT * FROM covid-maps-app.activeservices');
+    const results = { 'results': (result) ? result.rows : null};
+    res.render('pages/db', results );
+    client.release();
+  } catch (err) {
+    console.error(err);
+    res.send("Error " + err);
+  }
+})
 
 app.get("/v0/query", async (req, res) => {
   try {

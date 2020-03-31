@@ -1,7 +1,7 @@
 import React from "react";
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
-import { ScrollToTopOnMount } from "../utils";
+import { ScrollToTopOnMount, isStoreType } from "../utils";
 import * as api from "../api";
 import { getDistance } from "geolib";
 import _ from "lodash";
@@ -63,7 +63,10 @@ class Homepage extends React.Component {
   }
 
   isMissingLocationInformation(location) {
-    return location && location.name && !this.state.results.filter(result => result.placeId === location.place_id).length;
+    return location &&
+      isStoreType(location.types) &&
+      location.name &&
+      !this.state.results.filter(result => result.placeId === location.place_id).length;
   }
 
   onBoundsChanged(center) {
@@ -97,10 +100,10 @@ class Homepage extends React.Component {
         <ScrollToTopOnMount />
         <MapWithSearch
           value=""
-          onSuccess={({ name, latLng, place_id }) => {
+          onSuccess={({ name, latLng, place_id, types }) => {
             this.setState({
                 searchResultLatlng: latLng,
-                searchResultLocation: { name, latLng, place_id }
+                searchResultLocation: { name, latLng, place_id, types }
               },
               this.onBoundsChanged(latLng)
             );

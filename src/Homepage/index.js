@@ -41,12 +41,10 @@ class Homepage extends React.Component {
   }
 
   calculateGroupDistance(grouped) {
-    const groupedResult = grouped
-      .map(group => ({
-        ...group,
-        distance: this.calculateDistance(group, this.state.center)
-      }))
-      .filter(group => group.distance < 500000);
+    const groupedResult = grouped.map(group => ({
+      ...group,
+      distance: this.calculateDistance(group, this.state.center)
+    }));
     return _.sortBy(groupedResult, ["distance"]);
   }
 
@@ -136,7 +134,9 @@ class Homepage extends React.Component {
           <SearchResults
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
-            results={this.state.results}
+            results={this.state.results.filter(
+              result => result.distance < 500000
+            )}
             center={this.state.center}
           />
         </div>

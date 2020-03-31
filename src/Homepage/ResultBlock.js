@@ -15,7 +15,7 @@ export default class ResultBlock extends React.Component {
       top: 50,
       behavior: 'smooth'
     });
-    this.props.onClick(this.props.result);
+    this.props.onClick && this.props.onClick(this.props.result);
   }
 
   render() {

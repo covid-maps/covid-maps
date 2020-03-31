@@ -1,10 +1,7 @@
 import React, { useRef } from "react";
 import Map from "./Map";
 import LocationSearchControl from "./LocationSearch";
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
 import { geolocated } from "react-geolocated";
 import * as api from "../api";
 
@@ -64,29 +61,23 @@ class MapWithSearch extends React.Component {
     return (
       <>
         <Form>
-          <Row>
-            <Col>
-              <LocationSearchControl
-                onSuccess={this.props.onSuccess}
-                value={this.props.value}
-                currentLocation={current}
-              />
-            </Col>
-            <Col xs='4'>
-              <Button onClick={this.props.getGeolocation} variant="outline-primary">Locate Me</Button>
-            </Col>
-          </Row>
-          </Form>
-          <Map
-            style={this.props.style}
-            position={positionProp}
+          <LocationSearchControl
+            onSuccess={this.props.onSuccess}
+            value={this.props.value}
             currentLocation={current}
-            locations={this.props.locations}
-            isMarkerShown={this.props.isMarkerShown}
-            onBoundsChanged={this.props.onBoundsChanged}
-            onMarkerDragged={this.props.onMarkerDragged}
-            onPositionChanged={this.props.onPositionChanged}
+            onGeolocation={this.props.getGeolocation}
           />
+        </Form>
+        <Map
+          style={this.props.style}
+          position={positionProp}
+          currentLocation={current}
+          locations={this.props.locations}
+          isMarkerShown={this.props.isMarkerShown}
+          onBoundsChanged={this.props.onBoundsChanged}
+          onMarkerDragged={this.props.onMarkerDragged}
+          onPositionChanged={this.props.onPositionChanged}
+        />
         {!this.props.isGeolocationAvailable ? (
           <div className="alert alert-danger text-center mb-0">
             Your browser does not support geolocation.

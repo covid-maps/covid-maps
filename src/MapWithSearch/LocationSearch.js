@@ -7,6 +7,8 @@ import PlacesAutocomplete, {
   getLatLng
 } from "react-places-autocomplete";
 import { getAddressComponent } from "../utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faTimesCircle, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 
 class LocationSearchInput extends React.Component {
   constructor(props) {
@@ -75,7 +77,7 @@ class LocationSearchInput extends React.Component {
             <InputGroup>
               <Form.Control
                 {...getInputProps({
-                  placeholder: "Search by store name, address or landmark",
+                  placeholder: "Search by name or landmark",
                   defaultValue: this.props.defaultValue,
                   className: "location-search-input"
                 })}
@@ -83,10 +85,16 @@ class LocationSearchInput extends React.Component {
               />
               <InputGroup.Append>
                 <Button
+                  onClick={this.props.onGeolocation}
+                  variant="outline-primary"
+                >
+                  <FontAwesomeIcon icon={faCrosshairs} />
+                </Button>
+                <Button
                   onClick={e => this.clearInput(e)}
                   variant="outline-secondary"
                 >
-                  ×
+                  <FontAwesomeIcon icon={faTimesCircle} />
                 </Button>
               </InputGroup.Append>
             </InputGroup>

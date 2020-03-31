@@ -23,6 +23,7 @@ class LocationSearchInput extends React.Component {
 
   handleSelect = address => {
     this.textInput.current.blur();
+    console.log("handle select");
     geocodeByAddress(address)
       .then(async results => {
         this.setState({ address });

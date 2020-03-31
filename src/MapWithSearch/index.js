@@ -39,6 +39,17 @@ class MapWithSearch extends React.Component {
     );
   }
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.props.coords && !prevProps.coords) {
+      this.props.onSuccess({
+        latLng: {
+          lat: this.props.coords.latitude,
+          lng: this.props.coords.longitude
+        }
+      });
+    }
+  }
+
   getCurrentLocation() {
     // First try geolocation
     if (this.props.coords) {

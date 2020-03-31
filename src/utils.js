@@ -48,6 +48,5 @@ export const isStoreType = types => {
     "street_address",
     "premise"
   ];
-  if (types) console.log(types.filter(type => invalidTypes.indexOf(type) >= 0));
   return types && !types.filter(type => invalidTypes.indexOf(type) >= 0).length;
 };

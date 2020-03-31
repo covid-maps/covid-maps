@@ -107,13 +107,15 @@ class Homepage extends React.Component {
         <MapWithSearch
           value=""
           onSuccess={({ name, latLng, place_id, types }) => {
-            this.setState(
-              {
-                searchResultLatlng: latLng,
-                searchResultLocation: { name, latLng, place_id, types }
-              },
-              this.onBoundsChanged(latLng)
-            );
+            if (latLng) {
+              this.setState(
+                {
+                  searchResultLatlng: latLng,
+                  searchResultLocation: { name, latLng, place_id, types }
+                },
+                this.onBoundsChanged(latLng)
+              );
+            }
           }}
           style={{ height: 400 }}
           position={this.state.searchResultLatlng}

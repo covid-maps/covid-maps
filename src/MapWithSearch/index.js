@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useRef } from "react";
 import Map from "./Map";
 import LocationSearchControl from "./LocationSearch";
-// import { geolocated } from "react-geolocated";
+import Button from "react-bootstrap/Button";
+import { geolocated } from "react-geolocated";
 import * as api from "../api";
 
 class MapWithSearch extends React.Component {
@@ -38,11 +39,22 @@ class MapWithSearch extends React.Component {
     );
   }
 
+  getCurrentLocation() {
+    // First try geolocation
+    if (this.props.coords) {
+      return {
+        lat: this.props.coords.latitude,
+        lng: this.props.coords.longitude
+      };
+    }
+
+    // Then fall back to IP location
+    return this.state.ipLocation;
+  }
+
   render() {
-    // const current = this.props.coords
-    //   ? { lat: this.props.coords.latitude, lng: this.props.coords.longitude }
-    //   : undefined;
-    const current = this.state.ipLocation;
+    console.log(this.props);
+    const current = this.getCurrentLocation();
     const positionProp =
       this.props.position && this.props.position.lat
         ? this.props.position
@@ -55,6 +67,7 @@ class MapWithSearch extends React.Component {
             value={this.props.value}
             currentLocation={current}
           />
+          <Button onClick={this.props.getGeolocation}>Current location</Button>
         </div>
         <Map
           style={this.props.style}
@@ -66,37 +79,43 @@ class MapWithSearch extends React.Component {
           onMarkerDragged={this.props.onMarkerDragged}
           onPositionChanged={this.props.onPositionChanged}
         />
-        {/* {!this.props.coords ? (
+        {!this.props.isGeolocationAvailable ? (
           <div className="alert alert-danger text-center mb-0">
-            {!this.props.isGeolocationAvailable ? (
-              <strong className="">
-                Your browser does not support geolocation.
-              </strong>
-            ) : !this.props.isGeolocationEnabled ? (
-              <strong className="">
-                <span className="text-uppercase">
-                  Gelocation is not enabled.
-                </span>{" "}
-                <small className="d-block">
-                  Please enable location sharing.
-                </small>
-              </strong>
-            ) : this.props.coords ? null : (
-              <strong className="">Getting location data!</strong>
-            )}
+            Your browser does not support geolocation.
           </div>
-        ) : null} */}
+        ) : !this.props.isGeolocationEnabled ? (
+          <div className="alert alert-danger text-center mb-0">
+            Geolocation is not enabled.
+          </div>
+        ) : null}
       </>
     );
   }
 }
 
-export default MapWithSearch;
+const MapWithSearchHOC = geolocated({
+  positionOptions: {
+    enableHighAccuracy: false,
+    timeout: Infinity
+  },
+  userDecisionTimeout: 5000,
+  suppressLocationOnMount: true
+})(MapWithSearch);
 
-// export default geolocated({
-//   positionOptions: {
-//     enableHighAccuracy: false,
-//     timeout: Infinity
-//   },
-//   userDecisionTimeout: 5000
-// })(MapWithSearch);
+function MapWithSearchWrapper(props) {
+  const innerRef = useRef();
+
+  const getGeolocation = () => {
+    innerRef.current && innerRef.current.getLocation();
+  };
+
+  return (
+    <MapWithSearchHOC
+      {...props}
+      ref={innerRef}
+      getGeolocation={getGeolocation}
+    />
+  );
+}
+
+export default MapWithSearchWrapper;

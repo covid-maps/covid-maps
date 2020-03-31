@@ -1,9 +1,24 @@
 import React from "react";
 import Map from "./Map";
 import LocationSearchControl from "./LocationSearch";
-import { geolocated } from "react-geolocated";
+// import { geolocated } from "react-geolocated";
+import * as api from "../api";
 
 class MapWithSearch extends React.Component {
+  state = {
+    ipLocation: undefined
+  };
+
+  componentDidMount() {
+    api.ip().then(response => {
+      const [lat, lng] = response.loc.split(",");
+      this.setState({
+        // ip: response.ip,
+        ipLocation: { lat: Number(lat), lng: Number(lng) }
+      });
+    });
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
     // To move map when search is done on homepage
     if (!this.props.position && nextProps.position) {
@@ -24,9 +39,10 @@ class MapWithSearch extends React.Component {
   }
 
   render() {
-    const current = this.props.coords
-      ? { lat: this.props.coords.latitude, lng: this.props.coords.longitude }
-      : undefined;
+    // const current = this.props.coords
+    //   ? { lat: this.props.coords.latitude, lng: this.props.coords.longitude }
+    //   : undefined;
+    const current = this.state.ipLocation;
     const positionProp =
       this.props.position && this.props.position.lat
         ? this.props.position
@@ -50,7 +66,7 @@ class MapWithSearch extends React.Component {
           onMarkerDragged={this.props.onMarkerDragged}
           onPositionChanged={this.props.onPositionChanged}
         />
-        {!this.props.coords ? (
+        {/* {!this.props.coords ? (
           <div className="alert alert-danger text-center mb-0">
             {!this.props.isGeolocationAvailable ? (
               <strong className="">
@@ -69,16 +85,18 @@ class MapWithSearch extends React.Component {
               <strong className="">Getting location data!</strong>
             )}
           </div>
-        ) : null}
+        ) : null} */}
       </>
     );
   }
 }
 
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: false,
-    timeout: Infinity
-  },
-  userDecisionTimeout: 5000
-})(MapWithSearch);
+export default MapWithSearch;
+
+// export default geolocated({
+//   positionOptions: {
+//     enableHighAccuracy: false,
+//     timeout: Infinity
+//   },
+//   userDecisionTimeout: 5000
+// })(MapWithSearch);

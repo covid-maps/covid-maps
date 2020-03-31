@@ -88,10 +88,10 @@ function MyGoogleMap(props) {
         radius={70}
         options={{
           strokeColor: "#2688ff",
-          strokeOpacity: 0.3,
+          strokeOpacity: 0.2,
           strokeWeight: 1,
           fillColor: "#2688ff",
-          fillOpacity: 0.7
+          fillOpacity: 0.4
         }}
       />
 

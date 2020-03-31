@@ -13,7 +13,7 @@ const defaultMapOptions = {
   // gestureHandling: "greedy"
 };
 
-const defaultCenter = { lat: 49.281376, lng: -123.111382 };
+const defaultCenter = { lat: 49, lng: -123 };
 
 function MyGoogleMap(props) {
   const [markerPosition, setMarkerPosition] = useState();

@@ -1,10 +1,16 @@
 import React from "react";
 import Map from "./Map";
 import LocationSearchControl from "./LocationSearch";
-import { geolocated } from "react-geolocated";
+import { connect } from "react-redux";
+import { updateLocation } from "../actions";
 
 class MapWithSearch extends React.Component {
+  componentDidMount() {
+    this.props.updateLocation();
+  }
+
   shouldComponentUpdate(nextProps, nextState) {
+    console.log(this.props, nextProps);
     // To move map when search is done on homepage
     if (!this.props.position && nextProps.position) {
       return true;
@@ -24,9 +30,11 @@ class MapWithSearch extends React.Component {
   }
 
   render() {
-    const current = this.props.coords
-      ? { lat: this.props.coords.latitude, lng: this.props.coords.longitude }
-      : undefined;
+    console.log(this.props.newLocation, "-------");
+    // const current = this.props.coords
+    //   ? { lat: this.props.coords.latitude, lng: this.props.coords.longitude }
+    //   : undefined;
+    const current = this.props.newLocation.location;
     const positionProp =
       this.props.position && this.props.position.lat
         ? this.props.position
@@ -75,10 +83,21 @@ class MapWithSearch extends React.Component {
   }
 }
 
-export default geolocated({
-  positionOptions: {
-    enableHighAccuracy: false,
-    timeout: Infinity
-  },
-  userDecisionTimeout: 5000
-})(MapWithSearch);
+const mapStateToProps = (state /*, ownProps*/) => {
+  console.log(state);
+  return {
+    newLocation: state.location
+  };
+};
+
+const mapDispatchToProps = { updateLocation };
+
+export default connect(mapStateToProps, mapDispatchToProps)(MapWithSearch);
+
+// export default geolocated({
+//   positionOptions: {
+//     enableHighAccuracy: false,
+//     timeout: Infinity
+//   },
+//   userDecisionTimeout: 5000
+// })(MapWithSearch);

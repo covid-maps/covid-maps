@@ -1,6 +1,6 @@
 import React from "react";
 import { Router, Switch, Route, Link } from "react-router-dom";
-import { createBrowserHistory } from 'history';
+import { createBrowserHistory } from "history";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Homepage from "./Homepage";
@@ -13,12 +13,14 @@ import ReactGA from "react-ga";
 import logo from "./Logo.svg";
 
 const history = createBrowserHistory();
-ReactGA.initialize("UA-162047555-1");
-ReactGA.pageview(window.location.pathname);
-history.listen(location => {
-  ReactGA.set({ page: location.pathname });
-  ReactGA.pageview(location.pathname);
-});
+if (process.env.NODE_ENV !== "development") {
+  ReactGA.initialize("UA-162047555-1");
+  ReactGA.pageview(window.location.pathname);
+  history.listen(location => {
+    ReactGA.set({ page: location.pathname });
+    ReactGA.pageview(location.pathname);
+  });
+}
 
 function AppNavbar() {
   return (
@@ -51,7 +53,7 @@ function App() {
         <AppNavbar />
         <div className="page">
           <Switch>
-            <Route path="/update" component={SubmitPage}/>
+            <Route path="/update" component={SubmitPage} />
             <Route path="/about" component={AboutPage} />
             <Route path="/" component={Homepage} />
           </Switch>

@@ -1,5 +1,6 @@
 import React from "react";
 import SearchResults from "./SearchResults";
+import MissingBlock from "./MissingBlock";
 import { ScrollToTopOnMount } from "../utils";
 import * as api from "../api";
 import { getDistance } from "geolib";
@@ -12,7 +13,8 @@ class Homepage extends React.Component {
     markers: [],
     isLoading: true,
     center: {},
-    searchResultLatlng: undefined
+    searchResultLatlng: undefined,
+    searchResultLocation: undefined
   };
 
   componentDidMount() {
@@ -51,12 +53,17 @@ class Homepage extends React.Component {
     const grouped = Object.values(_.groupBy(results, groupByFn)).map(
       entries => ({
         name: entries[0]["Store Name"],
+        placeId: entries[0]["Place Id"],
         lat: entries[0].Latitude,
         lng: entries[0].Longitude,
         entries: _.sortBy(entries, ["Timestamp"]).reverse()
       })
     );
     return this.calculateGroupDistance(grouped);
+  }
+
+  isMissingLocationInformation(location) {
+    return location && location.name && !this.state.results.filter(result => result.placeId === location.place_id).length;
   }
 
   onBoundsChanged(center) {
@@ -75,14 +82,26 @@ class Homepage extends React.Component {
   }
 
   render() {
+    let missingLocation = null;
+    if(this.isMissingLocationInformation(this.state.searchResultLocation)) {
+      missingLocation = (
+        <MissingBlock missing={true} result={{
+          name: this.state.searchResultLocation.name,
+          entries: [{ 'Store Name': this.state.searchResultLocation.name }]
+        }}></MissingBlock>
+      );
+    }
+
     return (
       <div>
         <ScrollToTopOnMount />
         <MapWithSearch
           value=""
-          onSuccess={({ latLng }) => {
-            this.setState(
-              { searchResultLatlng: latLng },
+          onSuccess={({ name, latLng, place_id }) => {
+            this.setState({
+                searchResultLatlng: latLng,
+                searchResultLocation: { name, latLng, place_id }
+              },
               this.onBoundsChanged(latLng)
             );
           }}
@@ -90,9 +109,10 @@ class Homepage extends React.Component {
           position={this.state.searchResultLatlng}
           locations={this.state.markers}
           onBoundsChanged={center => this.onBoundsChanged(center)}
-          onPositionChanged={position => this.setState({ searchResultLatlng: position })}
+          onPositionChanged={position => this.setState({ searchResultLatlng: position, searchResultLocation: null })}
         />
         <div className="m-3">
+          { missingLocation }
           <SearchResults
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}

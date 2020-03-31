@@ -41,10 +41,12 @@ class Homepage extends React.Component {
   }
 
   calculateGroupDistance(grouped) {
-    const groupedResult = grouped.map(group => ({
-      ...group,
-      distance: this.calculateDistance(group, this.state.center)
-    }));
+    const groupedResult = grouped
+      .map(group => ({
+        ...group,
+        distance: this.calculateDistance(group, this.state.center)
+      }))
+      .filter(group => group.distance < 500000);
     return _.sortBy(groupedResult, ["distance"]);
   }
 
@@ -63,10 +65,13 @@ class Homepage extends React.Component {
   }
 
   isMissingLocationInformation(location) {
-    return location &&
+    return (
+      location &&
       isStoreType(location.types) &&
       location.name &&
-      !this.state.results.filter(result => result.placeId === location.place_id).length;
+      !this.state.results.filter(result => result.placeId === location.place_id)
+        .length
+    );
   }
 
   onBoundsChanged(center) {
@@ -86,12 +91,15 @@ class Homepage extends React.Component {
 
   render() {
     let missingLocation = null;
-    if(this.isMissingLocationInformation(this.state.searchResultLocation)) {
+    if (this.isMissingLocationInformation(this.state.searchResultLocation)) {
       missingLocation = (
-        <MissingBlock missing={true} result={{
-          name: this.state.searchResultLocation.name,
-          entries: [{ 'Store Name': this.state.searchResultLocation.name }]
-        }}></MissingBlock>
+        <MissingBlock
+          missing={true}
+          result={{
+            name: this.state.searchResultLocation.name,
+            entries: [{ "Store Name": this.state.searchResultLocation.name }]
+          }}
+        ></MissingBlock>
       );
     }
 
@@ -101,7 +109,8 @@ class Homepage extends React.Component {
         <MapWithSearch
           value=""
           onSuccess={({ name, latLng, place_id, types }) => {
-            this.setState({
+            this.setState(
+              {
                 searchResultLatlng: latLng,
                 searchResultLocation: { name, latLng, place_id, types }
               },
@@ -112,10 +121,15 @@ class Homepage extends React.Component {
           position={this.state.searchResultLatlng}
           locations={this.state.markers}
           onBoundsChanged={center => this.onBoundsChanged(center)}
-          onPositionChanged={position => this.setState({ searchResultLatlng: position, searchResultLocation: null })}
+          onPositionChanged={position =>
+            this.setState({
+              searchResultLatlng: position,
+              searchResultLocation: null
+            })
+          }
         />
         <div className="m-3">
-          { missingLocation }
+          {missingLocation}
           <h6 className="text-uppercase font-weight-bold mb-3">
             Stores Nearby
           </h6>

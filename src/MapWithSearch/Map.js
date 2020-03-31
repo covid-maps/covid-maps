@@ -7,10 +7,10 @@ const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,
 const defaultMapOptions = {
   fullscreenControl: false,
   mapTypeControl: false,
-  streetViewControl: false
+  streetViewControl: false,
   // `greedy` will disable the two-finger drag behavior
   // on mobile.
-  // gestureHandling: "greedy"
+  gestureHandling: "greedy"
 };
 
 const defaultCenter = { lat: 49.281376, lng: -123.111382 };

@@ -154,7 +154,7 @@ class SubmitForm extends React.Component {
           isMarkerShown
           onSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
-          style={{ height: 300 }}
+          style={{ height: "40vh" }}
           position={
             this.state.data.Latitude
               ? {

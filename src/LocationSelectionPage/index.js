@@ -84,7 +84,7 @@ class LocationSelectionPage extends React.Component {
     return (
       <>
         <div class="m-3 text-uppercase font-weight-bold">
-          <h5>Set store location</h5>
+          <h5>Set store location to add</h5>
         </div>
         <MapWithSearch
           isMarkerShown

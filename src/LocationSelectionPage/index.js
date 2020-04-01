@@ -140,7 +140,7 @@ class LocationSelectionPage extends React.Component {
             <Button
               variant="outline-primary"
               className="text-uppercase"
-              disabled={!this.hasLocation()}
+              // disabled={!this.hasLocation()}
             >
               Select location
             </Button>

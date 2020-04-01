@@ -40,6 +40,12 @@ class MapWithSearch extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
+    if (this.state.ipLocation && !prevState.ipLocation) {
+      this.props.onSuccess({
+        latLng: this.state.ipLocation
+      });
+    }
+
     if (this.props.coords && !prevProps.coords) {
       this.props.onSuccess({
         latLng: {

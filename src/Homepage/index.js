@@ -14,7 +14,7 @@ class Homepage extends React.Component {
     isLoading: true,
     center: {},
     searchResultLatlng: undefined,
-    searchResultLocation: undefined
+    searchResult: undefined
   };
 
   componentDidMount() {
@@ -67,8 +67,7 @@ class Homepage extends React.Component {
       location &&
       isStoreType(location.types) &&
       location.name &&
-      !this.state.results.filter(result => result.placeId === location.place_id)
-        .length
+      !this.state.results.find(result => result.placeId === location.place_id)
     );
   }
 
@@ -88,14 +87,26 @@ class Homepage extends React.Component {
   }
 
   render() {
-    let missingLocation = null;
-    if (this.isMissingLocationInformation(this.state.searchResultLocation)) {
-      missingLocation = (
+    let missingBlock = null;
+    if (this.isMissingLocationInformation(this.state.searchResult)) {
+      const storeLocation = this.state.searchResult;
+      missingBlock = (
         <MissingBlock
           missing={true}
           result={{
-            name: this.state.searchResultLocation.name,
-            entries: [{ "Store Name": this.state.searchResultLocation.name }]
+            name: storeLocation.name,
+            // TODO: first comma thing with the name
+            entries: [
+              {
+                "Store Name": storeLocation.name,
+                Latitude: storeLocation.latLng.lat,
+                Longitude: storeLocation.latLng.lng,
+                "Place Id": storeLocation.place_id,
+                City: storeLocation.city,
+                Locality: storeLocation.locality,
+                Address: storeLocation.address
+              }
+            ]
           }}
         ></MissingBlock>
       );
@@ -106,14 +117,14 @@ class Homepage extends React.Component {
         <ScrollToTopOnMount />
         <MapWithSearch
           value=""
-          onSuccess={({ name, latLng, place_id, types }) => {
-            if (latLng) {
+          onSuccess={result => {
+            if (result && result.latLng) {
               this.setState(
                 {
-                  searchResultLatlng: latLng,
-                  searchResultLocation: { name, latLng, place_id, types }
+                  searchResultLatlng: result.latLng,
+                  searchResult: result
                 },
-                this.onBoundsChanged(latLng)
+                this.onBoundsChanged(result.latLng)
               );
             }
           }}
@@ -124,12 +135,12 @@ class Homepage extends React.Component {
           onPositionChanged={position =>
             this.setState({
               searchResultLatlng: position,
-              searchResultLocation: null
+              searchResult: null
             })
           }
         />
         <div className="m-3">
-          {missingLocation}
+          {missingBlock}
           <h6 className="text-uppercase font-weight-bold mb-3">
             Stores Nearby
           </h6>

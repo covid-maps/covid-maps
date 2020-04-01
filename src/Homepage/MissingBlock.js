@@ -12,17 +12,17 @@ export default class MissingBlock extends React.Component {
         }`}
       >
         <div className="card-body">
-          <h5 className="card-title m-0 p-0">{result.name}</h5>
-          <p className="card-text">
-            We don't have information on this location yet - you can help out by
-            adding some!
-          </p>
           <Link
             to={{ pathname: "/update", state: { item: entry } }}
-            className="btn btn-sm btn-outline-light text-uppercase"
+            className="float-right btn btn-sm btn-outline-light text-uppercase"
           >
             Add
           </Link>
+          <h5 className="card-title m-0 p-0">{result.name}</h5>
+          <p className="card-text">
+            We don't have information on this location yet. Help out by adding
+            some!
+          </p>
         </div>
       </div>
     );

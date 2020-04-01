@@ -59,7 +59,10 @@ class SubmitForm extends React.Component {
     place_id,
     types
   }) => {
-    if ((latLng && latLng.lat) || name) {
+    // This checks for latlng and name, so that
+    // we don't inadvertently overwrite teh state in the case
+    // of a current location update in onSuccess.
+    if (latLng && latLng.lat && name) {
       this.setState({
         searchFieldValue: name,
         data: {
@@ -89,7 +92,6 @@ class SubmitForm extends React.Component {
     const elements = event.target.elements;
     const data = {
       ...this.state.data,
-      Safety: elements.formBasicCrowdDetails.value,
       Timestamp: new Date().toISOString()
     };
 
@@ -113,6 +115,10 @@ class SubmitForm extends React.Component {
   onChangeInput({ target }, dataKey) {
     this.setState({ data: { ...this.state.data, [dataKey]: target.value } });
   }
+
+  // componentDidUpdate(prevProps, prevState, snapshot) {
+  //   console.log("change", this.state.data, prevState.data);
+  // }
 
   componentDidMount() {
     if (this.props.location.state) {

@@ -77,6 +77,7 @@ class MapWithSearch extends React.Component {
             value={this.props.value}
             currentLocation={current}
             onGeolocation={this.props.getGeolocation}
+            activateInput={this.props.activateInput}
           />
         </Form>
         <Map

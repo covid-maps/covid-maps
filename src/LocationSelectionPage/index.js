@@ -24,8 +24,6 @@ const emptyData = {
 
 class LocationSelectionPage extends React.Component {
   state = {
-    isLoading: false,
-    hasSubmitted: false,
     currentLocationCaptured: false,
     data: { ...emptyData },
     searchFieldValue: ""
@@ -57,9 +55,9 @@ class LocationSelectionPage extends React.Component {
     }
   };
 
-  shouldComponentUpdate(nextProps, nextState) {
-    return !this.state.currentLocationCaptured;
-  }
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return !this.state.currentLocationCaptured;
+  // }
 
   getSearchValue() {
     if (this.state.searchFieldValue) {
@@ -90,18 +88,19 @@ class LocationSelectionPage extends React.Component {
         </div>
         <MapWithSearch
           isMarkerShown
+          activateInput
           onSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
           style={{ height: "60vh" }}
-          onBoundsChanged={center => {
-            this.setState({
-              currentLocationCaptured: true,
-              data: {
-                Latitude: center.lat,
-                Longitude: center.lng
-              }
-            });
-          }}
+          // onBoundsChanged={center => {
+          //   this.setState({
+          //     currentLocationCaptured: true,
+          //     data: {
+          //       Latitude: center.lat,
+          //       Longitude: center.lng
+          //     }
+          //   });
+          // }}
           position={
             this.state.data.Latitude
               ? {

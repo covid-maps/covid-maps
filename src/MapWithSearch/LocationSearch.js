@@ -53,6 +53,12 @@ class LocationSearchInput extends React.Component {
     }
   }
 
+  componentDidMount() {
+    if (this.props.activateInput) {
+      this.textInput.current.focus();
+    }
+  }
+
   clearInput() {
     this.setState({ address: "" });
   }

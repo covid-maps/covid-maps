@@ -138,7 +138,10 @@ class LocationSelectionPage extends React.Component {
 
         <div className="my-3 d-flex justify-content-center">
           <Link to={{ pathname: "/update", state: { item: this.state.data } }}>
-            <Button className="text-uppercase" disabled={!this.hasLocation()}>
+            <Button
+              className="outline-success text-uppercase"
+              disabled={!this.hasLocation()}
+            >
               Select location
             </Button>
           </Link>

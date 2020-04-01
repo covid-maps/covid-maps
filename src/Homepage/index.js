@@ -4,7 +4,6 @@ import MissingBlock from "./MissingBlock";
 import { ScrollToTopOnMount, isStoreType } from "../utils";
 import * as api from "../api";
 import { getDistance } from "geolib";
-import { groupBy} from 'lodash';
 import MapWithSearch from "../MapWithSearch";
 
 class Homepage extends React.Component {
@@ -49,8 +48,19 @@ class Homepage extends React.Component {
   }
 
   formatResults(results) {
-    const groupByFn = result => result["Place Id"] || result["Store Name"];
-    const grouped = Object.values(groupBy(results, groupByFn)).map(
+    const grouped = Object.values(results.reduce(function (obj, result) {
+
+      var length = result.length;
+
+      if (!obj.hasOwnProperty(result["Place Id"] || result["Store Name"])) {
+        obj[result["Place Id"] || result["Store Name"]] = [];
+      }
+
+      obj[result["Place Id"] || result["Store Name"]].push(result);
+
+      return obj;
+
+    }, {})).map(
       entries => ({
         name: entries[0]["Store Name"],
         placeId: entries[0]["Place Id"],

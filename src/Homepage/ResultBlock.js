@@ -2,6 +2,14 @@ import React from "react";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
 
+function removeSafety(entry) {
+  return {
+    ...entry,
+    "Safety Observations": "",
+    "Useful Information": ""
+  };
+}
+
 export default class ResultBlock extends React.Component {
   constructor(props) {
     super(props);
@@ -34,7 +42,7 @@ export default class ResultBlock extends React.Component {
       >
         <div className="card-body p-3">
           <Link
-            to={{ pathname: "/update", state: { item: entry } }}
+            to={{ pathname: "/update", state: { item: removeSafety(entry) } }}
             className="float-right btn btn-sm btn-outline-success text-uppercase"
           >
             Update

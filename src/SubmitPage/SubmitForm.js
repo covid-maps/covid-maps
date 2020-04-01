@@ -238,7 +238,7 @@ class SubmitForm extends React.Component {
                 rows="3"
                 value={this.state.data["Useful Information"]}
                 onChange={e => this.onChangeInput(e, "Useful Information")}
-                placeholder="Contact number, timing, stock availability, etc."
+                placeholder="Timings, stock availability, etc."
               />
             </Form.Group>
 

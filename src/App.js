@@ -6,9 +6,9 @@ import "./App.css";
 import Homepage from "./Homepage";
 import SubmitPage from "./SubmitPage";
 import AboutPage from "./AboutPage";
+import { ScrollToTop } from "./utils";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
-import Button from "react-bootstrap/Button";
 import ReactGA from "react-ga";
 import logo from "./Logo.svg";
 
@@ -35,12 +35,8 @@ function AppNavbar() {
           />{" "}
         </Link>
       </Navbar.Brand>
-      <Nav className="ml-auto">
-        <Link to="/update">
-          <Button size="sm" variant="success" className="text-uppercase">
-            <strong>Submit update</strong>
-          </Button>
-        </Link>
+      <Nav className="ml-auto text-muted">
+        {/* <div>Find nearby stores</div> */}
       </Nav>
     </Navbar>
   );
@@ -50,6 +46,7 @@ function App() {
   return (
     <Router history={history}>
       <div className="App">
+        <ScrollToTop />
         <AppNavbar />
         <div className="page">
           <Switch>

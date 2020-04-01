@@ -1,10 +1,25 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import Button from "react-bootstrap/Button";
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
-import { ScrollToTopOnMount, isStoreType } from "../utils";
 import * as api from "../api";
 import { getDistance } from "geolib";
 import MapWithSearch from "../MapWithSearch";
+import { isStoreType } from "../utils";
+
+function searchResultToFormEntry(searchResult) {
+  if (!searchResult) return undefined;
+  return {
+    "Store Name": searchResult.name,
+    Latitude: searchResult.latLng.lat,
+    Longitude: searchResult.latLng.lng,
+    "Place Id": searchResult.place_id,
+    City: searchResult.city,
+    Locality: searchResult.locality,
+    Address: searchResult.address
+  };
+}
 
 class Homepage extends React.Component {
   state = {
@@ -93,24 +108,14 @@ class Homepage extends React.Component {
   render() {
     let missingBlock = null;
     if (this.isMissingLocationInformation(this.state.searchResult)) {
-      const storeLocation = this.state.searchResult;
+      const { searchResult } = this.state;
       missingBlock = (
         <MissingBlock
           missing={true}
           result={{
-            name: storeLocation.name,
+            name: searchResult.name,
             // TODO: first comma thing with the name
-            entries: [
-              {
-                "Store Name": storeLocation.name,
-                Latitude: storeLocation.latLng.lat,
-                Longitude: storeLocation.latLng.lng,
-                "Place Id": storeLocation.place_id,
-                City: storeLocation.city,
-                Locality: storeLocation.locality,
-                Address: storeLocation.address
-              }
-            ]
+            entries: [searchResultToFormEntry(searchResult)]
           }}
         ></MissingBlock>
       );
@@ -118,7 +123,6 @@ class Homepage extends React.Component {
 
     return (
       <div>
-        <ScrollToTopOnMount />
         <MapWithSearch
           value=""
           onSuccess={result => {
@@ -143,16 +147,34 @@ class Homepage extends React.Component {
             })
           }
         />
-        <div className="m-3">
+        <div className="my-3 mx-2">
           {missingBlock}
-          <h6 className="text-uppercase font-weight-bold mb-3">
-            Stores Nearby
-          </h6>
+          <div className="my-1 px-3 d-flex justify-content-between align-items-center">
+            <h6 className="text-uppercase m-0 font-weight-bold">
+              Stores Nearby
+            </h6>
+            <Link
+              to={{
+                pathname: "/update",
+                state: {
+                  item: searchResultToFormEntry(this.state.searchResult)
+                }
+              }}
+            >
+              <Button
+                size="sm"
+                variant="outline-success"
+                className="text-uppercase"
+              >
+                Add a store
+              </Button>
+            </Link>
+          </div>
           <SearchResults
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
             results={this.state.results.filter(
-              result => result.distance < 500000
+              result => result.distance < 200000
             )}
             center={this.state.center}
           />

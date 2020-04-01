@@ -8,7 +8,7 @@ import PlacesAutocomplete, {
 } from "react-places-autocomplete";
 import { getAddressComponent } from "../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faTimesCircle, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 
 class LocationSearchInput extends React.Component {
   constructor(props) {
@@ -23,7 +23,6 @@ class LocationSearchInput extends React.Component {
 
   handleSelect = address => {
     this.textInput.current.blur();
-    console.log("handle select");
     geocodeByAddress(address)
       .then(async results => {
         this.setState({ address });
@@ -75,10 +74,10 @@ class LocationSearchInput extends React.Component {
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
-            <InputGroup>
+            <InputGroup className="location-search-group">
               <Form.Control
                 {...getInputProps({
-                  placeholder: "Search by name or landmark",
+                  placeholder: "Search by store or landmark",
                   defaultValue: this.props.defaultValue,
                   className: "location-search-input"
                 })}
@@ -87,7 +86,7 @@ class LocationSearchInput extends React.Component {
               <InputGroup.Append>
                 <Button
                   onClick={this.props.onGeolocation}
-                  variant="outline-primary"
+                  variant="outline-secondary"
                 >
                   <FontAwesomeIcon icon={faCrosshairs} />
                 </Button>
@@ -95,7 +94,7 @@ class LocationSearchInput extends React.Component {
                   onClick={e => this.clearInput(e)}
                   variant="outline-secondary"
                 >
-                  <FontAwesomeIcon icon={faTimesCircle} />
+                  <FontAwesomeIcon icon={faTimes} />
                 </Button>
               </InputGroup.Append>
             </InputGroup>

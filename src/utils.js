@@ -1,14 +1,19 @@
 import React from "react";
+import { withRouter } from "react-router-dom";
 
-export class ScrollToTopOnMount extends React.Component {
-  componentDidMount() {
-    window.scrollTo(0, 0);
+class ScrollToTopOnMount extends React.Component {
+  componentDidUpdate(prevProps) {
+    if (this.props.location.pathname !== prevProps.location.pathname) {
+      window.scrollTo(0, 0);
+    }
   }
 
   render() {
     return null;
   }
 }
+
+export const ScrollToTop = withRouter(ScrollToTopOnMount);
 
 // The API key is restricted through HTTP referer rules.
 export const GOOGLE_API_KEY = "AIzaSyB9hwI7b4677POloj5DpmDXaliqU5Dp8sA";

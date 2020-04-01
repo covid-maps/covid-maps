@@ -34,6 +34,11 @@ body {
   color: #1b1b1b !important;
 }
 
+.location-search-group input,
+.location-search-group button {
+  border-color: #6c757d;
+}
+
 footer {
   background-color: #f7f7f7;
   font-size: smaller;

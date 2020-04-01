@@ -32,7 +32,7 @@ export default class ResultBlock extends React.Component {
           backgroundColor: this.state.hover ? "#eee" : "white"
         }}
       >
-        <div className="card-body">
+        <div className="card-body p-3">
           <Link
             to={{ pathname: "/update", state: { item: entry } }}
             className="float-right btn btn-sm btn-outline-success text-uppercase"

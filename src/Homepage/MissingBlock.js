@@ -7,11 +7,11 @@ export default class MissingBlock extends React.Component {
     const entry = result.entries.length ? result.entries[0] : undefined;
     return (
       <div
-        className={`card my-3 ${
+        className={`card my-2 ${
           this.props.missing ? "text-white bg-info" : null
         }`}
       >
-        <div className="card-body">
+        <div className="card-body p-3">
           <Link
             to={{ pathname: "/update", state: { item: entry } }}
             className="float-right btn btn-sm btn-outline-light text-uppercase"

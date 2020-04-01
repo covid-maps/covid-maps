@@ -1,6 +1,5 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { ScrollToTopOnMount } from "../utils";
 
 function NewTabLink({ href, children }) {
   return (
@@ -13,7 +12,6 @@ function NewTabLink({ href, children }) {
 function AboutPage() {
   return (
     <div className="container p-4 about-page">
-      <ScrollToTopOnMount />
       <h4 className="text-uppercase mb-1">About</h4>
       <p className="text-black-50">
         Covid Maps is a crowd-sourced app that helps you track the latest

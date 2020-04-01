@@ -154,7 +154,7 @@ class SubmitForm extends React.Component {
           isMarkerShown
           onSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
-          style={{ height: "40vh" }}
+          style={{ height: "45vh" }}
           position={
             this.state.data.Latitude
               ? {
@@ -196,7 +196,7 @@ class SubmitForm extends React.Component {
         ) : null}
 
         <Form onSubmit={e => this.onSubmit(e)}>
-          <div className="container p-4">
+          <div className="container p-3">
             <h6 className="text-uppercase font-weight-bold mb-3">
               Update Store Status
             </h6>

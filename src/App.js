@@ -6,6 +6,7 @@ import "./App.css";
 import Homepage from "./Homepage";
 import SubmitPage from "./SubmitPage";
 import AboutPage from "./AboutPage";
+import LocationSelectionPage from "./LocationSelectionPage";
 import { ScrollToTop } from "./utils";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
@@ -36,7 +37,7 @@ function AppNavbar() {
         </Link>
       </Navbar.Brand>
       <Nav className="ml-auto text-muted">
-        {/* <div>Find nearby stores</div> */}
+        {/* <div>Help 1200+ people</div> */}
       </Nav>
     </Navbar>
   );
@@ -51,6 +52,7 @@ function App() {
         <div className="page">
           <Switch>
             <Route path="/update" component={SubmitPage} />
+            <Route path="/location" component={LocationSelectionPage} />
             <Route path="/about" component={AboutPage} />
             <Route path="/" component={Homepage} />
           </Switch>

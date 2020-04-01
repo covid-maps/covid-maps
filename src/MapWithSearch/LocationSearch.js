@@ -77,7 +77,7 @@ class LocationSearchInput extends React.Component {
             <InputGroup className="location-search-group">
               <Form.Control
                 {...getInputProps({
-                  placeholder: "Search by store or landmark",
+                  placeholder: "Search by store, address or landmark",
                   defaultValue: this.props.defaultValue,
                   className: "location-search-input"
                 })}

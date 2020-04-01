@@ -105,6 +105,15 @@ class Homepage extends React.Component {
     });
   }
 
+  getLinkState() {
+    const item = searchResultToFormEntry(this.state.searchResult);
+    return item
+      ? {
+          item: searchResultToFormEntry(this.state.searchResult)
+        }
+      : undefined;
+  }
+
   render() {
     let missingBlock = null;
     if (this.isMissingLocationInformation(this.state.searchResult)) {
@@ -156,9 +165,7 @@ class Homepage extends React.Component {
             <Link
               to={{
                 pathname: "/update",
-                state: {
-                  item: searchResultToFormEntry(this.state.searchResult)
-                }
+                state: this.getLinkState()
               }}
             >
               <Button

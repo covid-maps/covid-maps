@@ -85,7 +85,7 @@ class LocationSelectionPage extends React.Component {
   render() {
     return (
       <>
-        <div class="text-uppercase font-weight-bold my-3">
+        <div class="m-3 text-uppercase font-weight-bold">
           <h5>Set store location</h5>
         </div>
         <MapWithSearch
@@ -139,7 +139,8 @@ class LocationSelectionPage extends React.Component {
         <div className="my-3 d-flex justify-content-center">
           <Link to={{ pathname: "/update", state: { item: this.state.data } }}>
             <Button
-              className="outline-success text-uppercase"
+              variant="outline-primary"
+              className="text-uppercase"
               disabled={!this.hasLocation()}
             >
               Select location

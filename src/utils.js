@@ -46,6 +46,6 @@ export const convertSvgUrl = svg => {
 };
 
 export const isStoreType = types => {
-  const invalidTypes = ["political", "locality", "premise"];
+  const invalidTypes = ["political", "locality"];
   return types && !types.filter(type => invalidTypes.indexOf(type) >= 0).length;
 };

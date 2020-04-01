@@ -13,7 +13,7 @@ export default class ResultBlock extends React.Component {
   onClick() {
     window.scrollTo({
       top: 50,
-      behavior: 'smooth'
+      behavior: "smooth"
     });
     this.props.onClick && this.props.onClick(this.props.result);
   }
@@ -26,15 +26,18 @@ export default class ResultBlock extends React.Component {
         onClick={() => this.onClick()}
         onMouseEnter={() => this.setState({ hover: true })}
         onMouseLeave={() => this.setState({ hover: false })}
-        className="card my-3"
-        style={{ cursor: 'pointer', backgroundColor: this.state.hover ? '#eee' : 'white' }}
+        className="card my-1"
+        style={{
+          cursor: "pointer",
+          backgroundColor: this.state.hover ? "#eee" : "white"
+        }}
       >
         <div className="card-body">
           <Link
             to={{ pathname: "/update", state: { item: entry } }}
             className="float-right btn btn-sm btn-outline-success text-uppercase"
           >
-            Update this
+            Update
           </Link>
           <h5 className="card-title m-0 p-0">{result.name}</h5>
           <ResultEntry entries={result.entries} />

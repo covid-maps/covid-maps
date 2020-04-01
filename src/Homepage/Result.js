@@ -26,7 +26,7 @@ function ResultEntry({ entries }) {
           <div>{result["Useful Information"]}</div>
         ) : null}
       </div>
-      <div className="card-link" style={{ fontSize: "0.8em" }}>
+      <div style={{ fontSize: "0.85em" }}>
         <small className="text-muted text-uppercase d-inline-block mt-2">
           {" "}
           Updated <Timestamp {...result} />

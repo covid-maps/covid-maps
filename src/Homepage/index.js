@@ -117,7 +117,7 @@ class Homepage extends React.Component {
               );
             }
           }}
-          style={{ height: "50vh" }}
+          style={{ height: "45vh" }}
           position={this.state.searchResultLatlng}
           locations={this.state.markers}
           onBoundsChanged={center => this.onBoundsChanged(center)}

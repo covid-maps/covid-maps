@@ -46,11 +46,11 @@ function MyGoogleMap(props) {
 
   const defaultIcon = {
     url: convertSvgUrl(iconSvgs.default),
-    scaledSize: { height: 40, width: 30 }
+    scaledSize: { height: 35, width: 30 }
   };
   const highlightedIcon = {
     url: convertSvgUrl(iconSvgs.highlighted),
-    scaledSize: { height: 40, width: 30 }
+    scaledSize: { height: 35, width: 30 }
   };
 
   const getMarkerIcon = location => {

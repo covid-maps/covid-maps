@@ -231,6 +231,7 @@ class SubmitForm extends React.Component {
               <Form.Control
                 as="textarea"
                 rows="2"
+                value={this.state.data["Safety Observations"]}
                 onChange={e => this.onChangeInput(e, "Safety Observations")}
                 placeholder="Queues, crowd level &amp; safety precautions"
               />
@@ -241,6 +242,7 @@ class SubmitForm extends React.Component {
               <Form.Control
                 as="textarea"
                 rows="3"
+                value={this.state.data["Useful Information"]}
                 onChange={e => this.onChangeInput(e, "Useful Information")}
                 placeholder="Contact number, timing, stock availability, etc."
               />

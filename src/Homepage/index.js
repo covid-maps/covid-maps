@@ -116,7 +116,9 @@ class Homepage extends React.Component {
 
   getLinkTo() {
     const state = this.getLinkState();
-    return state ? { pathname: "/update", state } : { pathname: "/location" };
+    return state && state["Store Name"]
+      ? { pathname: "/update", state }
+      : { pathname: "/location" };
   }
 
   render() {

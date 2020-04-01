@@ -114,6 +114,11 @@ class Homepage extends React.Component {
       : undefined;
   }
 
+  getLinkTo() {
+    const state = this.getLinkState();
+    return state ? { pathname: "/update", state } : { pathname: "/location" };
+  }
+
   render() {
     let missingBlock = null;
     if (this.isMissingLocationInformation(this.state.searchResult)) {
@@ -162,12 +167,7 @@ class Homepage extends React.Component {
             <h6 className="text-uppercase m-0 font-weight-bold">
               Stores Nearby
             </h6>
-            <Link
-              to={{
-                pathname: "/update",
-                state: this.getLinkState()
-              }}
-            >
+            <Link to={this.getLinkTo()}>
               <Button
                 size="sm"
                 variant="outline-success"

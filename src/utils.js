@@ -49,3 +49,9 @@ export const isStoreType = types => {
   const invalidTypes = ["political", "locality"];
   return types && !types.filter(type => invalidTypes.indexOf(type) >= 0).length;
 };
+
+export function isFunction(functionToCheck) {
+  return (
+    functionToCheck && {}.toString.call(functionToCheck) === "[object Function]"
+  );
+}

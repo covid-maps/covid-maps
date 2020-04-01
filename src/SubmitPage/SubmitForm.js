@@ -3,18 +3,12 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
-import { geocodeByLatlng, getAddressComponent } from "../utils";
+import { geocodeByLatlng, getAddressComponent, isFunction } from "../utils";
 import MapWithSearch from "../MapWithSearch";
 
 function getFirstComma(address) {
   const split = address ? address.split(", ") : [];
   return split.length ? split[0] : address;
-}
-
-function isFunction(functionToCheck) {
-  return (
-    functionToCheck && {}.toString.call(functionToCheck) === "[object Function]"
-  );
 }
 
 function ButtonWithLoading(props) {

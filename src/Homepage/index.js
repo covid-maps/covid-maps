@@ -4,7 +4,7 @@ import MissingBlock from "./MissingBlock";
 import { ScrollToTopOnMount, isStoreType } from "../utils";
 import * as api from "../api";
 import { getDistance } from "geolib";
-import _ from "lodash";
+import { groupBy} from 'lodash';
 import MapWithSearch from "../MapWithSearch";
 
 class Homepage extends React.Component {
@@ -50,7 +50,7 @@ class Homepage extends React.Component {
 
   formatResults(results) {
     const groupByFn = result => result["Place Id"] || result["Store Name"];
-    const grouped = Object.values(_.groupBy(results, groupByFn)).map(
+    const grouped = Object.values(groupBy(results, groupByFn)).map(
       entries => ({
         name: entries[0]["Store Name"],
         placeId: entries[0]["Place Id"],

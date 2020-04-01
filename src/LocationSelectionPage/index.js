@@ -1,28 +1,107 @@
 import React from "react";
-import Form from "react-bootstrap/Form";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import Spinner from "react-bootstrap/Spinner";
 import { geocodeByLatlng, getAddressComponent, isFunction } from "../utils";
 import MapWithSearch from "../MapWithSearch";
 
-class LocationSelectionPage extends React.Component {
-  state = { data: {} };
+function getFirstComma(address) {
+  const split = address ? address.split(", ") : [];
+  return split.length ? split[0] : address;
+}
 
-  onLocationSearchCompleted() {
-    //
+const emptyData = {
+  "Store Name": "",
+  "Store Category": "Grocery", // default selection
+  "Useful Information": "",
+  "Safety Observations": "",
+  Latitude: "",
+  Longitude: "",
+  City: "",
+  Locality: "",
+  "Place Id": "",
+  Address: ""
+};
+
+class LocationSelectionPage extends React.Component {
+  state = {
+    isLoading: false,
+    hasSubmitted: false,
+    currentLocationCaptured: false,
+    data: { ...emptyData },
+    searchFieldValue: ""
+  };
+
+  onLocationSearchCompleted = ({
+    latLng,
+    name,
+    address,
+    city,
+    locality,
+    place_id,
+    types
+  }) => {
+    if ((latLng && latLng.lat) || name) {
+      this.setState({
+        searchFieldValue: name,
+        data: {
+          ...this.state.data,
+          "Store Name": getFirstComma(name),
+          Latitude: latLng.lat,
+          Longitude: latLng.lng,
+          City: city,
+          Locality: locality,
+          "Place Id": place_id,
+          Address: address
+        }
+      });
+    }
+  };
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return !this.state.currentLocationCaptured;
   }
 
-  getSearchValue() {}
+  getSearchValue() {
+    if (this.state.searchFieldValue) {
+      // this is set from dragging the marker
+      return this.state.searchFieldValue;
+    }
+
+    if (this.props.location.state) {
+      // this is coming from the "Update info" from
+      // the home page
+      return this.props.location.state.item["Store Name"];
+    }
+
+    return "";
+  }
+
+  hasLocation() {
+    return (
+      this.state.data && this.state.data.Latitude && this.state.data.Longitude
+    );
+  }
 
   render() {
     return (
       <>
+        <div class="text-uppercase font-weight-bold my-3 d-flex justify-content-center">
+          <h5>Find store location</h5>
+        </div>
         <MapWithSearch
           isMarkerShown
           onSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
-          style={{ height: "45vh" }}
+          style={{ height: "60vh" }}
+          onBoundsChanged={center => {
+            this.setState({
+              currentLocationCaptured: true,
+              data: {
+                Latitude: center.lat,
+                Longitude: center.lng
+              }
+            });
+          }}
           position={
             this.state.data.Latitude
               ? {
@@ -57,9 +136,11 @@ class LocationSelectionPage extends React.Component {
           }}
         />
 
-        <div className="my-3">
-          <Link to={{ pathname: "/update" }}>
-            <Button>Select location</Button>
+        <div className="my-3 d-flex justify-content-center">
+          <Link to={{ pathname: "/update", state: { item: this.state.data } }}>
+            <Button className="text-uppercase" disabled={!this.hasLocation()}>
+              Select location
+            </Button>
           </Link>
         </div>
       </>

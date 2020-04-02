@@ -6,12 +6,12 @@ import MissingBlock from "./MissingBlock";
 import * as api from "../api";
 import { getDistance } from "geolib";
 import MapWithSearch from "../MapWithSearch";
-import { isStoreType } from "../utils";
+import { isStoreType, getFirstComma } from "../utils";
 
 function searchResultToFormEntry(searchResult) {
   if (!searchResult) return undefined;
   return {
-    "Store Name": searchResult.name,
+    "Store Name": getFirstComma(searchResult.name),
     Latitude: searchResult.latLng.lat,
     Longitude: searchResult.latLng.lng,
     "Place Id": searchResult.place_id,
@@ -130,7 +130,6 @@ class Homepage extends React.Component {
           missing={true}
           result={{
             name: searchResult.name,
-            // TODO: first comma thing with the name
             entries: [searchResultToFormEntry(searchResult)]
           }}
         ></MissingBlock>

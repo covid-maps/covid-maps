@@ -55,3 +55,8 @@ export function isFunction(functionToCheck) {
     functionToCheck && {}.toString.call(functionToCheck) === "[object Function]"
   );
 }
+
+export function getFirstComma(address) {
+  const split = address ? address.split(", ") : [];
+  return split.length ? split[0] : address;
+}

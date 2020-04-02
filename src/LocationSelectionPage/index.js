@@ -1,13 +1,13 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import { geocodeByLatlng, getAddressComponent, isFunction } from "../utils";
+import {
+  geocodeByLatlng,
+  getAddressComponent,
+  isFunction,
+  getFirstComma
+} from "../utils";
 import MapWithSearch from "../MapWithSearch";
-
-function getFirstComma(address) {
-  const split = address ? address.split(", ") : [];
-  return split.length ? split[0] : address;
-}
 
 const emptyData = {
   "Store Name": "",

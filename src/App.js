@@ -13,6 +13,11 @@ import Nav from "react-bootstrap/Nav";
 import ReactGA from "react-ga";
 import logo from "./Logo.svg";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { library } from '@fortawesome/fontawesome-svg-core'
+import { fab } from '@fortawesome/free-brands-svg-icons'
+library.add(fab)
+
 const history = createBrowserHistory();
 if (process.env.NODE_ENV !== "development") {
   ReactGA.initialize("UA-162047555-1");
@@ -37,7 +42,38 @@ function AppNavbar() {
         </Link>
       </Navbar.Brand>
       <Nav className="ml-auto text-muted">
-        {/* <div>Help 1200+ people</div> */}
+        <Nav.Link
+          as={ReactGA.OutboundLink}
+          eventLabel='twitter'
+          to='https://twitter.com'
+          target='_blank'
+        >
+          <FontAwesomeIcon size='lg' icon={['fab', 'twitter']} />
+        </Nav.Link>
+        <Nav.Link
+          as={ReactGA.OutboundLink}
+          eventLabel='facebook'
+          href='https://facebook.com'
+          target='_blank'
+        >
+          <FontAwesomeIcon size='lg' icon={['fab', 'facebook-f']} />
+        </Nav.Link>
+        <Nav.Link
+          as={ReactGA.OutboundLink}
+          eventLabel='google'
+          href='https://google.com'
+          target='_blank'
+        >
+          <FontAwesomeIcon size='lg' icon={['fab', 'google']} />
+        </Nav.Link>
+        <Nav.Link
+          as={ReactGA.OutboundLink}
+          eventLabel='github'
+          to='https://github.com/arjun27/covid-maps'
+          target='_blank'
+        >
+          <FontAwesomeIcon size='lg' icon={['fab', 'github']} />
+        </Nav.Link>
       </Nav>
     </Navbar>
   );

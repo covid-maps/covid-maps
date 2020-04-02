@@ -1,4 +1,4 @@
-# toilet-paper-app
+# covid-maps
 
 [Rough spec](https://excalidraw.com/#json=5185613305217024,Or41kGO8gujpVcdLs6KDww): UI not to scale (+ lots of artistic license)
 

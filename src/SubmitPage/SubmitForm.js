@@ -89,7 +89,6 @@ class SubmitForm extends React.Component {
   async onSubmit(event) {
     event.preventDefault();
     this.setState({ isLoading: true });
-    const elements = event.target.elements;
     const data = {
       ...this.state.data,
       Timestamp: new Date().toISOString()

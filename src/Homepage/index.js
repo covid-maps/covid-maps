@@ -136,7 +136,9 @@ class Homepage extends React.Component {
         ></MissingBlock>
       );
     }
-
+    const closeByResults = this.state.results.filter(
+      result => result.distance < 200000
+    );
     return (
       <div>
         <MapWithSearch
@@ -182,9 +184,7 @@ class Homepage extends React.Component {
           <SearchResults
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
-            results={this.state.results.filter(
-              result => result.distance < 200000
-            )}
+            results={closeByResults}
             center={this.state.center}
           />
         </div>

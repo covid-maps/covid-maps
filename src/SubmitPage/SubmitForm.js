@@ -9,6 +9,7 @@ import {
   isFunction,
   getFirstComma
 } from "../utils";
+import { recordFormSubmission } from "../gaEvents";
 import MapWithSearch from "../MapWithSearch";
 
 function ButtonWithLoading(props) {
@@ -105,6 +106,7 @@ class SubmitForm extends React.Component {
 
     const response = await api.submit(data);
     console.log(response);
+    recordFormSubmission();
     this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
       window.scrollTo(0, 0);
       this.clearForm();

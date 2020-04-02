@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import { recordAddInfoToStoreCard } from "../gaEvents";
 
 export default class MissingBlock extends React.Component {
   render() {
@@ -15,6 +16,7 @@ export default class MissingBlock extends React.Component {
           <Link
             to={{ pathname: "/update", state: { item: entry } }}
             className="float-right btn btn-sm btn-outline-light text-uppercase"
+            onClick={recordAddInfoToStoreCard}
           >
             Add
           </Link>

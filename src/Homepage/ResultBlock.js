@@ -1,6 +1,7 @@
 import React from "react";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
+import { recordUpdateStore } from "../gaEvents";
 
 function removeSafety(entry) {
   return {
@@ -44,6 +45,7 @@ export default class ResultBlock extends React.Component {
           <Link
             to={{ pathname: "/update", state: { item: removeSafety(entry) } }}
             className="float-right btn btn-sm btn-outline-success text-uppercase"
+            onClick={recordUpdateStore}
           >
             Update
           </Link>

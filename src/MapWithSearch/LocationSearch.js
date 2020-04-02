@@ -9,6 +9,7 @@ import PlacesAutocomplete, {
 import { getAddressComponent } from "../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
+import { recordSearchCompleted } from "../gaEvents";
 
 class LocationSearchInput extends React.Component {
   constructor(props) {
@@ -23,6 +24,7 @@ class LocationSearchInput extends React.Component {
 
   handleSelect = address => {
     this.textInput.current.blur();
+    recordSearchCompleted();
     geocodeByAddress(address)
       .then(async results => {
         this.setState({ address });

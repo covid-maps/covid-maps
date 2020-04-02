@@ -7,6 +7,7 @@ import * as api from "../api";
 import { getDistance } from "geolib";
 import MapWithSearch from "../MapWithSearch";
 import { isStoreType, getFirstComma } from "../utils";
+import { recordAddNewStore } from "../gaEvents";
 
 function searchResultToFormEntry(searchResult) {
   if (!searchResult) return undefined;
@@ -175,6 +176,7 @@ class Homepage extends React.Component {
                 size="sm"
                 variant="outline-success"
                 className="text-uppercase"
+                onClick={recordAddNewStore}
               >
                 Add a store
               </Button>

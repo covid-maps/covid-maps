@@ -7,14 +7,15 @@ import * as api from "../api";
 
 class MapWithSearch extends React.Component {
   state = {
-    ipLocation: undefined
+    ipLocation: undefined,
+    ipAddress: undefined
   };
 
   componentDidMount() {
     api.ip().then(response => {
       const [lat, lng] = response.loc.split(",");
       this.setState({
-        // ip: response.ip,
+        ipAddress: response.ip,
         ipLocation: { lat: Number(lat), lng: Number(lng) }
       });
     });

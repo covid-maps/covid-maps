@@ -98,7 +98,11 @@ class SubmitForm extends React.Component {
     // Get IP if possible
     let ipData = this.state.ipData;
     if (!this.state.ipData) {
-      ipData = await api.ip();
+      try {
+        ipData = await api.ip();
+      } catch (e) {
+        // Damn ad-blockers
+      }
     }
     if (ipData && ipData.ip) {
       data["User IP"] = ipData.ip;

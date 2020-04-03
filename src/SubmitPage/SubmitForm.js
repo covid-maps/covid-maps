@@ -256,6 +256,7 @@ class SubmitForm extends React.Component {
                 value={this.state.data["Useful Information"]}
                 onChange={e => this.onChangeInput(e, "Useful Information")}
                 placeholder="Timings, stock availability, etc."
+                required
               />
             </Form.Group>
 

@@ -2,7 +2,7 @@
 
 Covid Maps is a crowd-sourced app that helps you track the latest information on essential services operating around you during the COVID-19 shutdowns.
 
-## Contributing to the project
+## 👩‍💻 Contributing to the project 👨‍💻
 
 Developers looking to contribute to this project can get started by filtering for [good-first-issues](https://github.com/arjun27/covid-maps/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) 
 

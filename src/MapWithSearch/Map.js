@@ -10,7 +10,7 @@ const defaultMapOptions = {
   streetViewControl: false,
   // `greedy` will disable the two-finger
   // drag behavior on mobile.
-  gestureHandling: "greedy",
+  gestureHandling: "greedy"
 };
 
 const defaultCenter = { lat: 49.281376, lng: -123.111382 };
@@ -19,7 +19,7 @@ function MyGoogleMap(props) {
   const [markerPosition, setMarkerPosition] = useState();
   const refMap = useRef(null);
 
-  const handlePositionChanged = (center) => {
+  const handlePositionChanged = center => {
     setMarkerPosition(center);
     props.onBoundsChanged &&
       props.onBoundsChanged({ lat: center.lat(), lng: center.lng() });
@@ -30,13 +30,13 @@ function MyGoogleMap(props) {
     handlePositionChanged(mapCenter);
   };
 
-  const handleMarkerClicked = (location) => {
+  const handleMarkerClicked = location => {
     refMap.current.panTo(location.latLng);
     handlePositionChanged(location.latLng);
     props.onPositionChanged &&
       props.onPositionChanged({
         lat: location.latLng.lat(),
-        lng: location.latLng.lng(),
+        lng: location.latLng.lng()
       });
   };
 
@@ -46,14 +46,14 @@ function MyGoogleMap(props) {
 
   const defaultIcon = {
     url: convertSvgUrl(iconSvgs.default),
-    scaledSize: { height: 35, width: 30 },
+    scaledSize: { height: 35, width: 30 }
   };
   const highlightedIcon = {
     url: convertSvgUrl(iconSvgs.highlighted),
-    scaledSize: { height: 35, width: 30 },
+    scaledSize: { height: 35, width: 30 }
   };
 
-  const getMarkerIcon = (location) => {
+  const getMarkerIcon = location => {
     const isSelected =
       props.position &&
       props.position.lat === location.lat &&
@@ -75,7 +75,7 @@ function MyGoogleMap(props) {
       }}
     >
       {props.locations &&
-        props.locations.map((location) => (
+        props.locations.map(location => (
           <Marker
             position={location}
             onClick={handleMarkerClicked}
@@ -91,7 +91,7 @@ function MyGoogleMap(props) {
           strokeOpacity: 0.2,
           strokeWeight: 1,
           fillColor: "#2688ff",
-          fillOpacity: 0.4,
+          fillOpacity: 0.4
         }}
       />
 
@@ -100,11 +100,11 @@ function MyGoogleMap(props) {
           draggable={!!props.onMarkerDragged}
           position={markerPosition}
           // icon={defaultIcon}
-          onDragEnd={(event) =>
+          onDragEnd={event =>
             props.onMarkerDragged &&
             props.onMarkerDragged({
               lat: event.latLng.lat(),
-              lng: event.latLng.lng(),
+              lng: event.latLng.lng()
             })
           }
         />

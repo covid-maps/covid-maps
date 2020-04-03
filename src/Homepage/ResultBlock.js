@@ -63,7 +63,7 @@ export default class ResultBlock extends React.Component {
                             className="float-right btn btn-sm btn-outline-primary text-uppercase ml-1"
                             onClick={recordAddInfoToStoreCard}
                         >
-                            <i className="far fa-directions"></i> Directions
+                            <i className="far fa-directions"></i>
                         </Link>
                     </div>
                 </div>

@@ -227,6 +227,16 @@ class SubmitForm extends React.Component {
               </Form.Control>
             </Form.Group>
 
+            <Form.Group controlId="formBasicOpenTimings">
+              <Form.Label>Opening Time</Form.Label>
+              <Form.Control size="sm" type="time" step="1800" placeholder="Open time" />
+            </Form.Group>
+
+            <Form.Group controlId="formBasicCloseTimings">
+              <Form.Label>Closing Time</Form.Label>
+              <Form.Control size="sm" type="time" step="1800" placeholder="Close time" />
+            </Form.Group>
+
             <Form.Group controlId="formBasicCrowdDetails">
               <Form.Label>Safety Observations</Form.Label>
               <Form.Control

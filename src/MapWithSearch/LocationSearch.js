@@ -85,7 +85,7 @@ class LocationSearchInput extends React.Component {
             <InputGroup className="location-search-group">
               <Form.Control
                 {...getInputProps({
-                  placeholder: "Search by store, address or landmark",
+                  placeholder: "Search by location/store name, address or landmark",
                   defaultValue: this.props.defaultValue,
                   className: "location-search-input"
                 })}
@@ -94,15 +94,17 @@ class LocationSearchInput extends React.Component {
               <InputGroup.Append>
                 <Button
                   onClick={this.props.onGeolocation}
-                  variant="outline-secondary"
+                  variant="light"
+                  className="border-1"
                 >
-                  <FontAwesomeIcon icon={faCrosshairs} />
+                  <i className="fal fa-crosshairs"></i>
                 </Button>
                 <Button
                   onClick={e => this.clearInput(e)}
-                  variant="outline-secondary"
+                  variant="light"
+                  className="border-1"
                 >
-                  <FontAwesomeIcon icon={faTimes} />
+                  <i className="fal fa-times"></i>
                 </Button>
               </InputGroup.Append>
             </InputGroup>

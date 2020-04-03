@@ -1,0 +1,15 @@
+.navbar {
+  .navbar-nav {
+    > a {
+      text-transform: uppercase;
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: 0.5em;
+      color: #000;
+
+      &:hover {
+        color: #333;
+      }
+    }
+  }
+}

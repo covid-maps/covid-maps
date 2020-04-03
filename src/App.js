@@ -43,8 +43,9 @@ function AppNavbar() {
           />{" "}
         </Link>
       </Navbar.Brand>
-      <Nav className="ml-auto text-muted">
-        {/* <div>Help 1200+ people</div> */}
+      <Nav className="ml-auto">
+        <Link to="/about">About</Link>
+        <Link to="/update">Add location</Link> ·{" "}
       </Nav>
     </Navbar>
   );
@@ -64,13 +65,6 @@ function App() {
             <Route path="/" component={Homepage} />
           </Switch>
         </div>
-        <footer className="m-0 p-0">
-          <div className="container py-4 text-center text-uppercase">
-            <Link to="/">Home</Link> ·{" "}
-            <Link to="/update">Submit an update</Link> ·{" "}
-            <Link to="/about">About</Link>
-          </div>
-        </footer>
       </div>
     </Router>
   );

@@ -229,7 +229,7 @@ class SubmitForm extends React.Component {
               </Form.Control>
             </Form.Group>
 
-            <Row>
+            {/* <Row>
               <Col>
                 <Form.Group controlId="formBasicOpenTimings">
                   <Form.Label>Opening Time</Form.Label>
@@ -242,7 +242,7 @@ class SubmitForm extends React.Component {
                   <Form.Control size="sm" type="time" step="1800" placeholder="Close time" />
                 </Form.Group>
               </Col>
-            </Row>
+            </Row> */}
 
             <Form.Group controlId="formBasicCrowdDetails">
               <Form.Label>Safety Observations</Form.Label>

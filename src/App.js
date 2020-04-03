@@ -1,8 +1,16 @@
 import React from "react";
 import { Router, Switch, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
+
+// Styles
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import "./assets/styles/global.scss";
+import "./assets/styles/components/components.scss";
+
+// Assets
+import logo from "./assets/media/Logo.svg";
+
+// Pages
 import Homepage from "./Homepage";
 import SubmitPage from "./SubmitPage";
 import AboutPage from "./AboutPage";
@@ -11,7 +19,6 @@ import { ScrollToTop } from "./utils";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import ReactGA from "react-ga";
-import logo from "./Logo.svg";
 
 const history = createBrowserHistory();
 if (process.env.NODE_ENV !== "development") {

@@ -56,7 +56,7 @@ export default class ResultBlock extends React.Component {
                             className="float-right btn btn-sm btn-outline-primary text-uppercase ml-1 d-none"
                             onClick={recordAddInfoToStoreCard}
                         >
-                            <i className="far fa-phone"></i> Call
+                            <i className="far fa-phone"></i>
                         </Link>
                         <Link
                             to={{pathname: "/update", state: {item: entry}}}

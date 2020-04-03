@@ -1,5 +1,7 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
@@ -227,15 +229,20 @@ class SubmitForm extends React.Component {
               </Form.Control>
             </Form.Group>
 
-            <Form.Group controlId="formBasicOpenTimings">
-              <Form.Label>Opening Time</Form.Label>
-              <Form.Control size="sm" type="time" step="1800" placeholder="Open time" />
-            </Form.Group>
-
-            <Form.Group controlId="formBasicCloseTimings">
-              <Form.Label>Closing Time</Form.Label>
-              <Form.Control size="sm" type="time" step="1800" placeholder="Close time" />
-            </Form.Group>
+            <Row>
+              <Col>
+                <Form.Group controlId="formBasicOpenTimings">
+                  <Form.Label>Opening Time</Form.Label>
+                  <Form.Control size="sm" type="time" step="1800" placeholder="Open time" />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group controlId="formBasicCloseTimings">
+                  <Form.Label>Closing Time</Form.Label>
+                  <Form.Control size="sm" type="time" step="1800" placeholder="Close time" />
+                </Form.Group>
+              </Col>
+            </Row>
 
             <Form.Group controlId="formBasicCrowdDetails">
               <Form.Label>Safety Observations</Form.Label>

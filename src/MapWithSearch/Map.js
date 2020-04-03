@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
-import { GOOGLE_API_KEY, iconSvgs, convertSvgUrl } from "../utils";
+import { GOOGLE_API_KEY, iconSvgs, makeIcon } from "../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
 
@@ -44,15 +44,8 @@ function MyGoogleMap(props) {
     ? { center: props.position }
     : { defaultCenter };
 
-  const defaultIcon = {
-    url: convertSvgUrl(iconSvgs.default),
-    scaledSize: { height: 35, width: 30 }
-  };
-  const highlightedIcon = {
-    url: convertSvgUrl(iconSvgs.highlighted),
-    scaledSize: { height: 35, width: 30 }
-  };
-
+  const defaultIcon = makeIcon(iconSvgs.default);
+  const highlightedIcon = makeIcon(iconSvgs.highlighted);
   const getMarkerIcon = location => {
     const isSelected =
       props.position &&
@@ -79,7 +72,7 @@ function MyGoogleMap(props) {
           <Marker
             position={location}
             onClick={handleMarkerClicked}
-            // icon={getMarkerIcon(location)}
+            icon={getMarkerIcon(location)}
           />
         ))}
 
@@ -99,7 +92,7 @@ function MyGoogleMap(props) {
         <Marker
           draggable={!!props.onMarkerDragged}
           position={markerPosition}
-          // icon={defaultIcon}
+          icon={defaultIcon}
           onDragEnd={event =>
             props.onMarkerDragged &&
             props.onMarkerDragged({

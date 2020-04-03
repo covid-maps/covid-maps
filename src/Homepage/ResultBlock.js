@@ -35,7 +35,7 @@ export default class ResultBlock extends React.Component {
                 onClick={() => this.onClick()}
                 onMouseEnter={() => this.setState({hover: true})}
                 onMouseLeave={() => this.setState({hover: false})}
-                className="card location-card my-1"
+                className="card location-card shadow-sm mb-2"
                 style={{
                     cursor: "pointer",
                     backgroundColor: this.state.hover ? "#eee" : "white"
@@ -45,11 +45,11 @@ export default class ResultBlock extends React.Component {
                     <h6 className="card-title m-0 p-0 d-flex align-self-center">{result.name}</h6>
                     <div className="flex-fill location-buttons">
                         <Link
-                            to={{pathname: "/update", state: {item: removeSafety(entry)}}}
-                            className="float-right btn btn-sm btn-outline-success text-uppercase ml-1"
-                            onClick={recordUpdateStore}
+                            to={{pathname: "/update", state: {item: entry}}}
+                            className="float-right btn btn-sm btn-outline-primary text-uppercase ml-1"
+                            onClick={recordAddInfoToStoreCard}
                         >
-                            <i className="far fa-pencil"></i> Update
+                            <i className="far fa-directions"></i>
                         </Link>
                         <Link
                             to={{pathname: "/update", state: {item: entry}}}
@@ -59,11 +59,11 @@ export default class ResultBlock extends React.Component {
                             <i className="far fa-phone"></i>
                         </Link>
                         <Link
-                            to={{pathname: "/update", state: {item: entry}}}
-                            className="float-right btn btn-sm btn-outline-primary text-uppercase ml-1"
-                            onClick={recordAddInfoToStoreCard}
+                            to={{pathname: "/update", state: {item: removeSafety(entry)}}}
+                            className="float-right btn btn-sm btn-outline-success text-uppercase ml-1"
+                            onClick={recordUpdateStore}
                         >
-                            <i className="far fa-directions"></i>
+                            <i className="far fa-pencil"></i> Update
                         </Link>
                     </div>
                 </div>

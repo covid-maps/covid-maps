@@ -11,7 +11,7 @@
 1. Run migrations through sequelize
 
    - `npx sequelize-cli db:migrate`
-   - `npx db-migrate up`
+   - https://sequelize.org/v5/manual/migrations.html
 
 ## Importing data
 

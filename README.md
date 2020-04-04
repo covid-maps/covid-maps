@@ -8,6 +8,8 @@ Developers looking to contribute to this project can get started by filtering fo
 
 Once you've gotten a hang of the code base, check out the [Prioritized Feature List](https://github.com/arjun27/covid-maps/issues/86) which has also been pinned on the [Issues Board](https://github.com/arjun27/covid-maps/issues)
 
+Join our [WhatsApp Developer group](https://chat.whatsapp.com/HzZT0gMYoYYEDDjj2LQUD8) to engage with the team working on this project.
+
 
 ## Project structure
 

@@ -43,7 +43,8 @@ const emptyData = {
   "Place Id": "",
   Address: "",
   "Opening Time": "",
-  "Closing Time": ""
+  "Closing Time": "",
+  Country: ""
 };
 
 class SubmitForm extends React.Component {
@@ -63,6 +64,7 @@ class SubmitForm extends React.Component {
     locality,
     place_id,
     types,
+    country
   }) => {
     // This checks for latlng and name, so that
     // we don't inadvertently overwrite teh state in the case
@@ -79,6 +81,7 @@ class SubmitForm extends React.Component {
           Locality: locality,
           "Place Id": place_id,
           Address: address,
+          Country: country
         }
       });
     }
@@ -103,7 +106,11 @@ class SubmitForm extends React.Component {
     // Get IP if possible
     let ipData = this.state.ipData;
     if (!this.state.ipData) {
-      ipData = await api.ip();
+      try {
+        ipData = await api.ip();
+      } catch (e) {
+        // Damn ad-blockers
+      }
     }
     if (ipData && ipData.ip) {
       data["User IP"] = ipData.ip;
@@ -159,7 +166,7 @@ class SubmitForm extends React.Component {
       <>
         <MapWithSearch
           isMarkerShown
-          onSuccess={this.onLocationSearchCompleted}
+          onSearchSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
           style={{ height: "45vh" }}
           position={
@@ -233,7 +240,7 @@ class SubmitForm extends React.Component {
               </Form.Control>
             </Form.Group>
 
-            <Row>
+            { <Row>
               <Col>
                 <Form.Group controlId="formBasicOpenTimings">
                   <Form.Label>Opening Time</Form.Label>
@@ -260,7 +267,7 @@ class SubmitForm extends React.Component {
                   />
                 </Form.Group>
               </Col>
-            </Row>
+            </Row> }
 
             <Form.Group controlId="formBasicCrowdDetails">
               <Form.Label>Safety Observations</Form.Label>

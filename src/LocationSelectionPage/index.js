@@ -19,7 +19,8 @@ const emptyData = {
   City: "",
   Locality: "",
   "Place Id": "",
-  Address: ""
+  Address: "",
+  Country: ""
 };
 
 class LocationSelectionPage extends React.Component {
@@ -36,6 +37,7 @@ class LocationSelectionPage extends React.Component {
     city,
     locality,
     place_id,
+    country,
     types
   }) => {
     if ((latLng && latLng.lat) || name) {
@@ -49,7 +51,8 @@ class LocationSelectionPage extends React.Component {
           City: city,
           Locality: locality,
           "Place Id": place_id,
-          Address: address
+          Address: address,
+          Country: country
         }
       });
     }
@@ -89,7 +92,7 @@ class LocationSelectionPage extends React.Component {
         <MapWithSearch
           isMarkerShown
           activateInput
-          onSuccess={this.onLocationSearchCompleted}
+          onSearchSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
           style={{ height: "60vh" }}
           // onBoundsChanged={center => {
@@ -129,7 +132,11 @@ class LocationSelectionPage extends React.Component {
                   "neighborhood"
                 ),
                 place_id: result.place_id,
-                types: result.types
+                types: result.types,
+                country: getAddressComponent(
+                  result.address_components,
+                  "country"
+                )
               });
             }
           }}

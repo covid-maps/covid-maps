@@ -21,7 +21,7 @@ export default class ResultBlock extends React.Component {
 
   onClick() {
     window.scrollTo({
-      top: 50,
+      top: 0,
       behavior: "smooth"
     });
     this.props.onClick && this.props.onClick(this.props.result);

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useRef } from "react";
 import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
 import { GOOGLE_API_KEY, icons, makeIcon, isSameLocation } from "../../utils";
 
@@ -42,7 +42,6 @@ function MyGoogleMap(props) {
     refMap.current && refMap.current.panTo(props.panToLocation);
   }
 
-  console.log(centerProps);
   return (
     <GoogleMap
       ref={refMap}

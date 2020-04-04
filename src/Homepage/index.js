@@ -20,7 +20,8 @@ function searchResultToFormEntry(searchResult) {
     "Place Id": searchResult.place_id,
     City: searchResult.city,
     Locality: searchResult.locality,
-    Address: searchResult.address
+    Address: searchResult.address,
+    Country: searchResult.country
   };
 }
 
@@ -129,8 +130,9 @@ class Homepage extends React.Component {
 
   render() {
     let missingBlock = null;
+    let selectedForMissing = undefined;
     if (this.isMissingLocationInformation(this.state.searchResult)) {
-      const { searchResult } = this.state;
+      const { searchResult, searchResultLatlng } = this.state;
       missingBlock = (
         <MissingBlock
           missing={true}
@@ -140,6 +142,7 @@ class Homepage extends React.Component {
           }}
         ></MissingBlock>
       );
+      selectedForMissing = searchResultLatlng;
     }
     const closeByResults = this.state.results.filter(
       result => result.distance < DISTANCE_FILTER
@@ -158,7 +161,6 @@ class Homepage extends React.Component {
                 searchResultLatlng: result.latLng,
                 searchResult: result,
                 center: result.latLng,
-                selectedLocation: undefined,
                 results: this.calculateGroupDistance(
                   this.state.results,
                   result.latLng
@@ -166,10 +168,14 @@ class Homepage extends React.Component {
               });
             }
           }}
-          selectedLocation={this.state.selectedLocation}
+          selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
           centerPosition={this.state.searchResultLatlng}
-          locations={closeByMarkers}
+          locations={
+            selectedForMissing
+              ? [...closeByMarkers, this.state.searchResultLatlng]
+              : closeByMarkers
+          }
           onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
           panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
         />

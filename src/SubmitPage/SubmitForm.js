@@ -39,7 +39,8 @@ const emptyData = {
   City: "",
   Locality: "",
   "Place Id": "",
-  Address: ""
+  Address: "",
+  Country: ""
 };
 
 class SubmitForm extends React.Component {
@@ -58,7 +59,8 @@ class SubmitForm extends React.Component {
     city,
     locality,
     place_id,
-    types
+    types,
+    country
   }) => {
     // This checks for latlng and name, so that
     // we don't inadvertently overwrite teh state in the case
@@ -74,7 +76,8 @@ class SubmitForm extends React.Component {
           City: city,
           Locality: locality,
           "Place Id": place_id,
-          Address: address
+          Address: address,
+          Country: country
         }
       });
     }

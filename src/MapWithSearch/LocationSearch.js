@@ -41,7 +41,8 @@ class LocationSearchInput extends React.Component {
           locality: getAddressComponent(
             result.address_components,
             "neighborhood"
-          )
+          ),
+          country: getAddressComponent(result.address_components, "country")
         });
       })
       .catch(error => console.error("Error", error));

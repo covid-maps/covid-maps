@@ -59,8 +59,7 @@ function App() {
         </div>
         <footer className="m-0 p-0">
           <div className="container py-4 text-center text-uppercase">
-            <Link to="/">Home</Link> ·{" "}
-            <Link to="/update">Submit an update</Link> ·{" "}
+            <Link to="/">Home</Link> · <Link to="/location">Add a store</Link> ·{" "}
             <Link to="/about">About</Link>
           </div>
         </footer>

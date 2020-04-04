@@ -38,7 +38,7 @@ function MyGoogleMap(props) {
   return (
     <GoogleMap
       ref={refMap}
-      defaultZoom={13}
+      defaultZoom={15}
       defaultOptions={defaultMapOptions}
       defaultCenter={{ lat: 54, lng: 25 }}
       onBoundsChanged={handleBoundsChanged}

@@ -1,8 +1,10 @@
 import React, { useRef } from "react";
-import Map from "./Map";
+import OriginalMap from "./Map";
+import HomepageMap from "./Map/HomepageMap";
 import LocationSearchControl from "./LocationSearch";
 import Form from "react-bootstrap/Form";
 import { geolocated } from "react-geolocated";
+import { isSameLocation } from "../utils";
 import * as api from "../api";
 
 class MapWithSearch extends React.Component {
@@ -13,6 +15,9 @@ class MapWithSearch extends React.Component {
 
   componentDidMount() {
     api.ip().then(response => {
+      // response.country - CA
+      // response.region - British Columbia
+      // response.city - West End
       const [lat, lng] = response.loc.split(",");
       this.setState({
         ipAddress: response.ip,
@@ -33,6 +38,18 @@ class MapWithSearch extends React.Component {
     ) {
       return true;
     }
+
+    // Update selected location in Homepage Map
+    if (!this.props.selectedLocation && nextProps.selectedLocation) {
+      return true;
+    }
+    if (this.props.selectedLocation) {
+      return !isSameLocation(
+        this.props.selectedLocation,
+        nextProps.selectedLocation
+      );
+    }
+
     return (
       !this.props.coords ||
       !this.props.locations ||
@@ -87,16 +104,27 @@ class MapWithSearch extends React.Component {
             activateInput={this.props.activateInput}
           />
         </Form>
-        <Map
-          style={this.props.style}
-          position={positionProp}
-          currentLocation={current}
-          locations={this.props.locations}
-          isMarkerShown={this.props.isMarkerShown}
-          onBoundsChanged={this.props.onBoundsChanged}
-          onMarkerDragged={this.props.onMarkerDragged}
-          onPositionChanged={this.props.onPositionChanged}
-        />
+        {this.props.isMarkerShown ? (
+          <OriginalMap
+            style={this.props.style}
+            position={positionProp}
+            currentLocation={current}
+            isMarkerShown={this.props.isMarkerShown}
+            onBoundsChanged={this.props.onBoundsChanged}
+            onMarkerDragged={this.props.onMarkerDragged}
+            onPositionChanged={this.props.onPositionChanged}
+          />
+        ) : (
+          <HomepageMap
+            style={this.props.style}
+            currentLocation={current}
+            locations={this.props.locations}
+            selectedLocation={this.props.selectedLocation}
+            onMarkerSelected={this.props.onMarkerSelected}
+            panToLocation={this.props.panToLocation}
+            centerPosition={this.props.centerPosition}
+          />
+        )}
         {!this.props.isGeolocationAvailable ? (
           <div className="alert alert-danger text-center mb-0">
             Your browser does not support geolocation.

@@ -63,3 +63,7 @@ export function getFirstComma(address) {
   const split = address ? address.split(", ") : [];
   return split.length ? split[0] : address;
 }
+
+export const isSameLocation = (a, b) => {
+  return a && b && a.lat === b.lat && a.lng === b.lng;
+};

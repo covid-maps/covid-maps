@@ -6,7 +6,7 @@
 
    - Heroku has Postgres 12, so that's what we will use
    - Ensure you can run `psql`
-   - In psql: `create database "covid-maps-0";`
+   - In psql: `create database "covid_maps_0";`
 
 1. Run migrations through sequelize
 

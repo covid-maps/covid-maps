@@ -32,25 +32,25 @@ function AboutPage() {
         outreach.
       </p>
       <p>
-        <a href="https://github.com/covid-maps/covid-maps">
+        <NewTabLink href="https://github.com/covid-maps/covid-maps">
           <Button variant="info">
             <i className="fab fa-github" /> Join us on GitHub
           </Button>
-        </a>
+        </NewTabLink>
       </p>
       <p>
-        <a href="https://chat.whatsapp.com/HzZT0gMYoYYEDDjj2LQUD8">
+        <NewTabLink href="https://chat.whatsapp.com/HzZT0gMYoYYEDDjj2LQUD8">
           <Button variant="info">
             <i className="fab fa-whatsapp" /> Join our Developer group
           </Button>
-        </a>
+        </NewTabLink>
       </p>
       <p>
-        <a href="https://chat.whatsapp.com/BXh2FuYjW55Ee26xuzoWcw">
+        <NewTabLink href="https://chat.whatsapp.com/BXh2FuYjW55Ee26xuzoWcw">
           <Button variant="info">
             <i className="fab fa-whatsapp" /> Join our Outreach group
           </Button>
-        </a>
+        </NewTabLink>
       </p>
       <h4 className="mt-4 text-uppercase mb-1">Privacy Policy</h4>
       <p className="text-black-60">

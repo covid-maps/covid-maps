@@ -9,6 +9,8 @@ import MapWithSearch from "../MapWithSearch";
 import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore } from "../gaEvents";
 
+const DISTANCE_FILTER = 200000; // meters
+
 function searchResultToFormEntry(searchResult) {
   if (!searchResult) return undefined;
   return {
@@ -137,7 +139,7 @@ class Homepage extends React.Component {
       );
     }
     const closeByResults = this.state.results.filter(
-      result => result.distance < 200000
+      result => result.distance < DISTANCE_FILTER
     );
     return (
       <div>

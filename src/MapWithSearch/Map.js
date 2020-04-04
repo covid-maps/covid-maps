@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
 import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
-import { GOOGLE_API_KEY, iconSvgs, makeIcon } from "../utils";
+import { GOOGLE_API_KEY, icons, makeIcon } from "../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
 
@@ -43,9 +43,8 @@ function MyGoogleMap(props) {
   const centerProps = props.position
     ? { center: props.position }
     : { defaultCenter };
-
-  const defaultIcon = makeIcon(iconSvgs.default);
-  const highlightedIcon = makeIcon(iconSvgs.highlighted);
+  const defaultIcon = makeIcon(icons.default);
+  const highlightedIcon = makeIcon(icons.highlighted);
   const getMarkerIcon = location => {
     const isSelected =
       props.position &&
@@ -53,6 +52,7 @@ function MyGoogleMap(props) {
       props.position.lng === location.lng;
     return isSelected ? highlightedIcon : defaultIcon;
   };
+  const markers = props.locations || [];
 
   return (
     <GoogleMap
@@ -67,14 +67,13 @@ function MyGoogleMap(props) {
         props.onMarkerDragged && props.onMarkerDragged(mapCenter);
       }}
     >
-      {props.locations &&
-        props.locations.map(location => (
-          <Marker
-            position={location}
-            onClick={handleMarkerClicked}
-            icon={getMarkerIcon(location)}
-          />
-        ))}
+      {markers.map(location => (
+        <Marker
+          position={location}
+          onClick={handleMarkerClicked}
+          icon={getMarkerIcon(location)}
+        />
+      ))}
 
       <Circle
         center={props.currentLocation}

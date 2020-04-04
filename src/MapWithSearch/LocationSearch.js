@@ -42,7 +42,11 @@ class LocationSearchInput extends React.Component {
             result.address_components,
             "neighborhood"
           ),
-          country: getAddressComponent(result.address_components, "country")
+          country: getAddressComponent(
+            result.address_components,
+            "country",
+            true
+          )
         });
       })
       .catch(error => console.error("Error", error));

@@ -27,10 +27,14 @@ export const geocodeByLatlng = latlng => {
   });
 };
 
-export function getAddressComponent(addressComponents, component) {
+export function getAddressComponent(
+  addressComponents,
+  component,
+  isShort = false
+) {
   const filtered = addressComponents
     .filter(c => c.types.find(t => t === component))
-    .map(c => c.long_name);
+    .map(c => (isShort ? c.short_name : c.long_name));
   return filtered.length ? filtered[0] : "";
 }
 

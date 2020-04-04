@@ -38,34 +38,18 @@ class MapWithSearch extends React.Component {
     ) {
       return true;
     }
-
-    // Update selected location in Homepage Map
-    if (!this.props.selectedLocation && nextProps.selectedLocation) {
-      return true;
-    }
-    if (this.props.selectedLocation) {
-      return !isSameLocation(
-        this.props.selectedLocation,
-        nextProps.selectedLocation
-      );
-    }
-
-    return (
-      !this.props.coords ||
-      !this.props.locations ||
-      !this.props.locations.length
-    );
+    return true;
   }
 
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (this.state.ipLocation && !prevState.ipLocation) {
-      this.props.onSuccess({
+      this.props.onSearchSuccess({
         latLng: this.state.ipLocation
       });
     }
 
     if (this.props.coords && !prevProps.coords) {
-      this.props.onSuccess({
+      this.props.onSearchSuccess({
         latLng: {
           lat: this.props.coords.latitude,
           lng: this.props.coords.longitude
@@ -97,7 +81,7 @@ class MapWithSearch extends React.Component {
       <>
         <Form>
           <LocationSearchControl
-            onSuccess={this.props.onSuccess}
+            onSearchSuccess={this.props.onSearchSuccess}
             value={this.props.value}
             currentLocation={current}
             onGeolocation={this.props.getGeolocation}

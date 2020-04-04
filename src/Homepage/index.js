@@ -155,7 +155,7 @@ class Homepage extends React.Component {
       <div>
         <MapWithSearch
           value=""
-          onSuccess={result => {
+          onSearchSuccess={result => {
             if (result && result.latLng) {
               this.setState({
                 searchResultLatlng: result.latLng,

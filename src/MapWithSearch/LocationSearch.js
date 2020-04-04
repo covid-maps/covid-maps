@@ -31,7 +31,7 @@ class LocationSearchInput extends React.Component {
         const result = results[0];
         const latLng = await getLatLng(result);
         console.log("Success", latLng);
-        this.props.onSuccess({
+        this.props.onSearchSuccess({
           latLng: latLng,
           name: address,
           address: result.formatted_address,

@@ -92,7 +92,7 @@ class LocationSelectionPage extends React.Component {
         <MapWithSearch
           isMarkerShown
           activateInput
-          onSuccess={this.onLocationSearchCompleted}
+          onSearchSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
           style={{ height: "60vh" }}
           // onBoundsChanged={center => {

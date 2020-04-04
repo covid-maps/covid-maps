@@ -160,7 +160,7 @@ class SubmitForm extends React.Component {
       <>
         <MapWithSearch
           isMarkerShown
-          onSuccess={this.onLocationSearchCompleted}
+          onSearchSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
           style={{ height: "45vh" }}
           position={

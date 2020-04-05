@@ -212,7 +212,7 @@ class SubmitForm extends React.Component {
         <Form onSubmit={e => this.onSubmit(e)}>
           <div className="container p-3">
             <h6 className="text-uppercase font-weight-bold mb-3">
-              Add/Update Location
+              Add/Update Store
             </h6>
             <Form.Group controlId="formBasicStore">
               <Form.Label className="">Location Name (required)</Form.Label>

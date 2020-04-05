@@ -174,38 +174,40 @@ class Homepage extends React.Component {
                 <NoOfUsersAlert />
         <MapWithSearch
           value=""
-          onSuccess={result => {
-            if (result && result.latLng) {
-              this.setState(
-                {
-                  searchResultLatlng: result.latLng,
-                  searchResult: result
-                },
-                this.onBoundsChanged(result.latLng)
-              );
-            }
+          onSearchSuccess={result => {
+              if (result && result.latLng) {
+                  this.setState({
+                      searchResultLatlng: result.latLng,
+                      searchResult: result,
+                      center: result.latLng,
+                      results: this.calculateGroupDistance(
+                          this.state.results,
+                          result.latLng
+                      )
+                  });
+              }
           }}
+          selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
-          position={this.state.searchResultLatlng}
-          locations={this.state.markers}
-          onBoundsChanged={center => this.onBoundsChanged(center)}
-          onPositionChanged={position =>
-            this.setState({
-              searchResultLatlng: position,
-              searchResult: null
-            })
+          centerPosition={this.state.searchResultLatlng}
+          locations={
+              selectedForMissing
+                  ? [...closeByMarkers, this.state.searchResultLatlng]
+                  : closeByMarkers
           }
+          onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
+          panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
         />
           <Accordion className="map-wide-data-container">
               <div>
                   <Accordion.Toggle as={Button} variant="link" eventKey="0" className="toggle-button">
                             <span>
-                                Locations near you <i className="fas fa-list-ul float-right"></i>
+                                Locations near you
                             </span>
                   </Accordion.Toggle>
               </div>
               <div>
-                  <Accordion.Collapse eventKey="0" className="toggle-container">
+                  <Accordion eventKey="0" className="toggle-container">
                       <div className="my-2 mx-2">
                           <Link to={this.getLinkTo()}>
                               <Button
@@ -225,7 +227,7 @@ class Homepage extends React.Component {
                               center={this.state.center}
                           />
                       </div>
-                  </Accordion.Collapse>
+                  </Accordion>
               </div>
           </Accordion>
       </div>

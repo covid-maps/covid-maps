@@ -18,7 +18,7 @@ function ResultEntry({entries}) {
     const resultList = entries.filter(
         result => result["Useful Information"] || result["Safety Observations"]
     );
-    return resultList.map(result => (
+    return resultList.map(result => result["Safety Observations"].length > 10 || result["Useful Information"].length > 10 ? (
         <div className="mt-3" key={result["Timestamp"]}>
             <div className="d-inline-block">
                 {result["Safety Observations"] ? (
@@ -65,7 +65,7 @@ function ResultEntry({entries}) {
                 </small>
             </div>
         </div>
-    ));
+    ) : (<div></div>));
 }
 
 export default ResultEntry;

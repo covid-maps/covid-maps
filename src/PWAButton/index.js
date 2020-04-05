@@ -19,7 +19,7 @@ function PWAInstallButton() {
   // TODO: don't show on desktop
   // TODO: don't show if the app is already installed
   // Adds the `deferredPrompt` object to the window.
-  window.addEventListener("beforeinstallprompt", function (event) {
+  window.addEventListener("beforeinstallprompt", event => {
     setShowInstall(false);
     event.preventDefault();
     window.deferredPrompt = event;

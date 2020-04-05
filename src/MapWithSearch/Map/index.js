@@ -1,6 +1,6 @@
 import React, { useRef, useState } from "react";
-import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
-import { GOOGLE_API_KEY, icons, makeIcon } from "../../utils";
+import { GoogleMap, withGoogleMap, Marker } from "react-google-maps";
+import { GOOGLE_API_KEY, icons, markerIcon, dotIcon } from "../../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
 
@@ -33,7 +33,7 @@ function MyGoogleMap(props) {
   const centerProps = props.position
     ? { center: props.position }
     : { defaultCenter };
-  const defaultIcon = makeIcon(icons.default);
+  const defaultIcon = markerIcon(icons.default);
 
   return (
     <GoogleMap
@@ -48,23 +48,13 @@ function MyGoogleMap(props) {
         props.onMarkerDragged && props.onMarkerDragged(mapCenter);
       }}
     >
-      <Circle
-        center={props.currentLocation}
-        radius={70}
-        options={{
-          strokeColor: "#2688ff",
-          strokeOpacity: 0.2,
-          strokeWeight: 1,
-          fillColor: "#2688ff",
-          fillOpacity: 0.4
-        }}
-      />
-
+      <Marker position={props.currentLocation} icon={dotIcon} />
       {props.isMarkerShown && (
         <Marker
           draggable={!!props.onMarkerDragged}
           position={markerPosition}
           icon={defaultIcon}
+          zIndex={10}
           onDragEnd={event =>
             props.onMarkerDragged &&
             props.onMarkerDragged({

@@ -4,7 +4,6 @@ import HomepageMap from "./Map/HomepageMap";
 import LocationSearchControl from "./LocationSearch";
 import Form from "react-bootstrap/Form";
 import { geolocated } from "react-geolocated";
-import { isSameLocation } from "../utils";
 import * as api from "../api";
 
 class MapWithSearch extends React.Component {

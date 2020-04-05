@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
+import google from "react-google-maps"
 import { GOOGLE_API_KEY, icons, makeIcon, isSameLocation } from "../../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
@@ -28,8 +29,8 @@ function MyGoogleMap(props) {
   const centerProps = props.centerPosition
     ? { center: props.centerPosition }
     : props.currentLocation
-    ? { center: props.currentLocation }
-    : { center: defaultCenter };
+      ? { center: props.currentLocation }
+      : { center: defaultCenter };
   const getMarkerIcon = location => {
     const isSelected =
       props.selectedLocation &&
@@ -50,6 +51,13 @@ function MyGoogleMap(props) {
       defaultCenter={{ lat: 54, lng: 25 }}
       {...centerProps}
     >
+      <Marker
+        position={props.currentLocation}
+        icon={{
+          url: "http://maps.gstatic.com/mapfiles/maps_lite/images/2x/ic_my_location_24dp_3.png",
+          scaledSize: new window.google.maps.Size(30, 30),
+        }}
+      />
       {markers.map(location => (
         <Marker
           position={location}
@@ -57,18 +65,6 @@ function MyGoogleMap(props) {
           icon={getMarkerIcon(location)}
         />
       ))}
-
-      <Circle
-        center={props.currentLocation}
-        radius={70}
-        options={{
-          strokeColor: "#2688ff",
-          strokeOpacity: 0.2,
-          strokeWeight: 1,
-          fillColor: "#2688ff",
-          fillOpacity: 0.4
-        }}
-      />
     </GoogleMap>
   );
 }

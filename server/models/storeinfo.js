@@ -14,7 +14,7 @@ module.exports = (sequelize, DataTypes) => {
     updated_at: DataTypes.TIME
   }, {});
   StoreInfo.associate = function(models) {
-    // associations can be defined here
+    StoreInfo.hasMany(models.StoreUpdates, {foreignKey: "store_id"});
   };
   return StoreInfo;
 };

@@ -12,6 +12,9 @@ module.exports = (sequelize, DataTypes) => {
     updated_at: DataTypes.DATE
   }, {});
   StoreUpdates.associate = function(models) {
+    StoreUpdates.belongsTo(models.StoreInfo, {
+      foreignKey: "store_id"
+    });
     // associations can be defined here
   };
   return StoreUpdates;

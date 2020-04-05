@@ -1,3 +1,5 @@
+var models  = require('./models');
+
 const express = require("express");
 const compression = require("compression");
 const bodyParser = require("body-parser");
@@ -83,6 +85,15 @@ app.post("/v0/update", async (req, res) => {
     console.log("Error in submit:", error);
     res.status(500).send({ error });
   }
+});
+
+app.get("/v1/query", async(req, res) => {
+  console.log(models.StoreInfo.findAll({
+    include : [{
+      model : models.StoreUpdates
+    }]
+  }));
+  res.send("new backend get query");
 });
 
 app.listen(process.env.PORT || 5000);

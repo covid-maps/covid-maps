@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
@@ -23,6 +24,22 @@ function searchResultToFormEntry(searchResult) {
     Address: searchResult.address,
     Country: searchResult.country
   };
+}
+
+function NoOfUsersAlert() {
+  const [show, setShow] = useState(true);
+  return (
+    <Alert
+      key="no-of-users"
+      className="card no-of-users-alert"
+      variant="primary"
+      show={show}
+      onClose={() => setShow(false)}
+      dismissible
+    >
+      Help 5500+ users by sharing information about essential services nearby
+    </Alert>
+  );
 }
 
 class Homepage extends React.Component {
@@ -153,6 +170,7 @@ class Homepage extends React.Component {
     }));
     return (
       <div>
+        <NoOfUsersAlert />
         <MapWithSearch
           value=""
           onSearchSuccess={result => {

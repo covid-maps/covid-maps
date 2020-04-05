@@ -75,6 +75,13 @@ footer a:hover {
   background-color: #fafafa;
 }
 
+.no-of-users-alert {
+  margin-bottom: 0;
+  border: none;
+  padding: 0.4em 0.6em;
+  font-size: 12px;
+}
+
 /* Card */
 .card {
   font-size: 0.925em;

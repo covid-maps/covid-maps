@@ -20,15 +20,13 @@ function PWAInstallButton() {
   // TODO: don't show if the app is already installed
   // Adds the `deferredPrompt` object to the window.
   window.addEventListener("beforeinstallprompt", event => {
-    // setShowInstall(false);
     event.preventDefault();
     window.deferredPrompt = event;
   });
-  const [showInstall, setShowInstall] = useState(true);
   const [showIOSPrompt, setShowIOSPrompt] = useState(false);
   return (
     <>
-      {showInstall && (
+      {
         <Button
           size="sm"
           variant="outline-success"
@@ -37,7 +35,7 @@ function PWAInstallButton() {
         >
           Add to Homescreen
         </Button>
-      )}
+      }
       {showIOSPrompt && (
         <PWAPrompt
           debug={true}

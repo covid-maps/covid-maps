@@ -3,10 +3,11 @@ import ResultBlock from "./ResultBlock";
 import { isSameLocation } from "../utils";
 import Pagination from "react-js-pagination";
 
+const ITEM_PER_PAGE = 10;
+
 class SearchResults extends React.Component {
   state = {
-    activePage: 1,
-    itemPerPage: 10
+    activePage: 1
   };
 
   handlePageChange(pageNumber) {
@@ -21,8 +22,10 @@ class SearchResults extends React.Component {
       result => !isSameLocation(result, this.props.selectedLocation)
     );
     const results = selectedResult ? [selectedResult, ...filtered] : filtered;
-    let indexOfLastResult = this.state.activePage * this.state.itemPerPage;
-    let indexOfFirstResult = indexOfLastResult - this.state.itemPerPage;
+
+    const isPaginated = results > ITEM_PER_PAGE;
+    let indexOfLastResult = this.state.activePage * ITEM_PER_PAGE;
+    let indexOfFirstResult = indexOfLastResult - ITEM_PER_PAGE;
     let renderedResults = results.slice(indexOfFirstResult, indexOfLastResult);
     return this.props.isLoading ? (
       <div className="text-center py-5">
@@ -42,15 +45,17 @@ class SearchResults extends React.Component {
             </div>
           );
         })}
-        <Pagination
-          itemClass="page-item"
-          linkClass="page-link"
-          activePage={this.state.activePage}
-          itemsCountPerPage={this.state.itemPerPage}
-          totalItemsCount={results.length}
-          pageRangeDisplayed={5}
-          onChange={this.handlePageChange.bind(this)}
-        />
+        {isPaginated ? (
+          <Pagination
+            itemClass="page-item"
+            linkClass="page-link"
+            activePage={this.state.activePage}
+            itemsCountPerPage={this.state.itemPerPage}
+            totalItemsCount={results.length}
+            pageRangeDisplayed={5}
+            onChange={this.handlePageChange.bind(this)}
+          />
+        ) : null}
       </div>
     );
   }

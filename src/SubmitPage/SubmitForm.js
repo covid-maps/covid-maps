@@ -97,7 +97,7 @@ class SubmitForm extends React.Component {
   async onSubmit(event) {
     event.preventDefault();
     this.setState({ isLoading: true });
-    console.log("Logging: ", this.state.data)
+    console.log("Logging: ", this.state.data);
     const data = {
       ...this.state.data,
       Timestamp: new Date().toISOString()
@@ -117,7 +117,7 @@ class SubmitForm extends React.Component {
     }
 
     const response = await api.submit(data);
-    console.log(data)
+    console.log(data);
     console.log(response);
     recordFormSubmission();
     this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
@@ -186,7 +186,7 @@ class SubmitForm extends React.Component {
               }
               this.onLocationSearchCompleted({
                 latLng,
-                name: result.formatted_address,
+                name: "",
                 address: result.formatted_address,
                 city: getAddressComponent(
                   result.address_components,
@@ -197,7 +197,7 @@ class SubmitForm extends React.Component {
                   "neighborhood"
                 ),
                 place_id: result.place_id,
-                types: result.types,
+                types: result.types
               });
             }
           }}
@@ -240,34 +240,36 @@ class SubmitForm extends React.Component {
               </Form.Control>
             </Form.Group>
 
-            { <Row>
-              <Col>
-                <Form.Group controlId="formBasicOpenTimings">
-                  <Form.Label>Opening Time</Form.Label>
-                  <Form.Control 
-                    size="sm" 
-                    type="time" 
-                    step="1800" 
-                    placeholder="Open time" 
-                    value={this.state.data["Opening Time"]} 
-                    onChange={e => this.onChangeInput(e, "Opening Time")}
-                  />
-                </Form.Group>
-              </Col>
-              <Col>
-                <Form.Group controlId="formBasicCloseTimings">
-                  <Form.Label>Closing Time</Form.Label>
-                  <Form.Control 
-                    size="sm" 
-                    type="time" 
-                    step="1800" 
-                    placeholder="Close time" 
-                    value={this.state.data["Closing Time"]} 
-                    onChange={e => this.onChangeInput(e, "Closing Time")}
-                  />
-                </Form.Group>
-              </Col>
-            </Row> }
+            {
+              <Row>
+                <Col>
+                  <Form.Group controlId="formBasicOpenTimings">
+                    <Form.Label>Opening Time</Form.Label>
+                    <Form.Control
+                      size="sm"
+                      type="time"
+                      step="1800"
+                      placeholder="Open time"
+                      value={this.state.data["Opening Time"]}
+                      onChange={e => this.onChangeInput(e, "Opening Time")}
+                    />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="formBasicCloseTimings">
+                    <Form.Label>Closing Time</Form.Label>
+                    <Form.Control
+                      size="sm"
+                      type="time"
+                      step="1800"
+                      placeholder="Close time"
+                      value={this.state.data["Closing Time"]}
+                      onChange={e => this.onChangeInput(e, "Closing Time")}
+                    />
+                  </Form.Group>
+                </Col>
+              </Row>
+            }
 
             <Form.Group controlId="formBasicCrowdDetails">
               <Form.Label>Safety Observations</Form.Label>

@@ -5,7 +5,7 @@ import {
   geocodeByLatlng,
   getAddressComponent,
   isFunction,
-  getFirstComma
+  getFirstComma,
 } from "../utils";
 import MapWithSearch from "../MapWithSearch";
 
@@ -19,14 +19,14 @@ const emptyData = {
   City: "",
   Locality: "",
   "Place Id": "",
-  Address: ""
+  Address: "",
 };
 
 class LocationSelectionPage extends React.Component {
   state = {
     currentLocationCaptured: false,
     data: { ...emptyData },
-    searchFieldValue: ""
+    searchFieldValue: "",
   };
 
   onLocationSearchCompleted = ({
@@ -36,7 +36,7 @@ class LocationSelectionPage extends React.Component {
     city,
     locality,
     place_id,
-    types
+    types,
   }) => {
     if ((latLng && latLng.lat) || name) {
       this.setState({
@@ -49,8 +49,8 @@ class LocationSelectionPage extends React.Component {
           City: city,
           Locality: locality,
           "Place Id": place_id,
-          Address: address
-        }
+          Address: address,
+        },
       });
     }
   };
@@ -105,11 +105,11 @@ class LocationSelectionPage extends React.Component {
             this.state.data.Latitude
               ? {
                   lat: parseFloat(this.state.data.Latitude),
-                  lng: parseFloat(this.state.data.Longitude)
+                  lng: parseFloat(this.state.data.Longitude),
                 }
               : undefined
           }
-          onMarkerDragged={async latLng => {
+          onMarkerDragged={async (latLng) => {
             const results = await geocodeByLatlng(latLng);
             if (results && results.length) {
               const result = results[0];
@@ -129,7 +129,7 @@ class LocationSelectionPage extends React.Component {
                   "neighborhood"
                 ),
                 place_id: result.place_id,
-                types: result.types
+                types: result.types,
               });
             }
           }}

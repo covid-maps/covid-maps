@@ -33,7 +33,21 @@ export default class NonUGCResultBlock extends React.Component {
       >
         <div className="card-body p-3 ugc">
           <Link
-            to={{ pathname: "/update", state: { "Store Name": result.name } }}
+            to={{
+              pathname: "/update",
+              state: {
+                searchFieldValue: result.name,
+                data: {
+                  "Store Name": result.name,
+                  Latitude: result.lat,
+                  Longitude: result.lng,
+                },
+                item: {
+                  "Store Name": result.name,
+                },
+                placeId: result.placeId,
+              },
+            }}
             className="float-right btn btn-sm ugc-button text-uppercase"
             onClick={recordUpdateStore}
           >

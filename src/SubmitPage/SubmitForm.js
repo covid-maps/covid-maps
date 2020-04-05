@@ -8,9 +8,13 @@ import {
   getAddressComponent,
   isFunction,
   getFirstComma,
+  transformGeocodeResult,
 } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import MapWithSearch from "../MapWithSearch";
+import PlacesAutocomplete, {
+  geocodeByPlaceId,
+} from "react-places-autocomplete";
 
 function ButtonWithLoading(props) {
   return props.isLoading ? (
@@ -60,7 +64,6 @@ class SubmitForm extends React.Component {
     place_id,
     types,
   }) => {
-    debugger;
     // This checks for latlng and name, so that
     // we don't inadvertently overwrite teh state in the case
     // of a current location update in onSuccess.
@@ -104,7 +107,6 @@ class SubmitForm extends React.Component {
     if (ipData && ipData.ip) {
       data["User IP"] = ipData.ip;
     }
-
     const response = await api.submit(data);
     console.log(response);
     recordFormSubmission();
@@ -130,6 +132,16 @@ class SubmitForm extends React.Component {
           ...this.state.data,
           ...this.props.location.state.item,
         },
+      });
+    }
+    if (this.props.location.state && this.props.location.state.placeId) {
+      geocodeByPlaceId(this.props.location.state.placeId).then((results) => {
+        let geocodeResult = transformGeocodeResult(results, {
+          lat: this.props.location.state.data.Latitude,
+          lng: this.props.location.state.data.Longitude,
+        });
+        geocodeResult.name = this.props.location.state.item["Store Name"];
+        this.onLocationSearchCompleted(geocodeResult);
       });
     }
   }

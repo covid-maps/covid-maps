@@ -37,7 +37,7 @@ function NoOfUsersAlert() {
       onClose={() => setShow(false)}
       dismissible
     >
-      Help 5500+ users by sharing information about essential services nearby
+      Help 10,000+ users by adding updates on essential services around you
     </Alert>
   );
 }

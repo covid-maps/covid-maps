@@ -19,13 +19,13 @@ export default class ResultBlock extends React.Component {
         };
     }
 
-    onClick() {
-        window.scrollTo({
-            top: 50,
-            behavior: "smooth"
-        });
-        this.props.onClick && this.props.onClick(this.props.result);
-    }
+  onClick() {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth"
+    });
+    this.props.onClick && this.props.onClick(this.props.result);
+  }
 
     render() {
         const {result} = this.props;

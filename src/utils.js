@@ -27,36 +27,43 @@ export const geocodeByLatlng = latlng => {
     });
 };
 
-export function getAddressComponent(addressComponents, component) {
-    const filtered = addressComponents
-        .filter(c => c.types.find(t => t === component))
-        .map(c => c.long_name);
-    return filtered.length ? filtered[0] : "";
+export function getAddressComponent(
+  addressComponents,
+  component,
+  isShort = false
+) {
+  const filtered = addressComponents
+    .filter(c => c.types.find(t => t === component))
+    .map(c => (isShort ? c.short_name : c.long_name));
+  return filtered.length ? filtered[0] : "";
 }
 
-export const iconSvgs = {
-    default:
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#ff4646" d="M12 0c-4.198 0-8 3.403-8 7.602 0 6.243 6.377 6.903 8 16.398 1.623-9.495 8-10.155 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.342-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>',
-    highlighted:
-        '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="#1fa01f" d="M12 0c-4.198 0-8 3.403-8 7.602 0 6.243 6.377 6.903 8 16.398 1.623-9.495 8-10.155 8-16.398 0-4.199-3.801-7.602-8-7.602zm0 11c-1.657 0-3-1.343-3-3s1.342-3 3-3 3 1.343 3 3-1.343 3-3 3z"/></svg>'
+export const icons = {
+  default: "/assets/marker_red.png",
+  highlighted: "/assets/marker_green.png"
 };
 
-export const convertSvgUrl = svg => {
-    return "data:image/svg+xml;charset=UTF-8;base64," + btoa(svg);
-};
+export const makeIcon = url => ({
+  url,
+  scaledSize: { height: 35, width: 21 }
+});
 
 export const isStoreType = types => {
-    const invalidTypes = ["political", "locality"];
-    return types && !types.filter(type => invalidTypes.indexOf(type) >= 0).length;
+  const invalidTypes = ["political", "locality"];
+  return types && !types.filter(type => invalidTypes.indexOf(type) >= 0).length;
 };
 
 export function isFunction(functionToCheck) {
-    return (
-        functionToCheck && {}.toString.call(functionToCheck) === "[object Function]"
-    );
+  return (
+    functionToCheck && {}.toString.call(functionToCheck) === "[object Function]"
+  );
 }
 
 export function getFirstComma(address) {
-    const split = address ? address.split(", ") : [];
-    return split.length ? split[0] : address;
+  const split = address ? address.split(", ") : [];
+  return split.length ? split[0] : address;
 }
+
+export const isSameLocation = (a, b) => {
+  return a && b && a.lat === b.lat && a.lng === b.lng;
+};

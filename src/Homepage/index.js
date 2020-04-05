@@ -124,6 +124,7 @@ class Homepage extends React.Component {
   }
 
   onMarkerSelected(latLng) {
+    console.log("selected 2", latLng);
     this.setState({
       center: { ...latLng },
       selectedLocation: { ...latLng },

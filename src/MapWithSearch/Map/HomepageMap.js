@@ -27,6 +27,7 @@ function MyGoogleMap(props) {
   const refMap = useRef(null);
 
   const handleMarkerClicked = location => {
+    console.log("selected 1", location);
     const latLng = { lat: location.latLng.lat(), lng: location.latLng.lng() };
     props.onMarkerSelected && props.onMarkerSelected(latLng);
   };

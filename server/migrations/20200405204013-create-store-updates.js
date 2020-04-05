@@ -1,51 +1,45 @@
 'use strict';
 module.exports = {
   up: (queryInterface, Sequelize) => {
-    return queryInterface.createTable('Reviews', {
+    return queryInterface.createTable('StoreUpdates', {
       id: {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      userip: {
+      store_id: {
+        type: Sequelize.INTEGER,
+        references: {
+          model: {
+            tableName: 'StoreInfos'
+          },
+          key: 'id'
+        },
+      },
+      ip: {
         type: Sequelize.STRING
       },
-      latitude: {
-        type: Sequelize.FLOAT
-      },
-      longitude: {
-        type: Sequelize.FLOAT
-      },
-      category: {
+      user_id: {
         type: Sequelize.STRING
       },
-      name: {
+      availability_info: {
         type: Sequelize.STRING
       },
-      safetyobservations: {
+      safety_info: {
         type: Sequelize.STRING
       },
-      reviewtext: {
+      opening_time: {
         type: Sequelize.STRING
       },
-      placeid: {
+      closing_time: {
         type: Sequelize.STRING
       },
-      city: {
-        type: Sequelize.STRING
+      created_at: {
+        type: Sequelize.DATE
       },
-      locality: {
-        type: Sequelize.STRING
-      },
-      address: {
-        type: Sequelize.STRING
-      },
-      opentime: {
-        type: Sequelize.TIME
-      },
-      closetime: {
-        type: Sequelize.TIME
+      updated_at: {
+        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,
@@ -58,6 +52,6 @@ module.exports = {
     });
   },
   down: (queryInterface, Sequelize) => {
-    return queryInterface.dropTable('Reviews');
+    return queryInterface.dropTable('StoreUpdates');
   }
 };

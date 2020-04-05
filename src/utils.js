@@ -43,7 +43,7 @@ export function findNearbyStores(currentLocation) {
   var request = {
     location: googleLocation,
     radius: "1000", // 1KM centered on the currentLocation
-    type: ["store"],
+    types: ["department_store", "home_goods_store"],
   };
 
   let service = new window.google.maps.places.PlacesService(
@@ -54,16 +54,19 @@ export function findNearbyStores(currentLocation) {
     service.nearbySearch(request, (results) => {
       console.log(results);
       resolve(
-        results.map((r) => {
-          let content = {
-            placeId: r["place_id"],
-            lat: r["geometry"].location.lat(),
-            lng: r["geometry"].location.lng(),
-            name: r["name"],
-            address: r["vicinity"],
-          };
-          return content;
-        })
+        results
+          .map((r) => {
+            let content = {
+              placeId: r["place_id"],
+              lat: r["geometry"].location.lat(),
+              lng: r["geometry"].location.lng(),
+              name: r["name"],
+              address: r["vicinity"],
+              rating: r["rating"],
+            };
+            return content;
+          })
+          .sort((i, j) => (i.rating > j.rating ? -1 : 1))
       );
     });
   });

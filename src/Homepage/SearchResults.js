@@ -7,6 +7,7 @@ class SearchResults extends React.Component {
     nonUGCStores = nonUGCStores || [];
     let nonUGCRendered = 0;
     let resultBlock = [];
+    let placeIds = [];
     for (let i = 1; i < results.length + nonUGCStores.length; i++) {
       if (
         i % 5 == 0 &&
@@ -14,18 +15,21 @@ class SearchResults extends React.Component {
         nonUGCStores.length > nonUGCRendered
       ) {
         let result = nonUGCStores[nonUGCRendered];
-        resultBlock.push(
-          <div key={result.placeId || result.name}>
-            <NonUGCResultBlock
-              onClick={() => this.props.onCardClick(result)}
-              result={result}
-            />
-          </div>
-        );
-        nonUGCRendered += 1;
+        if (!(result.placeId in placeIds)) {
+          resultBlock.push(
+            <div key={result.placeId || result.name}>
+              <NonUGCResultBlock
+                onClick={() => this.props.onCardClick(result)}
+                result={result}
+              />
+            </div>
+          );
+          nonUGCRendered += 1;
+        }
       } else {
         if (i > results.length - 1) break;
         let result = results[i];
+        placeIds.push(result.placeId);
         resultBlock.push(
           <div key={result.placeId || result.name}>
             <ResultBlock

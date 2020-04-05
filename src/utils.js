@@ -52,7 +52,6 @@ export function findNearbyStores(currentLocation) {
 
   return new Promise((resolve) => {
     service.nearbySearch(request, (results) => {
-      console.log(results);
       resolve(
         results
           .map((r) => {

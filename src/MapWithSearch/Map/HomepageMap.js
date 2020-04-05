@@ -1,6 +1,5 @@
 import React, { useRef } from "react";
 import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
-import google from "react-google-maps"
 import { GOOGLE_API_KEY, icons, makeIcon, isSameLocation } from "../../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;

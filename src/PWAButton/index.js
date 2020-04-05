@@ -17,6 +17,7 @@ function addToHomeScreen(setShowIOSPrompt) {
 
 function PWAInstallButton() {
   // TODO: don't show on desktop
+  // TODO: don't show if the app is already installed
   // Adds the `deferredPrompt` object to the window.
   window.addEventListener("beforeinstallprompt", function (event) {
     setShowInstall(false);
@@ -32,7 +33,7 @@ function PWAInstallButton() {
           size="sm"
           variant="outline-success"
           className="ml-auto a2hs-button"
-          onClick={addToHomeScreen(setShowIOSPrompt)}
+          onClick={() => addToHomeScreen(setShowIOSPrompt)}
         >
           Add to Homescreen
         </Button>

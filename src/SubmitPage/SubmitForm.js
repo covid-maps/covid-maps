@@ -9,10 +9,14 @@ import {
   geocodeByLatlng,
   getAddressComponent,
   isFunction,
-  getFirstComma
+  getFirstComma,
+  transformGeocodeResult,
 } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import MapWithSearch from "../MapWithSearch";
+import PlacesAutocomplete, {
+  geocodeByPlaceId,
+} from "react-places-autocomplete";
 
 function ButtonWithLoading(props) {
   return props.isLoading ? (
@@ -115,7 +119,6 @@ class SubmitForm extends React.Component {
     if (ipData && ipData.ip) {
       data["User IP"] = ipData.ip;
     }
-
     const response = await api.submit(data);
     console.log(data)
     console.log(response);
@@ -140,8 +143,18 @@ class SubmitForm extends React.Component {
       this.setState({
         data: {
           ...this.state.data,
-          ...this.props.location.state.item
-        }
+          ...this.props.location.state.item,
+        },
+      });
+    }
+    if (this.props.location.state && this.props.location.state.placeId) {
+      geocodeByPlaceId(this.props.location.state.placeId).then((results) => {
+        let geocodeResult = transformGeocodeResult(results, {
+          lat: this.props.location.state.data.Latitude,
+          lng: this.props.location.state.data.Longitude,
+        });
+        geocodeResult.name = this.props.location.state.item["Store Name"];
+        this.onLocationSearchCompleted(geocodeResult);
       });
     }
   }
@@ -244,12 +257,12 @@ class SubmitForm extends React.Component {
               <Col>
                 <Form.Group controlId="formBasicOpenTimings">
                   <Form.Label>Opening Time</Form.Label>
-                  <Form.Control 
-                    size="sm" 
-                    type="time" 
-                    step="1800" 
-                    placeholder="Open time" 
-                    value={this.state.data["Opening Time"]} 
+                  <Form.Control
+                    size="sm"
+                    type="time"
+                    step="1800"
+                    placeholder="Open time"
+                    value={this.state.data["Opening Time"]}
                     onChange={e => this.onChangeInput(e, "Opening Time")}
                   />
                 </Form.Group>
@@ -257,12 +270,12 @@ class SubmitForm extends React.Component {
               <Col>
                 <Form.Group controlId="formBasicCloseTimings">
                   <Form.Label>Closing Time</Form.Label>
-                  <Form.Control 
-                    size="sm" 
-                    type="time" 
-                    step="1800" 
-                    placeholder="Close time" 
-                    value={this.state.data["Closing Time"]} 
+                  <Form.Control
+                    size="sm"
+                    type="time"
+                    step="1800"
+                    placeholder="Close time"
+                    value={this.state.data["Closing Time"]}
                     onChange={e => this.onChangeInput(e, "Closing Time")}
                   />
                 </Form.Group>

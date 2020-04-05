@@ -5,7 +5,7 @@ import {
   geocodeByLatlng,
   getAddressComponent,
   isFunction,
-  getFirstComma
+  getFirstComma,
 } from "../utils";
 import MapWithSearch from "../MapWithSearch";
 

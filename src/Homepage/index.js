@@ -7,7 +7,7 @@ import MissingBlock from "./MissingBlock";
 import * as api from "../api";
 import { getDistance } from "geolib";
 import MapWithSearch from "../MapWithSearch";
-import { isStoreType, getFirstComma } from "../utils";
+import { findNearbyStores, isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore } from "../gaEvents";
 
 const DISTANCE_FILTER = 200000; // meters
@@ -51,7 +51,8 @@ class Homepage extends React.Component {
     mapShouldPan: false,
     selectedLocation: undefined,
     searchResultLatlng: undefined,
-    searchResult: undefined
+    searchResult: undefined,
+    nonUGCStores: undefined
   };
 
   componentDidMount() {
@@ -131,6 +132,15 @@ class Homepage extends React.Component {
     });
   }
 
+  onBoundsChanged(location) {
+    findNearbyStores(location).then(results => {
+      console.log(results);
+      this.setState({
+        nonUGCStores: results
+      });
+    });
+  }
+
   getLinkState() {
     const item = searchResultToFormEntry(this.state.searchResult);
     return item
@@ -164,10 +174,12 @@ class Homepage extends React.Component {
     const closeByResults = this.state.results.filter(
       result => result.distance < DISTANCE_FILTER
     );
-    const closeByMarkers = closeByResults.map(res => ({
-      lat: Number(res.lat),
-      lng: Number(res.lng)
-    }));
+    const closeByMarkers = closeByResults
+      .map(res => ({
+        lat: Number(res.lat),
+        lng: Number(res.lng)
+      }))
+      .concat(this.state.nonUGCStores || []);
     return (
       <div>
         <NoOfUsersAlert />
@@ -184,6 +196,7 @@ class Homepage extends React.Component {
                   result.latLng
                 )
               });
+              this.onBoundsChanged(result.latLng)
             }
           }}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
@@ -194,6 +207,7 @@ class Homepage extends React.Component {
               ? [...closeByMarkers, this.state.searchResultLatlng]
               : closeByMarkers
           }
+          onBoundsChanged={(center) => this.onBoundsChanged(center)}
           onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
           panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
         />
@@ -219,6 +233,7 @@ class Homepage extends React.Component {
             isLoading={this.state.isLoading}
             selectedLocation={this.state.selectedLocation}
             results={closeByResults}
+            nonUGCStores={this.state.nonUGCStores || []}
             center={this.state.center}
           />
         </div>

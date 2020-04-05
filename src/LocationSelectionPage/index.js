@@ -94,7 +94,7 @@ class LocationSelectionPage extends React.Component {
           activateInput
           onSearchSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
-          style={{ height: "60vh" }}
+          style={{ height: "50vh" }}
           // onBoundsChanged={center => {
           //   this.setState({
           //     currentLocationCaptured: true,

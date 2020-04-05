@@ -1,4 +1,5 @@
-.map-wide {}
+.map-wide {
+}
 
 .map-wide-data-container {
   background: #dfdfdf;
@@ -11,11 +12,13 @@
     text-decoration: none;
     text-align: left;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       color: #222;
       text-decoration: none;
     }
   }
 
-  .toggle-container {}
+  .toggle-container {
+  }
 }

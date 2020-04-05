@@ -17,7 +17,6 @@ import AboutPage from "./AboutPage";
 import LocationSelectionPage from "./LocationSelectionPage";
 import { ScrollToTop } from "./utils";
 import PWAPrompt from "react-ios-pwa-prompt";
-import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import Button from "react-bootstrap/Button";
 import ReactGA from "react-ga";

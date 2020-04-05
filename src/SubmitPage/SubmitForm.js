@@ -1,5 +1,7 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
+import Row from "react-bootstrap/Row";
+import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
@@ -44,6 +46,9 @@ const emptyData = {
   Locality: "",
   "Place Id": "",
   Address: "",
+  "Opening Time": "",
+  "Closing Time": "",
+  Country: ""
 };
 
 class SubmitForm extends React.Component {
@@ -52,7 +57,7 @@ class SubmitForm extends React.Component {
     hasSubmitted: false,
     ipData: undefined,
     data: { ...emptyData },
-    searchFieldValue: "",
+    searchFieldValue: ""
   };
 
   onLocationSearchCompleted = ({
@@ -63,6 +68,7 @@ class SubmitForm extends React.Component {
     locality,
     place_id,
     types,
+    country
   }) => {
     // This checks for latlng and name, so that
     // we don't inadvertently overwrite teh state in the case
@@ -79,7 +85,8 @@ class SubmitForm extends React.Component {
           Locality: locality,
           "Place Id": place_id,
           Address: address,
-        },
+          Country: country
+        }
       });
     }
   };
@@ -87,27 +94,33 @@ class SubmitForm extends React.Component {
   clearForm() {
     this.setState({
       data: { ...emptyData },
-      searchFieldValue: "",
+      searchFieldValue: ""
     });
   }
 
   async onSubmit(event) {
     event.preventDefault();
     this.setState({ isLoading: true });
+    console.log("Logging: ", this.state.data)
     const data = {
       ...this.state.data,
-      Timestamp: new Date().toISOString(),
+      Timestamp: new Date().toISOString()
     };
 
     // Get IP if possible
     let ipData = this.state.ipData;
     if (!this.state.ipData) {
-      ipData = await api.ip();
+      try {
+        ipData = await api.ip();
+      } catch (e) {
+        // Damn ad-blockers
+      }
     }
     if (ipData && ipData.ip) {
       data["User IP"] = ipData.ip;
     }
     const response = await api.submit(data);
+    console.log(data)
     console.log(response);
     recordFormSubmission();
     this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
@@ -166,18 +179,18 @@ class SubmitForm extends React.Component {
       <>
         <MapWithSearch
           isMarkerShown
-          onSuccess={this.onLocationSearchCompleted}
+          onSearchSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
           style={{ height: "45vh" }}
           position={
             this.state.data.Latitude
               ? {
                   lat: parseFloat(this.state.data.Latitude),
-                  lng: parseFloat(this.state.data.Longitude),
+                  lng: parseFloat(this.state.data.Longitude)
                 }
               : undefined
           }
-          onMarkerDragged={async (latLng) => {
+          onMarkerDragged={async latLng => {
             const results = await geocodeByLatlng(latLng);
             if (results && results.length) {
               const result = results[0];
@@ -209,7 +222,7 @@ class SubmitForm extends React.Component {
           </div>
         ) : null}
 
-        <Form onSubmit={(e) => this.onSubmit(e)}>
+        <Form onSubmit={e => this.onSubmit(e)}>
           <div className="container p-3">
             <h6 className="text-uppercase font-weight-bold mb-3">
               Update Store Status
@@ -218,7 +231,7 @@ class SubmitForm extends React.Component {
               <Form.Label className="">Store Name (required)</Form.Label>
               <Form.Control
                 type="text"
-                onChange={(e) => this.onChangeInput(e, "Store Name")}
+                onChange={e => this.onChangeInput(e, "Store Name")}
                 value={this.state.data["Store Name"]}
                 placeholder="e.g. Target or Nature's Basket"
                 required
@@ -229,7 +242,7 @@ class SubmitForm extends React.Component {
               <Form.Label>Service Type</Form.Label>
               <Form.Control
                 as="select"
-                onChange={(e) => this.onChangeInput(e, "Store Category")}
+                onChange={e => this.onChangeInput(e, "Store Category")}
               >
                 <option>Grocery</option>
                 <option>Restaurant</option>
@@ -240,13 +253,42 @@ class SubmitForm extends React.Component {
               </Form.Control>
             </Form.Group>
 
+            { <Row>
+              <Col>
+                <Form.Group controlId="formBasicOpenTimings">
+                  <Form.Label>Opening Time</Form.Label>
+                  <Form.Control
+                    size="sm"
+                    type="time"
+                    step="1800"
+                    placeholder="Open time"
+                    value={this.state.data["Opening Time"]}
+                    onChange={e => this.onChangeInput(e, "Opening Time")}
+                  />
+                </Form.Group>
+              </Col>
+              <Col>
+                <Form.Group controlId="formBasicCloseTimings">
+                  <Form.Label>Closing Time</Form.Label>
+                  <Form.Control
+                    size="sm"
+                    type="time"
+                    step="1800"
+                    placeholder="Close time"
+                    value={this.state.data["Closing Time"]}
+                    onChange={e => this.onChangeInput(e, "Closing Time")}
+                  />
+                </Form.Group>
+              </Col>
+            </Row> }
+
             <Form.Group controlId="formBasicCrowdDetails">
               <Form.Label>Safety Observations</Form.Label>
               <Form.Control
                 as="textarea"
                 rows="2"
                 value={this.state.data["Safety Observations"]}
-                onChange={(e) => this.onChangeInput(e, "Safety Observations")}
+                onChange={e => this.onChangeInput(e, "Safety Observations")}
                 placeholder="Queues, crowd level &amp; safety precautions"
               />
             </Form.Group>
@@ -257,8 +299,9 @@ class SubmitForm extends React.Component {
                 as="textarea"
                 rows="3"
                 value={this.state.data["Useful Information"]}
-                onChange={(e) => this.onChangeInput(e, "Useful Information")}
+                onChange={e => this.onChangeInput(e, "Useful Information")}
                 placeholder="Timings, stock availability, etc."
+                required
               />
             </Form.Group>
 

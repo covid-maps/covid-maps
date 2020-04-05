@@ -1,6 +1,7 @@
 import React from "react";
 import ResultBlock from "./ResultBlock";
 import NonUGCResultBlock from "./NonUGCResultBlock";
+import { isSameLocation } from "../utils";
 
 class SearchResults extends React.Component {
   createView(results, nonUGCStores) {
@@ -44,6 +45,13 @@ class SearchResults extends React.Component {
   }
 
   render() {
+    const selectedResult = this.props.results.find(result =>
+      isSameLocation(result, this.props.selectedLocation)
+    );
+    const filtered = this.props.results.filter(
+      result => !isSameLocation(result, this.props.selectedLocation)
+    );
+    const results = selectedResult ? [selectedResult, ...filtered] : filtered;
     return this.props.isLoading ? (
       <div className="text-center py-5">
         <div className="spinner-border text-secondary" role="status">

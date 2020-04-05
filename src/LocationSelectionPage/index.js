@@ -20,13 +20,14 @@ const emptyData = {
   Locality: "",
   "Place Id": "",
   Address: "",
+  Country: ""
 };
 
 class LocationSelectionPage extends React.Component {
   state = {
     currentLocationCaptured: false,
     data: { ...emptyData },
-    searchFieldValue: "",
+    searchFieldValue: ""
   };
 
   onLocationSearchCompleted = ({
@@ -36,7 +37,8 @@ class LocationSelectionPage extends React.Component {
     city,
     locality,
     place_id,
-    types,
+    country,
+    types
   }) => {
     if ((latLng && latLng.lat) || name) {
       this.setState({
@@ -50,7 +52,8 @@ class LocationSelectionPage extends React.Component {
           Locality: locality,
           "Place Id": place_id,
           Address: address,
-        },
+          Country: country
+        }
       });
     }
   };
@@ -89,7 +92,7 @@ class LocationSelectionPage extends React.Component {
         <MapWithSearch
           isMarkerShown
           activateInput
-          onSuccess={this.onLocationSearchCompleted}
+          onSearchSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
           style={{ height: "60vh" }}
           // onBoundsChanged={center => {
@@ -105,11 +108,11 @@ class LocationSelectionPage extends React.Component {
             this.state.data.Latitude
               ? {
                   lat: parseFloat(this.state.data.Latitude),
-                  lng: parseFloat(this.state.data.Longitude),
+                  lng: parseFloat(this.state.data.Longitude)
                 }
               : undefined
           }
-          onMarkerDragged={async (latLng) => {
+          onMarkerDragged={async latLng => {
             const results = await geocodeByLatlng(latLng);
             if (results && results.length) {
               const result = results[0];
@@ -130,6 +133,10 @@ class LocationSelectionPage extends React.Component {
                 ),
                 place_id: result.place_id,
                 types: result.types,
+                country: getAddressComponent(
+                  result.address_components,
+                  "country"
+                )
               });
             }
           }}

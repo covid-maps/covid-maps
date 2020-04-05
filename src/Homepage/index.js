@@ -1,6 +1,7 @@
-import React from "react";
+import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
@@ -8,6 +9,8 @@ import { getDistance } from "geolib";
 import MapWithSearch from "../MapWithSearch";
 import { findNearbyStores, isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore } from "../gaEvents";
+
+const DISTANCE_FILTER = 200000; // meters
 
 function searchResultToFormEntry(searchResult) {
   if (!searchResult) return undefined;
@@ -19,7 +22,24 @@ function searchResultToFormEntry(searchResult) {
     City: searchResult.city,
     Locality: searchResult.locality,
     Address: searchResult.address,
+    Country: searchResult.country
   };
+}
+
+function NoOfUsersAlert() {
+  const [show, setShow] = useState(true);
+  return (
+    <Alert
+      key="no-of-users"
+      className="card no-of-users-alert"
+      variant="primary"
+      show={show}
+      onClose={() => setShow(false)}
+      dismissible
+    >
+      Help 10,000+ users by adding updates on essential services around you
+    </Alert>
+  );
 }
 
 class Homepage extends React.Component {
@@ -28,6 +48,8 @@ class Homepage extends React.Component {
     markers: [],
     isLoading: true,
     center: {},
+    mapShouldPan: false,
+    selectedLocation: undefined,
     searchResultLatlng: undefined,
     searchResult: undefined,
     nonUGCStores: undefined,
@@ -56,10 +78,10 @@ class Homepage extends React.Component {
     );
   }
 
-  calculateGroupDistance(grouped) {
-    const groupedResult = grouped.map((group) => ({
+  calculateGroupDistance(grouped, center) {
+    const groupedResult = grouped.map(group => ({
       ...group,
-      distance: this.calculateDistance(group, this.state.center),
+      distance: this.calculateDistance(group, center)
     }));
     return groupedResult.sort((a, b) => a.distance - b.distance);
   }
@@ -76,11 +98,11 @@ class Homepage extends React.Component {
     ).map((entries) => ({
       name: entries[0]["Store Name"],
       placeId: entries[0]["Place Id"],
-      lat: entries[0].Latitude,
-      lng: entries[0].Longitude,
-      entries: entries.sort((a, b) => b.Timestamp - a.Timestamp).reverse(),
+      lat: Number(entries[0].Latitude),
+      lng: Number(entries[0].Longitude),
+      entries: entries.sort((a, b) => b.Timestamp - a.Timestamp).reverse()
     }));
-    return this.calculateGroupDistance(grouped);
+    return this.calculateGroupDistance(grouped, this.state.center);
   }
 
   isMissingLocationInformation(location) {
@@ -105,19 +127,27 @@ class Homepage extends React.Component {
   }
 
   onCardClick(card) {
+    const center = { lat: Number(card.lat), lng: Number(card.lng) };
     this.setState({
-      center: { lat: Number(card.lat), lng: Number(card.lng) },
-      results: this.calculateGroupDistance(this.state.results),
-      searchResultLatlng: { lat: Number(card.lat), lng: Number(card.lng) },
+      center,
+      selectedLocation: center,
+      mapShouldPan: true
+    });
+    setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
+  }
+
+  onMarkerSelected(latLng) {
+    this.setState({
+      center: { ...latLng },
+      selectedLocation: { ...latLng },
+      mapShouldPan: false
     });
   }
 
   getLinkState() {
     const item = searchResultToFormEntry(this.state.searchResult);
     return item
-      ? {
-          item: searchResultToFormEntry(this.state.searchResult),
-        }
+      ? { item: searchResultToFormEntry(this.state.searchResult) }
       : undefined;
   }
 
@@ -130,8 +160,9 @@ class Homepage extends React.Component {
 
   render() {
     let missingBlock = null;
+    let selectedForMissing = undefined;
     if (this.isMissingLocationInformation(this.state.searchResult)) {
-      const { searchResult } = this.state;
+      const { searchResult, searchResultLatlng } = this.state;
       missingBlock = (
         <MissingBlock
           missing={true}
@@ -141,36 +172,43 @@ class Homepage extends React.Component {
           }}
         ></MissingBlock>
       );
+      selectedForMissing = searchResultLatlng;
     }
     const closeByResults = this.state.results.filter(
-      (result) => result.distance < 200000
+      result => result.distance < DISTANCE_FILTER
     );
-    let markers = this.state.markers.concat(this.state.nonUGCStores || []);
+    const closeByMarkers = closeByResults.map(res => ({
+      lat: Number(res.lat),
+      lng: Number(res.lng)
+    })).concat(this.state.nonUGCStores || []);
     return (
       <div>
+        <NoOfUsersAlert />
         <MapWithSearch
           value=""
-          onSuccess={(result) => {
+          onSearchSuccess={result => {
             if (result && result.latLng) {
-              this.setState(
-                {
-                  searchResultLatlng: result.latLng,
-                  searchResult: result,
-                },
-                this.onBoundsChanged(result.latLng)
-              );
+              this.setState({
+                searchResultLatlng: result.latLng,
+                searchResult: result,
+                center: result.latLng,
+                results: this.calculateGroupDistance(
+                  this.state.results,
+                  result.latLng
+                )
+              });
             }
           }}
+          selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
-          position={this.state.searchResultLatlng}
-          locations={markers}
-          onBoundsChanged={(center) => this.onBoundsChanged(center)}
-          onPositionChanged={(position) =>
-            this.setState({
-              searchResultLatlng: position,
-              searchResult: null,
-            })
+          centerPosition={this.state.searchResultLatlng}
+          locations={
+            selectedForMissing
+              ? [...closeByMarkers, this.state.searchResultLatlng]
+              : closeByMarkers
           }
+          onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
+          panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
         />
         <div className="my-3 mx-2">
           {missingBlock}
@@ -192,6 +230,7 @@ class Homepage extends React.Component {
           <SearchResults
             onCardClick={(card) => this.onCardClick(card)}
             isLoading={this.state.isLoading}
+            selectedLocation={this.state.selectedLocation}
             results={closeByResults}
             nonUGCStores={this.state.nonUGCStores || []}
             center={this.state.center}

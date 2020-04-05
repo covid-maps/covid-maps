@@ -10,6 +10,8 @@ const doc = new GoogleSpreadsheet(
   "1jFQrYwbhPIaRL6t4TnpTO7W905U0B-W1FXS-GBYwz7M"
 );
 
+const SHEET_IDX = 0;
+
 async function authenticate() {
   // Creds are either in a json file on disk
   // or in the process.env.GOOGLE_PRIVATE_KEY variable
@@ -36,7 +38,7 @@ function rowValue(headerValues, row) {
 async function getRows() {
   await authenticate();
   await doc.loadInfo();
-  const sheet = doc.sheetsByIndex[0];
+  const sheet = doc.sheetsByIndex[SHEET_IDX];
   const rows = await sheet.getRows({ limit: 1000 });
   return rows.map(row => rowValue(sheet.headerValues, row));
 }

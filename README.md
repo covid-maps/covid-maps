@@ -1,15 +1,14 @@
 # covid-maps
 
-Covid Maps is a crowd-sourced app that helps you track the latest information on essential services operating around you during the COVID-19 shutdowns.
+Covid Maps is a crowd-sourced app that helps you track the latest information on essential services operating around you during the Covid-19 shutdowns.
 
 ## 👩‍💻 Contributing to the project 👨‍💻
 
-Developers looking to contribute to this project can get started by filtering for [good-first-issues](https://github.com/arjun27/covid-maps/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22) 
+Developers looking to contribute to this project can get started by filtering for [good-first-issues](https://github.com/arjun27/covid-maps/issues?q=is%3Aopen+is%3Aissue+label%3A%22good+first+issue%22)
 
 Once you've gotten a hang of the code base, check out the [Prioritized Feature List](https://github.com/arjun27/covid-maps/issues/86) which has also been pinned on the [Issues Board](https://github.com/arjun27/covid-maps/issues)
 
 Join our [WhatsApp Developer group](https://chat.whatsapp.com/HzZT0gMYoYYEDDjj2LQUD8) to engage with the team working on this project.
-
 
 ## Project structure
 

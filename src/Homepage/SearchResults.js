@@ -41,6 +41,20 @@ class SearchResults extends React.Component {
         );
       }
     }
+    while (nonUGCRendered < 10 && nonUGCStores.length > nonUGCRendered) {
+      let result = nonUGCStores[nonUGCRendered];
+      if (!(result.placeId in placeIds)) {
+        resultBlock.push(
+          <div key={result.placeId || result.name}>
+            <NonUGCResultBlock
+              onClick={() => this.props.onCardClick(result)}
+              result={result}
+            />
+          </div>
+        );
+        nonUGCRendered += 1;
+      }
+    }
     return resultBlock;
   }
 

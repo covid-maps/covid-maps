@@ -15,6 +15,7 @@ const defaultMapOptions = {
 
 const defaultIcon = makeIcon(icons.default);
 const highlightedIcon = makeIcon(icons.highlighted);
+const currentLocationIcon = makeIcon(icons.currentLocation)
 const defaultCenter = { lat: 49.281376, lng: -123.111382 };
 
 function MyGoogleMap(props) {
@@ -53,7 +54,7 @@ function MyGoogleMap(props) {
       <Marker
         position={props.currentLocation}
         icon={{
-          url: "http://maps.gstatic.com/mapfiles/maps_lite/images/2x/ic_my_location_24dp_3.png",
+          ...currentLocationIcon,
           scaledSize: new window.google.maps.Size(30, 30),
         }}
       />

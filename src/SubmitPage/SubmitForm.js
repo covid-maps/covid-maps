@@ -215,7 +215,7 @@ class SubmitForm extends React.Component {
               Add/Update Store
             </h6>
             <Form.Group controlId="formBasicStore">
-              <Form.Label className="">Location Name (required)</Form.Label>
+              <Form.Label className="">Store Name (required)</Form.Label>
               <Form.Control
                 type="text"
                 onChange={e => this.onChangeInput(e, "Store Name")}

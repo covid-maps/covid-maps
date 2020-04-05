@@ -1,5 +1,6 @@
 .location-card {
   border: 0 transparent;
+  background-color: #fff;
 
   .card-header {
     background: transparent;
@@ -13,10 +14,15 @@
   }
 
   .card-body {
-    padding: 0 1em  1em;
+    padding: 0 1em 1em;
   }
 
   .location-buttons {
     min-width: 220px;
   }
+}
+
+.location-card:hover {
+  background-color: #eee;
+  cursor: pointer;
 }

@@ -5,10 +5,10 @@ import Alert from "react-bootstrap/Alert";
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
-import {getDistance} from "geolib";
+import { getDistance } from "geolib";
 import MapWithSearch from "../MapWithSearch";
-import {isStoreType, getFirstComma} from "../utils";
-import {recordAddNewStore} from "../gaEvents";
+import { isStoreType, getFirstComma } from "../utils";
+import { recordAddNewStore } from "../gaEvents";
 import Accordion from "react-bootstrap/Accordion";
 
 const DISTANCE_FILTER = 200000; // meters
@@ -146,90 +146,94 @@ class Homepage extends React.Component {
       : { pathname: "/location" };
   }
 
-    render() {
-        let missingBlock = null;
-        let selectedForMissing = undefined;
-        if (this.isMissingLocationInformation(this.state.searchResult)) {
-            const { searchResult, searchResultLatlng } = this.state;
-            missingBlock = (
-                <MissingBlock
-                    missing={true}
-                    result={{
-                        name: searchResult.name,
-                        entries: [searchResultToFormEntry(searchResult)]
-                    }}
-                ></MissingBlock>
-            );
-            selectedForMissing = searchResultLatlng;
-        }
-        const closeByResults = this.state.results.filter(
-            result => result.distance < DISTANCE_FILTER
-        );
-        const closeByMarkers = closeByResults.map(res => ({
-            lat: Number(res.lat),
-            lng: Number(res.lng)
-        }));
-        return (
-            <div>
-                <NoOfUsersAlert />
+  render() {
+    let missingBlock = null;
+    let selectedForMissing = undefined;
+    if (this.isMissingLocationInformation(this.state.searchResult)) {
+      const { searchResult, searchResultLatlng } = this.state;
+      missingBlock = (
+        <MissingBlock
+          missing={true}
+          result={{
+            name: searchResult.name,
+            entries: [searchResultToFormEntry(searchResult)]
+          }}
+        ></MissingBlock>
+      );
+      selectedForMissing = searchResultLatlng;
+    }
+    const closeByResults = this.state.results.filter(
+      result => result.distance < DISTANCE_FILTER
+    );
+    const closeByMarkers = closeByResults.map(res => ({
+      lat: Number(res.lat),
+      lng: Number(res.lng)
+    }));
+    return (
+      <div>
+        <NoOfUsersAlert />
         <MapWithSearch
           value=""
           onSearchSuccess={result => {
-              if (result && result.latLng) {
-                  this.setState({
-                      searchResultLatlng: result.latLng,
-                      searchResult: result,
-                      center: result.latLng,
-                      results: this.calculateGroupDistance(
-                          this.state.results,
-                          result.latLng
-                      )
-                  });
-              }
+            if (result && result.latLng) {
+              this.setState({
+                searchResultLatlng: result.latLng,
+                searchResult: result,
+                center: result.latLng,
+                results: this.calculateGroupDistance(
+                  this.state.results,
+                  result.latLng
+                )
+              });
+            }
           }}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
           centerPosition={this.state.searchResultLatlng}
           locations={
-              selectedForMissing
-                  ? [...closeByMarkers, this.state.searchResultLatlng]
-                  : closeByMarkers
+            selectedForMissing
+              ? [...closeByMarkers, this.state.searchResultLatlng]
+              : closeByMarkers
           }
           onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
           panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
         />
-          <Accordion className="map-wide-data-container">
-              <div>
-                  <Accordion.Toggle as={Button} variant="link" eventKey="0" className="toggle-button">
-                            <span>
-                                Stores near you
-                            </span>
-                  </Accordion.Toggle>
+        <Accordion className="map-wide-data-container">
+          <div>
+            <Accordion.Toggle
+              as={Button}
+              variant="link"
+              eventKey="0"
+              className="toggle-button"
+            >
+              <span>Stores near you</span>
+            </Accordion.Toggle>
+          </div>
+          <div>
+            <Accordion eventKey="0" className="toggle-container">
+              <div className="my-2 mx-2">
+                <Link to={this.getLinkTo()}>
+                  <Button
+                    size="md"
+                    variant="success"
+                    className="text-uppercase btn-block mb-2"
+                    onClick={recordAddNewStore}
+                  >
+                    Add a store
+                  </Button>
+                </Link>
+                {missingBlock}
+                <SearchResults
+                  onCardClick={card => this.onCardClick(card)}
+                  isLoading={this.state.isLoading}
+                  selectedLocation={this.state.selectedLocation}
+                  results={closeByResults}
+                  center={this.state.center}
+                />
               </div>
-              <div>
-                  <Accordion eventKey="0" className="toggle-container">
-                      <div className="my-2 mx-2">
-                          <Link to={this.getLinkTo()}>
-                              <Button
-                                  size="md"
-                                  variant="success"
-                                  className="text-uppercase btn-block mb-2"
-                                  onClick={recordAddNewStore}
-                              >
-                                  Add a store
-                              </Button>
-                          </Link>
-                          {missingBlock}
-                          <SearchResults
-                              onCardClick={card => this.onCardClick(card)}
-                              isLoading={this.state.isLoading}
-                              results={closeByResults}
-                              center={this.state.center}
-                          />
-                      </div>
-                  </Accordion>
-              </div>
-          </Accordion>
+            </Accordion>
+          </div>
+        </Accordion>
       </div>
     );
   }

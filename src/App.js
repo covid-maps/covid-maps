@@ -67,11 +67,6 @@ function AppNavbar() {
             />{" "}
           </Link>
         </Navbar.Brand>
-        <Nav className="ml-auto">
-          <Link to="/about">About</Link>
-          <Link to="/update">Add store</Link>
-        </Nav>
-
         {a2hsButtonState && (
           <Button
             size="sm"
@@ -111,6 +106,12 @@ function App() {
             <Route path="/" component={Homepage} />
           </Switch>
         </div>
+        <footer className="m-0 p-0">
+          <div className="container py-4 text-center text-uppercase">
+            <Link to="/">Home</Link> · <Link to="/location">Add a store</Link> ·{" "}
+            <Link to="/about">About</Link>
+          </div>
+        </footer>
       </div>
     </Router>
   );

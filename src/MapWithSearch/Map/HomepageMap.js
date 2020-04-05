@@ -1,5 +1,6 @@
 import React, { useRef } from "react";
 import { GoogleMap, withGoogleMap, Marker } from "react-google-maps";
+import { mapOptions } from "./theme";
 import {
   GOOGLE_API_KEY,
   icons,
@@ -9,15 +10,6 @@ import {
 } from "../../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
-
-const defaultMapOptions = {
-  fullscreenControl: false,
-  mapTypeControl: false,
-  streetViewControl: false,
-  // `greedy` will disable the two-finger
-  // drag behavior on mobile.
-  gestureHandling: "greedy"
-};
 
 const defaultIcon = markerIcon(icons.default);
 const highlightedIcon = markerIcon(icons.highlighted);
@@ -54,7 +46,7 @@ function MyGoogleMap(props) {
     <GoogleMap
       ref={refMap}
       defaultZoom={13}
-      defaultOptions={defaultMapOptions}
+      defaultOptions={mapOptions}
       defaultCenter={{ lat: 54, lng: 25 }}
       {...centerProps}
     >

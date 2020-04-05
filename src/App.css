@@ -77,6 +77,9 @@ footer a:hover {
 
 .no-of-users-alert {
   margin-bottom: 0;
+  border: none;
+  padding: 0.4em 0.6em;
+  font-size: 12px;
 }
 
 /* Card */

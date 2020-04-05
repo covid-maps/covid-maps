@@ -27,20 +27,19 @@ function searchResultToFormEntry(searchResult) {
 }
 
 function NoOfUsersAlert() {
-  const [show, setShow] = useState(true)
-
+  const [show, setShow] = useState(true);
   return (
     <Alert
-      key='no-of-users'
-      className='card no-of-users-alert'
-      variant='primary'
+      key="no-of-users"
+      className="card no-of-users-alert"
+      variant="primary"
       show={show}
       onClose={() => setShow(false)}
       dismissible
     >
-      Help 5500+ users by sharing information about essential services available around you
+      Help 5500+ users by sharing information about essential services nearby
     </Alert>
-  )
+  );
 }
 
 class Homepage extends React.Component {

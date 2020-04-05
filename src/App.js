@@ -69,7 +69,7 @@ function AppNavbar() {
                 </Navbar.Brand>
                 <Nav className="ml-auto">
                     <Link to="/about">About</Link>
-                    <Link to="/update">Add location</Link> ·{" "}
+                    <Link to="/update">Add store</Link> ·{" "}
                 </Nav>
 
                 {

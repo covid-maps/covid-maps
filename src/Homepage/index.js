@@ -202,7 +202,7 @@ class Homepage extends React.Component {
               <div>
                   <Accordion.Toggle as={Button} variant="link" eventKey="0" className="toggle-button">
                             <span>
-                                Locations near you
+                                Stores near you
                             </span>
                   </Accordion.Toggle>
               </div>
@@ -216,7 +216,7 @@ class Homepage extends React.Component {
                                   className="text-uppercase btn-block mb-2"
                                   onClick={recordAddNewStore}
                               >
-                                  Add a location
+                                  Add a store
                               </Button>
                           </Link>
                           {missingBlock}

@@ -6,10 +6,10 @@ import PlacesAutocomplete, {
   geocodeByAddress,
   getLatLng
 } from "react-places-autocomplete";
-import { getAddressComponent } from "../utils";
+import { getAddressComponent } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
-import { recordSearchCompleted } from "../gaEvents";
+import { recordSearchCompleted } from "../../gaEvents";
 
 class LocationSearchInput extends React.Component {
   constructor(props) {

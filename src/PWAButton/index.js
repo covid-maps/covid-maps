@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import PWAPrompt from "react-ios-pwa-prompt";
 
+function isMobile() {
+  return (
+    typeof window.orientation !== "undefined" ||
+    navigator.userAgent.indexOf("IEMobile") !== -1
+  );
+}
+
 function addToHomeScreen(setShowIOSPrompt) {
   if (["iPhone", "iPad", "iPod"].includes(navigator.platform)) {
     setShowIOSPrompt(false);
@@ -26,7 +33,7 @@ function PWAInstallButton() {
   const [showIOSPrompt, setShowIOSPrompt] = useState(false);
   return (
     <>
-      {
+      {isMobile() ? (
         <Button
           size="sm"
           variant="outline-success"
@@ -35,7 +42,7 @@ function PWAInstallButton() {
         >
           Add to Homescreen
         </Button>
-      }
+      ) : null}
       {showIOSPrompt && (
         <PWAPrompt
           debug={true}

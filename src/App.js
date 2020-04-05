@@ -9,8 +9,7 @@ import AboutPage from "./AboutPage";
 import LocationSelectionPage from "./LocationSelectionPage";
 import { ScrollToTop } from "./utils";
 import { Navbar, Button } from "react-bootstrap";
-import PWAPrompt from "react-ios-pwa-prompt"
-import Nav from "react-bootstrap/Nav";
+import PWAPrompt from "react-ios-pwa-prompt";
 import ReactGA from "react-ga";
 import logo from "./Logo.svg";
 
@@ -25,27 +24,26 @@ if (process.env.NODE_ENV !== "development") {
 }
 
 function addToHomeScreen(pwaPromptChangeState) {
-  if (['iPhone', 'iPad', 'iPod'].includes(navigator.platform)) {
-    pwaPromptChangeState(false)
+  if (["iPhone", "iPad", "iPod"].includes(navigator.platform)) {
+    pwaPromptChangeState(false);
     process.nextTick(() => {
-      pwaPromptChangeState(true)
-    })
+      pwaPromptChangeState(true);
+    });
   } else {
     if (window.deferredPrompt) {
-      window.deferredPrompt.prompt()
+      window.deferredPrompt.prompt();
     }
   }
-
 }
 
 function AppNavbar() {
-  const [pwaPromptState, pwaPromptChangeState] = useState(false)
-  const [a2hsButtonState, a2hsButtonChangeState] = useState(false)
+  const [pwaPromptState, pwaPromptChangeState] = useState(false);
+  const [a2hsButtonState, a2hsButtonChangeState] = useState(false);
   //Adds the `deferredPrompt` object to the window.
-  window.addEventListener('beforeinstallprompt', function (event) {
-    a2hsButtonChangeState(true)
+  window.addEventListener("beforeinstallprompt", function (event) {
+    a2hsButtonChangeState(true);
     event.preventDefault();
-    window.deferredPrompt = event
+    window.deferredPrompt = event;
   });
   return (
     <>
@@ -60,8 +58,7 @@ function AppNavbar() {
             />{" "}
           </Link>
         </Navbar.Brand>
-        {
-          a2hsButtonState &&
+        {a2hsButtonState && (
           <Button
             size="sm"
             variant="outline-success"
@@ -69,20 +66,19 @@ function AppNavbar() {
             onClick={() => addToHomeScreen(pwaPromptChangeState)}
           >
             Add To Home Screen
-      </Button>
-        }
+          </Button>
+        )}
       </Navbar>
-      {
-        pwaPromptState &&
+      {pwaPromptState && (
         <PWAPrompt
           debug={true}
           promptOnVisit={50}
           timesToShow={50}
           delay={200}
           copyClosePrompt="Close"
-          permanentlyHideOnDismiss={false} />
-      }
-
+          permanentlyHideOnDismiss={false}
+        />
+      )}
     </>
   );
 }

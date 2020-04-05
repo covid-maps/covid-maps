@@ -40,13 +40,19 @@ export function getAddressComponent(
 
 export const icons = {
   default: "/assets/marker_red.png",
-  highlighted: "/assets/marker_green.png"
+  highlighted: "/assets/marker_green.png",
+  currentLocation: "/assets/current_location.png"
 };
 
-export const makeIcon = url => ({
+export const markerIcon = url => ({
   url,
   scaledSize: { height: 35, width: 21 }
 });
+
+export const dotIcon = {
+  url: icons.currentLocation,
+  scaledSize: new window.google.maps.Size(25, 25)
+};
 
 export const isStoreType = types => {
   const invalidTypes = ["political", "locality"];

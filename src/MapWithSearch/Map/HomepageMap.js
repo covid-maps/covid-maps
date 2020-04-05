@@ -1,6 +1,12 @@
 import React, { useRef } from "react";
-import { GoogleMap, withGoogleMap, Marker, Circle } from "react-google-maps";
-import { GOOGLE_API_KEY, icons, makeIcon, isSameLocation } from "../../utils";
+import { GoogleMap, withGoogleMap, Marker } from "react-google-maps";
+import {
+  GOOGLE_API_KEY,
+  icons,
+  markerIcon,
+  dotIcon,
+  isSameLocation
+} from "../../utils";
 
 const URL = `https://maps.googleapis.com/maps/api/js?v=3.exp&libraries=geometry,drawing,places&key=${GOOGLE_API_KEY}`;
 
@@ -13,8 +19,8 @@ const defaultMapOptions = {
   gestureHandling: "greedy"
 };
 
-const defaultIcon = makeIcon(icons.default);
-const highlightedIcon = makeIcon(icons.highlighted);
+const defaultIcon = markerIcon(icons.default);
+const highlightedIcon = markerIcon(icons.highlighted);
 const defaultCenter = { lat: 49.281376, lng: -123.111382 };
 
 function MyGoogleMap(props) {
@@ -30,12 +36,14 @@ function MyGoogleMap(props) {
     : props.currentLocation
     ? { center: props.currentLocation }
     : { center: defaultCenter };
-  const getMarkerIcon = location => {
-    const isSelected =
-      props.selectedLocation &&
-      isSameLocation(props.selectedLocation, location);
-    return isSelected ? highlightedIcon : defaultIcon;
+  const isMarkerSelected = location => {
+    return (
+      props.selectedLocation && isSameLocation(props.selectedLocation, location)
+    );
   };
+  const getMarkerIcon = location =>
+    isMarkerSelected(location) ? highlightedIcon : defaultIcon;
+  const getZIndex = location => (isMarkerSelected(location) ? 10 : 1);
   const markers = props.locations || [];
 
   if (props.panToLocation) {
@@ -50,25 +58,15 @@ function MyGoogleMap(props) {
       defaultCenter={{ lat: 54, lng: 25 }}
       {...centerProps}
     >
+      <Marker position={props.currentLocation} icon={dotIcon} />
       {markers.map(location => (
         <Marker
           position={location}
           onClick={handleMarkerClicked}
           icon={getMarkerIcon(location)}
+          zIndex={getZIndex(location)}
         />
       ))}
-
-      <Circle
-        center={props.currentLocation}
-        radius={70}
-        options={{
-          strokeColor: "#2688ff",
-          strokeOpacity: 0.2,
-          strokeWeight: 1,
-          fillColor: "#2688ff",
-          fillOpacity: 0.4
-        }}
-      />
     </GoogleMap>
   );
 }

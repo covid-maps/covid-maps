@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import { Router, Switch, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -8,8 +8,8 @@ import SubmitPage from "./SubmitPage";
 import AboutPage from "./AboutPage";
 import LocationSelectionPage from "./LocationSelectionPage";
 import { ScrollToTop } from "./utils";
-import { Navbar, Button } from "react-bootstrap";
-import PWAPrompt from "react-ios-pwa-prompt";
+import Navbar from "react-bootstrap/Navbar";
+import PWAInstallButton from "./PWAButton";
 import ReactGA from "react-ga";
 import logo from "./Logo.svg";
 
@@ -23,28 +23,7 @@ if (process.env.NODE_ENV !== "development") {
   });
 }
 
-function addToHomeScreen(pwaPromptChangeState) {
-  if (["iPhone", "iPad", "iPod"].includes(navigator.platform)) {
-    pwaPromptChangeState(false);
-    process.nextTick(() => {
-      pwaPromptChangeState(true);
-    });
-  } else {
-    if (window.deferredPrompt) {
-      window.deferredPrompt.prompt();
-    }
-  }
-}
-
 function AppNavbar() {
-  const [pwaPromptState, pwaPromptChangeState] = useState(false);
-  const [a2hsButtonState, a2hsButtonChangeState] = useState(false);
-  //Adds the `deferredPrompt` object to the window.
-  window.addEventListener("beforeinstallprompt", function (event) {
-    a2hsButtonChangeState(true);
-    event.preventDefault();
-    window.deferredPrompt = event;
-  });
   return (
     <>
       <Navbar bg="light" variant="light" fixed="top">
@@ -58,27 +37,8 @@ function AppNavbar() {
             />{" "}
           </Link>
         </Navbar.Brand>
-        {a2hsButtonState && (
-          <Button
-            size="sm"
-            variant="outline-success"
-            className="ml-auto a2hs-button"
-            onClick={() => addToHomeScreen(pwaPromptChangeState)}
-          >
-            Add To Home Screen
-          </Button>
-        )}
+        <PWAInstallButton />
       </Navbar>
-      {pwaPromptState && (
-        <PWAPrompt
-          debug={true}
-          promptOnVisit={50}
-          timesToShow={50}
-          delay={200}
-          copyClosePrompt="Close"
-          permanentlyHideOnDismiss={false}
-        />
-      )}
     </>
   );
 }

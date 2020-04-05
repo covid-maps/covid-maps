@@ -80,3 +80,22 @@ footer a:hover {
   font-size: 0.925em;
   line-height: 1.5;
 }
+
+.ugc {
+  background-color: #6abecc;
+  color: white;
+}
+
+.ugc-heading {
+  font-weight: bold;
+}
+
+.ugc-button {
+  background-color: #6abecc; /* Green */
+  color: white;
+  padding: 2px 10px;
+  text-align: center;
+  display: inline-block;
+  font-size: 16px;
+  border: 1px solid white;
+}

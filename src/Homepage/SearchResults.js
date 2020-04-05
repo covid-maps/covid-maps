@@ -1,7 +1,44 @@
 import React from "react";
 import ResultBlock from "./ResultBlock";
+import NonUGCResultBlock from "./NonUGCResultBlock";
 
 class SearchResults extends React.Component {
+  createView(results, nonUGCStores) {
+    nonUGCStores = nonUGCStores || [];
+    let nonUGCRendered = 0;
+    let resultBlock = [];
+    for (let i = 1; i < results.length + nonUGCStores.length; i++) {
+      if (
+        i % 5 == 0 &&
+        nonUGCRendered < 10 &&
+        nonUGCStores.length > nonUGCRendered
+      ) {
+        let result = nonUGCStores[nonUGCRendered];
+        resultBlock.push(
+          <div key={result.placeId || result.name}>
+            <NonUGCResultBlock
+              onClick={() => this.props.onCardClick(result)}
+              result={result}
+            />
+          </div>
+        );
+        nonUGCRendered += 1;
+      } else {
+        if (i > results.length - 1) break;
+        let result = results[i];
+        resultBlock.push(
+          <div key={result.placeId || result.name}>
+            <ResultBlock
+              onClick={() => this.props.onCardClick(result)}
+              result={result}
+            />
+          </div>
+        );
+      }
+    }
+    return resultBlock;
+  }
+
   render() {
     return this.props.isLoading ? (
       <div className="text-center py-5">
@@ -10,16 +47,7 @@ class SearchResults extends React.Component {
         </div>
       </div>
     ) : (
-      this.props.results.map(result => {
-        return (
-          <div key={result.placeId || result.name}>
-            <ResultBlock
-              onClick={() => this.props.onCardClick(result)}
-              result={result}
-            />
-          </div>
-        );
-      })
+      this.createView(this.props.results, this.props.nonUGCStores)
     );
   }
 }

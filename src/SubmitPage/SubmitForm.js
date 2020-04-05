@@ -186,7 +186,7 @@ class SubmitForm extends React.Component {
               }
               this.onLocationSearchCompleted({
                 latLng,
-                name: result.formatted_address,
+                name: "",
                 address: result.formatted_address,
                 city: getAddressComponent(
                   result.address_components,

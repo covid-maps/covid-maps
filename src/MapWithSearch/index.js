@@ -1,7 +1,7 @@
 import React, { useRef } from "react";
 import OriginalMap from "./Map";
 import HomepageMap from "./Map/HomepageMap";
-import LocationSearchControl from "./LocationSearch";
+import LocationSearchControl from "./Input";
 import Form from "react-bootstrap/Form";
 import { geolocated } from "react-geolocated";
 import * as api from "../api";

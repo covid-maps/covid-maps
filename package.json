@@ -23,6 +23,7 @@
     "react-geolocated": "^3.0.1",
     "react-google-maps": "^9.4.5",
     "react-ios-pwa-prompt": "^1.7.0",
+    "react-js-pagination": "^3.0.3",
     "react-places-autocomplete": "^7.2.1",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1"

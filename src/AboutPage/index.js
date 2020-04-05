@@ -19,7 +19,7 @@ function AboutPage() {
       <p className="text-black-60">
         Covid Maps is a crowd-sourced app that helps you track the latest
         information on essential services operating around you during the
-        COVID-19 shutdowns. <Link to="/update">Add an update</Link> about a
+        Covid-19 shutdowns. <Link to="/update">Add an update</Link> about a
         store near you and help others!
       </p>
       <p className="text-black-60">

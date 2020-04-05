@@ -58,10 +58,6 @@ class LocationSelectionPage extends React.Component {
     }
   };
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return !this.state.currentLocationCaptured;
-  // }
-
   getSearchValue() {
     if (this.state.searchFieldValue) {
       // this is set from dragging the marker
@@ -95,15 +91,6 @@ class LocationSelectionPage extends React.Component {
           onSearchSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
           style={{ height: "50vh" }}
-          // onBoundsChanged={center => {
-          //   this.setState({
-          //     currentLocationCaptured: true,
-          //     data: {
-          //       Latitude: center.lat,
-          //       Longitude: center.lng
-          //     }
-          //   });
-          // }}
           position={
             this.state.data.Latitude
               ? {
@@ -121,7 +108,7 @@ class LocationSelectionPage extends React.Component {
               }
               this.onLocationSearchCompleted({
                 latLng,
-                name: result.formatted_address,
+                name: "",
                 address: result.formatted_address,
                 city: getAddressComponent(
                   result.address_components,

@@ -15,6 +15,7 @@ const defaultMapOptions = {
 
 const defaultIcon = makeIcon(icons.default);
 const highlightedIcon = makeIcon(icons.highlighted);
+const currentLocationIcon = makeIcon(icons.currentLocation)
 const defaultCenter = { lat: 49.281376, lng: -123.111382 };
 
 function MyGoogleMap(props) {
@@ -28,8 +29,8 @@ function MyGoogleMap(props) {
   const centerProps = props.centerPosition
     ? { center: props.centerPosition }
     : props.currentLocation
-    ? { center: props.currentLocation }
-    : { center: defaultCenter };
+      ? { center: props.currentLocation }
+      : { center: defaultCenter };
   const getMarkerIcon = location => {
     const isSelected =
       props.selectedLocation &&
@@ -50,6 +51,13 @@ function MyGoogleMap(props) {
       defaultCenter={{ lat: 54, lng: 25 }}
       {...centerProps}
     >
+      <Marker
+        position={props.currentLocation}
+        icon={{
+          ...currentLocationIcon,
+          scaledSize: new window.google.maps.Size(30, 30),
+        }}
+      />
       {markers.map(location => (
         <Marker
           position={location}
@@ -57,18 +65,6 @@ function MyGoogleMap(props) {
           icon={getMarkerIcon(location)}
         />
       ))}
-
-      <Circle
-        center={props.currentLocation}
-        radius={70}
-        options={{
-          strokeColor: "#2688ff",
-          strokeOpacity: 0.2,
-          strokeWeight: 1,
-          fillColor: "#2688ff",
-          fillOpacity: 0.4
-        }}
-      />
     </GoogleMap>
   );
 }

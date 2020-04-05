@@ -40,7 +40,8 @@ export function getAddressComponent(
 
 export const icons = {
   default: "/assets/marker_red.png",
-  highlighted: "/assets/marker_green.png"
+  highlighted: "/assets/marker_green.png",
+  currentLocation: "/assets/current_location.png"
 };
 
 export const makeIcon = url => ({

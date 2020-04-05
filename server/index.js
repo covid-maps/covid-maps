@@ -29,6 +29,54 @@ async function authenticate() {
   }
 }
 
+
+async function addInfoToDB(data){
+  const store = await models.StoreInfo.findOne({ where: { name: data['Store Name'] } });
+  if(store == null){
+    return await addNewStore(data)
+  }else{
+    return await updateExistingStore(store, data)
+  }
+}
+
+async function addNewStore(data){
+  console.log(data)
+  let storeInfo = {
+    name: data["Store Name"],
+    category: data["Store Category"],
+    latitude: parseFloat(data.Latitude),
+    longitude: parseFloat(data.Longitude),
+    place_id: data["Place Id"] || "",
+    address: data.Address || "",
+    city: data.City || "",
+    locality: data.Locality || "",
+    country: data.Country || "",
+    created_at: new Date(),
+    updated_at: new Date(),
+    storeUpdates: [{
+      ip: data["User IP"],
+      user_id: -1,
+      availability_info: data["Useful Information"],
+      safety_info: data["Safety Observations"],
+      opening_time: data["Opening Time"],
+      closing_time: data["Closing Time"],
+      created_at: new Date(),
+      updated_at: new Date()
+    }]
+  };
+  console.log(storeInfo);
+  return await models.StoreInfo.create(storeInfo, {
+    include: [{
+      association: models.StoreUpdates,
+      as: 'storeUpdates'
+    }]
+  })
+}
+
+async function updateExistingStore(store, data){
+
+}
+
 function rowValue(headerValues, row) {
   let values = {};
   headerValues.forEach(title => {
@@ -80,7 +128,7 @@ app.get("/v0/query", async (req, res) => {
 
 app.post("/v0/update", async (req, res) => {
   try {
-    res.send(await addRow(req.body));
+    res.send(await addInfoToDB(req.body));
   } catch (error) {
     console.log("Error in submit:", error);
     res.status(500).send({ error });
@@ -95,5 +143,6 @@ app.get("/v1/query", async(req, res) => {
   }));
   res.send("new backend get query");
 });
+
 
 app.listen(process.env.PORT || 5000);

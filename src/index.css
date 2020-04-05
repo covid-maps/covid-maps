@@ -6,6 +6,19 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+/* Don't Show the a2hs (Add To Home Screen Button) 
+anywhere other than the Browser
+*/
+.a2hs-button {
+  display: none !important;
+}
+
+@media all and (display-mode: browser) {
+  .a2hs-button {
+    display: inline-block !important;
+  }
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;

@@ -52,18 +52,18 @@ class Homepage extends React.Component {
     selectedLocation: undefined,
     searchResultLatlng: undefined,
     searchResult: undefined,
-    nonUGCStores: undefined,
+    nonUGCStores: undefined
   };
 
   componentDidMount() {
-    api.query().then((data) => {
+    api.query().then(data => {
       this.setState({
         results: this.formatResults(data),
-        markers: data.map((result) => ({
+        markers: data.map(result => ({
           lat: Number(result.Latitude),
-          lng: Number(result.Longitude),
+          lng: Number(result.Longitude)
         })),
-        isLoading: false,
+        isLoading: false
       });
     });
   }
@@ -95,7 +95,7 @@ class Homepage extends React.Component {
         obj[result["Place Id"] || result["Store Name"]].push(result);
         return obj;
       }, {})
-    ).map((entries) => ({
+    ).map(entries => ({
       name: entries[0]["Store Name"],
       placeId: entries[0]["Place Id"],
       lat: Number(entries[0].Latitude),
@@ -110,20 +110,8 @@ class Homepage extends React.Component {
       location &&
       isStoreType(location.types) &&
       location.name &&
-      !this.state.results.find((result) => result.placeId === location.place_id)
+      !this.state.results.find(result => result.placeId === location.place_id)
     );
-  }
-
-  onBoundsChanged(center) {
-    this.setState({
-      results: this.calculateGroupDistance(this.state.results),
-      center: center,
-    });
-    findNearbyStores(center).then((results) => {
-      this.setState({
-        nonUGCStores: results,
-      });
-    });
   }
 
   onCardClick(card) {
@@ -141,6 +129,15 @@ class Homepage extends React.Component {
       center: { ...latLng },
       selectedLocation: { ...latLng },
       mapShouldPan: false
+    });
+  }
+
+  onBoundsChanged(location) {
+    findNearbyStores(location).then(results => {
+      console.log(results);
+      this.setState({
+        nonUGCStores: results
+      });
     });
   }
 
@@ -168,7 +165,7 @@ class Homepage extends React.Component {
           missing={true}
           result={{
             name: searchResult.name,
-            entries: [searchResultToFormEntry(searchResult)],
+            entries: [searchResultToFormEntry(searchResult)]
           }}
         ></MissingBlock>
       );
@@ -177,10 +174,12 @@ class Homepage extends React.Component {
     const closeByResults = this.state.results.filter(
       result => result.distance < DISTANCE_FILTER
     );
-    const closeByMarkers = closeByResults.map(res => ({
-      lat: Number(res.lat),
-      lng: Number(res.lng)
-    })).concat(this.state.nonUGCStores || []);
+    const closeByMarkers = closeByResults
+      .map(res => ({
+        lat: Number(res.lat),
+        lng: Number(res.lng)
+      }))
+      .concat(this.state.nonUGCStores || []);
     return (
       <div>
         <NoOfUsersAlert />
@@ -197,6 +196,7 @@ class Homepage extends React.Component {
                   result.latLng
                 )
               });
+              this.onBoundsChanged(result.latLng)
             }
           }}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
@@ -207,6 +207,7 @@ class Homepage extends React.Component {
               ? [...closeByMarkers, this.state.searchResultLatlng]
               : closeByMarkers
           }
+          onBoundsChanged={(center) => this.onBoundsChanged(center)}
           onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
           panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
         />
@@ -228,7 +229,7 @@ class Homepage extends React.Component {
             </Link>
           </div>
           <SearchResults
-            onCardClick={(card) => this.onCardClick(card)}
+            onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
             selectedLocation={this.state.selectedLocation}
             results={closeByResults}

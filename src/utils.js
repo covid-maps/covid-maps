@@ -57,7 +57,7 @@ export function findNearbyStores(currentLocation) {
   return new Promise((resolve) => {
     service.nearbySearch(request, (results) => {
       resolve(
-        results
+          (results || [])
           .map((r) => {
             let content = {
               placeId: r["place_id"],

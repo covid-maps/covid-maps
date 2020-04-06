@@ -8,7 +8,7 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      store_id: {
+      storeId: {
         type: Sequelize.INTEGER,
         references: {
           model: {
@@ -20,26 +20,20 @@ module.exports = {
       ip: {
         type: Sequelize.STRING
       },
-      user_id: {
+      userId: {
         type: Sequelize.STRING
       },
-      availability_info: {
+      availabilityInfo: {
         type: Sequelize.STRING
       },
-      safety_info: {
+      safetyInfo: {
         type: Sequelize.STRING
       },
-      opening_time: {
+      openingTime: {
         type: Sequelize.STRING
       },
-      closing_time: {
+      closingTime: {
         type: Sequelize.STRING
-      },
-      created_at: {
-        type: Sequelize.DATE
-      },
-      updated_at: {
-        type: Sequelize.DATE
       },
       createdAt: {
         allowNull: false,

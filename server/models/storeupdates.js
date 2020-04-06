@@ -1,19 +1,19 @@
 'use strict';
 module.exports = (sequelize, DataTypes) => {
   const StoreUpdates = sequelize.define('StoreUpdates', {
-    store_id: DataTypes.INTEGER,
+    storeId: DataTypes.INTEGER,
     ip: DataTypes.STRING,
-    user_id: DataTypes.STRING,
-    availability_info: DataTypes.STRING,
-    safety_info: DataTypes.STRING,
-    opening_time: DataTypes.STRING,
-    closing_time: DataTypes.STRING,
-    created_at: DataTypes.DATE,
-    updated_at: DataTypes.DATE
+    userId: DataTypes.STRING,
+    availabilityInfo: DataTypes.STRING,
+    safetyInfo: DataTypes.STRING,
+    openingTime: DataTypes.STRING,
+    closingTime: DataTypes.STRING,
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
   }, {});
   StoreUpdates.associate = function(models) {
     StoreUpdates.belongsTo(models.StoreInfo, {
-      foreignKey: "store_id"
+      foreignKey: "storeId"
     });
     // associations can be defined here
   };

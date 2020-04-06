@@ -1,5 +1,4 @@
 var models  = require('./models');
-
 const express = require("express");
 const compression = require("compression");
 const bodyParser = require("body-parser");
@@ -30,6 +29,28 @@ async function authenticate() {
 }
 
 
+function mapDBRow(data){
+  return data.StoreUpdates.map(up => {
+    return {
+      "User IP": up.ip,
+      Timestamp: up.created_at,
+      Latitude: data.latitude,
+      Longitude: data.longitude,
+      "Store Category": data.category.split(","),
+      "Store Name": data.name,
+      "Safety Observations": up.safetyInfo,
+      "Useful Information": up.availabilityInfo,
+      "Place Id": data.placeId,
+      City: data.city,
+      Locality: data.locality,
+      Address: data.address,
+      Country: data.country,
+      "Opening Time": up.openingTime,
+      "Closing Time": up.closingTime
+    }
+  })
+}
+
 async function addInfoToDB(data){
   const store = await models.StoreInfo.findOne({ where: { name: data['Store Name'] } });
   if(store == null){
@@ -39,41 +60,75 @@ async function addInfoToDB(data){
   }
 }
 
-async function addNewStore(data){
-  console.log(data)
-  let storeInfo = {
+
+function buildStoreObject(data){
+  return {
     name: data["Store Name"],
     category: data["Store Category"],
     latitude: parseFloat(data.Latitude),
     longitude: parseFloat(data.Longitude),
-    place_id: data["Place Id"] || "",
+    placeId: data["Place Id"] || "",
     address: data.Address || "",
     city: data.City || "",
     locality: data.Locality || "",
     country: data.Country || "",
-    created_at: new Date(),
-    updated_at: new Date(),
-    storeUpdates: [{
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    StoreUpdates: [{
       ip: data["User IP"],
       user_id: -1,
-      availability_info: data["Useful Information"],
-      safety_info: data["Safety Observations"],
-      opening_time: data["Opening Time"],
-      closing_time: data["Closing Time"],
-      created_at: new Date(),
-      updated_at: new Date()
+      availabilityInfo: data["Useful Information"],
+      safetyInfo: data["Safety Observations"],
+      openingTime: data["Opening Time"],
+      closingTime: data["Closing Time"],
+      createdAt: new Date(),
+      updatedAt: new Date()
     }]
   };
-  console.log(storeInfo);
+}
+
+async function addNewStore(data){
+  let storeInfo = buildStoreObject(data);
   return await models.StoreInfo.create(storeInfo, {
     include: [{
-      association: models.StoreUpdates,
-      as: 'storeUpdates'
+      model: models.StoreUpdates
     }]
   })
 }
 
 async function updateExistingStore(store, data){
+  let categories = store.category.split(",");
+  if(!categories.includes(data["Store Category"])){
+    categories.push(data["Store Category"])
+  }
+  return await models.sequelize.transaction(async (t) => {
+
+    const updatedStore = await store.update({
+      category: categories.join(","),
+      latitude: parseFloat(data.Latitude),
+      longitude: parseFloat(data.Longitude),
+      placeId: data["Place Id"] || "",
+      address: data.Address || "",
+      city: data.City || "",
+      locality: data.Locality || "",
+      country: data.Country || "",
+      updatedAt: new Date()
+    }, { transaction: t });
+
+    const updatedInfo = await models.StoreUpdates.create({
+      ip: data["User IP"],
+      storeId: store.id,
+      user_id: -1,
+      availabilityInfo: data["Useful Information"],
+      safetyInfo: data["Safety Observations"],
+      openingTime: data["Opening Time"],
+      closingTime: data["Closing Time"],
+      updatedAt: new Date()
+    }, { transaction: t });
+
+    updatedStore.StoreUpdates = [updatedInfo];
+    return updatedStore;
+  });
 
 }
 
@@ -128,7 +183,19 @@ app.get("/v0/query", async (req, res) => {
 
 app.post("/v0/update", async (req, res) => {
   try {
-    res.send(await addInfoToDB(req.body));
+    const ressult = await addRow(req.body);
+    console.log(ressult);
+    res.send(ressult);
+  } catch (error) {
+    console.log("Error in submit:", error);
+    res.status(500).send({ error });
+  }
+});
+
+app.post("/v1/update", async (req, res) => {
+  try {
+    const store = await addInfoToDB(req.body);
+    res.send(mapDBRow(store)[0]);
   } catch (error) {
     console.log("Error in submit:", error);
     res.status(500).send({ error });
@@ -136,12 +203,12 @@ app.post("/v0/update", async (req, res) => {
 });
 
 app.get("/v1/query", async(req, res) => {
-  console.log(models.StoreInfo.findAll({
+  const stores = await models.StoreInfo.findAll({
     include : [{
       model : models.StoreUpdates
     }]
-  }));
-  res.send("new backend get query");
+  });
+  res.send(stores.flatMap(store => mapDBRow(store)));
 });
 
 

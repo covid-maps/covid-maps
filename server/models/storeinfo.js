@@ -5,16 +5,16 @@ module.exports = (sequelize, DataTypes) => {
     category: DataTypes.STRING,
     latitude: DataTypes.FLOAT,
     longitude: DataTypes.FLOAT,
-    place_id: DataTypes.STRING,
+    placeId: DataTypes.STRING,
     address: DataTypes.STRING,
     city: DataTypes.STRING,
     locality: DataTypes.STRING,
     country: DataTypes.STRING,
-    created_at: DataTypes.TIME,
-    updated_at: DataTypes.TIME
+    createdAt: DataTypes.TIME,
+    updatedAt: DataTypes.TIME
   }, {});
   StoreInfo.associate = function(models) {
-    StoreInfo.hasMany(models.StoreUpdates, {foreignKey: "store_id"});
+    StoreInfo.hasMany(models.StoreUpdates, {foreignKey: "storeId"});
   };
   return StoreInfo;
 };

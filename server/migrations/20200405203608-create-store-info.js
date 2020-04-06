@@ -20,7 +20,7 @@ module.exports = {
       longitude: {
         type: Sequelize.FLOAT
       },
-      place_id: {
+      placeId: {
         type: Sequelize.STRING
       },
       address: {
@@ -34,12 +34,6 @@ module.exports = {
       },
       country: {
         type: Sequelize.STRING
-      },
-      created_at: {
-        type: Sequelize.TIME
-      },
-      updated_at: {
-        type: Sequelize.TIME
       },
       createdAt: {
         allowNull: false,

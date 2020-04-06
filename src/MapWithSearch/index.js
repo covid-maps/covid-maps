@@ -5,6 +5,7 @@ import LocationSearchControl from "./Input";
 import Form from "react-bootstrap/Form";
 import { geolocated } from "react-geolocated";
 import * as api from "../api";
+import GoogleMap from "./Map2";
 
 class MapWithSearch extends React.Component {
   state = {
@@ -108,6 +109,7 @@ class MapWithSearch extends React.Component {
             centerPosition={this.props.centerPosition}
           />
         )}
+        <GoogleMap />
         {!this.props.isGeolocationAvailable ? (
           <div className="alert alert-danger text-center mb-0">
             Your browser does not support geolocation.

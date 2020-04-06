@@ -89,7 +89,7 @@ class MapWithSearch extends React.Component {
         </Form>
         {this.props.isMarkerShown ? (
           <LocationSelectorMap
-            style={this.props.style}
+            height={this.props.height}
             position={positionProp}
             currentLocation={current}
             isMarkerShown={this.props.isMarkerShown}

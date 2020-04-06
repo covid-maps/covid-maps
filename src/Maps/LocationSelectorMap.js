@@ -12,9 +12,7 @@ class Map extends Component {
   };
 
   mapCenter = () => {
-    return (
-      this.props.centerPosition || this.props.currentLocation || defaultCenter
-    );
+    return this.props.position || this.props.currentLocation || defaultCenter;
   };
 
   onMapLoaded = map => {
@@ -24,13 +22,14 @@ class Map extends Component {
   onBoundsChanged = () => {
     if (this.map) {
       const mapCenter = this.map.getCenter();
-      this.setState({ markerPosition: mapCenter });
-      if (this.props.onBoundsChanged) {
-        this.props.onBoundsChanged({
-          lat: mapCenter.lat(),
-          lng: mapCenter.lng()
-        });
-      }
+      // this.setState({ markerPosition: mapCenter });
+
+      // if (this.props.onBoundsChanged) {
+      //   this.props.onBoundsChanged({
+      //     lat: mapCenter.lat(),
+      //     lng: mapCenter.lng()
+      //   });
+      // }
     }
   };
 
@@ -41,13 +40,22 @@ class Map extends Component {
     }
   };
 
+  componentDidUpdate(prevProps, prevState, snapshot) {
+    if (!isSameLocation(this.props.position, prevProps.position)) {
+      this.setState({ markerPosition: this.props.position });
+      this.map && this.map.panTo(this.props.position);
+    }
+  }
+
   render() {
+    console.log(this.props);
+    // console.log(this.mapCenter());
     return (
       <GoogleMap
         id="example-map"
         options={mapOptions}
         mapContainerStyle={{
-          height: "45vh",
+          height: this.props.height,
           width: "100%"
         }}
         onLoad={this.onMapLoaded}

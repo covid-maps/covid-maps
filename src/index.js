@@ -4,6 +4,10 @@ import * as Sentry from "@sentry/browser";
 import "./index.css";
 import App from "./App";
 import * as serviceWorker from "./serviceWorker";
+import { createStore, applyMiddleware } from "redux";
+import reducer from "./reducers";
+import promise from "redux-promise-middleware";
+import { Provider } from "react-redux";
 
 if (process.env.NODE_ENV !== "development") {
   Sentry.init({
@@ -11,9 +15,13 @@ if (process.env.NODE_ENV !== "development") {
   });
 }
 
+const store = applyMiddleware(promise)(createStore)(reducer);
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <App />
+    </Provider>
   </React.StrictMode>,
   document.getElementById("root")
 );

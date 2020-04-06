@@ -5,14 +5,9 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
-import {
-  geocodeByLatlng,
-  getAddressComponent,
-  isFunction,
-  getFirstComma
-} from "../utils";
+import { getFirstComma } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
-import MapWithSearch from "../MapWithSearch";
+import LocationSelector from "../LocationSelector";
 
 function ButtonWithLoading(props) {
   return props.isLoading ? (
@@ -164,11 +159,10 @@ class SubmitForm extends React.Component {
   render() {
     return (
       <>
-        <MapWithSearch
-          isMarkerShown
+        <LocationSelector
           onSearchSuccess={this.onLocationSearchCompleted}
-          value={this.getSearchValue()}
-          style={{ height: "45vh" }}
+          searchValue={this.getSearchValue()}
+          height={"45vh"}
           position={
             this.state.data.Latitude
               ? {
@@ -177,30 +171,6 @@ class SubmitForm extends React.Component {
                 }
               : undefined
           }
-          onMarkerDragged={async latLng => {
-            const results = await geocodeByLatlng(latLng);
-            if (results && results.length) {
-              const result = results[0];
-              if (isFunction(latLng.lat)) {
-                latLng = { lat: latLng.lat(), lng: latLng.lng() };
-              }
-              this.onLocationSearchCompleted({
-                latLng,
-                name: "",
-                address: result.formatted_address,
-                city: getAddressComponent(
-                  result.address_components,
-                  "locality"
-                ),
-                locality: getAddressComponent(
-                  result.address_components,
-                  "neighborhood"
-                ),
-                place_id: result.place_id,
-                types: result.types
-              });
-            }
-          }}
         />
 
         {this.state.hasSubmitted ? (

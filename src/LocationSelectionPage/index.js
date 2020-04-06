@@ -1,13 +1,8 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import {
-  geocodeByLatlng,
-  getAddressComponent,
-  isFunction,
-  getFirstComma
-} from "../utils";
-import MapWithSearch from "../MapWithSearch";
+import { getFirstComma } from "../utils";
+import LocationSelector from "../LocationSelector";
 
 const emptyData = {
   "Store Name": "",
@@ -30,16 +25,18 @@ class LocationSelectionPage extends React.Component {
     searchFieldValue: ""
   };
 
-  onLocationSearchCompleted = ({
-    latLng,
-    name,
-    address,
-    city,
-    locality,
-    place_id,
-    country,
-    types
-  }) => {
+  onLocationSearchCompleted = result => {
+    console.log(result);
+    const {
+      latLng,
+      name,
+      address,
+      city,
+      locality,
+      place_id,
+      country,
+      types
+    } = result;
     if ((latLng && latLng.lat) || name) {
       this.setState({
         searchFieldValue: name,
@@ -85,12 +82,11 @@ class LocationSelectionPage extends React.Component {
         <div className="p-2 text-uppercase font-weight-bold">
           <h5 className="m-0">Set store location to add</h5>
         </div>
-        <MapWithSearch
-          isMarkerShown
+        <LocationSelector
           activateInput
           onSearchSuccess={this.onLocationSearchCompleted}
-          value={this.getSearchValue()}
-          style={{ height: "50vh" }}
+          searchValue={this.getSearchValue()}
+          height={"50vh"}
           position={
             this.state.data.Latitude
               ? {
@@ -99,36 +95,7 @@ class LocationSelectionPage extends React.Component {
                 }
               : undefined
           }
-          onMarkerDragged={async latLng => {
-            const results = await geocodeByLatlng(latLng);
-            if (results && results.length) {
-              const result = results[0];
-              if (isFunction(latLng.lat)) {
-                latLng = { lat: latLng.lat(), lng: latLng.lng() };
-              }
-              this.onLocationSearchCompleted({
-                latLng,
-                name: "",
-                address: result.formatted_address,
-                city: getAddressComponent(
-                  result.address_components,
-                  "locality"
-                ),
-                locality: getAddressComponent(
-                  result.address_components,
-                  "neighborhood"
-                ),
-                place_id: result.place_id,
-                types: result.types,
-                country: getAddressComponent(
-                  result.address_components,
-                  "country"
-                )
-              });
-            }
-          }}
         />
-
         <div className="my-3 d-flex justify-content-center">
           <Link to={{ pathname: "/update", state: { item: this.state.data } }}>
             <Button

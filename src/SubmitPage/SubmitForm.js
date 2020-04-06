@@ -27,8 +27,8 @@ function ButtonWithLoading(props) {
       Submitting...
     </Button>
   ) : (
-    <Button {...props} />
-  );
+      <Button {...props} />
+    );
 }
 
 const emptyData = {
@@ -161,7 +161,12 @@ class SubmitForm extends React.Component {
     return "";
   }
 
+  canBeSubmitted() {
+    return (this.state.data["Safety Observations"].length) || (this.state.data["Useful Information"].length);
+  }
+
   render() {
+    const isEnabled = this.canBeSubmitted();
     return (
       <>
         <MapWithSearch
@@ -172,9 +177,9 @@ class SubmitForm extends React.Component {
           position={
             this.state.data.Latitude
               ? {
-                  lat: parseFloat(this.state.data.Latitude),
-                  lng: parseFloat(this.state.data.Longitude)
-                }
+                lat: parseFloat(this.state.data.Latitude),
+                lng: parseFloat(this.state.data.Longitude)
+              }
               : undefined
           }
           onMarkerDragged={async latLng => {
@@ -290,7 +295,6 @@ class SubmitForm extends React.Component {
                 value={this.state.data["Useful Information"]}
                 onChange={e => this.onChangeInput(e, "Useful Information")}
                 placeholder="Timings, stock availability, etc."
-                required
               />
             </Form.Group>
 
@@ -299,6 +303,7 @@ class SubmitForm extends React.Component {
               variant="success"
               type="submit"
               className="btn-block text-uppercase font-weight-bold"
+              disabled={!isEnabled}
             >
               Submit update
             </ButtonWithLoading>

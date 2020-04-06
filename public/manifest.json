@@ -1,6 +1,6 @@
 {
-  "name": "COVID Maps",
-  "short_name": "COMAPS",
+  "name": "Covid Maps",
+  "short_name": "Covid Maps",
   "theme_color": "#f1e932",
   "background_color": "#000000",
   "display": "standalone",

@@ -23,7 +23,7 @@ class SearchResults extends React.Component {
     );
     const results = selectedResult ? [selectedResult, ...filtered] : filtered;
 
-    const isPaginated = results > ITEM_PER_PAGE;
+    const isPaginated = results.length > ITEM_PER_PAGE;
     let indexOfLastResult = this.state.activePage * ITEM_PER_PAGE;
     let indexOfFirstResult = indexOfLastResult - ITEM_PER_PAGE;
     let renderedResults = results.slice(indexOfFirstResult, indexOfLastResult);

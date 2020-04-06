@@ -82,15 +82,15 @@ class LocationSelectionPage extends React.Component {
   render() {
     return (
       <>
-        <div class="m-3 text-uppercase font-weight-bold">
-          <h5>Set store location to add</h5>
+        <div className="p-2 text-uppercase font-weight-bold">
+          <h5 className="m-0">Set store location to add</h5>
         </div>
         <MapWithSearch
           isMarkerShown
           activateInput
           onSearchSuccess={this.onLocationSearchCompleted}
           value={this.getSearchValue()}
-          style={{ height: "60vh" }}
+          style={{ height: "50vh" }}
           position={
             this.state.data.Latitude
               ? {

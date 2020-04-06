@@ -3,6 +3,14 @@ import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
 import { recordUpdateStore } from "../gaEvents";
 
+function constructDirectionsUrl({ name, placeId, lat, lng }) {
+  if (placeId) {
+    return `https://www.google.com/maps/search/?api=1&query=${name}&query_place_id=${placeId}`;
+  } else {
+    return `https://www.google.com/maps/search/?api=1&query=${lat},${lng}`;
+  }
+}
+
 function removeSafety(entry) {
   return {
     ...entry,
@@ -42,6 +50,14 @@ export default class ResultBlock extends React.Component {
         }}
       >
         <div className="card-body p-3">
+          <a
+            href={constructDirectionsUrl(result)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="float-right btn btn-sm btn-outline-secondary text-uppercase ml-2"
+          >
+            <i className="far fa-directions"></i>
+          </a>
           <Link
             to={{ pathname: "/update", state: { item: removeSafety(entry) } }}
             className="float-right btn btn-sm btn-outline-success text-uppercase"

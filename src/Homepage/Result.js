@@ -1,6 +1,7 @@
 import React from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
+import Highlighter from "react-highlight-words";
 
 const humanizeDuration = require("humanize-duration");
 
@@ -33,7 +34,7 @@ function Timestamp({ Timestamp: value }) {
   );
 }
 
-function ResultEntry({ entries }) {
+function ResultEntry({ entries, highlightedText }) {
   const resultList = entries.filter(isPresentable);
   return resultList.map(result => (
     <div className="mt-3" key={result["Timestamp"]}>
@@ -43,7 +44,12 @@ function ResultEntry({ entries }) {
             <Overlay text="Safety Observations">
               <i className="far fa-shield-virus"></i>
             </Overlay>{" "}
-            {result["Safety Observations"]}
+            <Highlighter
+              highlightClassName="highlighted-text"
+              searchWords={[highlightedText]}
+              autoEscape={true}
+              textToHighlight={result["Safety Observations"]}
+            />
           </div>
         ) : null}
         {result["Useful Information"] ? (
@@ -51,7 +57,12 @@ function ResultEntry({ entries }) {
             <Overlay text="Useful Information">
               <i className="far fa-info-circle"></i>
             </Overlay>{" "}
-            {result["Useful Information"]}
+            <Highlighter
+              highlightClassName="highlighted-text"
+              searchWords={[highlightedText]}
+              autoEscape={true}
+              textToHighlight={result["Useful Information"]}
+            />
           </div>
         ) : null}
       </div>

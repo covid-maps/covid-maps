@@ -2,6 +2,7 @@ import React from "react";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
 import { recordUpdateStore } from "../gaEvents";
+import Highlighter from "react-highlight-words";
 
 function constructDirectionsUrl({ name, placeId, lat, lng }) {
   if (placeId) {
@@ -20,13 +21,6 @@ function removeSafety(entry) {
 }
 
 export default class ResultBlock extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      hover: false
-    };
-  }
-
   onClick() {
     window.scrollTo({
       top: 0,
@@ -41,13 +35,7 @@ export default class ResultBlock extends React.Component {
     return (
       <div
         onClick={() => this.onClick()}
-        onMouseEnter={() => this.setState({ hover: true })}
-        onMouseLeave={() => this.setState({ hover: false })}
-        className="card my-1"
-        style={{
-          cursor: "pointer",
-          backgroundColor: this.state.hover ? "#eee" : "white"
-        }}
+        className={`card my-1 card-result-block ${this.props.isSelected ? "card-result-block-selected" : ""}`}
       >
         <div className="card-body p-3">
           <a
@@ -65,8 +53,15 @@ export default class ResultBlock extends React.Component {
           >
             Update
           </Link>
-          <h5 className="card-title m-0 p-0">{result.name}</h5>
-          <ResultEntry entries={result.entries} />
+          <h5 className="card-title m-0 p-0">
+            <Highlighter
+              highlightClassName="highlighted-text"
+              searchWords={[this.props.highlightedText]}
+              autoEscape={true}
+              textToHighlight={result.name}
+            />
+          </h5>
+          <ResultEntry highlightedText={this.props.highlightedText} entries={result.entries} />
         </div>
       </div>
     );

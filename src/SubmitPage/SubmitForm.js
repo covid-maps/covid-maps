@@ -45,6 +45,7 @@ const emptyData = {
 class SubmitForm extends React.Component {
   state = {
     isLoading: false,
+    isValid: true,
     hasSubmitted: false,
     ipData: undefined,
     data: { ...emptyData },
@@ -91,34 +92,38 @@ class SubmitForm extends React.Component {
 
   async onSubmit(event) {
     event.preventDefault();
-    this.setState({ isLoading: true });
-    console.log("Logging: ", this.state.data);
-    const data = {
-      ...this.state.data,
-      Timestamp: new Date().toISOString()
-    };
+    if (this.canBeSubmitted()) {
+      this.setState({ isLoading: true, isValid: true });
+      console.log("Logging: ", this.state.data);
+      const data = {
+        ...this.state.data,
+        Timestamp: new Date().toISOString()
+      };
 
-    // Get IP if possible
-    let ipData = this.state.ipData;
-    if (!this.state.ipData) {
-      try {
-        ipData = await api.ip();
-      } catch (e) {
-        // Damn ad-blockers
+      // Get IP if possible
+      let ipData = this.state.ipData;
+      if (!this.state.ipData) {
+        try {
+          ipData = await api.ip();
+        } catch (e) {
+          // Damn ad-blockers
+        }
       }
-    }
-    if (ipData && ipData.ip) {
-      data["User IP"] = ipData.ip;
-    }
+      if (ipData && ipData.ip) {
+        data["User IP"] = ipData.ip;
+      }
 
-    const response = await api.submit(data);
-    console.log(data);
-    console.log(response);
-    recordFormSubmission();
-    this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
-      window.scrollTo(0, 0);
-      this.clearForm();
-    });
+      const response = await api.submit(data);
+      console.log(data);
+      //console.log(response);
+      //recordFormSubmission();
+      //this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
+      //  window.scrollTo(0, 0);
+      //  this.clearForm();
+      //});
+    } else {
+      this.setState({ isValid: false, isLoading: false });
+    }
   }
 
   onChangeInput({ target }, dataKey) {
@@ -156,7 +161,10 @@ class SubmitForm extends React.Component {
 
     return "";
   }
-
+  canBeSubmitted() {
+    const data = this.state.data;
+    return ((data["Safety Observations"].length) || (data["Useful Information"].length) || (data["Opening Time"].length) || (data["Closing Time"].length));
+  }
   render() {
     return (
       <>
@@ -177,6 +185,12 @@ class SubmitForm extends React.Component {
         {this.state.hasSubmitted ? (
           <div className="alert alert-success text-center mb-0">
             <span>Submitted successfully, thank you!</span>
+          </div>
+        ) : null}
+
+        {!this.state.isValid ? (
+          <div className="alert alert-danger text-center mb-0">
+            <span>Please enter either Store times or Useful information or Safety information</span>
           </div>
         ) : null}
 
@@ -261,7 +275,6 @@ class SubmitForm extends React.Component {
                 value={this.state.data["Useful Information"]}
                 onChange={e => this.onChangeInput(e, "Useful Information")}
                 placeholder="Stock availability, special services, etc."
-                required
               />
             </Form.Group>
 

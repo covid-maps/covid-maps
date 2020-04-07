@@ -6,7 +6,7 @@ import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
 import { getDistance } from "geolib";
-import MapWithSearch from "../MapWithSearch";
+import HomepageMapWithSearch from '../MapsWithSearch/HomepageMap';
 import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore } from "../gaEvents";
 import Form from "react-bootstrap/Form";
@@ -173,7 +173,7 @@ class Homepage extends React.Component {
     return (
       <div>
         <NoOfUsersAlert />
-        <MapWithSearch
+        <HomepageMapWithSearch
           value=""
           onSearchSuccess={result => {
             if (result && result.latLng) {

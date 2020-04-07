@@ -2,7 +2,6 @@ import React, { useRef } from "react";
 import LocationSelectorMap from "../Maps/LocationSelectorMap";
 import HomepageMap from "../Maps/HomepageMap";
 import LocationSearchControl from "./Input";
-import Form from "react-bootstrap/Form";
 import { geolocated } from "react-geolocated";
 import * as api from "../api";
 
@@ -78,15 +77,13 @@ class MapWithSearch extends React.Component {
         : current;
     return (
       <>
-        <Form>
-          <LocationSearchControl
-            onSearchSuccess={this.props.onSearchSuccess}
-            value={this.props.value}
-            currentLocation={current}
-            onGeolocation={this.props.getGeolocation}
-            activateInput={this.props.activateInput}
-          />
-        </Form>
+        <LocationSearchControl
+          onSearchSuccess={this.props.onSearchSuccess}
+          value={this.props.value}
+          currentLocation={current}
+          onGeolocation={this.props.getGeolocation}
+          activateInput={this.props.activateInput}
+        />
         {this.props.isMarkerShown ? (
           <LocationSelectorMap
             height={this.props.height}
@@ -98,16 +95,16 @@ class MapWithSearch extends React.Component {
             onPositionChanged={this.props.onPositionChanged}
           />
         ) : (
-          <HomepageMap
-            style={this.props.style}
-            currentLocation={current}
-            locations={this.props.locations}
-            selectedLocation={this.props.selectedLocation}
-            onMarkerSelected={this.props.onMarkerSelected}
-            panToLocation={this.props.panToLocation}
-            centerPosition={this.props.centerPosition}
-          />
-        )}
+            <HomepageMap
+              style={this.props.style}
+              currentLocation={current}
+              locations={this.props.locations}
+              selectedLocation={this.props.selectedLocation}
+              onMarkerSelected={this.props.onMarkerSelected}
+              panToLocation={this.props.panToLocation}
+              centerPosition={this.props.centerPosition}
+            />
+          )}
         {!this.props.isGeolocationAvailable ? (
           <div className="alert alert-danger text-center mb-0">
             Your browser does not support geolocation.

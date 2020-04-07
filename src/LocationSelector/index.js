@@ -1,12 +1,11 @@
 import React from "react";
 import { geocodeByLatlng, getAddressComponent, isFunction } from "../utils";
-import MapWithSearch from "../MapWithSearch";
+import LocationSelectorMapWithSearch from "../MapsWithSearch/LocationSelectorMap";
 
 class LocationSelector extends React.Component {
   render() {
     return (
-      <MapWithSearch
-        isMarkerShown
+      <LocationSelectorMapWithSearch
         activateInput={this.props.activateInput}
         onSearchSuccess={this.props.onSearchSuccess}
         value={this.props.searchValue}

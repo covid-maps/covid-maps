@@ -12,15 +12,15 @@ function constructDirectionsUrl({ name, placeId, lat, lng }) {
   }
 }
 
-function shareListing(result) {
-  let storeName = result.name
-  let placeId = result.placeId
-  console.log(result)
+function shareListing(listing) {
+  let storeName = listing.name
+  let placeId = listing.placeId
+  let url = `${window.location.origin}/listing/${placeId}`
   if (navigator.share) {
     navigator.share({
       title: `${storeName}`,
       text: `${storeName} on Covid Maps.\nFind essentials services around you in the lockdown period.\n`,
-      url: `https://covidmaps.in/listing/${placeId}`,
+      url: url
     })
   }
 }

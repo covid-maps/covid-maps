@@ -54,9 +54,10 @@ class Map extends Component {
 
         {this.props.locations &&
           this.props.locations.map((latlng, index) => {
+            const markerKey = `${latlng.lat}_${latlng.lng}_${index}`;
             return (
               <Marker
-                key={`${latlng.lat}_${latlng.lng}_${index}`}
+                key={markerKey}
                 icon={
                   this.isMarkerSelected(latlng)
                     ? markerIcon(icons.highlighted)

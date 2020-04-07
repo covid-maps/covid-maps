@@ -54,6 +54,7 @@ function App() {
             <Route path="/update" component={SubmitPage} />
             <Route path="/location" component={LocationSelectionPage} />
             <Route path="/about" component={AboutPage} />
+            <Route path="/listing/:placeId" component={Homepage} />
             <Route path="/" component={Homepage} />
           </Switch>
         </div>

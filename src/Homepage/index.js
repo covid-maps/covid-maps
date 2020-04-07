@@ -202,18 +202,19 @@ class Homepage extends React.Component {
         <div className="my-3 mx-2">
           {missingBlock}
           <div className="my-1 px-1 d-flex justify-content-between align-items-center search-results-container">
-            <h6 className="text-uppercase m-0 font-weight-bold search-results-title" style={{ width: '200px' }}>
-              Stores Nearby
-            </h6>
-            <div className="d-flex justify-content-end align-items-center" style={{ width: "100%" }}>
+            <div>
+              <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
+                Stores Nearby
+              </h6>
               <Form.Control
                 type="text"
-                onChange={e => this.setState({ searchQuery: e.target.value })}
+                onChange={e => this.setState({ searchQuery: e.target.value, selectedLocation: undefined })}
                 className="d-inline-block mx-1 results-search-box"
-                size="sm"
                 value={this.state.searchQuery}
-                placeholder="Search"
+                placeholder="Filter by name or item"
               />
+            </div>
+            <div>
               <Link to={this.getLinkTo()}>
                 <Button
                   size="sm"

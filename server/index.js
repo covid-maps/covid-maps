@@ -88,7 +88,7 @@ app.get("/v0/query", async (req, res) => {
 
 app.post("/v0/update", async (req, res) => {
   try {
-    const ressult = await addRow(req.body);
+    const ressult = await addRow(getFormDataWithUserIp(req));
     console.log(ressult);
     res.send(ressult);
   } catch (error) {

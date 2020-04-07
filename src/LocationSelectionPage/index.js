@@ -38,7 +38,7 @@ class LocationSelectionPage extends React.Component {
     } = result;
     if ((latLng && latLng.lat) || name) {
       this.setState({
-        searchFieldValue: name,
+        searchFieldValue: address,
         data: {
           ...this.state.data,
           "Store Name": getFirstComma(name),
@@ -96,7 +96,7 @@ class LocationSelectionPage extends React.Component {
           }
         />
         <div className="my-3 d-flex justify-content-center">
-          <Link to={{ pathname: "/update", state: { item: this.state.data } }}>
+          <Link to={{ pathname: "/update", state: { item: this.state.data, searchFieldValue: this.state.searchFieldValue } }}>
             <Button
               variant="outline-primary"
               className="text-uppercase"

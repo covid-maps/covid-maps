@@ -8,7 +8,8 @@ const defaultCenter = { lat: 49.281376, lng: -123.111382 };
 class Map extends Component {
   map = undefined;
   state = {
-    markerPosition: undefined
+    markerPosition: undefined,
+    isLoaded: false
   };
 
   mapCenter = () => {
@@ -17,10 +18,15 @@ class Map extends Component {
 
   onMapLoaded = map => {
     this.map = map;
+    setTimeout(() => {
+      // Async set isLoaded so that onBoundsChanged
+      // is not fired before the map is loaded. 🤷‍♂️
+      this.setState({ isLoaded: true })
+    }, 500)
   };
 
   onBoundsChanged = () => {
-    if (this.map) {
+    if (this.map && this.state.isLoaded) {
       const mapCenter = this.map.getCenter();
       const position = { lat: mapCenter.lat(), lng: mapCenter.lng() }
       this.setState({ markerPosition: position });

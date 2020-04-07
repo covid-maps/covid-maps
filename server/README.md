@@ -14,6 +14,12 @@ Deployed on Heroku. https://toilet-paper-app.herokuapp.com/
 
 Some quick notes on the setup.
 
+- Download Heroku CLI, login, and then set the Heroku remotes.
+
+  ```
+  heroku git:remote -a toilet-paper-app
+  ```
+
 - Since deployment is from a subdirectory, heroku+git needs to be configured to use that instead. This is the push command for heroku, which would deploy the app. (Run this from the root of the repo)
 
   ```

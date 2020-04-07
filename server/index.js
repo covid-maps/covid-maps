@@ -39,7 +39,7 @@ async function getRows() {
   await authenticate();
   await doc.loadInfo();
   const sheet = doc.sheetsByIndex[SHEET_IDX];
-  const rows = await sheet.getRows({ limit: 1000 });
+  const rows = await sheet.getRows({ limit: 2000 });
   return rows.map(row => rowValue(sheet.headerValues, row));
 }
 

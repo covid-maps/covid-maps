@@ -106,7 +106,7 @@ footer a:hover {
 }
 @media only screen and (max-width: 600px) {
   .search-results-title {
-    display: none;
+    display: none !important;
   }
 }
 .highlighted-text {

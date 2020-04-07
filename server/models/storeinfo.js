@@ -11,8 +11,8 @@ module.exports = (sequelize, DataTypes) => {
     locality: DataTypes.STRING,
     country: DataTypes.STRING,
     coordinate: DataTypes.GEOMETRY("POINT"),
-    createdAt: DataTypes.TIME,
-    updatedAt: DataTypes.TIME
+    createdAt: DataTypes.DATE,
+    updatedAt: DataTypes.DATE
   }, {});
   StoreInfo.associate = function(models) {
     StoreInfo.hasMany(models.StoreUpdates, {foreignKey: "storeId"});

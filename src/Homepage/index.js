@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import Alert from "react-bootstrap/Alert";
 import SearchResults from "./SearchResults";
@@ -66,7 +66,20 @@ class Homepage extends React.Component {
         })),
         isLoading: false
       });
+      this.goToListingFromProps()
     });
+
+  }
+
+  goToListingFromProps() {
+    if (this.props.match.params.placeId) {
+      const placeId = this.props.match.params.placeId
+      const place = this.state.results.find(item => item.placeId === placeId)
+      console.log(place)
+      //Run the function only if place is real value ( not nul || undefined)
+      //Reuse the onCardClick function.
+      place && this.onCardClick(place)
+    }
   }
 
   calculateDistance(result, center) {

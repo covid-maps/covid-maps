@@ -19,10 +19,8 @@ class Map extends Component {
   onMapLoaded = map => {
     this.map = map;
     setTimeout(() => {
-      // Async set isLoaded so that onBoundsChanged
-      // is not fired before the map is loaded. 🤷‍♂️
       this.setState({ isLoaded: true })
-    }, 500)
+    }, 1000);
   };
 
   onBoundsChanged = () => {
@@ -68,20 +66,23 @@ class Map extends Component {
         onBoundsChanged={this.onBoundsChanged}
         onDragEnd={this.onDragEnd}
       >
-        <Marker position={this.props.currentLocation} icon={dotIcon} />
-        <Marker
-          draggable={!!this.props.onMarkerDragged}
-          position={this.state.markerPosition}
-          icon={markerIcon(icons.default)}
-          zIndex={10}
-          onDragEnd={event =>
-            this.props.onMarkerDragged &&
-            this.props.onMarkerDragged({
-              lat: event.latLng.lat(),
-              lng: event.latLng.lng()
-            })
-          }
-        />
+        {this.props.currentLocation ?
+          <Marker position={this.props.currentLocation} icon={dotIcon} />
+          : null}
+        {this.state.markerPosition ?
+          <Marker
+            draggable={!!this.props.onMarkerDragged}
+            position={this.state.markerPosition}
+            icon={markerIcon(icons.default)}
+            zIndex={10}
+            onDragEnd={event =>
+              this.props.onMarkerDragged &&
+              this.props.onMarkerDragged({
+                lat: event.latLng.lat(),
+                lng: event.latLng.lng()
+              })
+            }
+          /> : null}
       </GoogleMap>
     );
   }

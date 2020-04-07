@@ -34,7 +34,7 @@ class LocationSelectionPage extends React.Component {
       locality,
       place_id,
       country,
-      types
+      // types
     } = result;
     if ((latLng && latLng.lat) || name) {
       this.setState({

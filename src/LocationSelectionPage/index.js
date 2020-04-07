@@ -26,7 +26,6 @@ class LocationSelectionPage extends React.Component {
   };
 
   onLocationSearchCompleted = result => {
-    console.log(result);
     const {
       latLng,
       name,
@@ -90,9 +89,9 @@ class LocationSelectionPage extends React.Component {
           position={
             this.state.data.Latitude
               ? {
-                  lat: parseFloat(this.state.data.Latitude),
-                  lng: parseFloat(this.state.data.Longitude)
-                }
+                lat: parseFloat(this.state.data.Latitude),
+                lng: parseFloat(this.state.data.Longitude)
+              }
               : undefined
           }
         />
@@ -101,7 +100,7 @@ class LocationSelectionPage extends React.Component {
             <Button
               variant="outline-primary"
               className="text-uppercase"
-              // disabled={!this.hasLocation()}
+            // disabled={!this.hasLocation()}
             >
               Select location
             </Button>

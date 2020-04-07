@@ -48,8 +48,6 @@ class Map extends Component {
   }
 
   render() {
-    console.log(this.props);
-    // console.log(this.mapCenter());
     return (
       <GoogleMap
         id="example-map"

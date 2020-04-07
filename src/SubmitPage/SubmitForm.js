@@ -5,18 +5,13 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
-import {
-  geocodeByLatlng,
-  getAddressComponent,
-  isFunction,
-  getFirstComma
-} from "../utils";
+import { getFirstComma } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
-import MapWithSearch from "../MapWithSearch";
+import LocationSelector from "../LocationSelector";
 
 function ButtonWithLoading(props) {
   return props.isLoading ? (
-    <Button variant="primary" disabled>
+    <Button variant="success" disabled>
       <Spinner
         as="span"
         animation="border"
@@ -27,8 +22,8 @@ function ButtonWithLoading(props) {
       Submitting...
     </Button>
   ) : (
-    <Button {...props} />
-  );
+      <Button {...props} />
+    );
 }
 
 const emptyData = {
@@ -67,11 +62,11 @@ class SubmitForm extends React.Component {
     country
   }) => {
     // This checks for latlng and name, so that
-    // we don't inadvertently overwrite teh state in the case
+    // we don't inadvertently overwrite the state in the case
     // of a current location update in onSuccess.
-    if (latLng && latLng.lat && name) {
+    if (latLng && latLng.lat && (name || address)) {
       this.setState({
-        searchFieldValue: name,
+        searchFieldValue: address,
         data: {
           ...this.state.data,
           "Store Name": getFirstComma(name),
@@ -141,7 +136,8 @@ class SubmitForm extends React.Component {
         data: {
           ...this.state.data,
           ...this.props.location.state.item
-        }
+        },
+        searchFieldValue: this.props.location.state.searchFieldValue
       });
     }
   }
@@ -164,43 +160,18 @@ class SubmitForm extends React.Component {
   render() {
     return (
       <>
-        <MapWithSearch
-          isMarkerShown
+        <LocationSelector
           onSearchSuccess={this.onLocationSearchCompleted}
-          value={this.getSearchValue()}
-          style={{ height: "45vh" }}
+          searchValue={this.getSearchValue()}
+          height={"45vh"}
           position={
             this.state.data.Latitude
               ? {
-                  lat: parseFloat(this.state.data.Latitude),
-                  lng: parseFloat(this.state.data.Longitude)
-                }
+                lat: parseFloat(this.state.data.Latitude),
+                lng: parseFloat(this.state.data.Longitude)
+              }
               : undefined
           }
-          onMarkerDragged={async latLng => {
-            const results = await geocodeByLatlng(latLng);
-            if (results && results.length) {
-              const result = results[0];
-              if (isFunction(latLng.lat)) {
-                latLng = { lat: latLng.lat(), lng: latLng.lng() };
-              }
-              this.onLocationSearchCompleted({
-                latLng,
-                name: "",
-                address: result.formatted_address,
-                city: getAddressComponent(
-                  result.address_components,
-                  "locality"
-                ),
-                locality: getAddressComponent(
-                  result.address_components,
-                  "neighborhood"
-                ),
-                place_id: result.place_id,
-                types: result.types
-              });
-            }
-          }}
         />
 
         {this.state.hasSubmitted ? (

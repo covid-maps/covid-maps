@@ -1,6 +1,6 @@
 import React, { useRef } from "react";
-import OriginalMap from "./Map";
-import HomepageMap from "./Map/HomepageMap";
+import LocationSelectorMap from "../Maps/LocationSelectorMap";
+import HomepageMap from "../Maps/HomepageMap";
 import LocationSearchControl from "./Input";
 import Form from "react-bootstrap/Form";
 import { geolocated } from "react-geolocated";
@@ -88,8 +88,8 @@ class MapWithSearch extends React.Component {
           />
         </Form>
         {this.props.isMarkerShown ? (
-          <OriginalMap
-            style={this.props.style}
+          <LocationSelectorMap
+            height={this.props.height}
             position={positionProp}
             currentLocation={current}
             isMarkerShown={this.props.isMarkerShown}

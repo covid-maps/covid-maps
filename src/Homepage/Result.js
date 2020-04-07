@@ -7,8 +7,8 @@ const humanizeDuration = require("humanize-duration");
 
 function isPresentable(entry) {
   return (
-    entry["Safety Observations"].length > 5 ||
-    entry["Useful Information"].length > 5
+    (entry["Safety Observations"] && entry["Safety Observations"].length > 5) ||
+    (entry["Useful Information"] && entry["Useful Information"].length > 5)
   );
 }
 

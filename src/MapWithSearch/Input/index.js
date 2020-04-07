@@ -86,8 +86,14 @@ class LocationSearchInput extends React.Component {
   };
 
   clearInput() {
-    this.setState({ address: "" });
+    this.setState({ address: "" }, this.removeLastSelectedAddress);
   }
+
+  removeLastSelectedAddress = () => {
+    if (window.localStorage) {
+      localStorage.removeItem("lastSelecedAddress");
+    }
+  };
 
   render() {
     const location = this.props.currentLocation

@@ -1,8 +1,7 @@
 // import { combineReducers } from "redux";
 
 const initialState = {
-  location: undefined,
-  ip: undefined
+  location: undefined
 };
 
 function location(state = initialState, action) {

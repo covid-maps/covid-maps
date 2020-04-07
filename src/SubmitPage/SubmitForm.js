@@ -22,8 +22,8 @@ function ButtonWithLoading(props) {
       Submitting...
     </Button>
   ) : (
-      <Button {...props} />
-    );
+    <Button {...props} />
+  );
 }
 
 const emptyData = {
@@ -46,7 +46,6 @@ class SubmitForm extends React.Component {
   state = {
     isLoading: false,
     hasSubmitted: false,
-    ipData: undefined,
     data: { ...emptyData },
     searchFieldValue: ""
   };
@@ -98,24 +97,11 @@ class SubmitForm extends React.Component {
       Timestamp: new Date().toISOString()
     };
 
-    // Get IP if possible
-    let ipData = this.state.ipData;
-    if (!this.state.ipData) {
-      try {
-        ipData = await api.ip();
-      } catch (e) {
-        // Damn ad-blockers
-      }
-    }
-    if (ipData && ipData.ip) {
-      data["User IP"] = ipData.ip;
-    }
-
     const response = await api.submit(data);
     console.log(data);
     console.log(response);
     recordFormSubmission();
-    this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
+    this.setState({ isLoading: false, hasSubmitted: true }, () => {
       window.scrollTo(0, 0);
       this.clearForm();
     });
@@ -167,9 +153,9 @@ class SubmitForm extends React.Component {
           position={
             this.state.data.Latitude
               ? {
-                lat: parseFloat(this.state.data.Latitude),
-                lng: parseFloat(this.state.data.Longitude)
-              }
+                  lat: parseFloat(this.state.data.Latitude),
+                  lng: parseFloat(this.state.data.Longitude)
+                }
               : undefined
           }
         />

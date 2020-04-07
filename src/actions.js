@@ -13,7 +13,6 @@ export function updateLocation() {
       // response.city - West End
       const [lat, lng] = response.loc.split(",");
       resolve({
-        ip: response.ip,
         location: { lat: Number(lat), lng: Number(lng) }
       });
     })

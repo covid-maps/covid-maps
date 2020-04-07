@@ -9,6 +9,7 @@ import { getDistance } from "geolib";
 import MapWithSearch from "../MapWithSearch";
 import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore } from "../gaEvents";
+import Form from "react-bootstrap/Form";
 
 const DISTANCE_FILTER = 200000; // meters
 
@@ -44,6 +45,7 @@ function NoOfUsersAlert() {
 
 class Homepage extends React.Component {
   state = {
+    searchQuery: "",
     results: [],
     markers: [],
     isLoading: true,
@@ -199,22 +201,33 @@ class Homepage extends React.Component {
         />
         <div className="my-3 mx-2">
           {missingBlock}
-          <div className="my-1 px-3 d-flex justify-content-between align-items-center">
-            <h6 className="text-uppercase m-0 font-weight-bold">
+          <div className="my-1 px-3 d-flex justify-content-between align-items-center search-results-container">
+            <h6 className="text-uppercase m-0 font-weight-bold search-results-title">
               Stores Nearby
             </h6>
-            <Link to={this.getLinkTo()}>
-              <Button
+            <div className="d-flex align-items-center">
+              <Form.Control
+                type="text"
+                onChange={e => this.setState({ searchQuery: e.target.value })}
+                className="d-inline-block mx-1 results-search-box"
                 size="sm"
-                variant="outline-success"
-                className="text-uppercase"
-                onClick={recordAddNewStore}
-              >
-                Add a store
+                value={this.state.searchQuery}
+                placeholder="Search"
+              />
+              <Link to={this.getLinkTo()}>
+                <Button
+                  size="sm"
+                  variant="outline-success"
+                  className="text-uppercase"
+                  onClick={recordAddNewStore}
+                >
+                  Add a store
               </Button>
-            </Link>
+              </Link>
+            </div>
           </div>
           <SearchResults
+            textFilter={this.state.searchQuery}
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
             selectedLocation={this.state.selectedLocation}

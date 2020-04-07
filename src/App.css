@@ -91,3 +91,25 @@ footer a:hover {
   font-size: 0.925em;
   line-height: 1.5;
 }
+.card-result-block {
+  background: #fff;
+  cursor: pointer;
+}
+.card-result-block:hover {
+  background: #eee;
+}
+.card-result-block-selected {
+  background: #fff9e7;
+}
+.results-search-box {
+  width: 15em;
+}
+@media only screen and (max-width: 600px) {
+  .search-results-title {
+    display: none;
+  }
+}
+.highlighted-text {
+  background: #fff8a0;
+  padding: .2em 0;
+}

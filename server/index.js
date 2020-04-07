@@ -2,6 +2,7 @@ const express = require("express");
 const compression = require("compression");
 const bodyParser = require("body-parser");
 const { GoogleSpreadsheet } = require("google-spreadsheet");
+const stores = require("./service/stores");
 
 const GOOGLE_SERVICE_ACCOUNT_EMAIL =
   "toilet-paper-app@eco-theater-119616.iam.gserviceaccount.com";
@@ -78,11 +79,36 @@ app.get("/v0/query", async (req, res) => {
 
 app.post("/v0/update", async (req, res) => {
   try {
-    res.send(await addRow(req.body));
+    const ressult = await addRow(req.body);
+    console.log(ressult);
+    res.send(ressult);
   } catch (error) {
     console.log("Error in submit:", error);
     res.status(500).send({ error });
   }
 });
+
+app.post("/v1/update", async (req, res) => {
+  try {
+    res.send(await stores.addStoreData(req.body));
+  } catch (error) {
+    console.log("Error in submit:", error);
+    res.status(500).send({ error });
+  }
+});
+
+app.post("/v1/admin-add", async (req, res) => {
+  try {
+    res.send(await stores.addStoreData(req.body, true));
+  } catch (error) {
+    console.log("Error in submit:", error);
+    res.status(500).send({ error });
+  }
+});
+
+app.get("/v1/query", async(req, res) => {
+  res.send(await stores.findAllStores());
+});
+
 
 app.listen(process.env.PORT || 5000);

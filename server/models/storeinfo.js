@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING,
     locality: DataTypes.STRING,
     country: DataTypes.STRING,
+    coordinate: DataTypes.GEOMETRY("POINT"),
     createdAt: DataTypes.TIME,
     updatedAt: DataTypes.TIME
   }, {});

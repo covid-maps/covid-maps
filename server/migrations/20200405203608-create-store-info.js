@@ -20,6 +20,9 @@ module.exports = {
       longitude: {
         type: Sequelize.FLOAT
       },
+      coordinate: {
+        type: Sequelize.GEOMETRY('POINT')
+      },
       placeId: {
         type: Sequelize.STRING
       },

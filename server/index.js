@@ -36,6 +36,7 @@ function mapDBRow(data){
       Timestamp: up.created_at,
       Latitude: data.latitude,
       Longitude: data.longitude,
+      Coordinate: data.coordinate,
       "Store Category": data.category.split(","),
       "Store Name": data.name,
       "Safety Observations": up.safetyInfo,
@@ -51,15 +52,14 @@ function mapDBRow(data){
   })
 }
 
-async function addInfoToDB(data){
+async function addInfoToDB(data, forceDateUpdate = false){
   const store = await models.StoreInfo.findOne({ where: { name: data['Store Name'] } });
   if(store == null){
-    return await addNewStore(data)
+    return await addNewStore(data, forceDateUpdate)
   }else{
-    return await updateExistingStore(store, data)
+    return await updateExistingStore(store, data, forceDateUpdate)
   }
 }
-
 
 function buildStoreObject(data){
   return {
@@ -67,6 +67,7 @@ function buildStoreObject(data){
     category: data["Store Category"],
     latitude: parseFloat(data.Latitude),
     longitude: parseFloat(data.Longitude),
+    coordinate: { type: 'Point', coordinates: [parseFloat(data.Latitude),parseFloat(data.Longitude)]},
     placeId: data["Place Id"] || "",
     address: data.Address || "",
     city: data.City || "",
@@ -87,8 +88,12 @@ function buildStoreObject(data){
   };
 }
 
-async function addNewStore(data){
+async function addNewStore(data, forceDateUpdate){
   let storeInfo = buildStoreObject(data);
+  if(forceDateUpdate && data.Timestamp){
+      storeInfo.createdAt = data.Timestamp;
+      storeInfo.updatedAt = data.Timestamp;
+  }
   return await models.StoreInfo.create(storeInfo, {
     include: [{
       model: models.StoreUpdates
@@ -96,10 +101,14 @@ async function addNewStore(data){
   })
 }
 
-async function updateExistingStore(store, data){
+async function updateExistingStore(store, data, forceDateUpdate){
   let categories = store.category.split(",");
   if(!categories.includes(data["Store Category"])){
     categories.push(data["Store Category"])
+  }
+  let updatedAt = new Date();
+  if(forceDateUpdate && data.Timestamp){
+    updatedAt = data.Timestamp;
   }
   return await models.sequelize.transaction(async (t) => {
 
@@ -107,6 +116,7 @@ async function updateExistingStore(store, data){
       category: categories.join(","),
       latitude: parseFloat(data.Latitude),
       longitude: parseFloat(data.Longitude),
+      coordinate: { type: 'Point', coordinates: [parseFloat(data.Latitude),parseFloat(data.Longitude)]},
       placeId: data["Place Id"] || "",
       address: data.Address || "",
       city: data.City || "",
@@ -195,6 +205,16 @@ app.post("/v0/update", async (req, res) => {
 app.post("/v1/update", async (req, res) => {
   try {
     const store = await addInfoToDB(req.body);
+    res.send(mapDBRow(store)[0]);
+  } catch (error) {
+    console.log("Error in submit:", error);
+    res.status(500).send({ error });
+  }
+});
+
+app.post("/v1/admin-add", async (req, res) => {
+  try {
+    const store = await addInfoToDB(req.body, true);
     res.send(mapDBRow(store)[0]);
   } catch (error) {
     console.log("Error in submit:", error);

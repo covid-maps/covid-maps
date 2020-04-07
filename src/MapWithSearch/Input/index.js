@@ -22,7 +22,15 @@ class LocationSearchInput extends React.Component {
     this.setState({ address });
   };
 
+  persistLastSelectedAddress = address => {
+    if (window.localStorage) {
+      localStorage.setItem("lastSelecedAddress", address);
+    }
+  };
+
   handleSelect = address => {
+    this.persistLastSelectedAddress(address);
+
     this.textInput.current.blur();
     recordSearchCompleted();
     geocodeByAddress(address)
@@ -64,6 +72,13 @@ class LocationSearchInput extends React.Component {
     if (this.props.activateInput) {
       this.textInput.current.focus();
     }
+
+    if (window.localStorage) {
+      const address = localStorage.getItem("lastSelecedAddress");
+      if (address) {
+        this.handleSelect(address);
+      }
+    }
   }
 
   clearInput() {
@@ -73,9 +88,9 @@ class LocationSearchInput extends React.Component {
   render() {
     const location = this.props.currentLocation
       ? new window.google.maps.LatLng(
-        this.props.currentLocation.lat,
-        this.props.currentLocation.lng
-      )
+          this.props.currentLocation.lat,
+          this.props.currentLocation.lng
+        )
       : undefined;
     const options = location ? { location, radius: 200000 } : undefined;
     return (

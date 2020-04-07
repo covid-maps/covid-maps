@@ -249,7 +249,7 @@ class SubmitForm extends React.Component {
                 rows="2"
                 value={this.state.data["Safety Observations"]}
                 onChange={e => this.onChangeInput(e, "Safety Observations")}
-                placeholder="Queues, crowd level &amp; safety precautions"
+                placeholder="Queues, crowd levels &amp; safety precautions"
               />
             </Form.Group>
 
@@ -260,7 +260,7 @@ class SubmitForm extends React.Component {
                 rows="3"
                 value={this.state.data["Useful Information"]}
                 onChange={e => this.onChangeInput(e, "Useful Information")}
-                placeholder="Timings, stock availability, etc."
+                placeholder="Stock availability, special services, etc."
                 required
               />
             </Form.Group>

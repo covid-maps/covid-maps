@@ -73,6 +73,7 @@ class LocationSearchInput extends React.Component {
       this.textInput.current.focus();
     }
 
+    // populate search field with last selected address
     if (window.localStorage) {
       const address = localStorage.getItem("lastSelecedAddress");
       if (address) {

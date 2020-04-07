@@ -22,14 +22,14 @@ class Map extends Component {
   onBoundsChanged = () => {
     if (this.map) {
       const mapCenter = this.map.getCenter();
-      // this.setState({ markerPosition: mapCenter });
-
-      // if (this.props.onBoundsChanged) {
-      //   this.props.onBoundsChanged({
-      //     lat: mapCenter.lat(),
-      //     lng: mapCenter.lng()
-      //   });
-      // }
+      const position = { lat: mapCenter.lat(), lng: mapCenter.lng() }
+      this.setState({ markerPosition: position });
+      if (this.props.onBoundsChanged) {
+        this.props.onBoundsChanged({
+          lat: mapCenter.lat(),
+          lng: mapCenter.lng()
+        });
+      }
     }
   };
 

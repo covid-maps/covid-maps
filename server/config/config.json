@@ -8,6 +8,12 @@
   },
   "production": {
     "use_env_variable": "DATABASE_URL_WITH_SSL",
-    "ssl": true
+    "dialect":"postgres",
+    "ssl":true,
+    "dialectOptions":{
+      "ssl":{
+        "require":true
+      }
+    }
   }
 }

@@ -55,7 +55,7 @@ async function addRow(values) {
 const getFormDataWithUserIp = req => {
   return {
     ...req.body,
-    "User IP": req.clientIp || req.ip
+    "User IP": req.clientIp
   };
 };
 

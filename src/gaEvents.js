@@ -37,3 +37,10 @@ export function recordFormSubmission() {
     action: "form_submitted"
   });
 }
+
+export function recordAddToHomescreen() {
+  ReactGA.event({
+    category,
+    action: "add_to_homescreen_started"
+  });
+}

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import PWAPrompt from "react-ios-pwa-prompt";
+import { recordAddToHomescreen } from "../gaEvents";
 
 function isMobile() {
   return (
@@ -10,6 +11,7 @@ function isMobile() {
 }
 
 function addToHomeScreen(setShowIOSPrompt) {
+  recordAddToHomescreen();
   if (["iPhone", "iPad", "iPod"].includes(navigator.platform)) {
     setShowIOSPrompt(false);
     process.nextTick(() => {

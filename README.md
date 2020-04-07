@@ -10,6 +10,12 @@ Once you've gotten a hang of the code base, check out the [Prioritized Feature L
 
 Join our [WhatsApp Developer group](https://chat.whatsapp.com/HzZT0gMYoYYEDDjj2LQUD8) to engage with the team working on this project.
 
+### Pushing your changes
+
+* Comment on the issue you are working on to inform others.
+* Fork the repo. Build the feature.
+* Send in a PR when done!
+
 ## Project structure
 
 - This is a react app built with the create-react-app scaffolding
@@ -53,10 +59,6 @@ The sheet is at https://docs.google.com/spreadsheets/d/1jFQrYwbhPIaRL6t4TnpTO7W9
 2. Type on search field on submit
 3. Drag marker
 4. Drag map (marker stays in the center; "mobile friendly drag")
-
-## Contribute
-
-Let's push directly to master for now, and use the group chat / issues for coordination.
 
 ## Formatting
 

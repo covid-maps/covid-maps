@@ -52,12 +52,12 @@ async function addRow(values) {
   return rowValue(Object.keys(values), await sheet.addRow(values));
 }
 
-function getFormDataWithUserIp(req) {
+const getFormDataWithUserIp = req => {
   return {
     ...req.body,
     "User IP": req.clientIp
   };
-}
+};
 
 const app = express();
 app.use(express.json());

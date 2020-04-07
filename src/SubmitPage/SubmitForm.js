@@ -115,12 +115,12 @@ class SubmitForm extends React.Component {
 
       const response = await api.submit(data);
       console.log(data);
-      //console.log(response);
-      //recordFormSubmission();
-      //this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
-      //  window.scrollTo(0, 0);
-      //  this.clearForm();
-      //});
+      console.log(response);
+      recordFormSubmission();
+      this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
+        window.scrollTo(0, 0);
+        this.clearForm();
+      });
     } else {
       this.setState({ isValid: false, isLoading: false });
     }

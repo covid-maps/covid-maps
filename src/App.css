@@ -102,7 +102,7 @@ footer a:hover {
   background: #fff9e7;
 }
 .results-search-box {
-  width: 15em;
+  width: 13em;
 }
 @media only screen and (max-width: 600px) {
   .search-results-title {

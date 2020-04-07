@@ -208,11 +208,10 @@ class Homepage extends React.Component {
               </h6>
               <Form.Control
                 type="text"
-                onChange={e => this.setState({ searchQuery: e.target.value })}
+                onChange={e => this.setState({ searchQuery: e.target.value, selectedLocation: undefined })}
                 className="d-inline-block mx-1 results-search-box"
-                size="sm"
                 value={this.state.searchQuery}
-                placeholder="Search"
+                placeholder="Filter by name or item"
               />
             </div>
             <div>

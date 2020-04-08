@@ -226,7 +226,7 @@ class Homepage extends React.Component {
                 onChange={this.handleStoreFilterQuery}
                 className="d-inline-block mx-1 results-search-box"
                 value={this.state.searchQuery}
-                placeholder="Filter by name or item"
+                placeholder={this.props.translations.store_search_placeholder}
               />
             </div>
             <div>
@@ -237,7 +237,7 @@ class Homepage extends React.Component {
                   className="text-uppercase"
                   onClick={recordAddNewStore}
                 >
-                  Add a store
+                  {this.props.translations.add_store_button}
                 </Button>
               </Link>
             </div>

@@ -123,3 +123,7 @@ footer a:hover {
 .dropdown--translation .dropdown-item {
   user-select: none;
 }
+
+.no-of-users-alert {
+  padding-right: 2.5em;
+}

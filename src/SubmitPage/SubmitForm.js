@@ -130,10 +130,6 @@ class SubmitForm extends React.Component {
     this.setState({ data: { ...this.state.data, [dataKey]: target.value } });
   }
 
-  // componentDidUpdate(prevProps, prevState, snapshot) {
-  //   console.log("change", this.state.data, prevState.data);
-  // }
-
   componentDidMount() {
     if (this.props.location.state) {
       // Initial props from "Update this information"
@@ -158,13 +154,14 @@ class SubmitForm extends React.Component {
       // the home page
       return this.props.location.state.item["Store Name"];
     }
-
     return "";
   }
+
   canBeSubmitted() {
     const data = this.state.data;
     return ((data["Safety Observations"].length) || (data["Useful Information"].length) || (data["Opening Time"].length) || (data["Closing Time"].length));
   }
+
   render() {
     return (
       <>
@@ -185,12 +182,6 @@ class SubmitForm extends React.Component {
         {this.state.hasSubmitted ? (
           <div className="alert alert-success text-center mb-0">
             <span>Submitted successfully, thank you!</span>
-          </div>
-        ) : null}
-
-        {!this.state.isValid ? (
-          <div className="alert alert-danger text-center mb-0">
-            <span>Please enter either Store times or Useful information or Safety information</span>
           </div>
         ) : null}
 
@@ -277,6 +268,12 @@ class SubmitForm extends React.Component {
                 placeholder="Stock availability, special services, etc."
               />
             </Form.Group>
+
+            {!this.state.isValid ? (
+              <div className="alert alert-danger text-center">
+                <span>Please enter either Store timings or Useful information or Safety information</span>
+              </div>
+            ) : null}
 
             <ButtonWithLoading
               isLoading={this.state.isLoading}

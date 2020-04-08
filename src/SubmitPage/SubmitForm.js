@@ -166,7 +166,7 @@ class SubmitForm extends React.Component {
 
         {this.state.hasSubmitted ? (
           <div className="alert alert-success text-center mb-0">
-            <span>Submitted successfully, thank you!</span>
+            <span>And now we're up-to-date! Thanks for keeping them coming 🙌</span>
           </div>
         ) : null}
 

@@ -12,7 +12,8 @@ function constructDirectionsUrl({ name, placeId, lat, lng }) {
   }
 }
 
-function shareListing(listing) {
+function shareListing(e, listing) {
+  e.stopPropagation();
   let storeName = listing.name
   let placeId = listing.placeId
   let url = `${window.location.origin}/listing/${placeId}`
@@ -74,7 +75,7 @@ const ResultBlock = (props) => {
         {
           showShareButton &&
           <div
-            onClick={() => shareListing(result)}
+            onClick={(e) => shareListing(e, result)}
             className="float-right btn btn-sm btn-outline-secondary text-uppercase mr-2"
           >
             <i className="far fa-share-alt"></i>

@@ -20,7 +20,7 @@ function shareListing(e, listing) {
   if (navigator.share) {
     navigator.share({
       title: `${storeName}`,
-      text: `${storeName} on Covid Maps.\nFind essentials services around you in the lockdown period.\n`,
+      text: `Check out the latest information on ${storeName} using Covid Maps — crowdsourced updates on essential services during lockdown period. \n`,
       url: url
     })
   }

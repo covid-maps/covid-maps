@@ -31,7 +31,7 @@ const IconToggle = React.forwardRef(({ onClick }, ref) => (
     ref={ref}
     onClick={onClick}
     tabIndex={0}
-    className="far fa-language language_icon"
+    className="far fa-language language-icon"
   />
 ));
 

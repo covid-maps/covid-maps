@@ -147,6 +147,13 @@ class Homepage extends React.Component {
       : { pathname: "/location" };
   }
 
+  handleStoreFilterQuery = event => {
+    this.setState({
+      searchQuery: event.target.value,
+      selectedLocation: undefined
+    });
+  };
+
   render() {
     let missingBlock = null;
     let selectedForMissing = undefined;
@@ -208,7 +215,7 @@ class Homepage extends React.Component {
               </h6>
               <Form.Control
                 type="text"
-                onChange={e => this.setState({ searchQuery: e.target.value, selectedLocation: undefined })}
+                onChange={this.handleStoreFilterQuery}
                 className="d-inline-block mx-1 results-search-box"
                 value={this.state.searchQuery}
                 placeholder="Filter by name or item"
@@ -223,7 +230,7 @@ class Homepage extends React.Component {
                   onClick={recordAddNewStore}
                 >
                   Add a store
-              </Button>
+                </Button>
               </Link>
             </div>
           </div>

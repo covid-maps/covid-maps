@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
@@ -10,6 +11,7 @@ import MapWithSearch from "../MapWithSearch";
 import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore } from "../gaEvents";
 import Form from "react-bootstrap/Form";
+import { withGlobalContext } from "../App";
 
 const DISTANCE_FILTER = 200000; // meters
 
@@ -27,7 +29,7 @@ function searchResultToFormEntry(searchResult) {
   };
 }
 
-function NoOfUsersAlert() {
+function NoOfUsersAlert(props) {
   const [show, setShow] = useState(true);
   return (
     <Alert
@@ -38,12 +40,16 @@ function NoOfUsersAlert() {
       onClose={() => setShow(false)}
       dismissible
     >
-      Help 10,000+ users by adding updates on essential services around you
+      {props.alertText}
     </Alert>
   );
 }
 
 class Homepage extends React.Component {
+  static propTypes = {
+    translations: PropTypes.object
+  };
+
   state = {
     searchQuery: "",
     results: [],
@@ -179,7 +185,9 @@ class Homepage extends React.Component {
     }));
     return (
       <div>
-        <NoOfUsersAlert />
+        <NoOfUsersAlert
+          alertText={this.props.translations.website_purpose_banner}
+        />
         <MapWithSearch
           value=""
           onSearchSuccess={result => {
@@ -248,4 +256,4 @@ class Homepage extends React.Component {
   }
 }
 
-export default Homepage;
+export default withGlobalContext(Homepage);

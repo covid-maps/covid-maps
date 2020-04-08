@@ -106,9 +106,8 @@ app.post("/v1/admin-add", async (req, res) => {
   }
 });
 
-app.get("/v1/query", async(req, res) => {
+app.get("/v1/query", async (req, res) => {
   res.send(await stores.findAllStores());
 });
-
 
 app.listen(process.env.PORT || 5000);

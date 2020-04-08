@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
@@ -8,6 +8,7 @@ import * as api from "../api";
 import { getFirstComma } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import LocationSelector from "../LocationSelector";
+import ShareButton from "../ShareButton";
 
 function ButtonWithLoading(props) {
   return props.isLoading ? (
@@ -167,6 +168,22 @@ class SubmitForm extends React.Component {
         {this.state.hasSubmitted ? (
           <div className="alert alert-success text-center mb-0">
             <span>And now we're up-to-date! Thanks for keeping them coming 🙌</span>
+            <div className='float-right'>
+              <ShareButton
+                label='Share With Friends'
+                title='Covid Maps'
+                url='https://covidmaps.in/'
+                text={
+                  [
+                    'Covid Maps - find essentials services around you in the lockdown period ',
+                    '- track timings, stock levels and safety precautions at stores. ',
+                    'Make an update with info you find in your grocery run and share with neighbours! ',
+                    '- https://covidmaps.in/',
+                  ]
+                    .join()
+                }
+              />
+            </div>
           </div>
         ) : null}
 

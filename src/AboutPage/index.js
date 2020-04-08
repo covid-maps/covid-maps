@@ -52,6 +52,20 @@ function AboutPage() {
           </Button>
         </NewTabLink>
       </p>
+      <p>
+        <NewTabLink href="mailto:helpcovidmaps@gmail.com">
+          <Button variant="info">
+            <i className="fal fa-envelope" /> Reach out by email
+          </Button>
+        </NewTabLink>
+      </p>
+      <p>
+        <NewTabLink href="https://www.instagram.com/covidmaps.in/">
+          <Button variant="info">
+            <i className="fab fa-instagram" /> Follow us on Instagram
+          </Button>
+        </NewTabLink>
+      </p>
       <h4 className="mt-4 text-uppercase mb-1">Privacy Policy</h4>
       <p className="text-black-60">
         We collect your IP address when you update information on a store. This

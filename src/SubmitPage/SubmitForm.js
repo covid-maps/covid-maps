@@ -47,7 +47,6 @@ class SubmitForm extends React.Component {
     isLoading: false,
     isValid: true,
     hasSubmitted: false,
-    ipData: undefined,
     data: { ...emptyData },
     searchFieldValue: ""
   };
@@ -99,25 +98,11 @@ class SubmitForm extends React.Component {
         ...this.state.data,
         Timestamp: new Date().toISOString()
       };
-
-      // Get IP if possible
-      let ipData = this.state.ipData;
-      if (!this.state.ipData) {
-        try {
-          ipData = await api.ip();
-        } catch (e) {
-          // Damn ad-blockers
-        }
-      }
-      if (ipData && ipData.ip) {
-        data["User IP"] = ipData.ip;
-      }
-
       const response = await api.submit(data);
       console.log(data);
       console.log(response);
       recordFormSubmission();
-      this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
+      this.setState({ isLoading: false, hasSubmitted: true }, () => {
         window.scrollTo(0, 0);
         this.clearForm();
       });

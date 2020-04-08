@@ -1,0 +1,12 @@
+{
+  "development": {
+    "username": "root",
+    "password": null,
+    "database": "covid_maps_0",
+    "host": "localhost",
+    "dialect": "postgres"
+  },
+  "production": {
+    "use_env_variable": "DATABASE_URL"
+  }
+}

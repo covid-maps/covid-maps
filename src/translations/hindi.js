@@ -3,7 +3,7 @@ export default {
     "अपने आस-पास आवश्यक सेवाओं पर अपडेट जोड़कर 10,000+ उपयोगकर्ताओं की मदद करें",
   location_search_placeholder: "स्टोर, पता या लैंडमार्क द्वारा खोजें",
   store_search_placeholder: "नाम या वस्तु से छाने",
-  add_store_button: "सूची में नया स्टोर जोड़ें",
+  add_store: "सूची में नया स्टोर जोड़ें",
   store_nearby_label: "आसपास की दुकानें",
   update: "अपडेट करें",
   add_update_store: "दुकान जोड़ें या अपडेट करें",
@@ -23,4 +23,6 @@ export default {
   useful_information: "उपयोगी जानकारी",
   useful_placeholder: "आइटम की उपलब्धता, विशेष सेवाएं, आदि।",
   submit_update: "अपडेट जमा करें",
+  home: "होमपेज",
+  about: "जानिए हमारे बारे में",
 };

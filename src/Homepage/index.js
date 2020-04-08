@@ -25,7 +25,7 @@ function searchResultToFormEntry(searchResult) {
     City: searchResult.city,
     Locality: searchResult.locality,
     Address: searchResult.address,
-    Country: searchResult.country
+    Country: searchResult.country,
   };
 }
 
@@ -47,7 +47,7 @@ function NoOfUsersAlert(props) {
 
 class Homepage extends React.Component {
   static propTypes = {
-    translations: PropTypes.object
+    translations: PropTypes.object,
   };
 
   state = {
@@ -59,7 +59,7 @@ class Homepage extends React.Component {
     mapShouldPan: false,
     selectedLocation: undefined,
     searchResultLatlng: undefined,
-    searchResult: undefined
+    searchResult: undefined,
   };
 
   componentDidMount() {
@@ -68,9 +68,9 @@ class Homepage extends React.Component {
         results: this.formatResults(data),
         markers: data.map(result => ({
           lat: Number(result.Latitude),
-          lng: Number(result.Longitude)
+          lng: Number(result.Longitude),
         })),
-        isLoading: false
+        isLoading: false,
       });
     });
   }
@@ -88,7 +88,7 @@ class Homepage extends React.Component {
   calculateGroupDistance(grouped, center) {
     const groupedResult = grouped.map(group => ({
       ...group,
-      distance: this.calculateDistance(group, center)
+      distance: this.calculateDistance(group, center),
     }));
     return groupedResult.sort((a, b) => a.distance - b.distance);
   }
@@ -107,7 +107,7 @@ class Homepage extends React.Component {
       placeId: entries[0]["Place Id"],
       lat: Number(entries[0].Latitude),
       lng: Number(entries[0].Longitude),
-      entries: entries.sort((a, b) => b.Timestamp - a.Timestamp).reverse()
+      entries: entries.sort((a, b) => b.Timestamp - a.Timestamp).reverse(),
     }));
     return this.calculateGroupDistance(grouped, this.state.center);
   }
@@ -126,7 +126,7 @@ class Homepage extends React.Component {
     this.setState({
       center,
       selectedLocation: center,
-      mapShouldPan: true
+      mapShouldPan: true,
     });
     setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
   }
@@ -135,7 +135,7 @@ class Homepage extends React.Component {
     this.setState({
       center: { ...latLng },
       selectedLocation: { ...latLng },
-      mapShouldPan: false
+      mapShouldPan: false,
     });
   }
 
@@ -156,7 +156,7 @@ class Homepage extends React.Component {
   handleStoreFilterQuery = event => {
     this.setState({
       searchQuery: event.target.value,
-      selectedLocation: undefined
+      selectedLocation: undefined,
     });
   };
 
@@ -170,7 +170,7 @@ class Homepage extends React.Component {
           missing={true}
           result={{
             name: searchResult.name,
-            entries: [searchResultToFormEntry(searchResult)]
+            entries: [searchResultToFormEntry(searchResult)],
           }}
         ></MissingBlock>
       );
@@ -181,7 +181,7 @@ class Homepage extends React.Component {
     );
     const closeByMarkers = closeByResults.map(res => ({
       lat: Number(res.lat),
-      lng: Number(res.lng)
+      lng: Number(res.lng),
     }));
     return (
       <div>
@@ -199,7 +199,7 @@ class Homepage extends React.Component {
                 results: this.calculateGroupDistance(
                   this.state.results,
                   result.latLng
-                )
+                ),
               });
             }
           }}
@@ -237,7 +237,7 @@ class Homepage extends React.Component {
                   className="text-uppercase"
                   onClick={recordAddNewStore}
                 >
-                  {this.props.translations.add_store_button}
+                  {this.props.translations.add_store}
                 </Button>
               </Link>
             </div>

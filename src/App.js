@@ -79,7 +79,7 @@ class App extends Component {
     super(props);
 
     this.state = {
-      language: this.getDefaultLanguage()
+      language: this.getDefaultLanguage(),
     };
   }
 
@@ -104,16 +104,17 @@ class App extends Component {
   getTranslations = () => {
     return {
       ...translations[AVAILABLE_LANGUAGES.ENGLISH],
-      ...translations[this.state.language]
+      ...translations[this.state.language],
     };
   };
 
   render() {
+    const translations = this.getTranslations();
     return (
       <Router history={history}>
         <AppContext.Provider
           value={{
-            translations: this.getTranslations()
+            translations,
           }}
         >
           <div className="App">
@@ -132,9 +133,9 @@ class App extends Component {
             </div>
             <footer className="m-0 p-0">
               <div className="container py-4 text-center text-uppercase">
-                <Link to="/">Home</Link> ·{" "}
-                <Link to="/location">Add a store</Link> ·{" "}
-                <Link to="/about">About</Link>
+                <Link to="/">{translations.home}</Link> ·{" "}
+                <Link to="/location">{translations.add_store}</Link> ·{" "}
+                <Link to="/about">{translations.about}</Link>
               </div>
             </footer>
           </div>

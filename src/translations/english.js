@@ -3,7 +3,7 @@ export default {
     "Help 10,000+ users by adding updates on essential services around you",
   location_search_placeholder: "Search by store, address or landmark",
   store_search_placeholder: "Filter by name or item",
-  add_store_button: "Add a store",
+  add_store: "Add a store",
   store_nearby_label: "Stores Nearby",
   update: "Update",
   add_update_store: "Add or update store",
@@ -23,4 +23,6 @@ export default {
   useful_information: "Useful Information",
   useful_placeholder: "Queues, crowd levels and safety precautions",
   submit_update: "Submit update",
+  home: "Home",
+  about: "About",
 };

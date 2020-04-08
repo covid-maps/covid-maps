@@ -18,19 +18,19 @@ function removeSafety(entry) {
   return {
     ...entry,
     "Safety Observations": "",
-    "Useful Information": ""
+    "Useful Information": "",
   };
 }
 
 class ResultBlock extends React.Component {
   static propTypes = {
-    translations: PropTypes.object
+    translations: PropTypes.object,
   };
 
   onClick() {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
     this.props.onClick && this.props.onClick(this.props.result);
   }
@@ -61,7 +61,7 @@ class ResultBlock extends React.Component {
           >
             {this.props.translations.update}
           </Link>
-          <h5 className="card-title m-0 p-0">
+          <h5 className="card-title m-0 p-0 d-inline-block">
             <Highlighter
               highlightClassName="highlighted-text"
               searchWords={[this.props.highlightedText]}
@@ -69,6 +69,9 @@ class ResultBlock extends React.Component {
               textToHighlight={result.name}
             />
           </h5>
+          {result.openTime && result.closeTime ? (
+            <span className="mx-2">{`Hours: ${result.openTime} to ${result.closeTime}`}</span>
+          ) : null}
           <ResultEntry
             highlightedText={this.props.highlightedText}
             entries={result.entries}

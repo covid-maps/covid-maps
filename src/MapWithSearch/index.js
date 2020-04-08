@@ -10,7 +10,6 @@ import * as api from "../api";
 class MapWithSearch extends React.Component {
   state = {
     ipLocation: undefined,
-    ipAddress: undefined,
     showGeolocationDisabledAlert: true
   };
 
@@ -21,7 +20,6 @@ class MapWithSearch extends React.Component {
       // response.city - West End
       const [lat, lng] = response.loc.split(",");
       this.setState({
-        ipAddress: response.ip,
         ipLocation: { lat: Number(lat), lng: Number(lng) }
       });
     });

@@ -13,10 +13,15 @@
    - `npx sequelize-cli db:migrate`
    - https://sequelize.org/v5/manual/migrations.html
 
-## Importing data
+## Gotchas
 
-1. Export google sheet as CSV
-1. Figure out Postgres import: local and production
+1. The `pg` NPM needs to be pinned to 7.12.1
+   - https://github.com/brianc/node-postgres/issues/2009
+1. A newly provisioned database requires installing the PostGIS extension
+   ```sh
+   heroku pg:psql # launch psql
+   create extension postgis; # inside psql
+   ```
 
 ## Notes
 

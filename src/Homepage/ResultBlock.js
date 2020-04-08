@@ -53,7 +53,7 @@ export default class ResultBlock extends React.Component {
           >
             Update
           </Link>
-          <h5 className="card-title m-0 p-0">
+          <h5 className="card-title m-0 p-0 d-inline-block">
             <Highlighter
               highlightClassName="highlighted-text"
               searchWords={[this.props.highlightedText]}
@@ -61,6 +61,7 @@ export default class ResultBlock extends React.Component {
               textToHighlight={result.name}
             />
           </h5>
+          {(result.openTime && result.closeTime) ? <span className="mx-2">{`Hours: ${result.openTime} to ${result.closeTime}`}</span> : null}
           <ResultEntry highlightedText={this.props.highlightedText} entries={result.entries} />
         </div>
       </div>

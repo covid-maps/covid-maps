@@ -43,6 +43,20 @@ function NoOfUsersAlert() {
   );
 }
 
+function openTimeInLastEntry(entries) {
+  const filtered = entries.filter(entry => entry["Opening Time"] && entry["Opening Time"].length)
+  if (filtered.length) {
+    return filtered[0]["Opening Time"]
+  }
+}
+
+function closeTimeInLastEntry(entries) {
+  const filtered = entries.filter(entry => entry["Closing Time"] && entry["Closing Time"].length)
+  if (filtered.length) {
+    return filtered[0]["Closing Time"]
+  }
+}
+
 class Homepage extends React.Component {
   state = {
     searchQuery: "",
@@ -89,20 +103,25 @@ class Homepage extends React.Component {
 
   formatResults(results) {
     const grouped = Object.values(
-      results.reduce(function (obj, result) {
+      results.reduce((obj, result) => {
         if (!obj.hasOwnProperty(result["Place Id"] || result["Store Name"])) {
           obj[result["Place Id"] || result["Store Name"]] = [];
         }
         obj[result["Place Id"] || result["Store Name"]].push(result);
         return obj;
       }, {})
-    ).map(entries => ({
-      name: entries[0]["Store Name"],
-      placeId: entries[0]["Place Id"],
-      lat: Number(entries[0].Latitude),
-      lng: Number(entries[0].Longitude),
-      entries: entries.sort((a, b) => b.Timestamp - a.Timestamp).reverse()
-    }));
+    ).map(entries => {
+      const sortedEntries = entries.sort((a, b) => b.Timestamp - a.Timestamp).reverse()
+      return {
+        name: entries[0]["Store Name"],
+        placeId: entries[0]["Place Id"],
+        lat: Number(entries[0].Latitude),
+        lng: Number(entries[0].Longitude),
+        openTime: openTimeInLastEntry(sortedEntries),
+        closeTime: closeTimeInLastEntry(sortedEntries),
+        entries: sortedEntries
+      }
+    });
     return this.calculateGroupDistance(grouped, this.state.center);
   }
 

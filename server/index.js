@@ -108,7 +108,7 @@ app.post("/v1/update", async (req, res) => {
 
 app.post("/v1/admin-add", async (req, res) => {
   try {
-    res.send(await stores.addStoreData(getFormDataWithUserIp(req), true));
+    res.send(await stores.addStoreData(req.body, true));
   } catch (error) {
     console.log("Error in submit:", error);
     res.status(500).send({ error });

@@ -79,12 +79,26 @@ class App extends Component {
     super(props);
 
     this.state = {
-      language: AVAILABLE_LANGUAGES.ENGLISH
+      language: this.getDefaultLanguage()
     };
   }
 
   setLanguage = language => {
+    this.persistLastSelectedLanguage(language);
     this.setState({ language });
+  };
+
+  persistLastSelectedLanguage = language => {
+    if (window.localStorage) {
+      localStorage.setItem("lastSelectedLanguage", language);
+    }
+  };
+
+  getDefaultLanguage = () => {
+    if (window.localStorage) {
+      const language = localStorage.getItem("lastSelectedLanguage");
+      return language || AVAILABLE_LANGUAGES.ENGLISH;
+    }
   };
 
   getTranslations = () => {

@@ -149,7 +149,8 @@ class Homepage extends React.Component {
 
   handleStoreFilterQuery = event => {
     this.setState({
-      searchQuery: event.target.value
+      searchQuery: event.target.value,
+      selectedLocation: undefined
     });
   };
 

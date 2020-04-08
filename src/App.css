@@ -111,5 +111,15 @@ footer a:hover {
 }
 .highlighted-text {
   background: #fff8a0;
-  padding: .2em 0;
+  padding: 0.2em 0;
+}
+
+.language_icon {
+  font-size: 32px;
+  cursor: pointer;
+  border: 1px solid transparent;
+}
+
+.dropdown--translation .dropdown-item {
+  user-select: none;
 }

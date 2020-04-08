@@ -219,7 +219,7 @@ class Homepage extends React.Component {
           <div className="my-1 px-1 d-flex justify-content-between align-items-center search-results-container">
             <div>
               <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
-                Stores Nearby
+                {this.props.translations.store_nearby_label}
               </h6>
               <Form.Control
                 type="text"

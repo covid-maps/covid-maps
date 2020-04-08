@@ -1,8 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
 import { recordUpdateStore } from "../gaEvents";
 import Highlighter from "react-highlight-words";
+import { withGlobalContext } from "../App";
 
 function constructDirectionsUrl({ name, placeId, lat, lng }) {
   if (placeId) {
@@ -20,7 +22,11 @@ function removeSafety(entry) {
   };
 }
 
-export default class ResultBlock extends React.Component {
+class ResultBlock extends React.Component {
+  static propTypes = {
+    translations: PropTypes.object
+  };
+
   onClick() {
     window.scrollTo({
       top: 0,
@@ -35,7 +41,9 @@ export default class ResultBlock extends React.Component {
     return (
       <div
         onClick={() => this.onClick()}
-        className={`card my-1 card-result-block ${this.props.isSelected ? "card-result-block-selected" : ""}`}
+        className={`card my-1 card-result-block ${
+          this.props.isSelected ? "card-result-block-selected" : ""
+        }`}
       >
         <div className="card-body p-3">
           <a
@@ -51,7 +59,7 @@ export default class ResultBlock extends React.Component {
             className="float-right btn btn-sm btn-outline-success text-uppercase"
             onClick={recordUpdateStore}
           >
-            Update
+            {this.props.translations.update}
           </Link>
           <h5 className="card-title m-0 p-0">
             <Highlighter
@@ -61,9 +69,14 @@ export default class ResultBlock extends React.Component {
               textToHighlight={result.name}
             />
           </h5>
-          <ResultEntry highlightedText={this.props.highlightedText} entries={result.entries} />
+          <ResultEntry
+            highlightedText={this.props.highlightedText}
+            entries={result.entries}
+          />
         </div>
       </div>
     );
   }
 }
+
+export default withGlobalContext(ResultBlock);

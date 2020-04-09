@@ -3,11 +3,17 @@ import PropTypes from "prop-types";
 import { Dropdown } from "react-bootstrap";
 import { withGlobalContext } from "./App";
 import { AVAILABLE_LANGUAGES } from "./constants";
+import { recordLanguageSelection } from "./gaEvents";
 
 class LanguageSelector extends Component {
   static propTypes = {
     currentLanguage: PropTypes.string.isRequired,
     setLanguage: PropTypes.func.isRequired,
+  };
+
+  handleLanguageSelect = language => {
+    recordLanguageSelection(language);
+    this.props.setLanguage(language);
   };
 
   render() {
@@ -23,7 +29,7 @@ class LanguageSelector extends Component {
               <Dropdown.Item
                 key={langValue}
                 active={this.props.currentLanguage === langValue}
-                onClick={() => this.props.setLanguage(langValue)}
+                onClick={() => this.handleLanguageSelect(langValue)}
                 className="language-selector__item"
               >
                 {langValue}

@@ -38,7 +38,10 @@ function mapDBRow(data){
 }
 
 async function addInfoToDB(data, forceDateUpdate){
-    const store = await models.StoreInfo.findOne({ where: { name: data['Store Name'] } });
+    let store = null
+    if(data["Place Id"] && data["Place Id"] != ""){
+        store = await models.StoreInfo.findOne({ where: { placeId: data['Place Id'] } });
+    }
     if(store == null){
         return await addNewStore(data, forceDateUpdate)
     }else{

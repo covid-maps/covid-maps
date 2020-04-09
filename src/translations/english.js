@@ -25,4 +25,6 @@ export default {
   submit_update: "Submit update",
   home: "Home",
   about: "About",
+  insufficient_form_data_error:
+    "Please enter either Store timings or Useful information or Safety information",
 };

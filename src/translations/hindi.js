@@ -25,4 +25,6 @@ export default {
   submit_update: "अपडेट जमा करें",
   home: "होमपेज",
   about: "जानिए हमारे बारे में",
+  insufficient_form_data_error:
+    "कृपया स्टोर टाइमिंग या उपयोगी जानकारी या सुरक्षा जानकारी दर्ज करें",
 };

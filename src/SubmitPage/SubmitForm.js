@@ -270,10 +270,7 @@ class SubmitForm extends React.Component {
 
             {!this.state.isValid ? (
               <div className="alert alert-danger text-center">
-                <span>
-                  Please enter either Store timings or Useful information or
-                  Safety information
-                </span>
+                <span>{translations.insufficient_form_data_error}</span>
               </div>
             ) : null}
 

@@ -1,4 +1,5 @@
 import React, { Component, createContext } from "react";
+import PropTypes from "prop-types";
 import { Router, Switch, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import { Dropdown } from "react-bootstrap";
@@ -15,6 +16,7 @@ import ReactGA from "react-ga";
 import logo from "./Logo.svg";
 import { AVAILABLE_LANGUAGES } from "./constants";
 import translations from "./translations";
+import { withLocalStorage } from "./withStorage";
 
 const history = createBrowserHistory();
 if (process.env.NODE_ENV !== "development") {
@@ -75,6 +77,11 @@ const AppNavbar = ({ setLanguage, currentLanguage }) => {
 const AppContext = createContext();
 
 class App extends Component {
+  static propTypes = {
+    getItemFromStorage: PropTypes.func.isRequired,
+    setItemToStorage: PropTypes.func.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -89,16 +96,12 @@ class App extends Component {
   };
 
   persistLastSelectedLanguage = language => {
-    if (window.localStorage) {
-      localStorage.setItem("lastSelectedLanguage", language);
-    }
+    this.props.setItemToStorage("lastSelectedLanguage", language);
   };
 
   getDefaultLanguage = () => {
-    if (window.localStorage) {
-      const language = localStorage.getItem("lastSelectedLanguage");
-      return language || AVAILABLE_LANGUAGES.ENGLISH;
-    }
+    const language = this.props.getItemFromStorage("lastSelectedLanguage");
+    return language || AVAILABLE_LANGUAGES.ENGLISH;
   };
 
   getTranslations = () => {
@@ -155,4 +158,4 @@ export function withGlobalContext(Component) {
   };
 }
 
-export default App;
+export default withLocalStorage(App);

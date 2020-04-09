@@ -78,7 +78,20 @@ class Homepage extends React.Component {
       console.log(place)
       //Run the function only if place is real value ( not nul || undefined)
       //Reuse the onCardClick function.
-      place && this.onCardClick(place)
+      if (place) {
+        this.onCardClick(place)
+        const latLng = {
+          "lat": place.lat,
+          "lng": place.lng
+        }
+        this.setState({
+          center: { "latLng": latLng },
+          results: this.calculateGroupDistance(
+            this.state.results,
+            latLng
+          )
+        });
+      }
     }
   }
 

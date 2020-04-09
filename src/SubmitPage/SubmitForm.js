@@ -121,7 +121,7 @@ class SubmitForm extends React.Component {
       this.setState({
         data: {
           ...this.state.data,
-          ...this.props.location.state.item
+          ...this.props.location.state.item,
         },
         searchFieldValue: this.props.location.state.searchFieldValue
       });
@@ -187,9 +187,10 @@ class SubmitForm extends React.Component {
             </Form.Group>
 
             <Form.Group controlId="formBasicServiceType">
-              <Form.Label>Service Type</Form.Label>
+              <Form.Label>Store Category</Form.Label>
               <Form.Control
                 as="select"
+                value={this.state.data['Store Category']}
                 onChange={e => this.onChangeInput(e, "Store Category")}
               >
                 <option>Grocery</option>

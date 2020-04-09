@@ -9,7 +9,7 @@ export default {
   add_update_store: "Add or update store",
   store_name: "Store Name (required)",
   store_name_placeholder: "e.g. Target or Nature's Basket",
-  service_type: "Service Type",
+  store_category: "Store Category",
   grocery: "Grocery",
   restaurant: "Restaurant",
   atm: "ATM",

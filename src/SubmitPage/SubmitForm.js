@@ -200,9 +200,10 @@ class SubmitForm extends React.Component {
             </Form.Group>
 
             <Form.Group controlId="formBasicServiceType">
-              <Form.Label>{translations.service_type}</Form.Label>
+              <Form.Label>{translations.store_category}</Form.Label>
               <Form.Control
                 as="select"
+                value={this.state.data["Store Category"]}
                 onChange={e => this.onChangeInput(e, "Store Category")}
               >
                 <option>{translations.grocery}</option>

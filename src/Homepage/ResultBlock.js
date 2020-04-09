@@ -14,11 +14,15 @@ function constructDirectionsUrl({ name, placeId, lat, lng }) {
   }
 }
 
-function removeSafety(entry) {
+function prepareStoreForUpdate(entry) {
   return {
     ...entry,
     "Safety Observations": "",
     "Useful Information": "",
+    "Store Category":
+      entry["Store Category"] && entry["Store Category"].length
+        ? entry["Store Category"][0]
+        : "",
   };
 }
 
@@ -55,7 +59,10 @@ class ResultBlock extends React.Component {
             <i className="far fa-directions"></i>
           </a>
           <Link
-            to={{ pathname: "/update", state: { item: removeSafety(entry) } }}
+            to={{
+              pathname: "/update",
+              state: { item: prepareStoreForUpdate(entry) },
+            }}
             className="float-right btn btn-sm btn-outline-success text-uppercase"
             onClick={recordUpdateStore}
           >

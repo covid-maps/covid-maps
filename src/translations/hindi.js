@@ -9,7 +9,7 @@ export default {
   add_update_store: "दुकान जोड़ें या अपडेट करें",
   store_name: "दुकान का नाम (आवश्यक)",
   store_name_placeholder: "जैसे टारगेट या वॉलमार्ट",
-  service_type: "दुकान का प्रकार",
+  store_category: "दुकान की श्रेणी",
   grocery: "किराना",
   restaurant: "खाने की दुकान",
   atm: "एटीएम",

@@ -38,7 +38,10 @@ function mapDBRow(data){
 }
 
 async function addInfoToDB(data, forceDateUpdate){
-    const store = await models.StoreInfo.findOne({ where: { name: data['Store Name'] } });
+    let store = null
+    if(data["Place Id"] && data["Place Id"] != ""){
+        store = await models.StoreInfo.findOne({ where: { placeId: data['Place Id'] } });
+    }
     if(store == null){
         return await addNewStore(data, forceDateUpdate)
     }else{
@@ -56,7 +59,7 @@ function buildStoreObject(data, forceDateUpdate){
         category: data["Store Category"],
         latitude: parseFloat(data.Latitude),
         longitude: parseFloat(data.Longitude),
-        coordinate: { type: 'Point', coordinates: [parseFloat(data.Latitude),parseFloat(data.Longitude)]},
+        coordinate: { type: 'Point', coordinates: [parseFloat(data.Longitude),parseFloat(data.Latitude)]},
         placeId: data["Place Id"] || "",
         address: data.Address || "",
         city: data.City || "",
@@ -101,7 +104,7 @@ async function updateExistingStore(store, data, forceDateUpdate){
             category: categories.join(","),
             latitude: parseFloat(data.Latitude),
             longitude: parseFloat(data.Longitude),
-            coordinate: { type: 'Point', coordinates: [parseFloat(data.Latitude),parseFloat(data.Longitude)]},
+                coordinate: { type: 'Point', coordinates: [parseFloat(data.Longitude),parseFloat(data.Latitude)]},
             placeId: data["Place Id"] || "",
             address: data.Address || "",
             city: data.City || "",

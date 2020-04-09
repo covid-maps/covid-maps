@@ -1,5 +1,6 @@
 const express = require("express");
 const compression = require("compression");
+const requestIp = require("request-ip");
 const bodyParser = require("body-parser");
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 const stores = require("./service/stores");
@@ -51,9 +52,17 @@ async function addRow(values) {
   return rowValue(Object.keys(values), await sheet.addRow(values));
 }
 
+const getFormDataWithUserIp = req => {
+  return {
+    ...req.body,
+    "User IP": req.clientIp
+  };
+};
+
 const app = express();
 app.use(express.json());
 app.use(compression());
+app.use(requestIp.mw());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
@@ -79,7 +88,7 @@ app.get("/v0/query", async (req, res) => {
 
 app.post("/v0/update", async (req, res) => {
   try {
-    const ressult = await addRow(req.body);
+    const ressult = await addRow(getFormDataWithUserIp(req));
     console.log(ressult);
     res.send(ressult);
   } catch (error) {
@@ -90,7 +99,7 @@ app.post("/v0/update", async (req, res) => {
 
 app.post("/v1/update", async (req, res) => {
   try {
-    res.send(await stores.addStoreData(req.body));
+    res.send(await stores.addStoreData(getFormDataWithUserIp(req)));
   } catch (error) {
     console.log("Error in submit:", error);
     res.status(500).send({ error });
@@ -106,9 +115,8 @@ app.post("/v1/admin-add", async (req, res) => {
   }
 });
 
-app.get("/v1/query", async(req, res) => {
+app.get("/v1/query", async (req, res) => {
   res.send(await stores.findAllStores());
 });
-
 
 app.listen(process.env.PORT || 5000);

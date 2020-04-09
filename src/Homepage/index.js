@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
@@ -10,6 +11,7 @@ import MapWithSearch from "../MapWithSearch";
 import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore } from "../gaEvents";
 import Form from "react-bootstrap/Form";
+import { withGlobalContext } from "../App";
 
 const DISTANCE_FILTER = 200000; // meters
 
@@ -23,11 +25,11 @@ function searchResultToFormEntry(searchResult) {
     City: searchResult.city,
     Locality: searchResult.locality,
     Address: searchResult.address,
-    Country: searchResult.country
+    Country: searchResult.country,
   };
 }
 
-function NoOfUsersAlert() {
+function NoOfUsersAlert(props) {
   const [show, setShow] = useState(true);
   return (
     <Alert
@@ -38,12 +40,16 @@ function NoOfUsersAlert() {
       onClose={() => setShow(false)}
       dismissible
     >
-      Help 10,000+ users by adding updates on essential services around you
+      {props.alertText}
     </Alert>
   );
 }
 
 class Homepage extends React.Component {
+  static propTypes = {
+    translations: PropTypes.object.isRequired,
+  };
+
   state = {
     searchQuery: "",
     results: [],
@@ -53,7 +59,7 @@ class Homepage extends React.Component {
     mapShouldPan: false,
     selectedLocation: undefined,
     searchResultLatlng: undefined,
-    searchResult: undefined
+    searchResult: undefined,
   };
 
   componentDidMount() {
@@ -62,9 +68,9 @@ class Homepage extends React.Component {
         results: this.formatResults(data),
         markers: data.map(result => ({
           lat: Number(result.Latitude),
-          lng: Number(result.Longitude)
+          lng: Number(result.Longitude),
         })),
-        isLoading: false
+        isLoading: false,
       });
     });
   }
@@ -82,27 +88,32 @@ class Homepage extends React.Component {
   calculateGroupDistance(grouped, center) {
     const groupedResult = grouped.map(group => ({
       ...group,
-      distance: this.calculateDistance(group, center)
+      distance: this.calculateDistance(group, center),
     }));
     return groupedResult.sort((a, b) => a.distance - b.distance);
   }
 
   formatResults(results) {
     const grouped = Object.values(
-      results.reduce(function (obj, result) {
+      results.reduce((obj, result) => {
         if (!obj.hasOwnProperty(result["Place Id"] || result["Store Name"])) {
           obj[result["Place Id"] || result["Store Name"]] = [];
         }
         obj[result["Place Id"] || result["Store Name"]].push(result);
         return obj;
       }, {})
-    ).map(entries => ({
-      name: entries[0]["Store Name"],
-      placeId: entries[0]["Place Id"],
-      lat: Number(entries[0].Latitude),
-      lng: Number(entries[0].Longitude),
-      entries: entries.sort((a, b) => b.Timestamp - a.Timestamp).reverse()
-    }));
+    ).map(entries => {
+      const sortedEntries = entries
+        .sort((a, b) => b.Timestamp - a.Timestamp)
+        .reverse();
+      return {
+        name: entries[0]["Store Name"],
+        placeId: entries[0]["Place Id"],
+        lat: Number(entries[0].Latitude),
+        lng: Number(entries[0].Longitude),
+        entries: sortedEntries,
+      };
+    });
     return this.calculateGroupDistance(grouped, this.state.center);
   }
 
@@ -120,7 +131,7 @@ class Homepage extends React.Component {
     this.setState({
       center,
       selectedLocation: center,
-      mapShouldPan: true
+      mapShouldPan: true,
     });
     setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
   }
@@ -129,7 +140,7 @@ class Homepage extends React.Component {
     this.setState({
       center: { ...latLng },
       selectedLocation: { ...latLng },
-      mapShouldPan: false
+      mapShouldPan: false,
     });
   }
 
@@ -147,6 +158,13 @@ class Homepage extends React.Component {
       : { pathname: "/location" };
   }
 
+  handleStoreFilterQuery = event => {
+    this.setState({
+      searchQuery: event.target.value,
+      selectedLocation: undefined,
+    });
+  };
+
   render() {
     let missingBlock = null;
     let selectedForMissing = undefined;
@@ -157,7 +175,7 @@ class Homepage extends React.Component {
           missing={true}
           result={{
             name: searchResult.name,
-            entries: [searchResultToFormEntry(searchResult)]
+            entries: [searchResultToFormEntry(searchResult)],
           }}
         ></MissingBlock>
       );
@@ -168,11 +186,13 @@ class Homepage extends React.Component {
     );
     const closeByMarkers = closeByResults.map(res => ({
       lat: Number(res.lat),
-      lng: Number(res.lng)
+      lng: Number(res.lng),
     }));
     return (
       <div>
-        <NoOfUsersAlert />
+        <NoOfUsersAlert
+          alertText={this.props.translations.website_purpose_banner}
+        />
         <MapWithSearch
           value=""
           onSearchSuccess={result => {
@@ -184,7 +204,7 @@ class Homepage extends React.Component {
                 results: this.calculateGroupDistance(
                   this.state.results,
                   result.latLng
-                )
+                ),
               });
             }
           }}
@@ -204,14 +224,14 @@ class Homepage extends React.Component {
           <div className="my-1 px-1 d-flex justify-content-between align-items-center search-results-container">
             <div>
               <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
-                Stores Nearby
+                {this.props.translations.store_nearby_label}
               </h6>
               <Form.Control
                 type="text"
-                onChange={e => this.setState({ searchQuery: e.target.value, selectedLocation: undefined })}
+                onChange={this.handleStoreFilterQuery}
                 className="d-inline-block mx-1 results-search-box"
                 value={this.state.searchQuery}
-                placeholder="Filter by name or item"
+                placeholder={this.props.translations.store_search_placeholder}
               />
             </div>
             <div>
@@ -222,8 +242,8 @@ class Homepage extends React.Component {
                   className="text-uppercase"
                   onClick={recordAddNewStore}
                 >
-                  Add a store
-              </Button>
+                  {this.props.translations.add_store}
+                </Button>
               </Link>
             </div>
           </div>
@@ -241,4 +261,4 @@ class Homepage extends React.Component {
   }
 }
 
-export default Homepage;
+export default withGlobalContext(Homepage);

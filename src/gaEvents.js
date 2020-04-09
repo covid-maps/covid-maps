@@ -5,42 +5,48 @@ const category = "user_events";
 export function recordSearchCompleted() {
   ReactGA.event({
     category,
-    action: "search_completed"
+    action: "search_completed",
   });
 }
 
 export function recordUpdateStore() {
-  console.log("updated event");
   ReactGA.event({
     category,
-    action: "store_updated_started"
+    action: "store_updated_started",
   });
 }
 
 export function recordAddNewStore() {
   ReactGA.event({
     category,
-    action: "add_new_store_started"
+    action: "add_new_store_started",
   });
 }
 
 export function recordAddInfoToStoreCard() {
   ReactGA.event({
     category,
-    action: "add_info_store_card_started"
+    action: "add_info_store_card_started",
   });
 }
 
 export function recordFormSubmission() {
   ReactGA.event({
     category,
-    action: "form_submitted"
+    action: "form_submitted",
   });
 }
 
 export function recordAddToHomescreen() {
   ReactGA.event({
     category,
-    action: "add_to_homescreen_started"
+    action: "add_to_homescreen_started",
   });
 }
+
+export const recordLanguageSelection = selectedLanguage => {
+  ReactGA.event({
+    category,
+    action: `language_selected_${selectedLanguage}`,
+  });
+};

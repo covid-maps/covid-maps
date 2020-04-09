@@ -10,7 +10,6 @@ export function recordSearchCompleted() {
 }
 
 export function recordUpdateStore() {
-  console.log("updated event");
   ReactGA.event({
     category,
     action: "store_updated_started"

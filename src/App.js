@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Component, createContext } from "react";
+import PropTypes from "prop-types";
 import { Router, Switch, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -10,8 +11,12 @@ import LocationSelectionPage from "./LocationSelectionPage";
 import { ScrollToTop } from "./utils";
 import Navbar from "react-bootstrap/Navbar";
 import PWAInstallButton from "./PWAButton";
+import LanguageSelector from "./LanguageSelector";
 import ReactGA from "react-ga";
 import logo from "./Logo.svg";
+import { AVAILABLE_LANGUAGES } from "./constants";
+import translations from "./translations";
+import { withLocalStorage } from "./withStorage";
 
 const history = createBrowserHistory();
 if (process.env.NODE_ENV !== "development") {
@@ -23,7 +28,7 @@ if (process.env.NODE_ENV !== "development") {
   });
 }
 
-function AppNavbar() {
+const AppNavbar = () => {
   return (
     <>
       <Navbar bg="light" variant="light" fixed="top">
@@ -41,31 +46,90 @@ function AppNavbar() {
       </Navbar>
     </>
   );
-}
+};
 
-function App() {
-  return (
-    <Router history={history}>
-      <div className="App">
-        <ScrollToTop />
-        <AppNavbar />
-        <div className="page">
-          <Switch>
-            <Route path="/update" component={SubmitPage} />
-            <Route path="/location" component={LocationSelectionPage} />
-            <Route path="/about" component={AboutPage} />
-            <Route path="/" component={Homepage} />
-          </Switch>
-        </div>
-        <footer className="m-0 p-0">
-          <div className="container py-4 text-center text-uppercase">
-            <Link to="/">Home</Link> · <Link to="/location">Add a store</Link> ·{" "}
-            <Link to="/about">About</Link>
+const AppContext = createContext();
+
+class App extends Component {
+  static propTypes = {
+    getItemFromStorage: PropTypes.func.isRequired,
+    setItemToStorage: PropTypes.func.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      language: this.getDefaultLanguage(),
+    };
+  }
+
+  setLanguage = language => {
+    this.persistLastSelectedLanguage(language);
+    this.setState({ language });
+  };
+
+  persistLastSelectedLanguage = language => {
+    this.props.setItemToStorage("lastSelectedLanguage", language);
+  };
+
+  getDefaultLanguage = () => {
+    const language = this.props.getItemFromStorage("lastSelectedLanguage");
+    return language || AVAILABLE_LANGUAGES.ENGLISH;
+  };
+
+  getTranslations = () => {
+    return {
+      ...translations[AVAILABLE_LANGUAGES.ENGLISH],
+      ...translations[this.state.language],
+    };
+  };
+
+  render() {
+    const translations = this.getTranslations();
+    return (
+      <Router history={history}>
+        <AppContext.Provider
+          value={{
+            translations,
+            currentLanguage: this.state.language,
+            setLanguage: this.setLanguage,
+          }}
+        >
+          <div className="App">
+            <ScrollToTop />
+            <AppNavbar />
+            <div className="page">
+              <Switch>
+                <Route path="/update" component={SubmitPage} />
+                <Route path="/location" component={LocationSelectionPage} />
+                <Route path="/about" component={AboutPage} />
+                <Route path="/" component={Homepage} />
+              </Switch>
+            </div>
+            <footer className="m-0 p-0">
+              <div className="container py-4 text-center text-uppercase">
+                <Link to="/">{translations.home}</Link> ·{" "}
+                <Link to="/location">{translations.add_store}</Link> ·{" "}
+                <Link to="/about">{translations.about}</Link>
+                <LanguageSelector />
+              </div>
+            </footer>
           </div>
-        </footer>
-      </div>
-    </Router>
-  );
+        </AppContext.Provider>
+      </Router>
+    );
+  }
 }
 
-export default App;
+export function withGlobalContext(Component) {
+  return function WrapperComponent(props) {
+    return (
+      <AppContext.Consumer>
+        {context => <Component {...props} {...context} />}
+      </AppContext.Consumer>
+    );
+  };
+}
+
+export default withLocalStorage(App);

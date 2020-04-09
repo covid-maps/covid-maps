@@ -7,8 +7,8 @@ const humanizeDuration = require("humanize-duration");
 
 function isPresentable(entry) {
   return (
-    entry["Safety Observations"].length > 5 ||
-    entry["Useful Information"].length > 5
+    (entry["Safety Observations"] && entry["Safety Observations"].length > 5) ||
+    (entry["Useful Information"] && entry["Useful Information"].length > 5)
   );
 }
 
@@ -63,6 +63,15 @@ function ResultEntry({ entries, highlightedText }) {
               autoEscape={true}
               textToHighlight={result["Useful Information"]}
             />
+          </div>
+        ) : null}
+        {result["Opening Time"] || result["Closing Time"] ? (
+          <div>
+            <Overlay text="Store timings">
+              <i className="far fa-clock"></i>
+            </Overlay>{" "}
+            {result["Opening Time"] ? `Opens at ${result["Opening Time"]}. ` : null}
+            {result["Closing Time"] ? `Closes at ${result["Closing Time"]}. ` : null}
           </div>
         ) : null}
       </div>

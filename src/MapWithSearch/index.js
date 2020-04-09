@@ -1,4 +1,5 @@
 import React, { useRef } from "react";
+import Alert from "react-bootstrap/Alert";
 import LocationSelectorMap from "../Maps/LocationSelectorMap";
 import HomepageMap from "../Maps/HomepageMap";
 import LocationSearchControl from "./Input";
@@ -9,7 +10,7 @@ import * as api from "../api";
 class MapWithSearch extends React.Component {
   state = {
     ipLocation: undefined,
-    ipAddress: undefined
+    showGeolocationDisabledAlert: true
   };
 
   componentDidMount() {
@@ -19,7 +20,6 @@ class MapWithSearch extends React.Component {
       // response.city - West End
       const [lat, lng] = response.loc.split(",");
       this.setState({
-        ipAddress: response.ip,
         ipLocation: { lat: Number(lat), lng: Number(lng) }
       });
     });
@@ -70,6 +70,38 @@ class MapWithSearch extends React.Component {
     return this.state.ipLocation;
   }
 
+  toggleGeolocationDisabledAlert = () => {
+    this.setState(prevState => {
+      return {
+        showGeolocationDisabledAlert: !prevState.showGeolocationDisabledAlert
+      };
+    });
+  };
+
+  showGeoLocationRelatedAlerts() {
+    if (!this.props.isGeolocationAvailable) {
+      return (
+        <div className="alert alert-danger text-center mb-0">
+          Your browser does not support geolocation.
+        </div>
+      );
+    } else if (!this.props.isGeolocationEnabled) {
+      return (
+        <Alert
+          dismissible
+          key="geolocation-is-not-enabled"
+          className="card geolocation-alert"
+          variant="danger"
+          show={this.state.showGeolocationDisabledAlert}
+          onClose={this.toggleGeolocationDisabledAlert}
+        >
+          Geolocation is not enabled.
+        </Alert>
+      );
+    }
+    return null;
+  }
+
   render() {
     const current = this.getCurrentLocation();
     const positionProp =
@@ -108,15 +140,7 @@ class MapWithSearch extends React.Component {
             centerPosition={this.props.centerPosition}
           />
         )}
-        {!this.props.isGeolocationAvailable ? (
-          <div className="alert alert-danger text-center mb-0">
-            Your browser does not support geolocation.
-          </div>
-        ) : !this.props.isGeolocationEnabled ? (
-          <div className="alert alert-danger text-center mb-0">
-            Geolocation is not enabled.
-          </div>
-        ) : null}
+        {this.showGeoLocationRelatedAlerts()}
       </>
     );
   }

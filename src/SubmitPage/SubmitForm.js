@@ -45,8 +45,8 @@ const emptyData = {
 class SubmitForm extends React.Component {
   state = {
     isLoading: false,
+    isValid: true,
     hasSubmitted: false,
-    ipData: undefined,
     data: { ...emptyData },
     searchFieldValue: ""
   };
@@ -91,43 +91,29 @@ class SubmitForm extends React.Component {
 
   async onSubmit(event) {
     event.preventDefault();
-    this.setState({ isLoading: true });
-    console.log("Logging: ", this.state.data);
-    const data = {
-      ...this.state.data,
-      Timestamp: new Date().toISOString()
-    };
-
-    // Get IP if possible
-    let ipData = this.state.ipData;
-    if (!this.state.ipData) {
-      try {
-        ipData = await api.ip();
-      } catch (e) {
-        // Damn ad-blockers
-      }
+    if (this.canBeSubmitted()) {
+      this.setState({ isLoading: true, isValid: true });
+      console.log("Logging: ", this.state.data);
+      const data = {
+        ...this.state.data,
+        Timestamp: new Date().toISOString()
+      };
+      const response = await api.submit(data);
+      console.log(data);
+      console.log(response);
+      recordFormSubmission();
+      this.setState({ isLoading: false, hasSubmitted: true }, () => {
+        window.scrollTo(0, 0);
+        this.clearForm();
+      });
+    } else {
+      this.setState({ isValid: false, isLoading: false });
     }
-    if (ipData && ipData.ip) {
-      data["User IP"] = ipData.ip;
-    }
-
-    const response = await api.submit(data);
-    console.log(data);
-    console.log(response);
-    recordFormSubmission();
-    this.setState({ isLoading: false, hasSubmitted: true, ipData }, () => {
-      window.scrollTo(0, 0);
-      this.clearForm();
-    });
   }
 
   onChangeInput({ target }, dataKey) {
     this.setState({ data: { ...this.state.data, [dataKey]: target.value } });
   }
-
-  // componentDidUpdate(prevProps, prevState, snapshot) {
-  //   console.log("change", this.state.data, prevState.data);
-  // }
 
   componentDidMount() {
     if (this.props.location.state) {
@@ -135,7 +121,7 @@ class SubmitForm extends React.Component {
       this.setState({
         data: {
           ...this.state.data,
-          ...this.props.location.state.item
+          ...this.props.location.state.item,
         },
         searchFieldValue: this.props.location.state.searchFieldValue
       });
@@ -153,8 +139,12 @@ class SubmitForm extends React.Component {
       // the home page
       return this.props.location.state.item["Store Name"];
     }
-
     return "";
+  }
+
+  canBeSubmitted() {
+    const data = this.state.data;
+    return ((data["Safety Observations"].length) || (data["Useful Information"].length) || (data["Opening Time"].length) || (data["Closing Time"].length));
   }
 
   render() {
@@ -197,9 +187,10 @@ class SubmitForm extends React.Component {
             </Form.Group>
 
             <Form.Group controlId="formBasicServiceType">
-              <Form.Label>Service Type</Form.Label>
+              <Form.Label>Store Category</Form.Label>
               <Form.Control
                 as="select"
+                value={this.state.data['Store Category']}
                 onChange={e => this.onChangeInput(e, "Store Category")}
               >
                 <option>Grocery</option>
@@ -261,9 +252,14 @@ class SubmitForm extends React.Component {
                 value={this.state.data["Useful Information"]}
                 onChange={e => this.onChangeInput(e, "Useful Information")}
                 placeholder="Stock availability, special services, etc."
-                required
               />
             </Form.Group>
+
+            {!this.state.isValid ? (
+              <div className="alert alert-danger text-center">
+                <span>Please enter either Store timings or Useful information or Safety information</span>
+              </div>
+            ) : null}
 
             <ButtonWithLoading
               isLoading={this.state.isLoading}

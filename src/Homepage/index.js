@@ -115,20 +115,23 @@ class Homepage extends React.Component {
 
   formatResults(results) {
     const grouped = Object.values(
-      results.reduce(function (obj, result) {
+      results.reduce((obj, result) => {
         if (!obj.hasOwnProperty(result["Place Id"] || result["Store Name"])) {
           obj[result["Place Id"] || result["Store Name"]] = [];
         }
         obj[result["Place Id"] || result["Store Name"]].push(result);
         return obj;
       }, {})
-    ).map(entries => ({
-      name: entries[0]["Store Name"],
-      placeId: entries[0]["Place Id"],
-      lat: Number(entries[0].Latitude),
-      lng: Number(entries[0].Longitude),
-      entries: entries.sort((a, b) => b.Timestamp - a.Timestamp).reverse()
-    }));
+    ).map(entries => {
+      const sortedEntries = entries.sort((a, b) => b.Timestamp - a.Timestamp).reverse()
+      return {
+        name: entries[0]["Store Name"],
+        placeId: entries[0]["Place Id"],
+        lat: Number(entries[0].Latitude),
+        lng: Number(entries[0].Longitude),
+        entries: sortedEntries
+      }
+    });
     return this.calculateGroupDistance(grouped, this.state.center);
   }
 
@@ -172,6 +175,13 @@ class Homepage extends React.Component {
       ? { pathname: "/update", state }
       : { pathname: "/location" };
   }
+
+  handleStoreFilterQuery = event => {
+    this.setState({
+      searchQuery: event.target.value,
+      selectedLocation: undefined
+    });
+  };
 
   render() {
     let missingBlock = null;
@@ -234,7 +244,7 @@ class Homepage extends React.Component {
               </h6>
               <Form.Control
                 type="text"
-                onChange={e => this.setState({ searchQuery: e.target.value, selectedLocation: undefined })}
+                onChange={this.handleStoreFilterQuery}
                 className="d-inline-block mx-1 results-search-box"
                 value={this.state.searchQuery}
                 placeholder="Filter by name or item"
@@ -249,7 +259,7 @@ class Homepage extends React.Component {
                   onClick={recordAddNewStore}
                 >
                   Add a store
-              </Button>
+                </Button>
               </Link>
             </div>
           </div>

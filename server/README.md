@@ -14,13 +14,11 @@ Deployed on Heroku. https://toilet-paper-app.herokuapp.com/
 
 Some quick notes on the setup.
 
-- Since deployment is from a subdirectory, heroku+git needs to be configured to use that instead. This is the push command for heroku, which would deploy the app. (Run this from the root of the repo)
+- Download Heroku CLI, login, and then set the Heroku remotes.
 
   ```
-  git subtree push --prefix server heroku master
+  heroku git:remote -a toilet-paper-app
   ```
-
-- Due to this subdirectory config, it seems we can't use the Github integration for Heroku. So the deployments happen by running the above command locally.
 
 - Running 1 web dyno for now
 

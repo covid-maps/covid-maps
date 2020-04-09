@@ -2,7 +2,6 @@ import React, { Component, createContext } from "react";
 import PropTypes from "prop-types";
 import { Router, Switch, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
-import { Dropdown } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Homepage from "./Homepage";
@@ -12,6 +11,7 @@ import LocationSelectionPage from "./LocationSelectionPage";
 import { ScrollToTop } from "./utils";
 import Navbar from "react-bootstrap/Navbar";
 import PWAInstallButton from "./PWAButton";
+import LanguageSelector from "./LanguageSelector";
 import ReactGA from "react-ga";
 import logo from "./Logo.svg";
 import { AVAILABLE_LANGUAGES } from "./constants";
@@ -28,16 +28,7 @@ if (process.env.NODE_ENV !== "development") {
   });
 }
 
-const IconToggle = React.forwardRef(({ onClick }, ref) => (
-  <i
-    ref={ref}
-    onClick={onClick}
-    tabIndex={0}
-    className="far fa-language language-icon"
-  />
-));
-
-const AppNavbar = ({ setLanguage, currentLanguage }) => {
+const AppNavbar = () => {
   return (
     <>
       <Navbar bg="light" variant="light" fixed="top">
@@ -51,24 +42,7 @@ const AppNavbar = ({ setLanguage, currentLanguage }) => {
             />{" "}
           </Link>
         </Navbar.Brand>
-        <Dropdown className="dropdown--translation">
-          <Dropdown.Toggle as={IconToggle} />
-          <Dropdown.Menu>
-            {Object.keys(AVAILABLE_LANGUAGES).map(key => {
-              const langValue = AVAILABLE_LANGUAGES[key];
-              return (
-                <Dropdown.Item
-                  key={langValue}
-                  active={currentLanguage === langValue}
-                  onClick={() => setLanguage(langValue)}
-                >
-                  {langValue}
-                </Dropdown.Item>
-              );
-            })}
-          </Dropdown.Menu>
-        </Dropdown>
-        {/* <PWAInstallButton /> */}
+        <PWAInstallButton />
       </Navbar>
     </>
   );
@@ -118,14 +92,13 @@ class App extends Component {
         <AppContext.Provider
           value={{
             translations,
+            currentLanguage: this.state.language,
+            setLanguage: this.setLanguage,
           }}
         >
           <div className="App">
             <ScrollToTop />
-            <AppNavbar
-              currentLanguage={this.state.language}
-              setLanguage={this.setLanguage}
-            />
+            <AppNavbar />
             <div className="page">
               <Switch>
                 <Route path="/update" component={SubmitPage} />
@@ -139,6 +112,7 @@ class App extends Component {
                 <Link to="/">{translations.home}</Link> ·{" "}
                 <Link to="/location">{translations.add_store}</Link> ·{" "}
                 <Link to="/about">{translations.about}</Link>
+                <LanguageSelector />
               </div>
             </footer>
           </div>

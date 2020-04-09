@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -10,8 +11,13 @@ import { getAddressComponent } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { recordSearchCompleted } from "../../gaEvents";
+import { withGlobalContext } from "../../App";
 
 class LocationSearchInput extends React.Component {
+  static propTypes = {
+    translations: PropTypes.object
+  };
+
   constructor(props) {
     super(props);
     this.state = { address: props.value };
@@ -73,9 +79,9 @@ class LocationSearchInput extends React.Component {
   render() {
     const location = this.props.currentLocation
       ? new window.google.maps.LatLng(
-        this.props.currentLocation.lat,
-        this.props.currentLocation.lng
-      )
+          this.props.currentLocation.lat,
+          this.props.currentLocation.lng
+        )
       : undefined;
     const options = location ? { location, radius: 200000 } : undefined;
     return (
@@ -91,7 +97,8 @@ class LocationSearchInput extends React.Component {
             <InputGroup className="location-search-group">
               <Form.Control
                 {...getInputProps({
-                  placeholder: "Search by store, address or landmark",
+                  placeholder: this.props.translations
+                    .location_search_placeholder,
                   defaultValue: this.props.defaultValue,
                   className: "location-search-input"
                 })}
@@ -143,4 +150,4 @@ class LocationSearchControl extends React.Component {
   }
 }
 
-export default LocationSearchControl;
+export default withGlobalContext(LocationSearchControl);

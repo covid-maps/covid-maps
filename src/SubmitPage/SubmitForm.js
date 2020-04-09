@@ -1,5 +1,6 @@
 import React from "react";
 import Form from "react-bootstrap/Form";
+import PropTypes from "prop-types";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
@@ -8,6 +9,7 @@ import * as api from "../api";
 import { getFirstComma } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import LocationSelector from "../LocationSelector";
+import { withGlobalContext } from "../App";
 
 function ButtonWithLoading(props) {
   return props.isLoading ? (
@@ -22,8 +24,8 @@ function ButtonWithLoading(props) {
       Submitting...
     </Button>
   ) : (
-      <Button {...props} />
-    );
+    <Button {...props} />
+  );
 }
 
 const emptyData = {
@@ -39,16 +41,20 @@ const emptyData = {
   Address: "",
   "Opening Time": "",
   "Closing Time": "",
-  Country: ""
+  Country: "",
 };
 
 class SubmitForm extends React.Component {
+  static propTypes = {
+    translations: PropTypes.object.isRequired,
+  };
+
   state = {
     isLoading: false,
     isValid: true,
     hasSubmitted: false,
     data: { ...emptyData },
-    searchFieldValue: ""
+    searchFieldValue: "",
   };
 
   onLocationSearchCompleted = ({
@@ -59,7 +65,7 @@ class SubmitForm extends React.Component {
     locality,
     place_id,
     types,
-    country
+    country,
   }) => {
     // This checks for latlng and name, so that
     // we don't inadvertently overwrite the state in the case
@@ -76,8 +82,8 @@ class SubmitForm extends React.Component {
           Locality: locality,
           "Place Id": place_id,
           Address: address,
-          Country: country
-        }
+          Country: country,
+        },
       });
     }
   };
@@ -85,7 +91,7 @@ class SubmitForm extends React.Component {
   clearForm() {
     this.setState({
       data: { ...emptyData },
-      searchFieldValue: ""
+      searchFieldValue: "",
     });
   }
 
@@ -96,7 +102,7 @@ class SubmitForm extends React.Component {
       console.log("Logging: ", this.state.data);
       const data = {
         ...this.state.data,
-        Timestamp: new Date().toISOString()
+        Timestamp: new Date().toISOString(),
       };
       const response = await api.submit(data);
       console.log(data);
@@ -123,7 +129,7 @@ class SubmitForm extends React.Component {
           ...this.state.data,
           ...this.props.location.state.item,
         },
-        searchFieldValue: this.props.location.state.searchFieldValue
+        searchFieldValue: this.props.location.state.searchFieldValue,
       });
     }
   }
@@ -144,10 +150,17 @@ class SubmitForm extends React.Component {
 
   canBeSubmitted() {
     const data = this.state.data;
-    return ((data["Safety Observations"].length) || (data["Useful Information"].length) || (data["Opening Time"].length) || (data["Closing Time"].length));
+    return (
+      data["Safety Observations"].length ||
+      data["Useful Information"].length ||
+      data["Opening Time"].length ||
+      data["Closing Time"].length
+    );
   }
 
   render() {
+    const { translations } = this.props;
+
     return (
       <>
         <LocationSelector
@@ -157,9 +170,9 @@ class SubmitForm extends React.Component {
           position={
             this.state.data.Latitude
               ? {
-                lat: parseFloat(this.state.data.Latitude),
-                lng: parseFloat(this.state.data.Longitude)
-              }
+                  lat: parseFloat(this.state.data.Latitude),
+                  lng: parseFloat(this.state.data.Longitude),
+                }
               : undefined
           }
         />
@@ -173,32 +186,32 @@ class SubmitForm extends React.Component {
         <Form onSubmit={e => this.onSubmit(e)}>
           <div className="container p-3">
             <h6 className="text-uppercase font-weight-bold mb-3">
-              Add or Update Store
+              {translations.add_update_store}
             </h6>
             <Form.Group controlId="formBasicStore">
-              <Form.Label className="">Store Name (required)</Form.Label>
+              <Form.Label className="">{translations.store_name}</Form.Label>
               <Form.Control
                 type="text"
                 onChange={e => this.onChangeInput(e, "Store Name")}
                 value={this.state.data["Store Name"]}
-                placeholder="e.g. Target or Nature's Basket"
+                placeholder={translations.store_name_placeholder}
                 required
               />
             </Form.Group>
 
             <Form.Group controlId="formBasicServiceType">
-              <Form.Label>Store Category</Form.Label>
+              <Form.Label>{translations.store_category}</Form.Label>
               <Form.Control
                 as="select"
-                value={this.state.data['Store Category']}
+                value={this.state.data["Store Category"]}
                 onChange={e => this.onChangeInput(e, "Store Category")}
               >
-                <option>Grocery</option>
-                <option>Restaurant</option>
-                <option>ATM</option>
-                <option>Clinic</option>
-                <option>Pharmacy</option>
-                <option>Other</option>
+                <option>{translations.grocery}</option>
+                <option>{translations.restaurant}</option>
+                <option>{translations.atm}</option>
+                <option>{translations.clinic}</option>
+                <option>{translations.pharmacy}</option>
+                <option>{translations.other}</option>
               </Form.Control>
             </Form.Group>
 
@@ -206,7 +219,7 @@ class SubmitForm extends React.Component {
               <Row>
                 <Col>
                   <Form.Group controlId="formBasicOpenTimings">
-                    <Form.Label>Opening Time</Form.Label>
+                    <Form.Label>{translations.opening_time}</Form.Label>
                     <Form.Control
                       size="sm"
                       type="time"
@@ -219,7 +232,7 @@ class SubmitForm extends React.Component {
                 </Col>
                 <Col>
                   <Form.Group controlId="formBasicCloseTimings">
-                    <Form.Label>Closing Time</Form.Label>
+                    <Form.Label>{translations.closing_time}</Form.Label>
                     <Form.Control
                       size="sm"
                       type="time"
@@ -234,30 +247,30 @@ class SubmitForm extends React.Component {
             }
 
             <Form.Group controlId="formBasicCrowdDetails">
-              <Form.Label>Safety Observations</Form.Label>
+              <Form.Label>{translations.safety_observations}</Form.Label>
               <Form.Control
                 as="textarea"
                 rows="2"
                 value={this.state.data["Safety Observations"]}
                 onChange={e => this.onChangeInput(e, "Safety Observations")}
-                placeholder="Queues, crowd levels &amp; safety precautions"
+                placeholder={translations.safety_placeholder}
               />
             </Form.Group>
 
             <Form.Group controlId="formBasicComments">
-              <Form.Label>Useful Information</Form.Label>
+              <Form.Label>{translations.useful_information}</Form.Label>
               <Form.Control
                 as="textarea"
                 rows="3"
                 value={this.state.data["Useful Information"]}
                 onChange={e => this.onChangeInput(e, "Useful Information")}
-                placeholder="Stock availability, special services, etc."
+                placeholder={translations.useful_placeholder}
               />
             </Form.Group>
 
             {!this.state.isValid ? (
               <div className="alert alert-danger text-center">
-                <span>Please enter either Store timings or Useful information or Safety information</span>
+                <span>{translations.insufficient_form_data_error}</span>
               </div>
             ) : null}
 
@@ -267,7 +280,7 @@ class SubmitForm extends React.Component {
               type="submit"
               className="btn-block text-uppercase font-weight-bold"
             >
-              Submit update
+              {translations.submit_update}
             </ButtonWithLoading>
           </div>
         </Form>
@@ -276,4 +289,4 @@ class SubmitForm extends React.Component {
   }
 }
 
-export default SubmitForm;
+export default withGlobalContext(SubmitForm);

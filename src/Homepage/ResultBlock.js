@@ -1,8 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
 import { recordUpdateStore } from "../gaEvents";
 import Highlighter from "react-highlight-words";
+import { withGlobalContext } from "../App";
 
 function constructDirectionsUrl({ name, placeId, lat, lng }) {
   if (placeId) {
@@ -17,16 +19,22 @@ function prepareStoreForUpdate(entry) {
     ...entry,
     "Safety Observations": "",
     "Useful Information": "",
-    "Store Category": entry['Store Category'] && entry['Store Category'].length ?
-      entry['Store Category'][0] : ""
+    "Store Category":
+      entry["Store Category"] && entry["Store Category"].length
+        ? entry["Store Category"][0]
+        : "",
   };
 }
 
-export default class ResultBlock extends React.Component {
+class ResultBlock extends React.Component {
+  static propTypes = {
+    translations: PropTypes.object.isRequired,
+  };
+
   onClick() {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
     this.props.onClick && this.props.onClick(this.props.result);
   }
@@ -37,7 +45,9 @@ export default class ResultBlock extends React.Component {
     return (
       <div
         onClick={() => this.onClick()}
-        className={`card my-1 card-result-block ${this.props.isSelected ? "card-result-block-selected" : ""}`}
+        className={`card my-1 card-result-block ${
+          this.props.isSelected ? "card-result-block-selected" : ""
+        }`}
       >
         <div className="card-body p-3">
           <a
@@ -49,11 +59,14 @@ export default class ResultBlock extends React.Component {
             <i className="far fa-directions"></i>
           </a>
           <Link
-            to={{ pathname: "/update", state: { item: prepareStoreForUpdate(entry) } }}
+            to={{
+              pathname: "/update",
+              state: { item: prepareStoreForUpdate(entry) },
+            }}
             className="float-right btn btn-sm btn-outline-success text-uppercase"
             onClick={recordUpdateStore}
           >
-            Update
+            {this.props.translations.update}
           </Link>
           <h5 className="card-title m-0 p-0 d-inline-block">
             <Highlighter
@@ -63,10 +76,17 @@ export default class ResultBlock extends React.Component {
               textToHighlight={result.name}
             />
           </h5>
-          {(result.openTime && result.closeTime) ? <span className="mx-2">{`Hours: ${result.openTime} to ${result.closeTime}`}</span> : null}
-          <ResultEntry highlightedText={this.props.highlightedText} entries={result.entries} />
+          {result.openTime && result.closeTime ? (
+            <span className="mx-2">{`Hours: ${result.openTime} to ${result.closeTime}`}</span>
+          ) : null}
+          <ResultEntry
+            highlightedText={this.props.highlightedText}
+            entries={result.entries}
+          />
         </div>
       </div>
     );
   }
 }
+
+export default withGlobalContext(ResultBlock);

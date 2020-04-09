@@ -52,6 +52,12 @@ function AboutPage() {
           </Button>
         </NewTabLink>
       </p>
+      <h4 className="mt-4 text-uppercase mb-1">Privacy Policy</h4>
+      <p className="text-black-60">
+        We collect your IP address when you update information on a store. This
+        helps us identify the authenticity of the submission. No other personal
+        information is collected.
+      </p>
       <p>
         <NewTabLink href="mailto:helpcovidmaps@gmail.com">
           <Button variant="info">
@@ -65,12 +71,6 @@ function AboutPage() {
             <i className="fab fa-instagram" /> Follow us on Instagram
           </Button>
         </NewTabLink>
-      </p>
-      <h4 className="mt-4 text-uppercase mb-1">Privacy Policy</h4>
-      <p className="text-black-60">
-        We collect your IP address when you update information on a store. This
-        helps us identify the authenticity of the submission. No other personal
-        information is collected.
       </p>
     </div>
   );

@@ -46,7 +46,7 @@ const emptyData = {
 
 class SubmitForm extends React.Component {
   static propTypes = {
-    translations: PropTypes.object,
+    translations: PropTypes.object.isRequired,
   };
 
   state = {

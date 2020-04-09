@@ -27,4 +27,6 @@ export default {
   about: "जानिए हमारे बारे में",
   insufficient_form_data_error:
     "कृपया स्टोर टाइमिंग या उपयोगी जानकारी या सुरक्षा जानकारी दर्ज करें",
+  set_store_location: "सूची में जोड़ने के लिए स्टोर स्थान सेट करें",
+  select_location: "दुकान का स्थान चुनें",
 };

@@ -28,7 +28,7 @@ function prepareStoreForUpdate(entry) {
 
 class ResultBlock extends React.Component {
   static propTypes = {
-    translations: PropTypes.object,
+    translations: PropTypes.object.isRequired,
   };
 
   onClick() {

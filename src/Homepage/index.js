@@ -47,7 +47,7 @@ function NoOfUsersAlert(props) {
 
 class Homepage extends React.Component {
   static propTypes = {
-    translations: PropTypes.object,
+    translations: PropTypes.object.isRequired,
   };
 
   state = {

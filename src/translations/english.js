@@ -27,4 +27,6 @@ export default {
   about: "About",
   insufficient_form_data_error:
     "Please enter either Store timings or Useful information or Safety information",
+  set_store_location: "Set store location to add",
+  select_location: "Select location",
 };

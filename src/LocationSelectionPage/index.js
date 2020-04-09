@@ -1,8 +1,10 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import { getFirstComma } from "../utils";
 import LocationSelector from "../LocationSelector";
+import { withGlobalContext } from "../App";
 
 const emptyData = {
   "Store Name": "",
@@ -15,14 +17,18 @@ const emptyData = {
   Locality: "",
   "Place Id": "",
   Address: "",
-  Country: ""
+  Country: "",
 };
 
 class LocationSelectionPage extends React.Component {
+  static propTypes = {
+    translations: PropTypes.object.isRequired,
+  };
+
   state = {
     currentLocationCaptured: false,
     data: { ...emptyData },
-    searchFieldValue: ""
+    searchFieldValue: "",
   };
 
   onLocationSearchCompleted = result => {
@@ -48,8 +54,8 @@ class LocationSelectionPage extends React.Component {
           Locality: locality,
           "Place Id": place_id,
           Address: address,
-          Country: country
-        }
+          Country: country,
+        },
       });
     }
   };
@@ -76,10 +82,11 @@ class LocationSelectionPage extends React.Component {
   }
 
   render() {
+    const { translations } = this.props;
     return (
       <>
         <div className="p-2 text-uppercase font-weight-bold">
-          <h5 className="m-0">Set store location to add</h5>
+          <h5 className="m-0">{translations.set_store_location}</h5>
         </div>
         <LocationSelector
           activateInput
@@ -89,20 +96,24 @@ class LocationSelectionPage extends React.Component {
           position={
             this.state.data.Latitude
               ? {
-                lat: parseFloat(this.state.data.Latitude),
-                lng: parseFloat(this.state.data.Longitude)
-              }
+                  lat: parseFloat(this.state.data.Latitude),
+                  lng: parseFloat(this.state.data.Longitude),
+                }
               : undefined
           }
         />
         <div className="my-3 d-flex justify-content-center">
-          <Link to={{ pathname: "/update", state: { item: this.state.data, searchFieldValue: this.state.searchFieldValue } }}>
-            <Button
-              variant="outline-primary"
-              className="text-uppercase"
-            // disabled={!this.hasLocation()}
-            >
-              Select location
+          <Link
+            to={{
+              pathname: "/update",
+              state: {
+                item: this.state.data,
+                searchFieldValue: this.state.searchFieldValue,
+              },
+            }}
+          >
+            <Button variant="outline-primary" className="text-uppercase">
+              {translations.select_location}
             </Button>
           </Link>
         </div>
@@ -111,4 +122,4 @@ class LocationSelectionPage extends React.Component {
   }
 }
 
-export default LocationSelectionPage;
+export default withGlobalContext(LocationSelectionPage);

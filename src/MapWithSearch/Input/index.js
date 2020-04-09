@@ -5,17 +5,21 @@ import Button from "react-bootstrap/Button";
 import InputGroup from "react-bootstrap/InputGroup";
 import PlacesAutocomplete, {
   geocodeByAddress,
-  getLatLng
+  getLatLng,
 } from "react-places-autocomplete";
 import { getAddressComponent } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { recordSearchCompleted } from "../../gaEvents";
 import { withGlobalContext } from "../../App";
+import { withLocalStorage } from "../../withStorage";
 
 class LocationSearchInput extends React.Component {
   static propTypes = {
-    translations: PropTypes.object
+    translations: PropTypes.object.isRequired,
+    getItemFromStorage: PropTypes.func.isRequired,
+    setItemToStorage: PropTypes.func.isRequired,
+    removeItemFromStorage: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -29,9 +33,7 @@ class LocationSearchInput extends React.Component {
   };
 
   persistLastSelectedAddress = address => {
-    if (window.localStorage) {
-      localStorage.setItem("lastSelecedAddress", address);
-    }
+    this.props.setItemToStorage("lastSelecedAddress", address);
   };
 
   handleSelect = address => {
@@ -60,7 +62,7 @@ class LocationSearchInput extends React.Component {
             result.address_components,
             "country",
             true
-          )
+          ),
         });
       })
       .catch(error => console.error("Error", error));
@@ -83,11 +85,9 @@ class LocationSearchInput extends React.Component {
   }
 
   populateLastSelectedAddress = () => {
-    if (window.localStorage) {
-      const address = localStorage.getItem("lastSelecedAddress");
-      if (address) {
-        this.handleSelect(address);
-      }
+    const address = this.props.getItemFromStorage("lastSelecedAddress");
+    if (address) {
+      this.handleSelect(address);
     }
   };
 
@@ -96,9 +96,7 @@ class LocationSearchInput extends React.Component {
   }
 
   removeLastSelectedAddress = () => {
-    if (window.localStorage) {
-      localStorage.removeItem("lastSelecedAddress");
-    }
+    this.props.removeItemFromStorage("lastSelecedAddress");
   };
 
   render() {
@@ -125,7 +123,7 @@ class LocationSearchInput extends React.Component {
                   placeholder: this.props.translations
                     .location_search_placeholder,
                   defaultValue: this.props.defaultValue,
-                  className: "location-search-input"
+                  className: "location-search-input",
                 })}
                 ref={this.textInput}
               />
@@ -154,7 +152,7 @@ class LocationSearchInput extends React.Component {
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
-                      className
+                      className,
                     })}
                   >
                     <span>{suggestion.description}</span>
@@ -175,4 +173,4 @@ class LocationSearchControl extends React.Component {
   }
 }
 
-export default withGlobalContext(LocationSearchControl);
+export default withLocalStorage(withGlobalContext(LocationSearchControl));

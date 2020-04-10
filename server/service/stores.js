@@ -1,5 +1,8 @@
 var models  = require('../models');
 
+const DEFAULT_DISTANCE_RANGE = 0.1; //approx 11kms - https://stackoverflow.com/questions/8464666/distance-between-2-points-in-postgis-in-srid-4326-in-metres
+const MAX_DISTANCE_RADIUS_METERS = 200000
+
 async function addStoreData(data, forceUpdate = false){
     const store = await addInfoToDB(data, forceUpdate);
     return mapDBRow(store)[0];
@@ -12,6 +15,45 @@ async function findAllStores(){
         }]
     });
     return stores.flatMap(store => mapDBRow(store));
+}
+
+async function findNearbyStores(params){
+    if(!params.lat || !params.lng){
+        return [];
+    }
+    return await models.StoreInfo.findAll({
+        include: [{
+                model : models.StoreUpdates
+            }],
+        where: models.sequelize.where(
+            models.sequelize.fn(
+                "ST_DWithin",
+                models.sequelize.col('coordinate'),
+                models.sequelize.fn("ST_Transform", `SRID=4326;POINT(${params.lng} ${params.lat})`, 4326),
+                getDistanceRange(params)
+            ),
+            true
+        )
+    })
+}
+
+function getDistanceRange(params){
+    if(!params.radius){
+        return DEFAULT_DISTANCE_RANGE
+    }
+    if(params.radius > MAX_DISTANCE_RADIUS_METERS){
+        return toRadialDistance(MAX_DISTANCE_RADIUS_METERS)
+    }else{
+        return toRadialDistance(params.radius)
+    }
+}
+
+/**
+ *
+ * @param mt Distance in meters
+ */
+function toRadialDistance(mt){
+    return (0.001/111) * mt
 }
 
 function mapDBRow(data){
@@ -133,5 +175,6 @@ async function updateExistingStore(store, data, forceDateUpdate){
 
 module.exports =  {
     findAllStores,
-    addStoreData
+    addStoreData,
+    findNearbyStores
 };

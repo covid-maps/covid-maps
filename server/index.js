@@ -119,4 +119,13 @@ app.get("/v1/query", async (req, res) => {
   res.send(await stores.findAllStores());
 });
 
+app.get("/v2/query", async (req, res) => {
+  let query = {
+    lat: req.query.lat,
+    lng: req.query.lng,
+    radius: req.query.radius,
+    page: req.query.page}
+  res.send(await stores.findNearbyStores(query));
+});
+
 app.listen(process.env.PORT || 5000);

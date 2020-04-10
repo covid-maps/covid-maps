@@ -31,9 +31,13 @@ class Map extends Component {
   };
 
   mapCenter = () => {
-    return (
-      this.props.centerPosition || this.props.currentLocation || defaultCenter
-    );
+    if (this.props.centerPosition && this.props.centerPosition.lat) {
+      return this.props.centerPosition;
+    }
+    if (this.props.currentLocation && this.props.currentLocation.lat) {
+      return this.props.currentLocation;
+    }
+    return defaultCenter;
   };
 
   onMapLoaded = map => {
@@ -115,7 +119,6 @@ class Map extends Component {
     return (
       <GoogleMap
         ref={this.refMap}
-        id="example-map"
         options={mapOptions}
         mapContainerStyle={{
           height: "45vh",
@@ -125,7 +128,9 @@ class Map extends Component {
         zoom={13}
         center={this.mapCenter()}
       >
-        <Marker position={this.props.currentLocation} icon={dotIcon} />
+        {this.props.currentLocation && this.props.currentLocation.lat ?
+          <Marker position={this.props.currentLocation} icon={dotIcon} />
+          : null}
 
         {this.props.locations &&
           this.props.locations.map(latlng => {

@@ -8,15 +8,13 @@ class HomepageMapWithSearch extends React.Component {
       <LocationSearchControl
         onSearchSuccess={this.props.onSearchSuccess}
         value={this.props.value}
-        // TODO: fix current
-        currentLocation={this.props.centerPosition}
-        onGeolocation={this.props.getGeolocation}
+        currentLocation={this.props.currentLocation}
+        onGeolocationClicked={this.props.onGeolocationClicked}
         activateInput={this.props.activateInput}
       />
       <HomepageMap
         style={this.props.style}
-        // TODO: fix current
-        currentLocation={this.props.centerPosition}
+        currentLocation={this.props.currentLocation}
         locations={this.props.locations}
         selectedLocation={this.props.selectedLocation}
         onMarkerSelected={this.props.onMarkerSelected}

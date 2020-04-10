@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Spinner from 'react-bootstrap/Spinner';
 import InputGroup from "react-bootstrap/InputGroup";
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -13,15 +14,52 @@ import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { recordSearchCompleted } from "../../gaEvents";
 import { withGlobalContext } from "../../App";
 
+function GeolocationButton({ isLoading, onClick }) {
+  return <Button
+    onClick={onClick}
+    variant="outline-secondary"
+  >
+    {isLoading ? <Spinner animation="border" size="sm" /> :
+      <FontAwesomeIcon icon={faCrosshairs} />
+    }
+  </Button>
+}
+
 class LocationSearchInput extends React.Component {
   static propTypes = {
-    translations: PropTypes.object
+    translations: PropTypes.object,
+    setGeolocation: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
-    this.state = { address: props.value };
+    this.state = {
+      address: props.value,
+      isGeolocationLoading: false,
+    };
     this.textInput = React.createRef();
+  }
+
+  getGeolocation = () => {
+    this.setState({
+      isGeolocationLoading: true,
+      address: ""
+    });
+    if (this.props.onGeolocationClicked) {
+      this.props.onGeolocationClicked();
+    }
+    if (!navigator.geolocation) {
+      // TODO: geolocation error handling
+      this.setState({ isGeolocationLoading: false });
+    } else {
+      navigator.geolocation.getCurrentPosition(position => {
+        this.props.setGeolocation(position.coords)
+        this.setState({ isGeolocationLoading: false });
+      }, error => {
+        console.log('error', error.message)
+        this.setState({ isGeolocationLoading: false });
+      })
+    }
   }
 
   handleChange = address => {
@@ -79,9 +117,9 @@ class LocationSearchInput extends React.Component {
   render() {
     const location = this.props.currentLocation
       ? new window.google.maps.LatLng(
-          this.props.currentLocation.lat,
-          this.props.currentLocation.lng
-        )
+        this.props.currentLocation.lat,
+        this.props.currentLocation.lng
+      )
       : undefined;
     const options = location ? { location, radius: 200000 } : undefined;
     return (
@@ -105,12 +143,10 @@ class LocationSearchInput extends React.Component {
                 ref={this.textInput}
               />
               <InputGroup.Append>
-                <Button
-                  onClick={this.props.onGeolocation}
-                  variant="outline-secondary"
-                >
-                  <FontAwesomeIcon icon={faCrosshairs} />
-                </Button>
+                <GeolocationButton
+                  onClick={this.getGeolocation}
+                  isLoading={this.state.isGeolocationLoading}
+                />
                 <Button
                   onClick={e => this.clearInput(e)}
                   variant="outline-secondary"

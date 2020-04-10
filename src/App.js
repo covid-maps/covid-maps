@@ -88,9 +88,9 @@ class App extends Component {
     };
   };
 
-  setGeolocation = (coords) => {
+  setGeolocation = (location) => {
     this.setState({
-      geoLocation: { lat: coords.latitude, lng: coords.longitude }
+      geoLocation: location
     })
   }
 

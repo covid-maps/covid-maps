@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 import { getFirstComma } from "../utils";
 import LocationSelector from "../LocationSelector";
 import { withGlobalContext } from "../App";
@@ -30,6 +31,7 @@ class LocationSelectionPage extends React.Component {
   state = {
     data: { ...emptyData },
     searchFieldValue: "",
+    isLocationSelected: false
   };
 
   onLocationSearchCompleted = result => {
@@ -46,6 +48,7 @@ class LocationSelectionPage extends React.Component {
     if ((latLng && latLng.lat) || name) {
       this.setState({
         searchFieldValue: address,
+        isLocationSelected: true,
         data: {
           ...this.state.data,
           "Store Name": getFirstComma(name),
@@ -85,23 +88,18 @@ class LocationSelectionPage extends React.Component {
   render() {
     const { translations } = this.props;
     return (
-      <>
+      <div className="mb-5">
         <div className="p-2 text-uppercase font-weight-bold">
-          <h5 className="m-0">{translations.set_store_location}</h5>
+          <h5 className="m-0 text-center">{translations.set_store_location}</h5>
         </div>
         <LocationSelector
           activateInput
           onSearchSuccess={this.onLocationSearchCompleted}
           searchValue={this.getSearchValue()}
-          currentLocation={this.props.geoLocation || this.props.ipLocation}
-          onGeolocationClicked={() => {
-            this.setState({
-              data: { ...emptyData },
-              searchFieldValue: ""
-            })
-          }}
+          ipLocation={this.props.ipLocation}
+          geoLocation={this.props.geoLocation}
           height={"50vh"}
-          position={
+          markerPosition={
             this.state.data.Latitude
               ? {
                 lat: parseFloat(this.state.data.Latitude),
@@ -110,22 +108,30 @@ class LocationSelectionPage extends React.Component {
               : undefined
           }
         />
-        <div className="my-3 d-flex justify-content-center">
-          <Link
-            to={{
-              pathname: "/update",
-              state: {
-                item: this.state.data,
-                searchFieldValue: this.state.searchFieldValue,
-              },
-            }}
-          >
-            <Button variant="outline-success" className="text-uppercase">
-              {translations.select_location}
-            </Button>
-          </Link>
+        <div className="my-3 text-center">
+          <div className="my-3">
+            {!this.state.isLocationSelected ?
+              <Alert variant='warning'>
+                {translations.select_location_alert}
+              </Alert> : null}
+          </div>
+          <div>
+            <Link
+              to={{
+                pathname: "/update",
+                state: {
+                  item: this.state.data,
+                  searchFieldValue: this.state.searchFieldValue,
+                },
+              }}
+            >
+              <Button variant="success" className="text-uppercase" disabled={!this.state.isLocationSelected}>
+                {translations.select_location}
+              </Button>
+            </Link>
+          </div>
         </div>
-      </>
+      </div>
     );
   }
 }

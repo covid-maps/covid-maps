@@ -9,7 +9,7 @@ class HomepageMapWithSearch extends React.Component {
         onSearchSuccess={this.props.onSearchSuccess}
         value={this.props.value}
         currentLocation={this.props.currentLocation}
-        onGeolocationClicked={this.props.onGeolocationClicked}
+        onGeolocationFound={this.props.onGeolocationFound}
         activateInput={this.props.activateInput}
       />
       <HomepageMap

@@ -9,12 +9,12 @@ class Map extends Component {
   map = undefined;
 
   state = {
-    markerPosition: this.props.position,
+    markerPosition: this.props.markerPosition,
     isLoaded: false
   };
 
   mapCenter = () => {
-    return this.props.position || this.props.currentLocation || defaultCenter;
+    return this.props.markerPosition || this.props.geoLocation || this.props.ipLocation || defaultCenter;
   };
 
   onMapLoaded = map => {
@@ -46,9 +46,9 @@ class Map extends Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (!isSameLocation(this.props.position, prevProps.position)) {
-      this.setState({ markerPosition: this.props.position });
-      this.map && this.map.panTo(this.props.position);
+    if (!isSameLocation(this.props.markerPosition, prevProps.markerPosition)) {
+      this.setState({ markerPosition: this.props.markerPosition });
+      this.map && this.map.panTo(this.props.markerPosition);
     }
   }
 
@@ -66,8 +66,8 @@ class Map extends Component {
         onBoundsChanged={this.onBoundsChanged}
         onDragEnd={this.onDragEnd}
       >
-        {this.props.currentLocation ?
-          <Marker position={this.props.currentLocation} icon={dotIcon} />
+        {this.props.geoLocation ?
+          <Marker position={this.props.geoLocation} icon={dotIcon} />
           : null}
         {this.state.markerPosition ?
           <Marker

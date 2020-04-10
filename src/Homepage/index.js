@@ -166,7 +166,7 @@ class Homepage extends React.Component {
     });
   };
 
-  onGeolocationClicked = () => {
+  onGeolocationFound = () => {
     // Clear search result and refresh distances
     this.setState({
       searchResult: undefined,
@@ -217,7 +217,7 @@ class Homepage extends React.Component {
               });
             }
           }}
-          onGeolocationClicked={this.onGeolocationClicked}
+          onGeolocationFound={this.onGeolocationFound}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
           currentLocation={this.props.geoLocation || this.props.ipLocation}

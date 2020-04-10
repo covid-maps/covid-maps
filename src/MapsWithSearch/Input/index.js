@@ -45,16 +45,20 @@ class LocationSearchInput extends React.Component {
       isGeolocationLoading: true,
       address: ""
     });
-    if (this.props.onGeolocationClicked) {
-      this.props.onGeolocationClicked();
-    }
     if (!navigator.geolocation) {
       // TODO: geolocation error handling
       this.setState({ isGeolocationLoading: false });
     } else {
       navigator.geolocation.getCurrentPosition(position => {
-        this.props.setGeolocation(position.coords)
+        const location = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        }
+        this.props.setGeolocation(location)
         this.setState({ isGeolocationLoading: false });
+        if (this.props.onGeolocationFound) {
+          this.props.onGeolocationFound(location);
+        }
       }, error => {
         console.log('error', error.message)
         this.setState({ isGeolocationLoading: false });

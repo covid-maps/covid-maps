@@ -79,9 +79,9 @@ class LocationSearchInput extends React.Component {
   render() {
     const location = this.props.currentLocation
       ? new window.google.maps.LatLng(
-          this.props.currentLocation.lat,
-          this.props.currentLocation.lng
-        )
+        this.props.currentLocation.lat,
+        this.props.currentLocation.lng
+      )
       : undefined;
     const options = location ? { location, radius: 200000 } : undefined;
     return (
@@ -90,7 +90,7 @@ class LocationSearchInput extends React.Component {
         onChange={this.handleChange}
         onSelect={this.handleSelect}
         searchOptions={options}
-        debounce={500}
+        debounce={750}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>

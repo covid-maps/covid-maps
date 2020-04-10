@@ -6,14 +6,13 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
-import { getFirstComma } from "../utils";
+import { isMobile } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
-import LocationSelector from "../LocationSelector";
 import { withGlobalContext } from "../App";
 
 function ButtonWithLoading(props) {
   return props.isLoading ? (
-    <Button variant="success" disabled>
+    <Button {...props} disabled>
       <Spinner
         as="span"
         animation="border"
@@ -24,8 +23,18 @@ function ButtonWithLoading(props) {
       Submitting...
     </Button>
   ) : (
-    <Button {...props} />
-  );
+      <Button {...props} />
+    );
+}
+
+function MapImage({ location }) {
+  const size = isMobile() ? `400x250` : `600x350`;
+  return location ?
+    <img
+      style={{ maxWidth: "100%" }}
+      alt="Location snapshot"
+      src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&markers=${location.lat},${location.lng}&zoom=14&size=${size}&key=AIzaSyB9hwI7b4677POloj5DpmDXaliqU5Dp8sA`} />
+    : null;
 }
 
 const emptyData = {
@@ -54,44 +63,11 @@ class SubmitForm extends React.Component {
     isValid: true,
     hasSubmitted: false,
     data: { ...emptyData },
-    searchFieldValue: "",
-  };
-
-  onLocationSearchCompleted = ({
-    latLng,
-    name,
-    address,
-    city,
-    locality,
-    place_id,
-    types,
-    country,
-  }) => {
-    // This checks for latlng and name, so that
-    // we don't inadvertently overwrite the state in the case
-    // of a current location update in onSuccess.
-    if (latLng && latLng.lat && (name || address)) {
-      this.setState({
-        searchFieldValue: address,
-        data: {
-          ...this.state.data,
-          "Store Name": getFirstComma(name),
-          Latitude: latLng.lat,
-          Longitude: latLng.lng,
-          City: city,
-          Locality: locality,
-          "Place Id": place_id,
-          Address: address,
-          Country: country,
-        },
-      });
-    }
   };
 
   clearForm() {
     this.setState({
       data: { ...emptyData },
-      searchFieldValue: "",
     });
   }
 
@@ -160,22 +136,16 @@ class SubmitForm extends React.Component {
 
   render() {
     const { translations } = this.props;
+    const position = this.state.data.Latitude ? {
+      lat: parseFloat(this.state.data.Latitude),
+      lng: parseFloat(this.state.data.Longitude),
+    } : undefined;
 
     return (
       <>
-        <LocationSelector
-          onSearchSuccess={this.onLocationSearchCompleted}
-          searchValue={this.getSearchValue()}
-          height={"45vh"}
-          position={
-            this.state.data.Latitude
-              ? {
-                  lat: parseFloat(this.state.data.Latitude),
-                  lng: parseFloat(this.state.data.Longitude),
-                }
-              : undefined
-          }
-        />
+        <div className='d-flex justify-content-center' style={{ maxWidth: '100%' }}>
+          <MapImage location={position} />
+        </div>
 
         {this.state.hasSubmitted ? (
           <div className="alert alert-success text-center mb-0">

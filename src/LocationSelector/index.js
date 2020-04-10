@@ -11,6 +11,8 @@ class LocationSelector extends React.Component {
         value={this.props.searchValue}
         height={this.props.height}
         position={this.props.position}
+        currentLocation={this.props.currentLocation}
+        onGeolocationClicked={this.props.onGeolocationClicked}
         onMarkerDragged={async latLng => {
           const results = await geocodeByLatlng(latLng);
           if (results && results.length) {

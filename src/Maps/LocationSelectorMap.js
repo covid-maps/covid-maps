@@ -27,8 +27,8 @@ class Map extends Component {
   onBoundsChanged = () => {
     if (this.map && this.state.isLoaded) {
       const mapCenter = this.map.getCenter();
-      const position = { lat: mapCenter.lat(), lng: mapCenter.lng() }
-      this.setState({ markerPosition: position });
+      const center = { lat: mapCenter.lat(), lng: mapCenter.lng() }
+      this.setState({ markerPosition: center });
       if (this.props.onBoundsChanged) {
         this.props.onBoundsChanged({
           lat: mapCenter.lat(),
@@ -55,7 +55,6 @@ class Map extends Component {
   render() {
     return (
       <GoogleMap
-        id="example-map"
         options={mapOptions}
         mapContainerStyle={{
           height: this.props.height,

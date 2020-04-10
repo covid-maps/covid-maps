@@ -23,10 +23,11 @@ const emptyData = {
 class LocationSelectionPage extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
+    ipLocation: PropTypes.object,
+    geoLocation: PropTypes.object
   };
 
   state = {
-    currentLocationCaptured: false,
     data: { ...emptyData },
     searchFieldValue: "",
   };
@@ -92,13 +93,20 @@ class LocationSelectionPage extends React.Component {
           activateInput
           onSearchSuccess={this.onLocationSearchCompleted}
           searchValue={this.getSearchValue()}
+          currentLocation={this.props.geoLocation || this.props.ipLocation}
+          onGeolocationClicked={() => {
+            this.setState({
+              data: { ...emptyData },
+              searchFieldValue: ""
+            })
+          }}
           height={"50vh"}
           position={
             this.state.data.Latitude
               ? {
-                  lat: parseFloat(this.state.data.Latitude),
-                  lng: parseFloat(this.state.data.Longitude),
-                }
+                lat: parseFloat(this.state.data.Latitude),
+                lng: parseFloat(this.state.data.Longitude),
+              }
               : undefined
           }
         />
@@ -112,7 +120,7 @@ class LocationSelectionPage extends React.Component {
               },
             }}
           >
-            <Button variant="outline-primary" className="text-uppercase">
+            <Button variant="outline-success" className="text-uppercase">
               {translations.select_location}
             </Button>
           </Link>

@@ -19,6 +19,8 @@ function prepareStoreForUpdate(entry) {
     ...entry,
     "Safety Observations": "",
     "Useful Information": "",
+    "Opening Time": "",
+    "Closing Time": "",
     "Store Category":
       entry["Store Category"] && entry["Store Category"].length
         ? entry["Store Category"][0]
@@ -47,7 +49,7 @@ class ResultBlock extends React.Component {
         onClick={() => this.onClick()}
         className={`card my-1 card-result-block ${
           this.props.isSelected ? "card-result-block-selected" : ""
-        }`}
+          }`}
       >
         <div className="card-body p-3">
           <a

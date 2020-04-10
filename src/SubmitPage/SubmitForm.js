@@ -22,6 +22,7 @@ const {
   CLOSING_TIME,
   USEFUL_INFORMATION,
   SAFETY_OBSERVATIONS,
+  PLACE_ID,
 } = FORM_FIELDS;
 
 function ButtonWithLoading(props) {
@@ -50,7 +51,7 @@ const emptyData = {
   Longitude: "",
   City: "",
   Locality: "",
-  "Place Id": "",
+  [PLACE_ID]: "",
   Address: "",
   [OPENING_TIME]: "",
   [CLOSING_TIME]: "",
@@ -93,7 +94,7 @@ class SubmitForm extends React.Component {
           Longitude: latLng.lng,
           City: city,
           Locality: locality,
-          "Place Id": place_id,
+          [PLACE_ID]: place_id,
           Address: address,
           Country: country,
         },

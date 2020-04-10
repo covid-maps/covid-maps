@@ -10,4 +10,5 @@ export const FORM_FIELDS = {
   SAFETY_OBSERVATIONS: "Safety Observations",
   OPENING_TIME: "Opening Time",
   CLOSING_TIME: "Closing Time",
+  PLACE_ID: "Place Id",
 };

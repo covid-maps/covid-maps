@@ -163,7 +163,6 @@ class SubmitForm extends React.Component {
 
   parseTimeAndRoundToNearestHalfHour = time => {
     if (time) {
-      console.log("--------->", time);
       const incomingFormat = "HH:mm";
       const dateObject = parse(time, incomingFormat, new Date());
       const roundOfDate = roundToNearestMinutes(dateObject, { nearestTo: 30 });

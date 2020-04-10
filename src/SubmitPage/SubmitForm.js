@@ -305,7 +305,7 @@ class SubmitForm extends React.Component {
                         className={cx("time-picker", {
                           hasError: isClosingTimeInvalid,
                         })}
-                        placeholder="08:00 AM"
+                        placeholder="08:00 PM"
                         minutesStep={30}
                         value={formData[CLOSING_TIME]}
                         onChange={time =>

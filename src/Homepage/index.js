@@ -63,7 +63,8 @@ class Homepage extends React.Component {
   };
 
   componentDidMount() {
-    api.query().then(data => {
+    api.query().then(response => {
+      const { results: data } = response;
       this.setState({
         results: this.formatResults(data),
         markers: data.map(result => ({

@@ -29,4 +29,5 @@ export default {
     "Please enter either Store timings or Useful information or Safety information",
   set_store_location: "Set store location to add",
   select_location: "Select location",
+  closing_time_error: "Closing time should be after Opening time",
 };

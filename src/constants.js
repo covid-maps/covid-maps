@@ -1,4 +1,13 @@
 export const AVAILABLE_LANGUAGES = {
   ENGLISH: "english",
-  HINDI: "hindi"
+  HINDI: "hindi",
+};
+
+export const FORM_FIELDS = {
+  STORE_NAME: "Store Name",
+  STORE_CATEGORY: "Store Category", // default selection
+  USEFUL_INFORMATION: "Useful Information",
+  SAFETY_OBSERVATIONS: "Safety Observations",
+  OPENING_TIME: "Opening Time",
+  CLOSING_TIME: "Closing Time",
 };

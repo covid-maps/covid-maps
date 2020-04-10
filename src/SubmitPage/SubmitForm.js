@@ -214,10 +214,8 @@ class SubmitForm extends React.Component {
     return "";
   };
 
-  render() {
-    const { translations } = this.props;
+  isClosingTimeInvalid = () => {
     const formData = this.state.data;
-
     let isClosingTimeInvalid = false;
     if (formData[OPENING_TIME]) {
       isClosingTimeInvalid = isBefore(
@@ -225,6 +223,15 @@ class SubmitForm extends React.Component {
         formData[OPENING_TIME]
       );
     }
+
+    return isClosingTimeInvalid;
+  };
+
+  render() {
+    const { translations } = this.props;
+    const formData = this.state.data;
+
+    const isClosingTimeInvalid = this.isClosingTimeInvalid();
 
     return (
       <>

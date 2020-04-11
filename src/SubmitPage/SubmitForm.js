@@ -64,8 +64,8 @@ const emptyData = {
   Locality: "",
   [PLACE_ID]: "",
   [STORE_ADDRESS]: "",
-  [OPENING_TIME]: "",
-  [CLOSING_TIME]: "",
+  [OPENING_TIME]: null,
+  [CLOSING_TIME]: null,
   Country: "",
 };
 

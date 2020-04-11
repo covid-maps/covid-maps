@@ -49,7 +49,8 @@ class Homepage extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
     ipLocation: PropTypes.object,
-    geoLocation: PropTypes.object
+    geoLocation: PropTypes.object,
+    setIPlocation: PropTypes.func.isRequired
   };
 
   state = {
@@ -65,9 +66,10 @@ class Homepage extends React.Component {
 
   componentDidMount() {
     api.query().then(response => {
-      const { results: data } = response;
+      const { results: data, location } = response;
+      this.props.setIPlocation(location);
       this.setState({
-        results: this.formatResults(data),
+        results: this.formatResults(data, location),
         markers: data.map(result => ({
           lat: Number(result.Latitude),
           lng: Number(result.Longitude),
@@ -95,7 +97,7 @@ class Homepage extends React.Component {
     return groupedResult.sort((a, b) => a.distance - b.distance);
   }
 
-  formatResults(results) {
+  formatResults(results, centerLocation) {
     const grouped = Object.values(
       results.reduce((obj, result) => {
         if (!obj.hasOwnProperty(result["Place Id"] || result["Store Name"])) {
@@ -116,10 +118,7 @@ class Homepage extends React.Component {
         entries: sortedEntries,
       };
     });
-    // TODO: this assumes ip location will be available before
-    // API query finishes. => get IP from server, or use from session storage.
-    const center = this.props.ipLocation;
-    return this.calculateGroupDistance(grouped, center);
+    return this.calculateGroupDistance(grouped, centerLocation);
   }
 
   isMissingLocationInformation(location) {

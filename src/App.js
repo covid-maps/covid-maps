@@ -17,7 +17,6 @@ import logo from "./Logo.svg";
 import { AVAILABLE_LANGUAGES } from "./constants";
 import translations from "./translations";
 import { withLocalStorage } from "./withStorage";
-import * as api from "./api";
 
 const history = createBrowserHistory();
 if (process.env.NODE_ENV !== "development") {
@@ -94,14 +93,9 @@ class App extends Component {
     })
   }
 
-  componentDidMount() {
-    // TODO: move this API call to the server, see GH issues
-    // https://github.com/covid-maps/covid-maps/issues/120
-    api.ip().then(response => {
-      const [lat, lng] = response.loc.split(",");
-      this.setState({
-        ipLocation: { lat: parseFloat(lat), lng: parseFloat(lng) }
-      })
+  setIPlocation = (location) => {
+    this.setState({
+      ipLocation: location
     })
   }
 
@@ -116,7 +110,8 @@ class App extends Component {
             setLanguage: this.setLanguage,
             ipLocation: this.state.ipLocation,
             geoLocation: this.state.geoLocation,
-            setGeolocation: this.setGeolocation
+            setGeolocation: this.setGeolocation,
+            setIPlocation: this.setIPlocation,
           }}
         >
           <div className="App">

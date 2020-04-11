@@ -64,7 +64,7 @@ function mapDBRow(data){
             Latitude: data.latitude,
             Longitude: data.longitude,
             Coordinate: data.coordinate,
-            store_id: data.id,
+            StoreId: data.id,
             "Store Category": data.category.split(","),
             "Store Name": data.name,
             "Safety Observations": update.safetyInfo,

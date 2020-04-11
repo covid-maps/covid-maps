@@ -20,7 +20,7 @@ class LanguageSelector extends Component {
     return (
       <Dropdown className="language-selector" drop="up">
         <Dropdown.Toggle className="language-selector__toggle">
-          <i class="far fa-globe"></i> {this.props.currentLanguage}
+          <i className="far fa-globe"></i> {this.props.currentLanguage}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {Object.keys(AVAILABLE_LANGUAGES).map(key => {

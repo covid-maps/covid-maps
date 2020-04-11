@@ -2,13 +2,7 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import PWAPrompt from "react-ios-pwa-prompt";
 import { recordAddToHomescreen } from "../gaEvents";
-
-function isMobile() {
-  return (
-    typeof window.orientation !== "undefined" ||
-    navigator.userAgent.indexOf("IEMobile") !== -1
-  );
-}
+import { isMobile } from '../utils';
 
 function addToHomeScreen(setShowIOSPrompt) {
   recordAddToHomescreen();

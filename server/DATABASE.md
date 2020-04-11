@@ -22,6 +22,10 @@
    heroku pg:psql # launch psql
    create extension postgis; # inside psql
    ```
+   Or like this in the terminal
+   ```
+   psql covid_maps_0 -c "CREATE EXTENSION postgis";
+   ```
 
 ## Notes
 

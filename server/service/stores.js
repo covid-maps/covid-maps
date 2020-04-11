@@ -57,24 +57,24 @@ function toRadialDistance(mt){
 }
 
 function mapDBRow(data){
-    return data.StoreUpdates.map(up => {
+    return data.StoreUpdates.map(update => {
         return {
-            "User IP": up.ip,
-            Timestamp: up.createdAt,
+            "User IP": update.ip,
+            Timestamp: update.createdAt,
             Latitude: data.latitude,
             Longitude: data.longitude,
             Coordinate: data.coordinate,
             "Store Category": data.category.split(","),
             "Store Name": data.name,
-            "Safety Observations": up.safetyInfo,
-            "Useful Information": up.availabilityInfo,
+            "Safety Observations": update.safetyInfo,
+            "Useful Information": update.availabilityInfo,
             "Place Id": data.placeId,
             City: data.city,
             Locality: data.locality,
             Address: data.address,
             Country: data.country,
-            "Opening Time": up.openingTime,
-            "Closing Time": up.closingTime
+            "Opening Time": update.openingTime,
+            "Closing Time": update.closingTime,
         }
     })
 }

@@ -88,9 +88,9 @@ app.get("/v0/query", async (req, res) => {
 
 app.post("/v0/update", async (req, res) => {
   try {
-    const ressult = await addRow(getFormDataWithUserIp(req));
-    console.log(ressult);
-    res.send(ressult);
+    const result = await addRow(getFormDataWithUserIp(req));
+    console.log(result);
+    res.send(result);
   } catch (error) {
     console.log("Error in submit:", error);
     res.status(500).send({ error });

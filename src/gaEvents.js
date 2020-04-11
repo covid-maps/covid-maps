@@ -50,3 +50,17 @@ export const recordLanguageSelection = selectedLanguage => {
     action: `language_selected_${selectedLanguage}`,
   });
 };
+
+export const recordDirectionsClicked = () => {
+  ReactGA.event({
+    category,
+    action: `directions_clicked`,
+  });
+}
+
+export const recordStoreFilterKeypress = () => {
+  ReactGA.event({
+    category,
+    action: `store_filter_key_pressed`,
+  });
+}

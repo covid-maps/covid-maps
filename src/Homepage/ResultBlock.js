@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
-import { recordUpdateStore } from "../gaEvents";
+import { recordUpdateStore, recordDirectionsClicked } from "../gaEvents";
 import Highlighter from "react-highlight-words";
 import { withGlobalContext } from "../App";
 
@@ -74,6 +74,7 @@ function ResultBlock(props) {
       <div className="card-body p-3">
         <a
           href={constructDirectionsUrl(result)}
+          onClick={recordDirectionsClicked}
           target="_blank"
           rel="noopener noreferrer"
           className="float-right btn btn-sm btn-outline-secondary text-uppercase ml-2"

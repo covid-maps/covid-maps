@@ -104,8 +104,6 @@ class SubmitForm extends React.Component {
       };
 
       try {
-        throw new Error('oops');
-        return;
         const response = await api.submit(data);
         console.log(data);
         console.log(response);

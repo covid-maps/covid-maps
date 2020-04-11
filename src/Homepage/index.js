@@ -262,10 +262,11 @@ class Homepage extends React.Component {
       lat: Number(res.lat),
       lng: Number(res.lng),
     }));
+    const { translations } = this.props;
     return (
       <div>
         <NoOfUsersAlert
-          alertText={this.props.translations.website_purpose_banner}
+          alertText={translations.website_purpose_banner}
         />
         <HomepageMapWithSearch
           value=""
@@ -299,14 +300,14 @@ class Homepage extends React.Component {
           <div className="my-1 px-1 d-flex justify-content-between align-items-center search-results-container">
             <div>
               <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
-                {this.props.translations.store_nearby_label}
+                {translations.store_nearby_label}
               </h6>
               <Form.Control
                 type="text"
                 onChange={this.handleStoreFilterQuery}
                 className="d-inline-block mx-1 results-search-box"
                 value={this.state.storeFilterQuery}
-                placeholder={this.props.translations.store_search_placeholder}
+                placeholder={translations.store_search_placeholder}
               />
             </div>
             <div>
@@ -317,7 +318,7 @@ class Homepage extends React.Component {
                   className="text-uppercase"
                   onClick={recordAddNewStore}
                 >
-                  {this.props.translations.add_store}
+                  {translations.add_store}
                 </Button>
               </Link>
             </div>
@@ -343,7 +344,7 @@ class Homepage extends React.Component {
             onClose={this.toggleFormSubmissionNotificaiton}
             dismissible
           >
-            Your entry has been submitted succesfully. Thank you!
+            {translations.form_submit_success}
           </Alert>
         </Snackbar>
       </div>

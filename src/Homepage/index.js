@@ -9,7 +9,7 @@ import * as api from "../api";
 import { getDistance } from "geolib";
 import HomepageMapWithSearch from '../MapsWithSearch/HomepageMap';
 import { isStoreType, getFirstComma } from "../utils";
-import { recordAddNewStore } from "../gaEvents";
+import { recordAddNewStore, recordStoreFilterKeypress } from "../gaEvents";
 import Form from "react-bootstrap/Form";
 import { withGlobalContext } from "../App";
 
@@ -160,6 +160,7 @@ class Homepage extends React.Component {
   }
 
   handleStoreFilterQuery = event => {
+    recordStoreFilterKeypress()
     this.setState({
       storeFilterQuery: event.target.value,
       selectedLocation: undefined,

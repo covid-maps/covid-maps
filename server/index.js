@@ -7,7 +7,11 @@ const axios = require('axios');
 
 async function getLocationFromIp(req) {
   const ip = req.clientIp;
-  const url = `https://ipinfo.io/${ip}/json?token=737774ee26668f`;
+  let url = `https://ipinfo.io/${ip}/json?token=737774ee26668f`;
+  if (ip === '::1') {
+    // For local testing
+    url = `https://ipinfo.io/json?token=737774ee26668f`;
+  }
   const response = await axios.get(url);
   const [lat, lng] = response.data.loc.split(",");
   return { lat: parseFloat(lat), lng: parseFloat(lng) }

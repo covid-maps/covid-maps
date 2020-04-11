@@ -23,7 +23,7 @@ export default {
   safety_observations: "Safety Observations",
   safety_placeholder: "Queues, crowd levels and safety precautions",
   useful_information: "Useful Information",
-  useful_placeholder: "Queues, crowd levels and safety precautions",
+  useful_placeholder: "Stock availability, special services, etc.",
   submit_update: "Submit update",
   home: "Home",
   about: "About",

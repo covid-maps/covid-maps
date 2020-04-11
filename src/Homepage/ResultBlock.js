@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
@@ -28,67 +28,96 @@ function prepareStoreForUpdate(entry) {
   };
 }
 
-class ResultBlock extends React.Component {
-  static propTypes = {
+function shareListing(e, store) {
+  e.stopPropagation();
+  let storeName = store.name
+  let storeId = store.entries[0].StoreId
+  console.log(store)
+  let url = `${window.location.origin}/store/${storeId}`
+  if (navigator.share) {
+    navigator.share({
+      title: `${storeName}`,
+      text: `Check out the latest information on ${storeName} using Covid Maps — crowdsourced updates on essential services during lockdown period. \n`,
+      url: url
+    })
+  }
+}
+
+function ResultBlock(props) {
+  const propTypes = {
     translations: PropTypes.object.isRequired,
   };
 
-  onClick() {
+  const onClick = () => {
     window.scrollTo({
       top: 0,
       behavior: "smooth",
     });
-    this.props.onClick && this.props.onClick(this.props.result);
+    props.onClick && props.onClick(props.result);
   }
 
-  render() {
-    const { result } = this.props;
-    const entry = result.entries.length ? result.entries[0] : undefined;
-    return (
-      <div
-        onClick={() => this.onClick()}
-        className={`card my-1 card-result-block ${
-          this.props.isSelected ? "card-result-block-selected" : ""
-          }`}
-      >
-        <div className="card-body p-3">
-          <a
-            href={constructDirectionsUrl(result)}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="float-right btn btn-sm btn-outline-secondary text-uppercase ml-2"
+  const { result } = props;
+  const [showShareButton, setShareButtonState] = useState(false)
+  const entry = result.entries.length ? result.entries[0] : undefined;
+  useEffect(() => {
+    if (navigator.share) {
+      setShareButtonState(true)
+    }
+  }, [])
+  return (
+    <div
+      onClick={() => onClick()}
+      className={`card my-1 card-result-block ${
+        props.isSelected ? "card-result-block-selected" : ""
+        }`}
+    >
+      <div className="card-body p-3">
+        <a
+          href={constructDirectionsUrl(result)}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="float-right btn btn-sm btn-outline-secondary text-uppercase ml-2"
+        >
+          <i className="far fa-directions"></i>
+        </a>
+        <Link
+          to={{
+            pathname: "/update",
+            state: { item: prepareStoreForUpdate(entry) },
+          }}
+          className="float-right btn btn-sm btn-outline-success text-uppercase"
+          onClick={recordUpdateStore}
+        >
+          {props.translations.update}
+        </Link>
+        {
+          showShareButton &&
+          <div
+            onClick={(e) => shareListing(e, result)}
+            className="float-right btn btn-sm btn-outline-secondary text-uppercase mr-2"
           >
-            <i className="far fa-directions"></i>
-          </a>
-          <Link
-            to={{
-              pathname: "/update",
-              state: { item: prepareStoreForUpdate(entry) },
-            }}
-            className="float-right btn btn-sm btn-outline-success text-uppercase"
-            onClick={recordUpdateStore}
-          >
-            {this.props.translations.update}
-          </Link>
-          <h5 className="card-title m-0 p-0 d-inline-block">
-            <Highlighter
-              highlightClassName="highlighted-text"
-              searchWords={[this.props.highlightedText]}
-              autoEscape={true}
-              textToHighlight={result.name}
-            />
-          </h5>
-          {result.openTime && result.closeTime ? (
-            <span className="mx-2">{`Hours: ${result.openTime} to ${result.closeTime}`}</span>
-          ) : null}
-          <ResultEntry
-            highlightedText={this.props.highlightedText}
-            entries={result.entries}
+            <i className="far fa-share-alt"></i>
+          </div>
+        }
+
+        <h5 className="card-title m-0 p-0 d-inline-block">
+          <Highlighter
+            highlightClassName="highlighted-text"
+            searchWords={[props.highlightedText]}
+            autoEscape={true}
+            textToHighlight={result.name}
           />
-        </div>
+        </h5>
+        {result.openTime && result.closeTime ? (
+          <span className="mx-2">{`Hours: ${result.openTime} to ${result.closeTime}`}</span>
+        ) : null}
+        <ResultEntry
+          highlightedText={props.highlightedText}
+          entries={result.entries}
+        />
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default withGlobalContext(ResultBlock);

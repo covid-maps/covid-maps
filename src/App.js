@@ -122,8 +122,8 @@ class App extends Component {
                 <Route path="/update" component={SubmitPage} />
                 <Route path="/location" component={LocationSelectionPage} />
                 <Route path="/about" component={AboutPage} />
+                <Route path="/store/:storeId" component={Homepage} />
                 <Route path="/" component={Homepage} />
-                <Route path="/listing/:placeId" component={Homepage} />
               </Switch>
             </div>
             <footer className="m-0 p-0">

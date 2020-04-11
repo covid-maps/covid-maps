@@ -2,6 +2,7 @@ const express = require("express");
 const compression = require("compression");
 const requestIp = require("request-ip");
 const bodyParser = require("body-parser");
+const axios = require('axios');
 const { GoogleSpreadsheet } = require("google-spreadsheet");
 const stores = require("./service/stores");
 
@@ -13,6 +14,14 @@ const doc = new GoogleSpreadsheet(
 );
 
 const SHEET_IDX = 0;
+
+async function getLocationFromIp(req) {
+  const ip = req.clientIp;
+  const url = `https://ipinfo.io/${ip}/json?token=737774ee26668f`;
+  const response = await axios.get(url);
+  const [lat, lng] = response.data.loc.split(",");
+  return { lat: parseFloat(lat), lng: parseFloat(lng) }
+}
 
 async function authenticate() {
   // Creds are either in a json file on disk
@@ -116,7 +125,10 @@ app.post("/v1/admin-add", async (req, res) => {
 });
 
 app.get("/v1/query", async (req, res) => {
-  res.send(await stores.findAllStores());
+  const [results, location] = await Promise.all([
+    stores.findAllStores(), getLocationFromIp(req)
+  ]);
+  res.send({ results, location });
 });
 
 app.get("/v2/query", async (req, res) => {

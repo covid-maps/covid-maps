@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import ResultBlock from "./ResultBlock";
 import { isSameLocation } from "../utils";
 import Button from "react-bootstrap/Button";
@@ -20,6 +21,15 @@ function applySearchFilter(query, entries) {
 }
 
 class SearchResults extends React.Component {
+  static propTypes = {
+    selectedStoreName: PropTypes.string,
+    results: PropTypes.arrayOf(PropTypes.object),
+    selectedLocation: PropTypes.object,
+    isLoading: PropTypes.bool,
+    onCardClick: PropTypes.func.isRequired,
+    textFilter: PropTypes.string,
+  }
+
   state = {
     resultsShown: ITEM_PER_PAGE
   };
@@ -29,9 +39,10 @@ class SearchResults extends React.Component {
   }
 
   render() {
-    const selectedResult = this.props.results.find(result =>
+    const selectedResult = this.props.results.find(result => (
       isSameLocation(result, this.props.selectedLocation)
-    );
+      && this.props.selectedStoreName === result.name
+    ));
     let filtered = this.props.results.filter(
       result => !isSameLocation(result, this.props.selectedLocation)
     );

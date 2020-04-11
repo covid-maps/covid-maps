@@ -77,7 +77,7 @@ function ResultBlock(props) {
               textToHighlight={result.name}
             />
           </h5>
-          <div style={{ minWidth: 160 }}>
+          <div style={{ minWidth: 160, textAlign: 'right' }}>
             {
               showShareButton &&
               <div

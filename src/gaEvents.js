@@ -64,3 +64,10 @@ export const recordStoreFilterKeypress = () => {
     action: `store_filter_key_pressed`,
   });
 }
+
+export const recordStoreShareClicked = () => {
+  ReactGA.event({
+    category,
+    action: `store_share_clicked`,
+  });
+}

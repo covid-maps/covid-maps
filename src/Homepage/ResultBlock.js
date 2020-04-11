@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import PropTypes from "prop-types";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
-import { recordUpdateStore, recordDirectionsClicked } from "../gaEvents";
+import { recordUpdateStore, recordDirectionsClicked, recordStoreShareClicked } from "../gaEvents";
 import Highlighter from "react-highlight-words";
 import { withGlobalContext } from "../App";
 
@@ -28,16 +28,16 @@ function prepareStoreForUpdate(entry) {
   };
 }
 
-function shareListing(e, store) {
-  e.stopPropagation();
+function shareListing(event, store) {
+  event.stopPropagation();
+  recordStoreShareClicked();
   let storeName = store.name
   let storeId = store.entries[0].StoreId
-  console.log(store)
   let url = `${window.location.origin}/store/${storeId}`
   if (navigator.share) {
     navigator.share({
       title: `${storeName}`,
-      text: `Check out the latest information on ${storeName} using Covid Maps — crowdsourced updates on essential services during lockdown period. \n`,
+      text: `Check out the latest information on ${storeName} using Covid Maps — crowdsourced updates on essential services during lockdown period.\n`,
       url: url
     })
   }

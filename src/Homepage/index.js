@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";

@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
 import { recordUpdateStore, recordDirectionsClicked, recordStoreShareClicked } from "../gaEvents";
@@ -44,10 +43,6 @@ function shareListing(event, store) {
 }
 
 function ResultBlock(props) {
-  const propTypes = {
-    translations: PropTypes.object.isRequired,
-  };
-
   const onClick = () => {
     window.scrollTo({
       top: 0,
@@ -72,46 +67,46 @@ function ResultBlock(props) {
         }`}
     >
       <div className="card-body p-3">
-        <a
-          href={constructDirectionsUrl(result)}
-          onClick={recordDirectionsClicked}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="float-right btn btn-sm btn-outline-secondary text-uppercase ml-2"
-        >
-          <i className="far fa-directions"></i>
-        </a>
-        <Link
-          to={{
-            pathname: "/update",
-            state: { item: prepareStoreForUpdate(entry) },
-          }}
-          className="float-right btn btn-sm btn-outline-success text-uppercase"
-          onClick={recordUpdateStore}
-        >
-          {props.translations.update}
-        </Link>
-        {
-          showShareButton &&
-          <div
-            onClick={(e) => shareListing(e, result)}
-            className="float-right btn btn-sm btn-outline-secondary text-uppercase mr-2"
-          >
-            <i className="far fa-share-alt"></i>
+        <div className='d-flex justify-content-between align-center-items'>
+          <h5 className="card-title m-0 p-0 d-inline-block">
+            <Highlighter
+              highlightClassName="highlighted-text"
+              searchWords={[props.highlightedText]}
+              autoEscape={true}
+              textToHighlight={result.name}
+            />
+          </h5>
+          <div style={{ minWidth: 160 }}>
+            {
+              showShareButton &&
+              <div
+                onClick={(e) => shareListing(e, result)}
+                className="btn btn-sm btn-outline-secondary text-uppercase mr-2"
+              >
+                <i className="far fa-share-alt"></i>
+              </div>
+            }
+            <Link
+              to={{
+                pathname: "/update",
+                state: { item: prepareStoreForUpdate(entry) },
+              }}
+              className="btn btn-sm btn-outline-success text-uppercase"
+              onClick={recordUpdateStore}
+            >
+              {props.translations.update}
+            </Link>
+            <a
+              href={constructDirectionsUrl(result)}
+              onClick={recordDirectionsClicked}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-sm btn-outline-secondary text-uppercase ml-2"
+            >
+              <i className="far fa-directions"></i>
+            </a>
           </div>
-        }
-
-        <h5 className="card-title m-0 p-0 d-inline-block">
-          <Highlighter
-            highlightClassName="highlighted-text"
-            searchWords={[props.highlightedText]}
-            autoEscape={true}
-            textToHighlight={result.name}
-          />
-        </h5>
-        {result.openTime && result.closeTime ? (
-          <span className="mx-2">{`Hours: ${result.openTime} to ${result.closeTime}`}</span>
-        ) : null}
+        </div>
         <ResultEntry
           highlightedText={props.highlightedText}
           entries={result.entries}

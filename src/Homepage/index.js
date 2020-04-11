@@ -85,7 +85,7 @@ class Homepage extends React.Component {
     if (this.props.match.params.storeId) {
       const storeId = parseInt(this.props.match.params.storeId)
       const place = this.state.results.find(item => item.storeId === storeId)
-      console.log(place)
+      // console.log(place)
       //Run the function only if place is real value ( not nul || undefined)
       //Reuse the onCardClick function.
       if (place) {

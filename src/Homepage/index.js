@@ -12,16 +12,18 @@ import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore, recordStoreFilterKeypress } from "../gaEvents";
 import Form from "react-bootstrap/Form";
 import { withGlobalContext } from "../App";
+import { FORM_FIELDS } from '../constants';
 
+const { STORE_NAME, PLACE_ID } = FORM_FIELDS;
 const DISTANCE_FILTER = 200000; // meters
 
 function searchResultToFormEntry(searchResult) {
   if (!searchResult) return undefined;
   return {
-    "Store Name": getFirstComma(searchResult.name),
+    [STORE_NAME]: getFirstComma(searchResult.name),
     Latitude: searchResult.latLng.lat,
     Longitude: searchResult.latLng.lng,
-    "Place Id": searchResult.place_id,
+    [PLACE_ID]: searchResult.place_id,
     City: searchResult.city,
     Locality: searchResult.locality,
     Address: searchResult.address,
@@ -126,10 +128,10 @@ class Homepage extends React.Component {
   formatResults(results, centerLocation) {
     const grouped = Object.values(
       results.reduce((obj, result) => {
-        if (!obj.hasOwnProperty(result["Place Id"] || result["Store Name"])) {
-          obj[result["Place Id"] || result["Store Name"]] = [];
+        if (!obj.hasOwnProperty(result[PLACE_ID] || result[STORE_NAME])) {
+          obj[result[PLACE_ID] || result[STORE_NAME]] = [];
         }
-        obj[result["Place Id"] || result["Store Name"]].push(result);
+        obj[result[PLACE_ID] || result[STORE_NAME]].push(result);
         return obj;
       }, {})
     ).map(entries => {
@@ -137,8 +139,8 @@ class Homepage extends React.Component {
         .sort((a, b) => b.Timestamp - a.Timestamp)
         .reverse();
       return {
-        name: entries[0]["Store Name"],
-        placeId: entries[0]["Place Id"],
+        name: entries[0][STORE_NAME],
+        placeId: entries[0][PLACE_ID],
         storeId: entries[0]["StoreId"],
         lat: Number(entries[0].Latitude),
         lng: Number(entries[0].Longitude),
@@ -181,7 +183,7 @@ class Homepage extends React.Component {
 
   getLinkTo() {
     const state = this.getLinkState();
-    return state && state["Store Name"]
+    return state && state[STORE_NAME]
       ? { pathname: "/update", state }
       : { pathname: "/location" };
   }

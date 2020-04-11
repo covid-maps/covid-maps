@@ -6,18 +6,19 @@ import Alert from "react-bootstrap/Alert";
 import { getFirstComma } from "../utils";
 import LocationSelector from "../LocationSelector";
 import { withGlobalContext } from "../App";
+import { FORM_FIELDS, STORE_CATEGORIES } from "../constants";
 
 const emptyData = {
-  "Store Name": "",
-  "Store Category": "Grocery", // default selection
-  "Useful Information": "",
-  "Safety Observations": "",
+  [FORM_FIELDS.STORE_NAME]: "",
+  [FORM_FIELDS.STORE_CATEGORY]: STORE_CATEGORIES.GROCERY, // default selection
+  [FORM_FIELDS.USEFUL_INFORMATION]: "",
+  [FORM_FIELDS.SAFETY_OBSERVATIONS]: "",
   Latitude: "",
   Longitude: "",
   City: "",
   Locality: "",
-  "Place Id": "",
-  Address: "",
+  [FORM_FIELDS.PLACE_ID]: "",
+  [FORM_FIELDS.STORE_ADDRESS]: "",
   Country: "",
 };
 
@@ -52,12 +53,12 @@ class LocationSelectionPage extends React.Component {
         isLocationSelected: true,
         data: {
           ...this.state.data,
-          "Store Name": getFirstComma(name),
+          [FORM_FIELDS.STORE_NAME]: getFirstComma(name),
           Latitude: latLng.lat,
           Longitude: latLng.lng,
           City: city,
           Locality: locality,
-          "Place Id": place_id,
+          [FORM_FIELDS.PLACE_ID]: place_id,
           Address: address,
           Country: country,
         },
@@ -74,7 +75,7 @@ class LocationSelectionPage extends React.Component {
     if (this.props.location.state) {
       // this is coming from the "Update info" from
       // the home page
-      return this.props.location.state.item["Store Name"];
+      return this.props.location.state.item[FORM_FIELDS.STORE_NAME];
     }
 
     return "";

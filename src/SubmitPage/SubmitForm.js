@@ -167,7 +167,7 @@ class SubmitForm extends React.Component {
     if (this.props.location.state) {
       // this is coming from the "Update info" from
       // the home page
-      return this.props.location.state.item["Store Name"];
+      return this.props.location.state.item[STORE_NAME];
     }
     return "";
   }

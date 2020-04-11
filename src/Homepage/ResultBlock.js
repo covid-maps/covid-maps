@@ -23,7 +23,7 @@ function prepareStoreForUpdate(entry) {
     "Store Category":
       entry["Store Category"] && entry["Store Category"].length
         ? entry["Store Category"][0]
-        : "",
+        : "Grocery",
   };
 }
 

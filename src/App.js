@@ -122,6 +122,7 @@ class App extends Component {
                 <Route path="/update" component={SubmitPage} />
                 <Route path="/location" component={LocationSelectionPage} />
                 <Route path="/about" component={AboutPage} />
+                <Route path="/store/:storeId" component={Homepage} />
                 <Route path="/" component={Homepage} />
               </Switch>
             </div>

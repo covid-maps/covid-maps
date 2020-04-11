@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";
@@ -76,7 +76,33 @@ class Homepage extends React.Component {
         })),
         isLoading: false,
       });
+      this.goToStoreFromProps()
     });
+
+  }
+
+  goToStoreFromProps() {
+    if (this.props.match.params.storeId) {
+      const storeId = parseInt(this.props.match.params.storeId)
+      const place = this.state.results.find(item => item.storeId === storeId)
+      // console.log(place)
+      //Run the function only if place is real value ( not nul || undefined)
+      //Reuse the onCardClick function.
+      if (place) {
+        this.onCardClick(place)
+        const latLng = {
+          "lat": place.lat,
+          "lng": place.lng
+        }
+        this.setState({
+          center: { "latLng": latLng },
+          results: this.calculateGroupDistance(
+            this.state.results,
+            latLng
+          )
+        });
+      }
+    }
   }
 
   calculateDistance(result, center) {
@@ -113,6 +139,7 @@ class Homepage extends React.Component {
       return {
         name: entries[0]["Store Name"],
         placeId: entries[0]["Place Id"],
+        storeId: entries[0]["StoreId"],
         lat: Number(entries[0].Latitude),
         lng: Number(entries[0].Longitude),
         entries: sortedEntries,

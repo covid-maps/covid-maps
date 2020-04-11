@@ -1,5 +1,4 @@
 var models  = require('../models');
-var { FORM_FIELDS } = require('../../src/constants');
 
 const DEFAULT_DISTANCE_RANGE = 0.1; //approx 11kms - https://stackoverflow.com/questions/8464666/distance-between-2-points-in-postgis-in-srid-4326-in-metres
 const MAX_DISTANCE_RADIUS_METERS = 200000

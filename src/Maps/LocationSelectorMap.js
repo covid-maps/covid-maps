@@ -3,7 +3,8 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import { dotIcon, markerIcon, icons, isSameLocation } from "../utils";
 import { mapOptions } from "./theme";
 
-const defaultCenter = { lat: 40.281376, lng: -123.111382 };
+// Final fallback to a location in Vancouver (should never be shown)
+const defaultCenter = { lat: 49.281376, lng: -123.111382 };
 
 class Map extends Component {
   map = undefined;

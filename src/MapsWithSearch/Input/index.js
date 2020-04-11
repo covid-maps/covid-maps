@@ -13,6 +13,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { recordSearchCompleted } from "../../gaEvents";
 import { withGlobalContext } from "../../App";
+import { ADDRESS_COMPONENTS } from "../../constants";
 
 function GeolocationButton({ isLoading, onClick }) {
   return <Button
@@ -85,14 +86,14 @@ class LocationSearchInput extends React.Component {
           address: result.formatted_address,
           place_id: result.place_id,
           types: result.types,
-          city: getAddressComponent(result.address_components, "locality"),
+          city: getAddressComponent(result.address_components, ADDRESS_COMPONENTS.LOCALITY),
           locality: getAddressComponent(
             result.address_components,
-            "neighborhood"
+            ADDRESS_COMPONENTS.NEIGHBORHOOD
           ),
           country: getAddressComponent(
             result.address_components,
-            "country",
+            ADDRESS_COMPONENTS.COUNTRY,
             true
           )
         });

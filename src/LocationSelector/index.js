@@ -1,10 +1,16 @@
 import React from "react";
 import { geocodeByLatlng, getAddressComponent, isFunction } from "../utils";
 import LocationSelectorMapWithSearch from "../MapsWithSearch/LocationSelectorMap";
+import { ADDRESS_COMPONENTS } from "../constants";
 
 class LocationSelector extends React.Component {
   geocodeAndInformParent = async latLng => {
-    const results = await geocodeByLatlng(latLng);
+    let results;
+    try {
+      results = await geocodeByLatlng(latLng);
+    } catch (e) {
+      console.log('Geocoding failed for', latLng);
+    }
     if (results && results.length) {
       const result = results[0];
       if (isFunction(latLng.lat)) {
@@ -18,10 +24,10 @@ class LocationSelector extends React.Component {
         types: result.types,
         locality: getAddressComponent(
           result.address_components,
-          "neighborhood"
+          ADDRESS_COMPONENTS.NEIGHBORHOOD
         ),
-        city: getAddressComponent(result.address_components, "locality"),
-        country: getAddressComponent(result.address_components, "country")
+        city: getAddressComponent(result.address_components, ADDRESS_COMPONENTS.LOCALITY),
+        country: getAddressComponent(result.address_components, ADDRESS_COMPONENTS.COUNTRY)
       });
     }
   }

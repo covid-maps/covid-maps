@@ -9,6 +9,8 @@ export default {
   add_update_store: "Add or update store",
   store_name: "Store Name (required)",
   store_name_placeholder: "e.g. Target or Nature's Basket",
+  store_address: "Store Address",
+  store_address_placeholder: "Store Address",
   store_category: "Store Category",
   grocery: "Grocery",
   restaurant: "Restaurant",
@@ -29,5 +31,6 @@ export default {
     "Please enter one of Store Timings, Safety Observations or Useful Information",
   set_store_location: "Set store location to add",
   select_location: "Select location",
+  select_location_alert: "Select a location by searching or moving the marker",
   closing_time_error: "Closing time should be after Opening time",
 };

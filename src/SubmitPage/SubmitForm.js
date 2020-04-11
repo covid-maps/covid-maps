@@ -10,13 +10,13 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
-import { getFirstComma } from "../utils";
+import { isMobile } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
-import LocationSelector from "../LocationSelector";
 import { withGlobalContext } from "../App";
 import { FORM_FIELDS } from "../constants";
 const {
   STORE_NAME,
+  STORE_ADDRESS,
   STORE_CATEGORY,
   OPENING_TIME,
   CLOSING_TIME,
@@ -27,7 +27,7 @@ const {
 
 function ButtonWithLoading(props) {
   return props.isLoading ? (
-    <Button variant="success" disabled>
+    <Button {...props} disabled>
       <Spinner
         as="span"
         animation="border"
@@ -38,8 +38,19 @@ function ButtonWithLoading(props) {
       Submitting...
     </Button>
   ) : (
-    <Button {...props} />
-  );
+      <Button {...props} />
+    );
+}
+
+function MapImage({ location }) {
+  const size = isMobile() ? `400x250` : `600x350`;
+  const zoomLevel = 14;
+  return location ?
+    <img
+      style={{ maxWidth: "100%" }}
+      alt="Location snapshot"
+      src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&markers=${location.lat},${location.lng}&zoom=${zoomLevel}&size=${size}&key=AIzaSyB9hwI7b4677POloj5DpmDXaliqU5Dp8sA`} />
+    : null;
 }
 
 const emptyData = {
@@ -52,7 +63,7 @@ const emptyData = {
   City: "",
   Locality: "",
   [PLACE_ID]: "",
-  Address: "",
+  [STORE_ADDRESS]: "",
   [OPENING_TIME]: "",
   [CLOSING_TIME]: "",
   Country: "",
@@ -68,44 +79,11 @@ class SubmitForm extends React.Component {
     isValid: true,
     hasSubmitted: false,
     data: { ...emptyData },
-    searchFieldValue: "",
-  };
-
-  onLocationSearchCompleted = ({
-    latLng,
-    name,
-    address,
-    city,
-    locality,
-    place_id,
-    types,
-    country,
-  }) => {
-    // This checks for latlng and name, so that
-    // we don't inadvertently overwrite the state in the case
-    // of a current location update in onSuccess.
-    if (latLng && latLng.lat && (name || address)) {
-      this.setState({
-        searchFieldValue: address,
-        data: {
-          ...this.state.data,
-          [STORE_NAME]: getFirstComma(name),
-          Latitude: latLng.lat,
-          Longitude: latLng.lng,
-          City: city,
-          Locality: locality,
-          [PLACE_ID]: place_id,
-          Address: address,
-          Country: country,
-        },
-      });
-    }
   };
 
   clearForm() {
     this.setState({
       data: { ...emptyData },
-      searchFieldValue: "",
     });
   }
 
@@ -229,25 +207,18 @@ class SubmitForm extends React.Component {
 
   render() {
     const { translations } = this.props;
+    const position = this.state.data.Latitude ? {
+      lat: parseFloat(this.state.data.Latitude),
+      lng: parseFloat(this.state.data.Longitude),
+    } : undefined;
     const formData = this.state.data;
-
     const isClosingTimeInvalid = this.isClosingTimeInvalid();
 
     return (
       <>
-        <LocationSelector
-          onSearchSuccess={this.onLocationSearchCompleted}
-          searchValue={this.getSearchValue()}
-          height={"45vh"}
-          position={
-            formData.Latitude
-              ? {
-                  lat: parseFloat(formData.Latitude),
-                  lng: parseFloat(formData.Longitude),
-                }
-              : undefined
-          }
-        />
+        <div className='d-flex justify-content-center' style={{ maxWidth: '100%' }}>
+          <MapImage location={position} />
+        </div>
 
         {this.state.hasSubmitted ? (
           <div className="alert alert-success text-center mb-0">
@@ -267,6 +238,17 @@ class SubmitForm extends React.Component {
                 onChange={e => this.onChangeInput(e, STORE_NAME)}
                 value={formData[STORE_NAME]}
                 placeholder={translations.store_name_placeholder}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formStoreAddress">
+              <Form.Label className="">{translations.store_address}</Form.Label>
+              <Form.Control
+                type="text"
+                onChange={e => this.onChangeInput(e, STORE_ADDRESS)}
+                value={formData[STORE_ADDRESS]}
+                placeholder={translations.store_address_placeholder}
                 required
               />
             </Form.Group>

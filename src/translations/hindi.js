@@ -9,6 +9,8 @@ export default {
   add_update_store: "दुकान जोड़ें या अपडेट करें",
   store_name: "दुकान का नाम (आवश्यक)",
   store_name_placeholder: "जैसे टारगेट या वॉलमार्ट",
+  store_address: "स्टोर का पता",
+  store_address_placeholder: "स्टोर का पता",
   store_category: "दुकान की श्रेणी",
   grocery: "किराना",
   restaurant: "खाने की दुकान",
@@ -29,5 +31,6 @@ export default {
     "कृपया स्टोर टाइमिंग या उपयोगी जानकारी या सुरक्षा जानकारी दर्ज करें",
   set_store_location: "सूची में जोड़ने के लिए स्टोर स्थान सेट करें",
   select_location: "दुकान का स्थान चुनें",
+  select_location_alert: "जारी रखने के लिए स्थान चुनें",
   closing_time_error: '"बंद करने का समय" खोलने के समय के बाद होना चाहिए',
 };

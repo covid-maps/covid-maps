@@ -5,6 +5,7 @@ export const AVAILABLE_LANGUAGES = {
 
 export const FORM_FIELDS = {
   STORE_NAME: "Store Name",
+  STORE_ADDRESS: "Address",
   STORE_CATEGORY: "Store Category",
   USEFUL_INFORMATION: "Useful Information",
   SAFETY_OBSERVATIONS: "Safety Observations",
@@ -12,3 +13,9 @@ export const FORM_FIELDS = {
   CLOSING_TIME: "Closing Time",
   PLACE_ID: "Place Id",
 };
+
+export const ADDRESS_COMPONENTS = {
+  NEIGHBORHOOD: 'neighborhood',
+  LOCALITY: 'locality',
+  COUNTRY: 'country'
+}

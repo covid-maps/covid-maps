@@ -18,10 +18,10 @@ async function findAllStores(){
 }
 
 async function findNearbyStores(params){
-    if(!params.lat || !params.lng){
+    if(!params.location.lat || !params.location.lng){
         return [];
     }
-    return await models.StoreInfo.findAll({
+    const stores =  await models.StoreInfo.findAll({
         include: [{
                 model : models.StoreUpdates
             }],
@@ -32,14 +32,15 @@ async function findNearbyStores(params){
                 models.sequelize.fn(
                     "ST_Transform",
                     models.sequelize.cast(
-                        `SRID=4326;POINT(${params.lng} ${params.lat})`,
+                        `SRID=4326;POINT(${params.location.lng} ${params.location.lat})`,
                         "geometry"),
                     4326),
                 getDistanceRange(params)
             ),
             true
         )
-    })
+    });
+    return stores.flatMap(store => mapDBRow(store));
 }
 
 function getDistanceRange(params){
@@ -107,7 +108,11 @@ function buildStoreObject(data, forceDateUpdate){
         category: data["Store Category"],
         latitude: parseFloat(data.Latitude),
         longitude: parseFloat(data.Longitude),
-        coordinate: { type: 'Point', coordinates: [parseFloat(data.Longitude),parseFloat(data.Latitude)]},
+        coordinate: {
+            type: 'Point',
+            coordinates: [parseFloat(data.Longitude), parseFloat(data.Latitude)],
+            crs: {type: 'name', properties: {name: 'EPSG:4326'}},
+        },
         placeId: data["Place Id"] || "",
         address: data.Address || "",
         city: data.City || "",
@@ -152,7 +157,11 @@ async function updateExistingStore(store, data, forceDateUpdate){
             category: categories.join(","),
             latitude: parseFloat(data.Latitude),
             longitude: parseFloat(data.Longitude),
-                coordinate: { type: 'Point', coordinates: [parseFloat(data.Longitude),parseFloat(data.Latitude)]},
+            coordinate: {
+                type: 'Point',
+                coordinates: [parseFloat(data.Longitude), parseFloat(data.Latitude)],
+                crs: {type: 'name', properties: {name: 'EPSG:4326'}},
+            },
             placeId: data["Place Id"] || "",
             address: data.Address || "",
             city: data.City || "",

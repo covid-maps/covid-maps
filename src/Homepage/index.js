@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";
+import Snackbar from '@material-ui/core/Snackbar';
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
@@ -65,6 +66,7 @@ class Homepage extends React.Component {
     selectedLocation: undefined,
     searchResultLatlng: undefined,
     searchResult: undefined,
+    showFormSubmissionNotification: false,
   };
 
   componentDidMount() {
@@ -91,6 +93,7 @@ class Homepage extends React.Component {
         selectedLocation,
         selectedStoreName,
         mapShouldPan: Boolean(selectedLocation),
+        showFormSubmissionNotification: Boolean(selectedLocation),
       }, () => {
         if (selectedLocation) {
           setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
@@ -104,6 +107,13 @@ class Homepage extends React.Component {
       this.goToStoreFromProps()
     });
 
+  }
+
+  toggleFormSubmissionNotificaiton = () => {
+    this.setState(prevState => {
+      return {
+        showFormSubmissionNotification: !prevState.showFormSubmissionNotification }
+    });
   }
 
   goToStoreFromProps() {
@@ -321,6 +331,21 @@ class Homepage extends React.Component {
             results={closeByResults}
           />
         </div>
+        <Snackbar
+          autoHideDuration={5000}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={this.state.showFormSubmissionNotification}
+          onClose={this.toggleFormSubmissionNotificaiton}>
+          <Alert
+            show
+            key="form-submit-success"
+            variant="success"
+            onClose={this.toggleFormSubmissionNotificaiton}
+            dismissible
+          >
+            Your entry has been submitted succesfully. Thank you!
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

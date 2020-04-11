@@ -19,3 +19,12 @@ export const ADDRESS_COMPONENTS = {
   LOCALITY: 'locality',
   COUNTRY: 'country'
 }
+
+export const STORE_CATEGORIES = {
+  GROCERY: "Grocery",
+  RESTAURANT: "Restaurant",
+  ATM: "ATM",
+  CLINIC: "Clinic",
+  PHARMACY: "Pharmacy",
+  OTHER: "Other",
+};

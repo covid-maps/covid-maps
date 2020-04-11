@@ -13,7 +13,7 @@ import * as api from "../api";
 import { isMobile } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import { withGlobalContext } from "../App";
-import { FORM_FIELDS } from "../constants";
+import { FORM_FIELDS, STORE_CATEGORIES } from "../constants";
 const {
   STORE_NAME,
   STORE_ADDRESS,
@@ -55,7 +55,7 @@ function MapImage({ location }) {
 
 const emptyData = {
   [STORE_NAME]: "",
-  [STORE_CATEGORY]: "Grocery", // default selection
+  [STORE_CATEGORY]: STORE_CATEGORIES.GROCERY, // default selection
   [USEFUL_INFORMATION]: "",
   [SAFETY_OBSERVATIONS]: "",
   Latitude: "",
@@ -260,12 +260,12 @@ class SubmitForm extends React.Component {
                 value={formData[STORE_CATEGORY]}
                 onChange={e => this.onChangeInput(e, STORE_CATEGORY)}
               >
-                <option>{translations.grocery}</option>
-                <option>{translations.restaurant}</option>
-                <option>{translations.atm}</option>
-                <option>{translations.clinic}</option>
-                <option>{translations.pharmacy}</option>
-                <option>{translations.other}</option>
+                <option value={STORE_CATEGORIES.GROCERY}>{translations.grocery}</option>
+                <option value={STORE_CATEGORIES.RESTAURANT}>{translations.restaurant}</option>
+                <option value={STORE_CATEGORIES.ATM}>{translations.atm}</option>
+                <option value={STORE_CATEGORIES.CLINIC}>{translations.clinic}</option>
+                <option value={STORE_CATEGORIES.PHARMACY}>{translations.pharmacy}</option>
+                <option value={STORE_CATEGORIES.OTHER}>{translations.other}</option>
               </Form.Control>
             </Form.Group>
 

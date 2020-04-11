@@ -16,6 +16,7 @@ import { withGlobalContext } from "../App";
 import { FORM_FIELDS } from "../constants";
 const {
   STORE_NAME,
+  STORE_ADDRESS,
   STORE_CATEGORY,
   OPENING_TIME,
   CLOSING_TIME,
@@ -43,11 +44,12 @@ function ButtonWithLoading(props) {
 
 function MapImage({ location }) {
   const size = isMobile() ? `400x250` : `600x350`;
+  const zoomLevel = 14;
   return location ?
     <img
       style={{ maxWidth: "100%" }}
       alt="Location snapshot"
-      src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&markers=${location.lat},${location.lng}&zoom=15&size=${size}&key=AIzaSyB9hwI7b4677POloj5DpmDXaliqU5Dp8sA`} />
+      src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&markers=${location.lat},${location.lng}&zoom=${zoomLevel}&size=${size}&key=AIzaSyB9hwI7b4677POloj5DpmDXaliqU5Dp8sA`} />
     : null;
 }
 
@@ -61,7 +63,7 @@ const emptyData = {
   City: "",
   Locality: "",
   [PLACE_ID]: "",
-  Address: "",
+  [STORE_ADDRESS]: "",
   [OPENING_TIME]: "",
   [CLOSING_TIME]: "",
   Country: "",
@@ -236,6 +238,17 @@ class SubmitForm extends React.Component {
                 onChange={e => this.onChangeInput(e, STORE_NAME)}
                 value={formData[STORE_NAME]}
                 placeholder={translations.store_name_placeholder}
+                required
+              />
+            </Form.Group>
+
+            <Form.Group controlId="formStoreAddress">
+              <Form.Label className="">{translations.store_address}</Form.Label>
+              <Form.Control
+                type="text"
+                onChange={e => this.onChangeInput(e, STORE_ADDRESS)}
+                value={formData[STORE_ADDRESS]}
+                placeholder={translations.store_address_placeholder}
                 required
               />
             </Form.Group>

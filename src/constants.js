@@ -5,6 +5,7 @@ export const AVAILABLE_LANGUAGES = {
 
 export const FORM_FIELDS = {
   STORE_NAME: "Store Name",
+  STORE_ADDRESS: "Address",
   STORE_CATEGORY: "Store Category",
   USEFUL_INFORMATION: "Useful Information",
   SAFETY_OBSERVATIONS: "Safety Observations",

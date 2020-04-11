@@ -31,7 +31,8 @@ class LocationSelectionPage extends React.Component {
   state = {
     data: { ...emptyData },
     searchFieldValue: "",
-    isLocationSelected: false
+    isLocationSelected: false,
+    showInvalidAlert: false
   };
 
   onLocationSearchCompleted = result => {
@@ -110,8 +111,8 @@ class LocationSelectionPage extends React.Component {
         />
         <div className="my-3 text-center">
           <div className="my-3">
-            {!this.state.isLocationSelected ?
-              <Alert variant='warning'>
+            {!this.state.isLocationSelected && this.state.showInvalidAlert ?
+              <Alert variant='danger'>
                 {translations.select_location_alert}
               </Alert> : null}
           </div>
@@ -124,8 +125,14 @@ class LocationSelectionPage extends React.Component {
                   searchFieldValue: this.state.searchFieldValue,
                 },
               }}
+              onClick={e => {
+                if (!this.state.isLocationSelected) {
+                  this.setState({ showInvalidAlert: true })
+                  e.preventDefault();
+                }
+              }}
             >
-              <Button variant="success" className="text-uppercase" disabled={!this.state.isLocationSelected}>
+              <Button variant="success" className="text-uppercase">
                 {translations.select_location}
               </Button>
             </Link>

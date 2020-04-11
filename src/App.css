@@ -111,5 +111,60 @@ footer a:hover {
 }
 .highlighted-text {
   background: #fff8a0;
-  padding: .2em 0;
+  padding: 0.2em 0;
+}
+
+.no-of-users-alert {
+  padding-right: 2.5em;
+}
+
+.language-selector {
+  margin-top: 25px;
+}
+
+.language-selector__toggle {
+  background: transparent !important;
+  color: #1a1a1a !important;
+  border: 1px solid #1a1a1a !important;
+  text-transform: capitalize;
+  width: 120px;
+  text-align: left;
+  position: relative;
+}
+
+.language-selector__toggle i {
+  margin-right: 5px;
+}
+
+.language-selector__toggle:after {
+  position: absolute;
+  top: 50%;
+  right: 11px;
+  transform: translateY(-50%);
+}
+
+.language-selector__item {
+  text-transform: capitalize;
+}
+
+.MuiFormControl-root.time-picker {
+  display: block;
+}
+
+.MuiFormControl-root.time-picker.hasError .MuiInput-underline:after {
+  transform: scaleX(1);
+  border-color: #f44336;
+}
+
+.closing-time-error {
+  color: #f44336;
+  font-size: 12px;
+  line-height: 12px;
+  margin: 0;
+  margin-top: 8px;
+}
+
+.btn-success.disabled,
+.btn-success:disabled {
+  pointer-events: none;
 }

@@ -12,10 +12,3 @@ export async function submit(data) {
   const response = await axios.post(`${BASE_URL}/v1/update`, data);
   return response.data;
 }
-
-export async function ip() {
-  const response = await axios.get(
-    "https://ipinfo.io/json?token=737774ee26668f"
-  );
-  return response.data;
-}

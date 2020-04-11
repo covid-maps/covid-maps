@@ -1,8 +1,11 @@
 import React from "react";
+import PropTypes from "prop-types";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
+import Alert from "react-bootstrap/Alert";
 import { getFirstComma } from "../utils";
 import LocationSelector from "../LocationSelector";
+import { withGlobalContext } from "../App";
 
 const emptyData = {
   "Store Name": "",
@@ -15,14 +18,21 @@ const emptyData = {
   Locality: "",
   "Place Id": "",
   Address: "",
-  Country: ""
+  Country: "",
 };
 
 class LocationSelectionPage extends React.Component {
+  static propTypes = {
+    translations: PropTypes.object.isRequired,
+    ipLocation: PropTypes.object,
+    geoLocation: PropTypes.object
+  };
+
   state = {
-    currentLocationCaptured: false,
     data: { ...emptyData },
-    searchFieldValue: ""
+    searchFieldValue: "",
+    isLocationSelected: false,
+    showInvalidAlert: false
   };
 
   onLocationSearchCompleted = result => {
@@ -39,6 +49,7 @@ class LocationSelectionPage extends React.Component {
     if ((latLng && latLng.lat) || name) {
       this.setState({
         searchFieldValue: address,
+        isLocationSelected: true,
         data: {
           ...this.state.data,
           "Store Name": getFirstComma(name),
@@ -48,8 +59,8 @@ class LocationSelectionPage extends React.Component {
           Locality: locality,
           "Place Id": place_id,
           Address: address,
-          Country: country
-        }
+          Country: country,
+        },
       });
     }
   };
@@ -76,39 +87,60 @@ class LocationSelectionPage extends React.Component {
   }
 
   render() {
+    const { translations } = this.props;
     return (
-      <>
+      <div className="mb-5">
         <div className="p-2 text-uppercase font-weight-bold">
-          <h5 className="m-0">Set store location to add</h5>
+          <h5 className="m-0 text-center">{translations.set_store_location}</h5>
         </div>
         <LocationSelector
           activateInput
           onSearchSuccess={this.onLocationSearchCompleted}
           searchValue={this.getSearchValue()}
+          ipLocation={this.props.ipLocation}
+          geoLocation={this.props.geoLocation}
           height={"50vh"}
-          position={
+          markerPosition={
             this.state.data.Latitude
               ? {
                 lat: parseFloat(this.state.data.Latitude),
-                lng: parseFloat(this.state.data.Longitude)
+                lng: parseFloat(this.state.data.Longitude),
               }
               : undefined
           }
         />
-        <div className="my-3 d-flex justify-content-center">
-          <Link to={{ pathname: "/update", state: { item: this.state.data, searchFieldValue: this.state.searchFieldValue } }}>
-            <Button
-              variant="outline-primary"
-              className="text-uppercase"
-            // disabled={!this.hasLocation()}
+        <div className="my-3 text-center">
+          <div className="my-3">
+            {!this.state.isLocationSelected && this.state.showInvalidAlert ?
+              <Alert variant='danger'>
+                {translations.select_location_alert}
+              </Alert> : null}
+          </div>
+          <div>
+            <Link
+              to={{
+                pathname: "/update",
+                state: {
+                  item: this.state.data,
+                  searchFieldValue: this.state.searchFieldValue,
+                },
+              }}
+              onClick={e => {
+                if (!this.state.isLocationSelected) {
+                  this.setState({ showInvalidAlert: true })
+                  e.preventDefault();
+                }
+              }}
             >
-              Select location
-            </Button>
-          </Link>
+              <Button variant="success" className="text-uppercase">
+                {translations.select_location}
+              </Button>
+            </Link>
+          </div>
         </div>
-      </>
+      </div>
     );
   }
 }
 
-export default LocationSelectionPage;
+export default withGlobalContext(LocationSelectionPage);

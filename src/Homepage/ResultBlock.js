@@ -1,8 +1,10 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
+import PropTypes from "prop-types";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
 import { recordUpdateStore } from "../gaEvents";
 import Highlighter from "react-highlight-words";
+import { withGlobalContext } from "../App";
 
 function constructDirectionsUrl({ name, placeId, lat, lng }) {
   if (placeId) {
@@ -12,90 +14,81 @@ function constructDirectionsUrl({ name, placeId, lat, lng }) {
   }
 }
 
-function shareListing(e, listing) {
-  e.stopPropagation();
-  let storeName = listing.name
-  let placeId = listing.placeId
-  let url = `${window.location.origin}/listing/${placeId}`
-  if (navigator.share) {
-    navigator.share({
-      title: `${storeName}`,
-      text: `Check out the latest information on ${storeName} using Covid Maps — crowdsourced updates on essential services during lockdown period. \n`,
-      url: url
-    })
-  }
-}
-
 function prepareStoreForUpdate(entry) {
   return {
     ...entry,
     "Safety Observations": "",
     "Useful Information": "",
-    "Store Category": entry['Store Category'] && entry['Store Category'].length ?
-      entry['Store Category'][0] : ""
+    "Opening Time": "",
+    "Closing Time": "",
+    "Store Category":
+      entry["Store Category"] && entry["Store Category"].length
+        ? entry["Store Category"][0]
+        : "",
   };
 }
 
-const ResultBlock = (props) => {
-  const [showShareButton, setShareButtonState] = useState(false)
-  useEffect(() => {
-    if (navigator.share) {
-      setShareButtonState(true)
-    }
-  })
-  function onClick() {
+class ResultBlock extends React.Component {
+  static propTypes = {
+    translations: PropTypes.object.isRequired,
+  };
+
+  onClick() {
     window.scrollTo({
       top: 0,
-      behavior: "smooth"
+      behavior: "smooth",
     });
-    props.onClick && props.onClick(props.result);
+    this.props.onClick && this.props.onClick(this.props.result);
   }
 
-  const { result } = props;
-  const entry = result.entries.length ? result.entries[0] : undefined;
-  return (
-    <div
-      onClick={() => onClick()}
-      className={`card my-1 card-result-block ${props.isSelected ? "card-result-block-selected" : ""}`}
-    >
-      <div className="card-body p-3">
-        <a
-          href={constructDirectionsUrl(result)}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="float-right btn btn-sm btn-outline-secondary text-uppercase ml-2"
-        >
-          <i className="far fa-directions"></i>
-        </a>
-        <Link
-          to={{ pathname: "/update", state: { item: prepareStoreForUpdate(entry) } }}
-          className="float-right btn btn-sm btn-outline-success text-uppercase"
-          onClick={recordUpdateStore}
-        >
-          Update
-          </Link>
-        {
-          showShareButton &&
-          <div
-            onClick={(e) => shareListing(e, result)}
-            className="float-right btn btn-sm btn-outline-secondary text-uppercase mr-2"
+  render() {
+    const { result } = this.props;
+    const entry = result.entries.length ? result.entries[0] : undefined;
+    return (
+      <div
+        onClick={() => this.onClick()}
+        className={`card my-1 card-result-block ${
+          this.props.isSelected ? "card-result-block-selected" : ""
+          }`}
+      >
+        <div className="card-body p-3">
+          <a
+            href={constructDirectionsUrl(result)}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="float-right btn btn-sm btn-outline-secondary text-uppercase ml-2"
           >
-            <i className="far fa-share-alt"></i>
-          </div>
-        }
-
-        <h5 className="card-title m-0 p-0">
-          <Highlighter
-            highlightClassName="highlighted-text"
-            searchWords={[props.highlightedText]}
-            autoEscape={true}
-            textToHighlight={result.name}
+            <i className="far fa-directions"></i>
+          </a>
+          <Link
+            to={{
+              pathname: "/update",
+              state: { item: prepareStoreForUpdate(entry) },
+            }}
+            className="float-right btn btn-sm btn-outline-success text-uppercase"
+            onClick={recordUpdateStore}
+          >
+            {this.props.translations.update}
+          </Link>
+          <h5 className="card-title m-0 p-0 d-inline-block">
+            <Highlighter
+              highlightClassName="highlighted-text"
+              searchWords={[this.props.highlightedText]}
+              autoEscape={true}
+              textToHighlight={result.name}
+            />
+          </h5>
+          {result.openTime && result.closeTime ? (
+            <span className="mx-2">{`Hours: ${result.openTime} to ${result.closeTime}`}</span>
+          ) : null}
+          <ResultEntry
+            highlightedText={this.props.highlightedText}
+            entries={result.entries}
           />
-        </h5>
-        <ResultEntry highlightedText={props.highlightedText} entries={result.entries} />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
-export default ResultBlock;
+export default withGlobalContext(ResultBlock);

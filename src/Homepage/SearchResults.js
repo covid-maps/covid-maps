@@ -13,8 +13,8 @@ function applySearchFilter(query, entries) {
     const { entries } = store;
     const q = query.toLowerCase();
     return store.name.toLowerCase().indexOf(q) >= 0 || entries.find(entry => {
-      return entry["Safety Observations"].toLowerCase().indexOf(q) >= 0 ||
-        entry["Useful Information"].toLowerCase().indexOf(q) >= 0
+      return (entry["Safety Observations"] && entry["Safety Observations"].toLowerCase().indexOf(q) >= 0) ||
+        (entry["Useful Information"] && entry["Useful Information"].toLowerCase().indexOf(q) >= 0)
     })
   })
 }

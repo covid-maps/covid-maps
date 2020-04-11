@@ -1,39 +1,49 @@
 import React from "react";
 import { geocodeByLatlng, getAddressComponent, isFunction } from "../utils";
-import MapWithSearch from "../MapWithSearch";
+import LocationSelectorMapWithSearch from "../MapsWithSearch/LocationSelectorMap";
+import { ADDRESS_COMPONENTS } from "../constants";
 
 class LocationSelector extends React.Component {
+  geocodeAndInformParent = async latLng => {
+    let results;
+    try {
+      results = await geocodeByLatlng(latLng);
+    } catch (e) {
+      console.log('Geocoding failed for', latLng);
+    }
+    if (results && results.length) {
+      const result = results[0];
+      if (isFunction(latLng.lat)) {
+        latLng = { lat: latLng.lat(), lng: latLng.lng() };
+      }
+      this.props.onSearchSuccess({
+        latLng,
+        name: "",
+        address: result.formatted_address,
+        place_id: result.place_id,
+        types: result.types,
+        locality: getAddressComponent(
+          result.address_components,
+          ADDRESS_COMPONENTS.NEIGHBORHOOD
+        ),
+        city: getAddressComponent(result.address_components, ADDRESS_COMPONENTS.LOCALITY),
+        country: getAddressComponent(result.address_components, ADDRESS_COMPONENTS.COUNTRY)
+      });
+    }
+  }
+
   render() {
     return (
-      <MapWithSearch
-        isMarkerShown
+      <LocationSelectorMapWithSearch
         activateInput={this.props.activateInput}
         onSearchSuccess={this.props.onSearchSuccess}
         value={this.props.searchValue}
         height={this.props.height}
-        position={this.props.position}
-        onMarkerDragged={async latLng => {
-          const results = await geocodeByLatlng(latLng);
-          if (results && results.length) {
-            const result = results[0];
-            if (isFunction(latLng.lat)) {
-              latLng = { lat: latLng.lat(), lng: latLng.lng() };
-            }
-            this.props.onSearchSuccess({
-              latLng,
-              name: "",
-              address: result.formatted_address,
-              place_id: result.place_id,
-              types: result.types,
-              locality: getAddressComponent(
-                result.address_components,
-                "neighborhood"
-              ),
-              city: getAddressComponent(result.address_components, "locality"),
-              country: getAddressComponent(result.address_components, "country")
-            });
-          }
-        }}
+        markerPosition={this.props.markerPosition}
+        ipLocation={this.props.ipLocation}
+        geoLocation={this.props.geoLocation}
+        onGeolocationFound={this.geocodeAndInformParent}
+        onMarkerDragged={this.geocodeAndInformParent}
       />
     );
   }

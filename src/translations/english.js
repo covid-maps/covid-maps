@@ -33,4 +33,5 @@ export default {
   select_location: "Select location",
   select_location_alert: "Select a location by searching or moving the marker",
   closing_time_error: "Closing time should be after Opening time",
+  form_submit_error: "Oh no :( Something went wrong on our end. We are working on getting this fixed as soon as we can.",
 };

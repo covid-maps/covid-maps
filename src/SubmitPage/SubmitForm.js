@@ -78,6 +78,7 @@ class SubmitForm extends React.Component {
     isLoading: false,
     isValid: true,
     hasSubmitted: false,
+    hasError: false,
     data: { ...emptyData },
   };
 
@@ -103,20 +104,20 @@ class SubmitForm extends React.Component {
       };
 
       try {
+        throw new Error('oops');
+        return;
         const response = await api.submit(data);
         console.log(data);
         console.log(response);
         recordFormSubmission();
         this.setState({ isLoading: false, hasSubmitted: true }, () => {
-          window.scrollTo(0, 0);
-          this.clearForm(); 
-
           // redirect the user to homepage and
           // keep submittd form data in state for further use
           this.props.history.push(`/?submittedStore=${this.getBase64OfFormData(formData)}`);
         });
       } catch (error) {
         console.log(error);
+        window.scrollTo(0, 0);
         this.setState({ isLoading: false, hasError: true });
       }
 
@@ -234,9 +235,9 @@ class SubmitForm extends React.Component {
           <MapImage location={position} />
         </div>
 
-        {this.state.hasSubmitted ? (
-          <div className="alert alert-success text-center mb-0">
-            <span>Submitted successfully, thank you!</span>
+        {this.state.hasError ? (
+          <div className="alert alert-danger text-center mb-0">
+            <span>{translations.form_submit_error}</span>
           </div>
         ) : null}
 

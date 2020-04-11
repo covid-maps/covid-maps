@@ -3,6 +3,15 @@ const compression = require("compression");
 const requestIp = require("request-ip");
 const bodyParser = require("body-parser");
 const stores = require("./service/stores");
+const axios = require('axios');
+
+async function getLocationFromIp(req) {
+  const ip = req.clientIp;
+  const url = `https://ipinfo.io/${ip}/json?token=737774ee26668f`;
+  const response = await axios.get(url);
+  const [lat, lng] = response.data.loc.split(",");
+  return { lat: parseFloat(lat), lng: parseFloat(lng) }
+}
 
 const getFormDataWithUserIp = req => {
   return {
@@ -48,7 +57,10 @@ app.post("/v1/admin-add", async (req, res) => {
 });
 
 app.get("/v1/query", async (req, res) => {
-  res.send(await stores.findAllStores());
+  const [results, location] = await Promise.all([
+    stores.findAllStores(), getLocationFromIp(req)
+  ]);
+  res.send({ results, location });
 });
 
 app.get("/v2/query", async (req, res) => {

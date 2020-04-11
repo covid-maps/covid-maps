@@ -29,7 +29,12 @@ async function findNearbyStores(params){
             models.sequelize.fn(
                 "ST_DWithin",
                 models.sequelize.col('coordinate'),
-                models.sequelize.fn("ST_Transform", `SRID=4326;POINT(${params.lng} ${params.lat})`, 4326),
+                models.sequelize.fn(
+                    "ST_Transform",
+                    models.sequelize.cast(
+                        `SRID=4326;POINT(${params.lng} ${params.lat})`,
+                        "geometry"),
+                    4326),
                 getDistanceRange(params)
             ),
             true

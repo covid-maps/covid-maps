@@ -18,10 +18,10 @@ async function findAllStores(){
 }
 
 async function findNearbyStores(params){
-    if(!params.lat || !params.lng){
+    if(!params.location.lat || !params.location.lng){
         return [];
     }
-    return await models.StoreInfo.findAll({
+    const stores =  await models.StoreInfo.findAll({
         include: [{
                 model : models.StoreUpdates
             }],
@@ -32,14 +32,15 @@ async function findNearbyStores(params){
                 models.sequelize.fn(
                     "ST_Transform",
                     models.sequelize.cast(
-                        `SRID=4326;POINT(${params.lng} ${params.lat})`,
+                        `SRID=4326;POINT(${params.location.lng} ${params.location.lat})`,
                         "geometry"),
                     4326),
                 getDistanceRange(params)
             ),
             true
         )
-    })
+    });
+    return stores.flatMap(store => mapDBRow(store));
 }
 
 function getDistanceRange(params){

@@ -11,14 +11,6 @@ module.exports = {
         queryInterface.addIndex(
           'StoreUpdates',
           ['deleted']
-        ),
-        queryInterface.addIndex(
-          'StoreUpdates',
-          ['reviewed']
-        ),
-        queryInterface.addIndex(
-          'StoreUpdates',
-          ['flag']
         )
     ]);
   },
@@ -33,14 +25,6 @@ module.exports = {
         queryInterface.removeIndex(
           'StoreUpdates',
           ['deleted']
-        ),
-        queryInterface.removeIndex(
-          'StoreUpdates',
-          ['reviewed']
-        ),
-        queryInterface.removeIndex(
-          'StoreUpdates',
-          ['flag']
         )
     ]);
   }

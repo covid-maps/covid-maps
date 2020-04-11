@@ -125,7 +125,6 @@ class SubmitForm extends React.Component {
         });
       } catch (error) {
         console.log(error);
-        window.scrollTo(0, 0);
         this.setState({ isLoading: false, showErrorNotification: true });
       }
 

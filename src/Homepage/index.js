@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";
@@ -7,9 +7,9 @@ import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
 import { getDistance } from "geolib";
-import MapWithSearch from "../MapWithSearch";
+import HomepageMapWithSearch from '../MapsWithSearch/HomepageMap';
 import { isStoreType, getFirstComma } from "../utils";
-import { recordAddNewStore } from "../gaEvents";
+import { recordAddNewStore, recordStoreFilterKeypress } from "../gaEvents";
 import Form from "react-bootstrap/Form";
 import { withGlobalContext } from "../App";
 
@@ -48,14 +48,16 @@ function NoOfUsersAlert(props) {
 class Homepage extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
+    ipLocation: PropTypes.object,
+    geoLocation: PropTypes.object,
+    setIPlocation: PropTypes.func.isRequired
   };
 
   state = {
-    searchQuery: "",
+    storeFilterQuery: "",
     results: [],
     markers: [],
     isLoading: true,
-    center: {},
     mapShouldPan: false,
     selectedLocation: undefined,
     searchResultLatlng: undefined,
@@ -63,16 +65,44 @@ class Homepage extends React.Component {
   };
 
   componentDidMount() {
-    api.query().then(data => {
+    api.query().then(response => {
+      const { results: data, location } = response;
+      this.props.setIPlocation(location);
       this.setState({
-        results: this.formatResults(data),
+        results: this.formatResults(data, location),
         markers: data.map(result => ({
           lat: Number(result.Latitude),
           lng: Number(result.Longitude),
         })),
         isLoading: false,
       });
+      this.goToStoreFromProps()
     });
+
+  }
+
+  goToStoreFromProps() {
+    if (this.props.match.params.storeId) {
+      const storeId = parseInt(this.props.match.params.storeId)
+      const place = this.state.results.find(item => item.storeId === storeId)
+      // console.log(place)
+      //Run the function only if place is real value ( not nul || undefined)
+      //Reuse the onCardClick function.
+      if (place) {
+        this.onCardClick(place)
+        const latLng = {
+          "lat": place.lat,
+          "lng": place.lng
+        }
+        this.setState({
+          center: { "latLng": latLng },
+          results: this.calculateGroupDistance(
+            this.state.results,
+            latLng
+          )
+        });
+      }
+    }
   }
 
   calculateDistance(result, center) {
@@ -93,7 +123,7 @@ class Homepage extends React.Component {
     return groupedResult.sort((a, b) => a.distance - b.distance);
   }
 
-  formatResults(results) {
+  formatResults(results, centerLocation) {
     const grouped = Object.values(
       results.reduce((obj, result) => {
         if (!obj.hasOwnProperty(result["Place Id"] || result["Store Name"])) {
@@ -109,12 +139,13 @@ class Homepage extends React.Component {
       return {
         name: entries[0]["Store Name"],
         placeId: entries[0]["Place Id"],
+        storeId: entries[0]["StoreId"],
         lat: Number(entries[0].Latitude),
         lng: Number(entries[0].Longitude),
         entries: sortedEntries,
       };
     });
-    return this.calculateGroupDistance(grouped, this.state.center);
+    return this.calculateGroupDistance(grouped, centerLocation);
   }
 
   isMissingLocationInformation(location) {
@@ -127,10 +158,8 @@ class Homepage extends React.Component {
   }
 
   onCardClick(card) {
-    const center = { lat: Number(card.lat), lng: Number(card.lng) };
     this.setState({
-      center,
-      selectedLocation: center,
+      selectedLocation: { lat: Number(card.lat), lng: Number(card.lng) },
       mapShouldPan: true,
     });
     setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
@@ -138,7 +167,6 @@ class Homepage extends React.Component {
 
   onMarkerSelected(latLng) {
     this.setState({
-      center: { ...latLng },
       selectedLocation: { ...latLng },
       mapShouldPan: false,
     });
@@ -159,11 +187,21 @@ class Homepage extends React.Component {
   }
 
   handleStoreFilterQuery = event => {
+    recordStoreFilterKeypress()
     this.setState({
-      searchQuery: event.target.value,
+      storeFilterQuery: event.target.value,
       selectedLocation: undefined,
     });
   };
+
+  onGeolocationFound = () => {
+    // Clear search result and refresh distances
+    this.setState({
+      searchResult: undefined,
+      searchResultLatlng: undefined,
+      results: this.calculateGroupDistance(this.state.results, this.props.geoLocation || this.props.ipLocation)
+    })
+  }
 
   render() {
     let missingBlock = null;
@@ -193,14 +231,13 @@ class Homepage extends React.Component {
         <NoOfUsersAlert
           alertText={this.props.translations.website_purpose_banner}
         />
-        <MapWithSearch
+        <HomepageMapWithSearch
           value=""
           onSearchSuccess={result => {
             if (result && result.latLng) {
               this.setState({
                 searchResultLatlng: result.latLng,
                 searchResult: result,
-                center: result.latLng,
                 results: this.calculateGroupDistance(
                   this.state.results,
                   result.latLng
@@ -208,9 +245,11 @@ class Homepage extends React.Component {
               });
             }
           }}
+          onGeolocationFound={this.onGeolocationFound}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
-          centerPosition={this.state.searchResultLatlng}
+          currentLocation={this.props.geoLocation || this.props.ipLocation}
+          centerPosition={this.state.searchResultLatlng || this.props.geoLocation || this.props.ipLocation}
           locations={
             selectedForMissing
               ? [...closeByMarkers, this.state.searchResultLatlng]
@@ -230,7 +269,7 @@ class Homepage extends React.Component {
                 type="text"
                 onChange={this.handleStoreFilterQuery}
                 className="d-inline-block mx-1 results-search-box"
-                value={this.state.searchQuery}
+                value={this.state.storeFilterQuery}
                 placeholder={this.props.translations.store_search_placeholder}
               />
             </div>
@@ -248,12 +287,11 @@ class Homepage extends React.Component {
             </div>
           </div>
           <SearchResults
-            textFilter={this.state.searchQuery}
+            textFilter={this.state.storeFilterQuery}
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
             selectedLocation={this.state.selectedLocation}
             results={closeByResults}
-            center={this.state.center}
           />
         </div>
       </div>

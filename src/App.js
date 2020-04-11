@@ -61,6 +61,8 @@ class App extends Component {
 
     this.state = {
       language: this.getDefaultLanguage(),
+      ipLocation: undefined,
+      geoLocation: undefined
     };
   }
 
@@ -85,6 +87,18 @@ class App extends Component {
     };
   };
 
+  setGeolocation = (location) => {
+    this.setState({
+      geoLocation: location
+    })
+  }
+
+  setIPlocation = (location) => {
+    this.setState({
+      ipLocation: location
+    })
+  }
+
   render() {
     const translations = this.getTranslations();
     return (
@@ -94,6 +108,10 @@ class App extends Component {
             translations,
             currentLanguage: this.state.language,
             setLanguage: this.setLanguage,
+            ipLocation: this.state.ipLocation,
+            geoLocation: this.state.geoLocation,
+            setGeolocation: this.setGeolocation,
+            setIPlocation: this.setIPlocation,
           }}
         >
           <div className="App">
@@ -104,6 +122,7 @@ class App extends Component {
                 <Route path="/update" component={SubmitPage} />
                 <Route path="/location" component={LocationSelectionPage} />
                 <Route path="/about" component={AboutPage} />
+                <Route path="/store/:storeId" component={Homepage} />
                 <Route path="/" component={Homepage} />
               </Switch>
             </div>

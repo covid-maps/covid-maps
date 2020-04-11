@@ -1,5 +1,8 @@
 var models  = require('../models');
 
+const DEFAULT_DISTANCE_RANGE = 0.1; //approx 11kms - https://stackoverflow.com/questions/8464666/distance-between-2-points-in-postgis-in-srid-4326-in-metres
+const MAX_DISTANCE_RADIUS_METERS = 200000
+
 async function addStoreData(data, forceUpdate = false){
     const store = await addInfoToDB(data, forceUpdate);
     return mapDBRow(store)[0];
@@ -14,25 +17,70 @@ async function findAllStores(){
     return stores.flatMap(store => mapDBRow(store));
 }
 
+async function findNearbyStores(params){
+    if(!params.lat || !params.lng){
+        return [];
+    }
+    return await models.StoreInfo.findAll({
+        include: [{
+                model : models.StoreUpdates
+            }],
+        where: models.sequelize.where(
+            models.sequelize.fn(
+                "ST_DWithin",
+                models.sequelize.col('coordinate'),
+                models.sequelize.fn(
+                    "ST_Transform",
+                    models.sequelize.cast(
+                        `SRID=4326;POINT(${params.lng} ${params.lat})`,
+                        "geometry"),
+                    4326),
+                getDistanceRange(params)
+            ),
+            true
+        )
+    })
+}
+
+function getDistanceRange(params){
+    if(!params.radius){
+        return DEFAULT_DISTANCE_RANGE
+    }
+    if(params.radius > MAX_DISTANCE_RADIUS_METERS){
+        return toRadialDistance(MAX_DISTANCE_RADIUS_METERS)
+    }else{
+        return toRadialDistance(params.radius)
+    }
+}
+
+/**
+ *
+ * @param mt Distance in meters
+ */
+function toRadialDistance(mt){
+    return (0.001/111) * mt
+}
+
 function mapDBRow(data){
-    return data.StoreUpdates.map(up => {
+    return data.StoreUpdates.map(update => {
         return {
-            "User IP": up.ip,
-            Timestamp: up.createdAt,
+            "User IP": update.ip,
+            Timestamp: update.createdAt,
             Latitude: data.latitude,
             Longitude: data.longitude,
             Coordinate: data.coordinate,
+            StoreId: data.id,
             "Store Category": data.category.split(","),
             "Store Name": data.name,
-            "Safety Observations": up.safetyInfo,
-            "Useful Information": up.availabilityInfo,
+            "Safety Observations": update.safetyInfo,
+            "Useful Information": update.availabilityInfo,
             "Place Id": data.placeId,
             City: data.city,
             Locality: data.locality,
             Address: data.address,
             Country: data.country,
-            "Opening Time": up.openingTime,
-            "Closing Time": up.closingTime
+            "Opening Time": update.openingTime,
+            "Closing Time": update.closingTime,
         }
     })
 }
@@ -133,5 +181,6 @@ async function updateExistingStore(store, data, forceDateUpdate){
 
 module.exports =  {
     findAllStores,
-    addStoreData
+    addStoreData,
+    findNearbyStores
 };

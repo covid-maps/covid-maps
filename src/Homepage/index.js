@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import qs from 'qs';
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
@@ -12,6 +13,7 @@ import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore, recordStoreFilterKeypress } from "../gaEvents";
 import Form from "react-bootstrap/Form";
 import { withGlobalContext } from "../App";
+import { FORM_FIELDS } from "../constants";
 
 const DISTANCE_FILTER = 200000; // meters
 
@@ -50,7 +52,8 @@ class Homepage extends React.Component {
     translations: PropTypes.object.isRequired,
     ipLocation: PropTypes.object,
     geoLocation: PropTypes.object,
-    setIPlocation: PropTypes.func.isRequired
+    setIPlocation: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired,
   };
 
   state = {
@@ -68,13 +71,35 @@ class Homepage extends React.Component {
     api.query().then(response => {
       const { results: data, location } = response;
       this.props.setIPlocation(location);
+      let selectedLocation;
+      let selectedStoreName;
+
+      const queryParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+      if ('submittedStore' in queryParams) {
+        const storeData = JSON.parse(atob(queryParams.submittedStore));
+        selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude }
+        selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
+      }
+
       this.setState({
-        results: this.formatResults(data, location),
+        results: this.formatResults(data, selectedLocation || location),
         markers: data.map(result => ({
           lat: Number(result.Latitude),
           lng: Number(result.Longitude),
         })),
         isLoading: false,
+        selectedLocation,
+        selectedStoreName,
+        mapShouldPan: Boolean(selectedLocation),
+      }, () => {
+        if (selectedLocation) {
+          setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
+          const searchResultsContainer = document.querySelector('.search-results-container');
+
+          if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
+            searchResultsContainer.scrollIntoView({ behavior: 'smooth' });
+          }
+        }
       });
       this.goToStoreFromProps()
     });
@@ -161,6 +186,7 @@ class Homepage extends React.Component {
     this.setState({
       selectedLocation: { lat: Number(card.lat), lng: Number(card.lng) },
       mapShouldPan: true,
+      selectedStoreName: card.name,
     });
     setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
   }
@@ -287,6 +313,7 @@ class Homepage extends React.Component {
             </div>
           </div>
           <SearchResults
+            selectedStoreName={this.state.selectedStoreName}
             textFilter={this.state.storeFilterQuery}
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}

@@ -102,17 +102,31 @@ class SubmitForm extends React.Component {
         Timestamp: new Date().toISOString(),
       };
 
-      const response = await api.submit(data);
-      console.log(data);
-      console.log(response);
-      recordFormSubmission();
-      this.setState({ isLoading: false, hasSubmitted: true }, () => {
-        window.scrollTo(0, 0);
-        this.clearForm();
-      });
+      try {
+        const response = await api.submit(data);
+        console.log(data);
+        console.log(response);
+        recordFormSubmission();
+        this.setState({ isLoading: false, hasSubmitted: true }, () => {
+          window.scrollTo(0, 0);
+          this.clearForm(); 
+
+          // redirect the user to homepage and
+          // keep submittd form data in state for further use
+          this.props.history.push(`/?submittedStore=${this.getBase64OfFormData(formData)}`);
+        });
+      } catch (error) {
+        console.log(error);
+        this.setState({ isLoading: false, hasError: true });
+      }
+
     } else {
       this.setState({ isValid: false, isLoading: false });
     }
+  }
+
+  getBase64OfFormData = formData => {
+    return btoa(JSON.stringify(formData));
   }
 
   onChangeInput({ target }, dataKey) {

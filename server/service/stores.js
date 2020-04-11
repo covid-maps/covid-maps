@@ -1,4 +1,5 @@
 var models  = require('../models');
+var { FORM_FIELDS } = require('../../src/constants');
 
 const DEFAULT_DISTANCE_RANGE = 0.1; //approx 11kms - https://stackoverflow.com/questions/8464666/distance-between-2-points-in-postgis-in-srid-4326-in-metres
 const MAX_DISTANCE_RADIUS_METERS = 200000
@@ -70,25 +71,25 @@ function mapDBRow(data){
             Longitude: data.longitude,
             Coordinate: data.coordinate,
             StoreId: data.id,
-            "Store Category": data.category.split(","),
-            "Store Name": data.name,
-            "Safety Observations": update.safetyInfo,
-            "Useful Information": update.availabilityInfo,
-            "Place Id": data.placeId,
+            [FORM_FIELDS.STORE_CATEGORY]: data.category.split(","),
+            [FORM_FIELDS.STORE_NAME]: data.name,
+            [FORM_FIELDS.SAFETY_OBSERVATIONS]: update.safetyInfo,
+            [FORM_FIELDS.USEFUL_INFORMATION]: update.availabilityInfo,
+            [FORM_FIELDS.PLACE_ID]: data.placeId,
             City: data.city,
             Locality: data.locality,
             Address: data.address,
             Country: data.country,
-            "Opening Time": update.openingTime,
-            "Closing Time": update.closingTime,
+            [FORM_FIELDS.OPENING_TIME]: update.openingTime,
+            [FORM_FIELDS.CLOSING_TIME]: update.closingTime,
         }
     })
 }
 
 async function addInfoToDB(data, forceDateUpdate){
     let store = null
-    if(data["Place Id"] && data["Place Id"] != ""){
-        store = await models.StoreInfo.findOne({ where: { placeId: data['Place Id'] } });
+    if(data[FORM_FIELDS.PLACE_ID] && data[FORM_FIELDS.PLACE_ID] !== ""){
+        store = await models.StoreInfo.findOne({ where: { placeId: data[FORM_FIELDS.PLACE_ID] } });
     }
     if(store == null){
         return await addNewStore(data, forceDateUpdate)
@@ -103,12 +104,12 @@ function buildStoreObject(data, forceDateUpdate){
         dt = data.Timestamp;
     }
     return {
-        name: data["Store Name"],
-        category: data["Store Category"],
+        name: data[FORM_FIELDS.STORE_NAME],
+        category: data[FORM_FIELDS.STORE_CATEGORY],
         latitude: parseFloat(data.Latitude),
         longitude: parseFloat(data.Longitude),
         coordinate: { type: 'Point', coordinates: [parseFloat(data.Longitude),parseFloat(data.Latitude)]},
-        placeId: data["Place Id"] || "",
+        placeId: data[FORM_FIELDS.PLACE_ID] || "",
         address: data.Address || "",
         city: data.City || "",
         locality: data.Locality || "",
@@ -118,10 +119,10 @@ function buildStoreObject(data, forceDateUpdate){
         StoreUpdates: [{
             ip: data["User IP"],
             user_id: -1,
-            availabilityInfo: data["Useful Information"],
-            safetyInfo: data["Safety Observations"],
-            openingTime: data["Opening Time"],
-            closingTime: data["Closing Time"],
+            availabilityInfo: data[FORM_FIELDS.USEFUL_INFORMATION],
+            safetyInfo: data[FORM_FIELDS.SAFETY_OBSERVATIONS],
+            openingTime: data[FORM_FIELDS.OPENING_TIME],
+            closingTime: data[FORM_FIELDS.CLOSING_TIME],
             createdAt: dt,
             updatedAt: dt
         }]
@@ -139,8 +140,8 @@ async function addNewStore(data, forceDateUpdate){
 
 async function updateExistingStore(store, data, forceDateUpdate){
     let categories = store.category.split(",");
-    if(!categories.includes(data["Store Category"])){
-        categories.push(data["Store Category"])
+    if(!categories.includes(data[FORM_FIELDS.STORE_CATEGORY])){
+        categories.push(data[FORM_FIELDS.STORE_CATEGORY])
     }
     let dt = new Date();
     if(forceDateUpdate && data.Timestamp){
@@ -153,7 +154,7 @@ async function updateExistingStore(store, data, forceDateUpdate){
             latitude: parseFloat(data.Latitude),
             longitude: parseFloat(data.Longitude),
                 coordinate: { type: 'Point', coordinates: [parseFloat(data.Longitude),parseFloat(data.Latitude)]},
-            placeId: data["Place Id"] || "",
+            placeId: data[FORM_FIELDS.PLACE_ID] || "",
             address: data.Address || "",
             city: data.City || "",
             locality: data.Locality || "",
@@ -165,10 +166,10 @@ async function updateExistingStore(store, data, forceDateUpdate){
             ip: data["User IP"],
             storeId: store.id,
             user_id: -1,
-            availabilityInfo: data["Useful Information"],
-            safetyInfo: data["Safety Observations"],
-            openingTime: data["Opening Time"],
-            closingTime: data["Closing Time"],
+            availabilityInfo: data[FORM_FIELDS.USEFUL_INFORMATION],
+            safetyInfo: data[FORM_FIELDS.SAFETY_OBSERVATIONS],
+            openingTime: data[FORM_FIELDS.OPENING_TIME],
+            closingTime: data[FORM_FIELDS.CLOSING_TIME],
             createdAt: dt,
             updatedAt: dt
         }, { transaction: t });

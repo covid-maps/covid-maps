@@ -97,9 +97,9 @@ app.get("/v0/query", async (req, res) => {
 
 app.post("/v0/update", async (req, res) => {
   try {
-    const ressult = await addRow(getFormDataWithUserIp(req));
-    console.log(ressult);
-    res.send(ressult);
+    const result = await addRow(getFormDataWithUserIp(req));
+    console.log(result);
+    res.send(result);
   } catch (error) {
     console.log("Error in submit:", error);
     res.status(500).send({ error });
@@ -129,6 +129,15 @@ app.get("/v1/query", async (req, res) => {
     stores.findAllStores(), getLocationFromIp(req)
   ]);
   res.send({ results, location });
+});
+
+app.get("/v2/query", async (req, res) => {
+  let query = {
+    lat: req.query.lat,
+    lng: req.query.lng,
+    radius: req.query.radius,
+    page: req.query.page}
+  res.send(await stores.findNearbyStores(query));
 });
 
 app.listen(process.env.PORT || 5000);

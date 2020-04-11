@@ -3,6 +3,7 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import { dotIcon, markerIcon, icons, isSameLocation } from "../utils";
 import { mapOptions } from "./theme";
 
+// Final fallback to a location in Vancouver (should never be shown)
 const defaultCenter = { lat: 49.281376, lng: -123.111382 };
 
 class Map extends Component {
@@ -31,9 +32,13 @@ class Map extends Component {
   };
 
   mapCenter = () => {
-    return (
-      this.props.centerPosition || this.props.currentLocation || defaultCenter
-    );
+    if (this.props.centerPosition && this.props.centerPosition.lat) {
+      return this.props.centerPosition;
+    }
+    if (this.props.currentLocation && this.props.currentLocation.lat) {
+      return this.props.currentLocation;
+    }
+    return defaultCenter;
   };
 
   onMapLoaded = map => {
@@ -115,7 +120,6 @@ class Map extends Component {
     return (
       <GoogleMap
         ref={this.refMap}
-        id="example-map"
         options={mapOptions}
         mapContainerStyle={{
           height: "45vh",
@@ -125,12 +129,16 @@ class Map extends Component {
         zoom={13}
         center={this.mapCenter()}
       >
-        <Marker position={this.props.currentLocation} icon={dotIcon} />
+        {this.props.currentLocation && this.props.currentLocation.lat ?
+          <Marker position={this.props.currentLocation} icon={dotIcon} />
+          : null}
 
         {this.props.locations &&
-          this.props.locations.map(latlng => {
+          this.props.locations.map((latlng, index) => {
+            const markerKey = `${latlng.lat}_${latlng.lng}_${index}`;
             return (
               <Marker
+                key={markerKey}
                 icon={
                   this.isMarkerSelected(latlng)
                     ? markerIcon(icons.highlighted)

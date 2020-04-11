@@ -2,6 +2,7 @@ import React from "react";
 import PropTypes from "prop-types";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import Spinner from 'react-bootstrap/Spinner';
 import InputGroup from "react-bootstrap/InputGroup";
 import PlacesAutocomplete, {
   geocodeByAddress,
@@ -12,16 +13,58 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { recordSearchCompleted } from "../../gaEvents";
 import { withGlobalContext } from "../../App";
+import { ADDRESS_COMPONENTS } from "../../constants";
+
+function GeolocationButton({ isLoading, onClick }) {
+  return <Button
+    onClick={onClick}
+    variant="outline-secondary"
+  >
+    {isLoading ? <Spinner animation="border" size="sm" /> :
+      <FontAwesomeIcon icon={faCrosshairs} />
+    }
+  </Button>
+}
 
 class LocationSearchInput extends React.Component {
   static propTypes = {
-    translations: PropTypes.object
+    translations: PropTypes.object,
+    setGeolocation: PropTypes.func.isRequired
   };
 
   constructor(props) {
     super(props);
-    this.state = { address: props.value };
+    this.state = {
+      address: props.value,
+      isGeolocationLoading: false,
+    };
     this.textInput = React.createRef();
+  }
+
+  getGeolocation = () => {
+    this.setState({
+      isGeolocationLoading: true,
+      address: ""
+    });
+    if (!navigator.geolocation) {
+      // TODO: geolocation error handling
+      this.setState({ isGeolocationLoading: false });
+    } else {
+      navigator.geolocation.getCurrentPosition(position => {
+        const location = {
+          lat: position.coords.latitude,
+          lng: position.coords.longitude
+        }
+        this.props.setGeolocation(location)
+        this.setState({ isGeolocationLoading: false });
+        if (this.props.onGeolocationFound) {
+          this.props.onGeolocationFound(location);
+        }
+      }, error => {
+        console.log('error', error.message)
+        this.setState({ isGeolocationLoading: false });
+      })
+    }
   }
 
   handleChange = address => {
@@ -43,14 +86,14 @@ class LocationSearchInput extends React.Component {
           address: result.formatted_address,
           place_id: result.place_id,
           types: result.types,
-          city: getAddressComponent(result.address_components, "locality"),
+          city: getAddressComponent(result.address_components, ADDRESS_COMPONENTS.LOCALITY),
           locality: getAddressComponent(
             result.address_components,
-            "neighborhood"
+            ADDRESS_COMPONENTS.NEIGHBORHOOD
           ),
           country: getAddressComponent(
             result.address_components,
-            "country",
+            ADDRESS_COMPONENTS.COUNTRY,
             true
           )
         });
@@ -79,9 +122,9 @@ class LocationSearchInput extends React.Component {
   render() {
     const location = this.props.currentLocation
       ? new window.google.maps.LatLng(
-          this.props.currentLocation.lat,
-          this.props.currentLocation.lng
-        )
+        this.props.currentLocation.lat,
+        this.props.currentLocation.lng
+      )
       : undefined;
     const options = location ? { location, radius: 200000 } : undefined;
     return (
@@ -90,7 +133,7 @@ class LocationSearchInput extends React.Component {
         onChange={this.handleChange}
         onSelect={this.handleSelect}
         searchOptions={options}
-        debounce={500}
+        debounce={750}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>
@@ -105,12 +148,10 @@ class LocationSearchInput extends React.Component {
                 ref={this.textInput}
               />
               <InputGroup.Append>
-                <Button
-                  onClick={this.props.onGeolocation}
-                  variant="outline-secondary"
-                >
-                  <FontAwesomeIcon icon={faCrosshairs} />
-                </Button>
+                <GeolocationButton
+                  onClick={this.getGeolocation}
+                  isLoading={this.state.isGeolocationLoading}
+                />
                 <Button
                   onClick={e => this.clearInput(e)}
                   variant="outline-secondary"

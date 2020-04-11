@@ -73,3 +73,10 @@ export function getFirstComma(address) {
 export const isSameLocation = (a, b) => {
   return a && b && a.lat === b.lat && a.lng === b.lng;
 };
+
+export function isMobile() {
+  return (
+    typeof window.orientation !== "undefined" ||
+    navigator.userAgent.indexOf("IEMobile") !== -1
+  );
+}

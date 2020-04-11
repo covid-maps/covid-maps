@@ -5,13 +5,6 @@ import Highlighter from "react-highlight-words";
 
 const humanizeDuration = require("humanize-duration");
 
-function isPresentable(entry) {
-  return (
-    (entry["Safety Observations"] && entry["Safety Observations"].length > 5) ||
-    (entry["Useful Information"] && entry["Useful Information"].length > 5)
-  );
-}
-
 function Overlay(props) {
   return (
     <OverlayTrigger
@@ -35,8 +28,7 @@ function Timestamp({ Timestamp: value }) {
 }
 
 function ResultEntry({ entries, highlightedText }) {
-  const resultList = entries.filter(isPresentable);
-  return resultList.map(result => (
+  return entries.map(result => (
     <div className="mt-3" key={result["Timestamp"]}>
       <div>
         {result["Safety Observations"] ? (

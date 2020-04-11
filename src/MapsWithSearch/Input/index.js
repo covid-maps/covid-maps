@@ -133,7 +133,7 @@ class LocationSearchInput extends React.Component {
         onChange={this.handleChange}
         onSelect={this.handleSelect}
         searchOptions={options}
-        debounce={500}
+        debounce={750}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
           <div>

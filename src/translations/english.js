@@ -1,6 +1,6 @@
 export default {
   website_purpose_banner:
-    "Help 10,000+ users by adding updates on essential services around you",
+    "Help 35,000+ users by adding updates on essential services around you",
   location_search_placeholder: "Search by store, address or landmark",
   store_search_placeholder: "Filter by name or item",
   add_store: "Add a store",
@@ -26,8 +26,9 @@ export default {
   home: "Home",
   about: "About",
   insufficient_form_data_error:
-    "Please enter either Store timings or Useful information or Safety information",
+    "Please enter one of Store Timings, Safety Observations or Useful Information",
   set_store_location: "Set store location to add",
   select_location: "Select location",
-  select_location_alert: "Select a location to continue"
+  select_location_alert: "Select a location to continue",
+  closing_time_error: "Closing time should be after Opening time",
 };

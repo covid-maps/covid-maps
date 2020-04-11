@@ -146,3 +146,25 @@ footer a:hover {
 .language-selector__item {
   text-transform: capitalize;
 }
+
+.MuiFormControl-root.time-picker {
+  display: block;
+}
+
+.MuiFormControl-root.time-picker.hasError .MuiInput-underline:after {
+  transform: scaleX(1);
+  border-color: #f44336;
+}
+
+.closing-time-error {
+  color: #f44336;
+  font-size: 12px;
+  line-height: 12px;
+  margin: 0;
+  margin-top: 8px;
+}
+
+.btn-success.disabled,
+.btn-success:disabled {
+  pointer-events: none;
+}

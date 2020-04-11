@@ -2,6 +2,8 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import DateFnsUtils from "@date-io/date-fns";
 import cx from "classnames";
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from "react-bootstrap/Alert";
 import { format, parse, roundToNearestMinutes, isBefore } from "date-fns";
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import PropTypes from "prop-types";
@@ -78,9 +80,17 @@ class SubmitForm extends React.Component {
     isLoading: false,
     isValid: true,
     hasSubmitted: false,
-    hasError: false,
     data: { ...emptyData },
+    showErrorNotification: false,
   };
+
+  toggleErrorNotification = () => {
+    this.setState(prevState => {
+      return {
+        showErrorNotification: !prevState.showErrorNotification,
+      };
+    })
+  }
 
   clearForm() {
     this.setState({
@@ -116,7 +126,7 @@ class SubmitForm extends React.Component {
       } catch (error) {
         console.log(error);
         window.scrollTo(0, 0);
-        this.setState({ isLoading: false, hasError: true });
+        this.setState({ isLoading: false, showErrorNotification: true });
       }
 
     } else {
@@ -232,12 +242,20 @@ class SubmitForm extends React.Component {
         <div className='d-flex justify-content-center' style={{ maxWidth: '100%' }}>
           <MapImage location={position} />
         </div>
-
-        {this.state.hasError ? (
-          <div className="alert alert-danger text-center mb-0">
-            <span>{translations.form_submit_error}</span>
-          </div>
-        ) : null}
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={this.state.showErrorNotification}
+          onClose={this.toggleErrorNotification}>
+          <Alert
+            show
+            key="form-submit-error"
+            variant="danger"
+            onClose={this.toggleErrorNotification}
+            dismissible
+          >
+            {translations.form_submit_error}
+          </Alert>
+        </Snackbar>
 
         <Form onSubmit={e => this.onSubmit(e)}>
           <div className="container p-3">

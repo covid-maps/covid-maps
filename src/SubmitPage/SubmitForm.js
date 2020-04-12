@@ -138,7 +138,10 @@ class SubmitForm extends React.Component {
   }
 
   onChangeInput({ target }, dataKey) {
-    this.setState({ data: { ...this.state.data, [dataKey]: target.value } });
+    this.setState({
+      isValid: true,
+      data: { ...this.state.data, [dataKey]: target.value }
+    });
   }
 
   componentDidMount() {
@@ -279,7 +282,6 @@ class SubmitForm extends React.Component {
                 onChange={e => this.onChangeInput(e, STORE_ADDRESS)}
                 value={formData[STORE_ADDRESS]}
                 placeholder={translations.store_address_placeholder}
-                required
               />
             </Form.Group>
 

@@ -3,15 +3,14 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import { dotIcon, markerIcon, icons, isSameLocation } from "../utils";
 import { mapOptions } from "./theme";
 
-// Final fallback to a location in Vancouver (should never be shown)
-const defaultCenter = { lat: 49.281376, lng: -123.111382 };
+// Final fallback to a location in Bangalore
+const defaultCenter = { lat: 12.95396, lng: 77.4908577 };
 
 class Map extends Component {
   map = undefined;
 
   state = {
     markerPosition: this.props.markerPosition,
-    isLoaded: false
   };
 
   mapCenter = () => {
@@ -20,24 +19,15 @@ class Map extends Component {
 
   onMapLoaded = map => {
     this.map = map;
-    setTimeout(() => {
-      this.setState({ isLoaded: true })
-    }, 1000);
   };
 
-  onBoundsChanged = () => {
-    if (this.map && this.state.isLoaded) {
+  onDrag = () => {
+    if (this.map) {
       const mapCenter = this.map.getCenter();
       const center = { lat: mapCenter.lat(), lng: mapCenter.lng() }
       this.setState({ markerPosition: center });
-      if (this.props.onBoundsChanged) {
-        this.props.onBoundsChanged({
-          lat: mapCenter.lat(),
-          lng: mapCenter.lng()
-        });
-      }
     }
-  };
+  }
 
   onDragEnd = () => {
     if (this.map) {
@@ -54,6 +44,7 @@ class Map extends Component {
   }
 
   render() {
+    const center = this.mapCenter();
     return (
       <GoogleMap
         options={mapOptions}
@@ -61,10 +52,10 @@ class Map extends Component {
           height: this.props.height,
           width: "100%"
         }}
-        onLoad={this.onMapLoaded}
         zoom={16}
-        center={this.mapCenter()}
-        onBoundsChanged={this.onBoundsChanged}
+        center={center}
+        onLoad={this.onMapLoaded}
+        onDrag={this.onDrag}
         onDragEnd={this.onDragEnd}
       >
         {this.props.geoLocation ?

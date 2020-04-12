@@ -69,48 +69,55 @@ class Homepage extends React.Component {
     showFormSubmissionNotification: false,
   };
 
-  componentDidMount() {
-    api.query().then(response => {
-      const { results: data, location } = response;
+  async fetchResults() {
+    let queryLocation = this.state.searchResultLatlng;
+    const response = await api.query({ ...queryLocation, radius: DISTANCE_FILTER });
+    const { results: data, location } = response;
+    if (!queryLocation) {
       this.props.setIPlocation(location);
-      let selectedLocation;
-      let selectedStoreName;
+    }
+    
+    let selectedLocation;
+    let selectedStoreName;
 
-      const queryParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
-      if ('submittedStore' in queryParams) {
-        const storeData = JSON.parse(atob(queryParams.submittedStore));
-        selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude }
-        selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
-      }
+    const queryParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+    if ('submittedStore' in queryParams) {
+      const storeData = JSON.parse(atob(queryParams.submittedStore));
+      selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude }
+      selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
+    }
 
-      this.setState({
-        results: this.formatResults(data, selectedLocation || location),
-        markers: data.map(result => ({
-          lat: Number(result.Latitude),
-          lng: Number(result.Longitude),
-        })),
-        isLoading: false,
-        selectedLocation,
-        selectedStoreName,
-        searchResultLatlng: selectedLocation,
-        mapShouldPan: Boolean(selectedLocation),
-        showFormSubmissionNotification: Boolean(selectedLocation),
-      }, () => {
-        // remove query param from url
-        this.props.history.replace('/');
+    this.setState({
+      results: this.formatResults(data, selectedLocation || location),
+      markers: data.map(result => ({
+        lat: Number(result.Latitude),
+        lng: Number(result.Longitude),
+      })),
+      isLoading: false,
+      selectedLocation,
+      selectedStoreName,
+      searchResultLatlng: selectedLocation,
+      mapShouldPan: Boolean(selectedLocation),
+      showFormSubmissionNotification: Boolean(selectedLocation),
+    }, () => {
+      // remove query param from url
+      this.props.history.replace('/');
 
-        if (selectedLocation) {
-          setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
-          const searchResultsContainer = document.querySelector('.search-results-container');
+      if (selectedLocation) {
+        setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
+        const searchResultsContainer = document.querySelector('.search-results-container');
 
-          if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
-            searchResultsContainer.scrollIntoView({ behavior: 'smooth' });
-          }
+        if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
+          searchResultsContainer.scrollIntoView({ behavior: 'smooth' });
         }
-      });
-      this.goToStoreFromProps()
+      }
     });
+  }
 
+  componentDidMount() {
+    this.fetchResults().then(() => {
+      this.goToStoreFromProps();
+    })
   }
 
   toggleFormSubmissionNotificaiton = () => {
@@ -239,8 +246,22 @@ class Homepage extends React.Component {
     this.setState({
       searchResult: undefined,
       searchResultLatlng: undefined,
-      results: this.calculateGroupDistance(this.state.results, this.props.geoLocation || this.props.ipLocation)
+      isLoading: true,
+    }, () => {
+      this.fetchResults();
     })
+  }
+
+  onSearchCompleted = (result) => {
+    if (result && result.latLng) {
+      this.setState({
+        searchResultLatlng: result.latLng,
+        searchResult: result,
+        isLoading: true,
+      }, () => {
+        this.fetchResults();
+      });
+    }
   }
 
   render() {
@@ -259,10 +280,7 @@ class Homepage extends React.Component {
       );
       selectedForMissing = searchResultLatlng;
     }
-    const closeByResults = this.state.results.filter(
-      result => result.distance < DISTANCE_FILTER
-    );
-    const closeByMarkers = closeByResults.map(res => ({
+    const markers = this.state.results.map(res => ({
       lat: Number(res.lat),
       lng: Number(res.lng),
     }));
@@ -274,18 +292,7 @@ class Homepage extends React.Component {
         />
         <HomepageMapWithSearch
           value=""
-          onSearchSuccess={result => {
-            if (result && result.latLng) {
-              this.setState({
-                searchResultLatlng: result.latLng,
-                searchResult: result,
-                results: this.calculateGroupDistance(
-                  this.state.results,
-                  result.latLng
-                ),
-              });
-            }
-          }}
+          onSearchSuccess={this.onSearchCompleted}
           onGeolocationFound={this.onGeolocationFound}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
@@ -293,8 +300,8 @@ class Homepage extends React.Component {
           centerPosition={this.state.searchResultLatlng || this.props.geoLocation || this.props.ipLocation}
           locations={
             selectedForMissing
-              ? [...closeByMarkers, this.state.searchResultLatlng]
-              : closeByMarkers
+              ? [...markers, this.state.searchResultLatlng]
+              : markers
           }
           onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
           panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
@@ -333,7 +340,7 @@ class Homepage extends React.Component {
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
             selectedLocation={this.state.selectedLocation}
-            results={closeByResults}
+            results={this.state.results}
           />
         </div>
         <Snackbar

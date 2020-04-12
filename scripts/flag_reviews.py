@@ -27,10 +27,10 @@ def main():
         dict_key = (store_name.strip().lower(), row['ip'])
 
         if dict_key in duplicate_reviews_dict:
+            # Only count as duplicate if the two reviews are 300 mins apart
             review_proximity = pd.Timedelta(timestamp - pd.to_datetime(duplicate_reviews_dict[dict_key]['updatedAt'])).seconds / 60
             if abs(review_proximity) < 300:
-                # print("With review proxmity ", review_proximity, " minutes")
-                if (safety_info == duplicate_reviews_dict[dict_key]['safetyInfo'].strip().lower()) and (useful_info == duplicate_reviews_dict[dict_key]['availabilityInfo'].strip().lower()):
+                if (safety_info == duplicate_reviews_dict[dict_key]['safetyInfo'].strip().lower()) and (useful_info == duplicate_reviews_dict[dict_key]['availabilityInfo'].strip().lower() and pd.notnull(row['openingTime']) and pd.notnull(row['closingTime'])):
                     # print("duplicate found: ", safety_info, duplicate_reviews_dict[dict_key]['safetyInfo'].strip().lower(), "and useful info ", useful_info, duplicate_reviews_dict[dict_key]['availabilityInfo'].strip().lower())
                     df.at[index , 'flag'] = Flag.DUPLICATE
                     continue                    
@@ -62,6 +62,8 @@ def main():
     df = df.drop(columns=['updatedAt'])
     # Convert NaN to None as JSON cannot serialise with NaN type
     df = df.where(pd.notnull(df), None)
+    # Only display non-empty flags
+    df = df[df['flag']!= '']
 
     service = create_service(credentials_file_name, 'sheets', 'v4', SCOPES)
     export_data_to_sheets(df, service, SPREADSHEET_ID_OUTPUT, SPREADSHEET_RANGE)

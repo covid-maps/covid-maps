@@ -43,6 +43,11 @@ function shareListing(event, store) {
   }
 }
 
+function onDirectionButtonClick(event) {
+  event.stopPropagation();
+  recordDirectionsClicked();
+}
+
 function ResultBlock(props) {
   const onClick = () => {
     window.scrollTo({
@@ -99,7 +104,7 @@ function ResultBlock(props) {
             </Link>
             <a
               href={constructDirectionsUrl(result)}
-              onClick={recordDirectionsClicked}
+              onClick={(e) => onDirectionButtonClick(e)}
               target="_blank"
               rel="noopener noreferrer"
               className="btn btn-sm btn-outline-secondary text-uppercase ml-2"

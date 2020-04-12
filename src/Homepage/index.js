@@ -1,8 +1,10 @@
 import React, { useState } from "react";
+import qs from 'qs';
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";
+import Snackbar from '@material-ui/core/Snackbar';
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
@@ -12,6 +14,7 @@ import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore, recordStoreFilterKeypress } from "../gaEvents";
 import Form from "react-bootstrap/Form";
 import { withGlobalContext } from "../App";
+import { FORM_FIELDS } from "../constants";
 
 const DISTANCE_FILTER = 200000; // meters
 
@@ -51,6 +54,7 @@ class Homepage extends React.Component {
     ipLocation: PropTypes.object,
     geoLocation: PropTypes.object,
     setIPlocation: PropTypes.func.isRequired,
+    location: PropTypes.object.isRequired, // coming from react router
   };
 
   state = {
@@ -62,6 +66,7 @@ class Homepage extends React.Component {
     selectedLocation: undefined,
     searchResultLatlng: undefined,
     searchResult: undefined,
+    showFormSubmissionNotification: false,
   };
 
   async fetchResults() {
@@ -71,20 +76,55 @@ class Homepage extends React.Component {
     if (!queryLocation) {
       this.props.setIPlocation(location);
     }
+    
+    let selectedLocation;
+    let selectedStoreName;
+
+    const queryParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+    if ('submittedStore' in queryParams) {
+      const storeData = JSON.parse(atob(queryParams.submittedStore));
+      selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude }
+      selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
+    }
+
     this.setState({
-      results: this.formatResults(data, location),
+      results: this.formatResults(data, selectedLocation || location),
       markers: data.map(result => ({
         lat: Number(result.Latitude),
         lng: Number(result.Longitude),
       })),
       isLoading: false,
-    })
+      selectedLocation,
+      selectedStoreName,
+      searchResultLatlng: selectedLocation,
+      mapShouldPan: Boolean(selectedLocation),
+      showFormSubmissionNotification: Boolean(selectedLocation),
+    }, () => {
+      // remove query param from url
+      this.props.history.replace('/');
+
+      if (selectedLocation) {
+        setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
+        const searchResultsContainer = document.querySelector('.search-results-container');
+
+        if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
+          searchResultsContainer.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    });
   }
 
   componentDidMount() {
     this.fetchResults().then(() => {
       this.goToStoreFromProps();
     })
+  }
+
+  toggleFormSubmissionNotificaiton = () => {
+    this.setState(prevState => {
+      return {
+        showFormSubmissionNotification: !prevState.showFormSubmissionNotification }
+    });
   }
 
   goToStoreFromProps() {
@@ -164,6 +204,7 @@ class Homepage extends React.Component {
     this.setState({
       selectedLocation: { lat: Number(card.lat), lng: Number(card.lng) },
       mapShouldPan: true,
+      selectedStoreName: card.name,
     });
     setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
   }
@@ -240,10 +281,11 @@ class Homepage extends React.Component {
       lat: Number(res.lat),
       lng: Number(res.lng),
     }));
+    const { translations } = this.props;
     return (
       <div>
         <NoOfUsersAlert
-          alertText={this.props.translations.website_purpose_banner}
+          alertText={translations.website_purpose_banner}
         />
         <HomepageMapWithSearch
           value=""
@@ -270,14 +312,14 @@ class Homepage extends React.Component {
           <div className="my-1 px-1 d-flex justify-content-between align-items-center search-results-container">
             <div>
               <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
-                {this.props.translations.store_nearby_label}
+                {translations.store_nearby_label}
               </h6>
               <Form.Control
                 type="text"
                 onChange={this.handleStoreFilterQuery}
                 className="d-inline-block mx-1 results-search-box"
                 value={this.state.storeFilterQuery}
-                placeholder={this.props.translations.store_search_placeholder}
+                placeholder={translations.store_search_placeholder}
               />
             </div>
             <div>
@@ -288,12 +330,13 @@ class Homepage extends React.Component {
                   className="text-uppercase"
                   onClick={recordAddNewStore}
                 >
-                  {this.props.translations.add_store}
+                  {translations.add_store}
                 </Button>
               </Link>
             </div>
           </div>
           <SearchResults
+            selectedStoreName={this.state.selectedStoreName}
             textFilter={this.state.storeFilterQuery}
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
@@ -302,6 +345,21 @@ class Homepage extends React.Component {
             loadMoreBtnText={this.props.translations.load_more}
           />
         </div>
+        <Snackbar
+          autoHideDuration={5000}
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={this.state.showFormSubmissionNotification}
+          onClose={this.toggleFormSubmissionNotificaiton}>
+          <Alert
+            show
+            key="form-submit-success"
+            variant="success"
+            onClose={this.toggleFormSubmissionNotificaiton}
+            dismissible
+          >
+            {translations.form_submit_success}
+          </Alert>
+        </Snackbar>
       </div>
     );
   }

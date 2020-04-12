@@ -33,6 +33,8 @@ export default {
   select_location: "Select location",
   select_location_alert: "Select a location by searching or moving the marker",
   closing_time_error: "Closing time should be after Opening time",
+  form_submit_error: "Oh no :( Something went wrong on our end. We are working on getting this fixed as soon as we can.",
+  form_submit_success: "Your entry has been submitted succesfully. Thank you!",
   load_more: "Load More",
   add_to_homescreen: "Add to Homescreen",
 };

@@ -2,45 +2,23 @@ import ReactGA from "react-ga";
 
 const category = "user_events";
 
-export function recordSearchCompleted() {
-  ReactGA.event({
-    category,
-    action: "search_completed"
-  });
+const recordEvent = action => () => {
+  ReactGA.event({ category, action });  
 }
 
-export function recordUpdateStore() {
-  console.log("updated event");
-  ReactGA.event({
-    category,
-    action: "store_updated_started"
-  });
-}
+export const recordSearchCompleted = recordEvent('search_completed');
+export const recordUpdateStore = recordEvent('store_updated_started');
+export const recordAddNewStore = recordEvent('add_new_store_started');
+export const recordAddInfoToStoreCard = recordEvent('add_info_store_card_started');
+export const recordFormSubmission = recordEvent('form_submitted');
+export const recordAddToHomescreen = recordEvent('add_to_homescreen_started');
+export const recordDirectionsClicked = recordEvent('directions_clicked');
+export const recordStoreFilterKeypress = recordEvent('store_filter_key_pressed');
+export const recordStoreShareClicked = recordEvent('store_share_clicked');
 
-export function recordAddNewStore() {
+export const recordLanguageSelection = selectedLanguage => {
   ReactGA.event({
     category,
-    action: "add_new_store_started"
+    action: `language_selected_${selectedLanguage}`,
   });
-}
-
-export function recordAddInfoToStoreCard() {
-  ReactGA.event({
-    category,
-    action: "add_info_store_card_started"
-  });
-}
-
-export function recordFormSubmission() {
-  ReactGA.event({
-    category,
-    action: "form_submitted"
-  });
-}
-
-export function recordAddToHomescreen() {
-  ReactGA.event({
-    category,
-    action: "add_to_homescreen_started"
-  });
-}
+};

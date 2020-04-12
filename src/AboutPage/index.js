@@ -58,6 +58,20 @@ function AboutPage() {
         helps us identify the authenticity of the submission. No other personal
         information is collected.
       </p>
+      <p>
+        <NewTabLink href="mailto:helpcovidmaps@gmail.com">
+          <Button variant="info">
+            <i className="fal fa-envelope" /> Reach out by email
+          </Button>
+        </NewTabLink>
+      </p>
+      <p>
+        <NewTabLink href="https://www.instagram.com/covidmaps.in/">
+          <Button variant="info">
+            <i className="fab fa-instagram" /> Follow us on Instagram
+          </Button>
+        </NewTabLink>
+      </p>
     </div>
   );
 }

@@ -2,13 +2,8 @@ import React, { useState } from "react";
 import Button from "react-bootstrap/Button";
 import PWAPrompt from "react-ios-pwa-prompt";
 import { recordAddToHomescreen } from "../gaEvents";
-
-function isMobile() {
-  return (
-    typeof window.orientation !== "undefined" ||
-    navigator.userAgent.indexOf("IEMobile") !== -1
-  );
-}
+import { isMobile } from "../utils";
+import { withGlobalContext } from "../App";
 
 function addToHomeScreen(setShowIOSPrompt) {
   recordAddToHomescreen();
@@ -24,7 +19,7 @@ function addToHomeScreen(setShowIOSPrompt) {
   }
 }
 
-function PWAInstallButton() {
+function PWAInstallButton({ translations }) {
   // TODO: don't show on desktop
   // TODO: don't show if the app is already installed
   // Adds the `deferredPrompt` object to the window.
@@ -42,7 +37,7 @@ function PWAInstallButton() {
           className="ml-auto a2hs-button"
           onClick={() => addToHomeScreen(setShowIOSPrompt)}
         >
-          Add to Homescreen
+          {translations.add_to_homescreen}
         </Button>
       ) : null}
       {showIOSPrompt && (
@@ -59,4 +54,4 @@ function PWAInstallButton() {
   );
 }
 
-export default PWAInstallButton;
+export default withGlobalContext(PWAInstallButton);

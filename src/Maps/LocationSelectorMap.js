@@ -3,17 +3,19 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import { dotIcon, markerIcon, icons, isSameLocation } from "../utils";
 import { mapOptions } from "./theme";
 
-const defaultCenter = { lat: 49.281376, lng: -123.111382 };
+// Final fallback to a location in Bangalore
+const defaultCenter = { lat: 12.95396, lng: 77.4908577 };
 
 class Map extends Component {
   map = undefined;
+
   state = {
-    markerPosition: undefined,
+    markerPosition: this.props.markerPosition,
     isLoaded: false
   };
 
   mapCenter = () => {
-    return this.props.position || this.props.currentLocation || defaultCenter;
+    return this.props.markerPosition || this.props.geoLocation || this.props.ipLocation || defaultCenter;
   };
 
   onMapLoaded = map => {
@@ -26,8 +28,8 @@ class Map extends Component {
   onBoundsChanged = () => {
     if (this.map && this.state.isLoaded) {
       const mapCenter = this.map.getCenter();
-      const position = { lat: mapCenter.lat(), lng: mapCenter.lng() }
-      this.setState({ markerPosition: position });
+      const center = { lat: mapCenter.lat(), lng: mapCenter.lng() }
+      this.setState({ markerPosition: center });
       if (this.props.onBoundsChanged) {
         this.props.onBoundsChanged({
           lat: mapCenter.lat(),
@@ -45,16 +47,15 @@ class Map extends Component {
   };
 
   componentDidUpdate(prevProps, prevState, snapshot) {
-    if (!isSameLocation(this.props.position, prevProps.position)) {
-      this.setState({ markerPosition: this.props.position });
-      this.map && this.map.panTo(this.props.position);
+    if (!isSameLocation(this.props.markerPosition, prevProps.markerPosition)) {
+      this.setState({ markerPosition: this.props.markerPosition });
+      this.map && this.map.panTo(this.props.markerPosition);
     }
   }
 
   render() {
     return (
       <GoogleMap
-        id="example-map"
         options={mapOptions}
         mapContainerStyle={{
           height: this.props.height,
@@ -66,8 +67,8 @@ class Map extends Component {
         onBoundsChanged={this.onBoundsChanged}
         onDragEnd={this.onDragEnd}
       >
-        {this.props.currentLocation ?
-          <Marker position={this.props.currentLocation} icon={dotIcon} />
+        {this.props.geoLocation ?
+          <Marker position={this.props.geoLocation} icon={dotIcon} />
           : null}
         {this.state.markerPosition ?
           <Marker

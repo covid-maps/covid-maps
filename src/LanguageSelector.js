@@ -20,16 +20,17 @@ class LanguageSelector extends Component {
     return (
       <Dropdown className="language-selector" drop="up">
         <Dropdown.Toggle className="language-selector__toggle">
-          <i className="far fa-globe"></i> {this.props.currentLanguage}
+          <i className="far fa-globe"></i>&nbsp;
+          {AVAILABLE_LANGUAGES[this.props.currentLanguage]}
         </Dropdown.Toggle>
         <Dropdown.Menu>
           {Object.keys(AVAILABLE_LANGUAGES).map(key => {
             const langValue = AVAILABLE_LANGUAGES[key];
             return (
               <Dropdown.Item
-                key={langValue}
-                active={this.props.currentLanguage === langValue}
-                onClick={() => this.handleLanguageSelect(langValue)}
+                key={key}
+                active={this.props.currentLanguage === key}
+                onClick={() => this.handleLanguageSelect(key)}
                 className="language-selector__item"
               >
                 {langValue}

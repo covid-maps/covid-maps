@@ -3,8 +3,8 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import { dotIcon, markerIcon, icons, isSameLocation } from "../utils";
 import { mapOptions } from "./theme";
 
-// Final fallback to a location in Vancouver (should never be shown)
-const defaultCenter = { lat: 49.281376, lng: -123.111382 };
+// Final fallback to a location in Bangalore
+const defaultCenter = { lat: 12.95396, lng: 77.4908577 };
 
 class Map extends Component {
   map = undefined;

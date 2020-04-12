@@ -2,6 +2,8 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import DateFnsUtils from "@date-io/date-fns";
 import cx from "classnames";
+import Snackbar from '@material-ui/core/Snackbar';
+import Alert from "react-bootstrap/Alert";
 import { format, parse, roundToNearestMinutes, isBefore } from "date-fns";
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
 import PropTypes from "prop-types";
@@ -38,19 +40,20 @@ function ButtonWithLoading(props) {
       Submitting...
     </Button>
   ) : (
-      <Button {...props} />
-    );
+    <Button {...props} />
+  );
 }
 
 function MapImage({ location }) {
   const size = isMobile() ? `400x250` : `600x350`;
   const zoomLevel = 14;
-  return location ?
+  return location ? (
     <img
       style={{ maxWidth: "100%" }}
       alt="Location snapshot"
-      src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&markers=${location.lat},${location.lng}&zoom=${zoomLevel}&size=${size}&key=AIzaSyB9hwI7b4677POloj5DpmDXaliqU5Dp8sA`} />
-    : null;
+      src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&markers=${location.lat},${location.lng}&zoom=${zoomLevel}&size=${size}&key=AIzaSyB9hwI7b4677POloj5DpmDXaliqU5Dp8sA`}
+    />
+  ) : null;
 }
 
 const emptyData = {
@@ -79,7 +82,16 @@ class SubmitForm extends React.Component {
     isValid: true,
     hasSubmitted: false,
     data: { ...emptyData },
+    showErrorNotification: false,
   };
+
+  toggleErrorNotification = () => {
+    this.setState(prevState => {
+      return {
+        showErrorNotification: !prevState.showErrorNotification,
+      };
+    })
+  }
 
   clearForm() {
     this.setState({
@@ -102,17 +114,28 @@ class SubmitForm extends React.Component {
         Timestamp: new Date().toISOString(),
       };
 
-      const response = await api.submit(data);
-      console.log(data);
-      console.log(response);
-      recordFormSubmission();
-      this.setState({ isLoading: false, hasSubmitted: true }, () => {
-        window.scrollTo(0, 0);
-        this.clearForm();
-      });
+      try {
+        const response = await api.submit(data);
+        console.log(data);
+        console.log(response);
+        recordFormSubmission();
+        this.setState({ isLoading: false, hasSubmitted: true }, () => {
+          // redirect the user to homepage and
+          // keep submittd form data in state for further use
+          this.props.history.push(`/?submittedStore=${this.getBase64OfFormData(formData)}`);
+        });
+      } catch (error) {
+        console.log(error);
+        this.setState({ isLoading: false, showErrorNotification: true });
+      }
+
     } else {
       this.setState({ isValid: false, isLoading: false });
     }
+  }
+
+  getBase64OfFormData = formData => {
+    return btoa(JSON.stringify(formData));
   }
 
   onChangeInput({ target }, dataKey) {
@@ -210,24 +233,37 @@ class SubmitForm extends React.Component {
 
   render() {
     const { translations } = this.props;
-    const position = this.state.data.Latitude ? {
-      lat: parseFloat(this.state.data.Latitude),
-      lng: parseFloat(this.state.data.Longitude),
-    } : undefined;
+    const position = this.state.data.Latitude
+      ? {
+          lat: parseFloat(this.state.data.Latitude),
+          lng: parseFloat(this.state.data.Longitude),
+        }
+      : undefined;
     const formData = this.state.data;
     const isClosingTimeInvalid = this.isClosingTimeInvalid();
 
     return (
       <>
-        <div className='d-flex justify-content-center' style={{ maxWidth: '100%' }}>
+        <div
+          className="d-flex justify-content-center"
+          style={{ maxWidth: "100%" }}
+        >
           <MapImage location={position} />
         </div>
-
-        {this.state.hasSubmitted ? (
-          <div className="alert alert-success text-center mb-0">
-            <span>Submitted successfully, thank you!</span>
-          </div>
-        ) : null}
+        <Snackbar
+          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          open={this.state.showErrorNotification}
+          onClose={this.toggleErrorNotification}>
+          <Alert
+            show
+            key="form-submit-error"
+            variant="danger"
+            onClose={this.toggleErrorNotification}
+            dismissible
+          >
+            {translations.form_submit_error}
+          </Alert>
+        </Snackbar>
 
         <Form onSubmit={e => this.onSubmit(e)}>
           <div className="container p-3">
@@ -262,12 +298,22 @@ class SubmitForm extends React.Component {
                 value={formData[STORE_CATEGORY]}
                 onChange={e => this.onChangeInput(e, STORE_CATEGORY)}
               >
-                <option value={STORE_CATEGORIES.GROCERY}>{translations.grocery}</option>
-                <option value={STORE_CATEGORIES.RESTAURANT}>{translations.restaurant}</option>
+                <option value={STORE_CATEGORIES.GROCERY}>
+                  {translations.grocery}
+                </option>
+                <option value={STORE_CATEGORIES.RESTAURANT}>
+                  {translations.restaurant}
+                </option>
                 <option value={STORE_CATEGORIES.ATM}>{translations.atm}</option>
-                <option value={STORE_CATEGORIES.CLINIC}>{translations.clinic}</option>
-                <option value={STORE_CATEGORIES.PHARMACY}>{translations.pharmacy}</option>
-                <option value={STORE_CATEGORIES.OTHER}>{translations.other}</option>
+                <option value={STORE_CATEGORIES.CLINIC}>
+                  {translations.clinic}
+                </option>
+                <option value={STORE_CATEGORIES.PHARMACY}>
+                  {translations.pharmacy}
+                </option>
+                <option value={STORE_CATEGORIES.OTHER}>
+                  {translations.other}
+                </option>
               </Form.Control>
             </Form.Group>
 

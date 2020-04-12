@@ -96,6 +96,9 @@ class Homepage extends React.Component {
         mapShouldPan: Boolean(selectedLocation),
         showFormSubmissionNotification: Boolean(selectedLocation),
       }, () => {
+        // remove query param from url
+        this.props.history.replace('/');
+
         if (selectedLocation) {
           setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
           const searchResultsContainer = document.querySelector('.search-results-container');

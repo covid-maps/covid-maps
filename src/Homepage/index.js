@@ -92,6 +92,7 @@ class Homepage extends React.Component {
         isLoading: false,
         selectedLocation,
         selectedStoreName,
+        searchResultLatlng: selectedLocation,
         mapShouldPan: Boolean(selectedLocation),
         showFormSubmissionNotification: Boolean(selectedLocation),
       }, () => {

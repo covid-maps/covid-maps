@@ -1,8 +1,8 @@
-import React, { useState } from "react";
+import React from "react";
 import Form from "react-bootstrap/Form";
 import DateFnsUtils from "@date-io/date-fns";
 import cx from "classnames";
-import Snackbar from '@material-ui/core/Snackbar';
+import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "react-bootstrap/Alert";
 import { format, parse, roundToNearestMinutes, isBefore } from "date-fns";
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -14,7 +14,6 @@ import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
 import { isMobile } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
-import LocationSelector from "../LocationSelector";
 import ShareButton from "../ShareButton";
 import { withGlobalContext } from "../App";
 import { FORM_FIELDS, STORE_CATEGORIES } from "../constants";
@@ -82,7 +81,7 @@ class SubmitForm extends React.Component {
   state = {
     isLoading: false,
     isValid: true,
-    hasSubmitted: false,
+    hasSubmitted: true,
     data: { ...emptyData },
     showErrorNotification: false,
   };
@@ -92,8 +91,8 @@ class SubmitForm extends React.Component {
       return {
         showErrorNotification: !prevState.showErrorNotification,
       };
-    })
-  }
+    });
+  };
 
   clearForm() {
     this.setState({
@@ -124,13 +123,14 @@ class SubmitForm extends React.Component {
         this.setState({ isLoading: false, hasSubmitted: true }, () => {
           // redirect the user to homepage and
           // keep submittd form data in state for further use
-          this.props.history.push(`/?submittedStore=${this.getBase64OfFormData(formData)}`);
+          this.props.history.push(
+            `/?submittedStore=${this.getBase64OfFormData(formData)}`
+          );
         });
       } catch (error) {
         console.log(error);
         this.setState({ isLoading: false, showErrorNotification: true });
       }
-
     } else {
       this.setState({ isValid: false, isLoading: false });
     }
@@ -138,12 +138,12 @@ class SubmitForm extends React.Component {
 
   getBase64OfFormData = formData => {
     return btoa(JSON.stringify(formData));
-  }
+  };
 
   onChangeInput({ target }, dataKey) {
     this.setState({
       isValid: true,
-      data: { ...this.state.data, [dataKey]: target.value }
+      data: { ...this.state.data, [dataKey]: target.value },
     });
   }
 
@@ -246,37 +246,22 @@ class SubmitForm extends React.Component {
 
     return (
       <>
-        <LocationSelector
-          onSearchSuccess={this.onLocationSearchCompleted}
-          searchValue={this.getSearchValue()}
-          height={"45vh"}
-          position={
-            this.state.data.Latitude
-              ? {
-                lat: parseFloat(this.state.data.Latitude),
-                lng: parseFloat(this.state.data.Longitude)
-              }
-              : undefined
-          }
-        />
-
         {this.state.hasSubmitted ? (
           <div className="alert alert-success text-center mb-0">
-            <span>And now we're up-to-date! Thanks for keeping them coming 🙌</span>
-            <div className='float-right'>
+            <span>
+              And now we're up-to-date! Thanks for keeping them coming 🙌
+            </span>
+            <div className="float-right">
               <ShareButton
-                label='Share With Friends'
-                title='Covid Maps'
-                url='https://covidmaps.in/'
-                text={
-                  [
-                    'Covid Maps - find essentials services around you in the lockdown period ',
-                    '- track timings, stock levels and safety precautions at stores. ',
-                    'Make an update with info you find in your grocery run and share with neighbours! ',
-                    '- https://covidmaps.in/',
-                  ]
-                    .join()
-                }
+                label="Share With Friends"
+                title="Covid Maps"
+                url="https://covidmaps.in/"
+                text={[
+                  "Covid Maps - find essentials services around you in the lockdown period ",
+                  "- track timings, stock levels and safety precautions at stores. ",
+                  "Make an update with info you find in your grocery run and share with neighbours! ",
+                  "- https://covidmaps.in/",
+                ].join()}
               />
             </div>
           </div>
@@ -288,9 +273,10 @@ class SubmitForm extends React.Component {
           <MapImage location={position} />
         </div>
         <Snackbar
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={this.state.showErrorNotification}
-          onClose={this.toggleErrorNotification}>
+          onClose={this.toggleErrorNotification}
+        >
           <Alert
             show
             key="form-submit-error"

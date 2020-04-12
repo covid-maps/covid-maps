@@ -6,7 +6,7 @@ function share(params) {
     return navigator.share({
       title: params.title,
       text: params.text,
-      url: params.url
+      url: params.url,
     });
   }
 }
@@ -17,7 +17,7 @@ function ShareButton(props) {
     icon = <i className="far fa-share-alt"></i>,
     title,
     url,
-    text
+    text,
   } = props;
 
   const [showShareButton, setShowShareButton] = useState(false);
@@ -25,7 +25,7 @@ function ShareButton(props) {
     if (navigator && navigator.share) {
       setShowShareButton(true);
     }
-  });
+  }, []);
 
   if (!showShareButton) {
     return null;
@@ -37,7 +37,7 @@ function ShareButton(props) {
         share({
           title: title,
           url: url,
-          text: text
+          text: text,
         })
       }
     >

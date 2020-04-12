@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Form from "react-bootstrap/Form";
 import DateFnsUtils from "@date-io/date-fns";
 import cx from "classnames";
@@ -14,6 +14,8 @@ import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
 import { isMobile } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
+import LocationSelector from "../LocationSelector";
+import ShareButton from "../ShareButton";
 import { withGlobalContext } from "../App";
 import { FORM_FIELDS, STORE_CATEGORIES } from "../constants";
 const {
@@ -244,6 +246,41 @@ class SubmitForm extends React.Component {
 
     return (
       <>
+        <LocationSelector
+          onSearchSuccess={this.onLocationSearchCompleted}
+          searchValue={this.getSearchValue()}
+          height={"45vh"}
+          position={
+            this.state.data.Latitude
+              ? {
+                lat: parseFloat(this.state.data.Latitude),
+                lng: parseFloat(this.state.data.Longitude)
+              }
+              : undefined
+          }
+        />
+
+        {this.state.hasSubmitted ? (
+          <div className="alert alert-success text-center mb-0">
+            <span>And now we're up-to-date! Thanks for keeping them coming 🙌</span>
+            <div className='float-right'>
+              <ShareButton
+                label='Share With Friends'
+                title='Covid Maps'
+                url='https://covidmaps.in/'
+                text={
+                  [
+                    'Covid Maps - find essentials services around you in the lockdown period ',
+                    '- track timings, stock levels and safety precautions at stores. ',
+                    'Make an update with info you find in your grocery run and share with neighbours! ',
+                    '- https://covidmaps.in/',
+                  ]
+                    .join()
+                }
+              />
+            </div>
+          </div>
+        ) : null}
         <div
           className="d-flex justify-content-center"
           style={{ maxWidth: "100%" }}

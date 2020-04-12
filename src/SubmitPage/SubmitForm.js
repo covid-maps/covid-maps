@@ -117,7 +117,10 @@ class SubmitForm extends React.Component {
   }
 
   onChangeInput({ target }, dataKey) {
-    this.setState({ data: { ...this.state.data, [dataKey]: target.value } });
+    this.setState({
+      isValid: true,
+      data: { ...this.state.data, [dataKey]: target.value }
+    });
   }
 
   componentDidMount() {

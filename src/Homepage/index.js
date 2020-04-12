@@ -64,20 +64,27 @@ class Homepage extends React.Component {
     searchResult: undefined,
   };
 
-  componentDidMount() {
-    api.query().then(response => {
-      const { results: data, location } = response;
+  async fetchResults() {
+    let queryLocation = this.state.searchResultLatlng;
+    const response = await api.query({ ...queryLocation, radius: DISTANCE_FILTER });
+    const { results: data, location } = response;
+    if (!queryLocation) {
       this.props.setIPlocation(location);
-      this.setState({
-        results: this.formatResults(data, location),
-        markers: data.map(result => ({
-          lat: Number(result.Latitude),
-          lng: Number(result.Longitude),
-        })),
-        isLoading: false,
-      });
+    }
+    this.setState({
+      results: this.formatResults(data, location),
+      markers: data.map(result => ({
+        lat: Number(result.Latitude),
+        lng: Number(result.Longitude),
+      })),
+      isLoading: false,
+    })
+  }
+
+  componentDidMount() {
+    this.fetchResults().then(() => {
       this.goToStoreFromProps();
-    });
+    })
   }
 
   goToStoreFromProps() {
@@ -195,12 +202,23 @@ class Homepage extends React.Component {
     this.setState({
       searchResult: undefined,
       searchResultLatlng: undefined,
-      results: this.calculateGroupDistance(
-        this.state.results,
-        this.props.geoLocation || this.props.ipLocation
-      ),
-    });
-  };
+      isLoading: true,
+    }, () => {
+      this.fetchResults();
+    })
+  }
+
+  onSearchCompleted = (result) => {
+    if (result && result.latLng) {
+      this.setState({
+        searchResultLatlng: result.latLng,
+        searchResult: result,
+        isLoading: true,
+      }, () => {
+        this.fetchResults();
+      });
+    }
+  }
 
   render() {
     let missingBlock = null;
@@ -218,10 +236,7 @@ class Homepage extends React.Component {
       );
       selectedForMissing = searchResultLatlng;
     }
-    const closeByResults = this.state.results.filter(
-      result => result.distance < DISTANCE_FILTER
-    );
-    const closeByMarkers = closeByResults.map(res => ({
+    const markers = this.state.results.map(res => ({
       lat: Number(res.lat),
       lng: Number(res.lng),
     }));
@@ -232,18 +247,7 @@ class Homepage extends React.Component {
         />
         <HomepageMapWithSearch
           value=""
-          onSearchSuccess={result => {
-            if (result && result.latLng) {
-              this.setState({
-                searchResultLatlng: result.latLng,
-                searchResult: result,
-                results: this.calculateGroupDistance(
-                  this.state.results,
-                  result.latLng
-                ),
-              });
-            }
-          }}
+          onSearchSuccess={this.onSearchCompleted}
           onGeolocationFound={this.onGeolocationFound}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
@@ -255,8 +259,8 @@ class Homepage extends React.Component {
           }
           locations={
             selectedForMissing
-              ? [...closeByMarkers, this.state.searchResultLatlng]
-              : closeByMarkers
+              ? [...markers, this.state.searchResultLatlng]
+              : markers
           }
           onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
           panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
@@ -294,7 +298,7 @@ class Homepage extends React.Component {
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
             selectedLocation={this.state.selectedLocation}
-            results={closeByResults}
+            results={this.state.results}
             loadMoreBtnText={this.props.translations.load_more}
           />
         </div>

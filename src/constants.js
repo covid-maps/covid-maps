@@ -12,6 +12,7 @@ export const FORM_FIELDS = {
   OPENING_TIME: "Opening Time",
   CLOSING_TIME: "Closing Time",
   PLACE_ID: "Place Id",
+  STORE_ID: "StoreId",
 };
 
 export const ADDRESS_COMPONENTS = {

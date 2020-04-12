@@ -38,19 +38,20 @@ function ButtonWithLoading(props) {
       Submitting...
     </Button>
   ) : (
-      <Button {...props} />
-    );
+    <Button {...props} />
+  );
 }
 
 function MapImage({ location }) {
   const size = isMobile() ? `400x250` : `600x350`;
   const zoomLevel = 14;
-  return location ?
+  return location ? (
     <img
       style={{ maxWidth: "100%" }}
       alt="Location snapshot"
-      src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&markers=${location.lat},${location.lng}&zoom=${zoomLevel}&size=${size}&key=AIzaSyB9hwI7b4677POloj5DpmDXaliqU5Dp8sA`} />
-    : null;
+      src={`https://maps.googleapis.com/maps/api/staticmap?center=${location.lat},${location.lng}&markers=${location.lat},${location.lng}&zoom=${zoomLevel}&size=${size}&key=AIzaSyB9hwI7b4677POloj5DpmDXaliqU5Dp8sA`}
+    />
+  ) : null;
 }
 
 const emptyData = {
@@ -64,8 +65,8 @@ const emptyData = {
   Locality: "",
   [PLACE_ID]: "",
   [STORE_ADDRESS]: "",
-  [OPENING_TIME]: "",
-  [CLOSING_TIME]: "",
+  [OPENING_TIME]: null,
+  [CLOSING_TIME]: null,
   Country: "",
 };
 
@@ -207,16 +208,21 @@ class SubmitForm extends React.Component {
 
   render() {
     const { translations } = this.props;
-    const position = this.state.data.Latitude ? {
-      lat: parseFloat(this.state.data.Latitude),
-      lng: parseFloat(this.state.data.Longitude),
-    } : undefined;
+    const position = this.state.data.Latitude
+      ? {
+          lat: parseFloat(this.state.data.Latitude),
+          lng: parseFloat(this.state.data.Longitude),
+        }
+      : undefined;
     const formData = this.state.data;
     const isClosingTimeInvalid = this.isClosingTimeInvalid();
 
     return (
       <>
-        <div className='d-flex justify-content-center' style={{ maxWidth: '100%' }}>
+        <div
+          className="d-flex justify-content-center"
+          style={{ maxWidth: "100%" }}
+        >
           <MapImage location={position} />
         </div>
 
@@ -260,12 +266,22 @@ class SubmitForm extends React.Component {
                 value={formData[STORE_CATEGORY]}
                 onChange={e => this.onChangeInput(e, STORE_CATEGORY)}
               >
-                <option value={STORE_CATEGORIES.GROCERY}>{translations.grocery}</option>
-                <option value={STORE_CATEGORIES.RESTAURANT}>{translations.restaurant}</option>
+                <option value={STORE_CATEGORIES.GROCERY}>
+                  {translations.grocery}
+                </option>
+                <option value={STORE_CATEGORIES.RESTAURANT}>
+                  {translations.restaurant}
+                </option>
                 <option value={STORE_CATEGORIES.ATM}>{translations.atm}</option>
-                <option value={STORE_CATEGORIES.CLINIC}>{translations.clinic}</option>
-                <option value={STORE_CATEGORIES.PHARMACY}>{translations.pharmacy}</option>
-                <option value={STORE_CATEGORIES.OTHER}>{translations.other}</option>
+                <option value={STORE_CATEGORIES.CLINIC}>
+                  {translations.clinic}
+                </option>
+                <option value={STORE_CATEGORIES.PHARMACY}>
+                  {translations.pharmacy}
+                </option>
+                <option value={STORE_CATEGORIES.OTHER}>
+                  {translations.other}
+                </option>
               </Form.Control>
             </Form.Group>
 

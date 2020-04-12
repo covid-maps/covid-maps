@@ -13,11 +13,18 @@ function applySearchFilter(query, entries) {
   return entries.filter(store => {
     const { entries } = store;
     const q = query.toLowerCase();
-    return store.name.toLowerCase().indexOf(q) >= 0 || entries.find(entry => {
-      return (entry["Safety Observations"] && entry["Safety Observations"].toLowerCase().indexOf(q) >= 0) ||
-        (entry["Useful Information"] && entry["Useful Information"].toLowerCase().indexOf(q) >= 0)
-    })
-  })
+    return (
+      store.name.toLowerCase().indexOf(q) >= 0 ||
+      entries.find(entry => {
+        return (
+          (entry["Safety Observations"] &&
+            entry["Safety Observations"].toLowerCase().indexOf(q) >= 0) ||
+          (entry["Useful Information"] &&
+            entry["Useful Information"].toLowerCase().indexOf(q) >= 0)
+        );
+      })
+    );
+  });
 }
 
 class SearchResults extends React.Component {
@@ -31,11 +38,11 @@ class SearchResults extends React.Component {
   }
 
   state = {
-    resultsShown: ITEM_PER_PAGE
+    resultsShown: ITEM_PER_PAGE,
   };
 
   loadMore() {
-    this.setState({ resultsShown: this.state.resultsShown + ITEM_PER_PAGE })
+    this.setState({ resultsShown: this.state.resultsShown + ITEM_PER_PAGE });
   }
 
   render() {
@@ -56,32 +63,36 @@ class SearchResults extends React.Component {
         </div>
       </div>
     ) : (
-        <>
-          {selectedResult ?
-            <div>
-              <ResultBlock result={selectedResult} isSelected />
-            </div> : null}
+      <>
+        {selectedResult ? (
           <div>
-            {renderedResults.map(result => {
-              return (
-                <div key={result.placeId || result.name}>
-                  <ResultBlock
-                    highlightedText={this.props.textFilter}
-                    onClick={() => this.props.onCardClick(result)}
-                    result={result}
-                  />
-                </div>
-              );
-            })}
-            {isPaginated ? (
-              <Button
-                size="sm"
-                variant="outline-secondary"
-                onClick={() => this.loadMore()}>Load more</Button>
-            ) : null}
+            <ResultBlock result={selectedResult} isSelected />
           </div>
-        </>
-      );
+        ) : null}
+        <div>
+          {renderedResults.map(result => {
+            return (
+              <div key={result.placeId || result.name}>
+                <ResultBlock
+                  highlightedText={this.props.textFilter}
+                  onClick={() => this.props.onCardClick(result)}
+                  result={result}
+                />
+              </div>
+            );
+          })}
+          {isPaginated ? (
+            <Button
+              size="sm"
+              variant="outline-secondary"
+              onClick={() => this.loadMore()}
+            >
+              {this.props.loadMoreBtnText}
+            </Button>
+          ) : null}
+        </div>
+      </>
+    );
   }
 }
 

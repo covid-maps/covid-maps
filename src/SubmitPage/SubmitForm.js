@@ -64,8 +64,8 @@ const emptyData = {
   Locality: "",
   [PLACE_ID]: "",
   [STORE_ADDRESS]: "",
-  [OPENING_TIME]: null,
-  [CLOSING_TIME]: null,
+  [OPENING_TIME]: "",
+  [CLOSING_TIME]: "",
   Country: "",
 };
 
@@ -249,6 +249,7 @@ class SubmitForm extends React.Component {
                 onChange={e => this.onChangeInput(e, STORE_ADDRESS)}
                 value={formData[STORE_ADDRESS]}
                 placeholder={translations.store_address_placeholder}
+                required
               />
             </Form.Group>
 

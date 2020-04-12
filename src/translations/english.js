@@ -33,4 +33,6 @@ export default {
   select_location: "Select location",
   select_location_alert: "Select a location by searching or moving the marker",
   closing_time_error: "Closing time should be after Opening time",
+  load_more: "Load More",
+  add_to_homescreen: "Add to Homescreen",
 };

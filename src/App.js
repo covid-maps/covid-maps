@@ -62,7 +62,7 @@ class App extends Component {
     this.state = {
       language: this.getDefaultLanguage(),
       ipLocation: undefined,
-      geoLocation: undefined
+      geoLocation: undefined,
     };
   }
 
@@ -87,17 +87,17 @@ class App extends Component {
     };
   };
 
-  setGeolocation = (location) => {
+  setGeolocation = location => {
     this.setState({
-      geoLocation: location
-    })
-  }
+      geoLocation: location,
+    });
+  };
 
-  setIPlocation = (location) => {
+  setIPlocation = location => {
     this.setState({
-      ipLocation: location
-    })
-  }
+      ipLocation: location,
+    });
+  };
 
   render() {
     const translations = this.getTranslations();

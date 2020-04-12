@@ -68,8 +68,8 @@ app.get("/v1/query", async (req, res) => {
 });
 
 app.get("/v2/query", async (req, res) => {
-  let location = {lat: req.query.lat, lng: req.query.lng};
-  if(!location.lat || !location.lng){
+  let location = { lat: req.query.lat, lng: req.query.lng };
+  if (!location.lat || !location.lng) {
     location = await getLocationFromIp(req);
   }
   let query = {
@@ -79,7 +79,7 @@ app.get("/v2/query", async (req, res) => {
   }
 
   let results = await stores.findNearbyStores(query);
-  res.send({results, location});
+  res.send({ location, results });
 });
 
 app.listen(process.env.PORT || 5000);

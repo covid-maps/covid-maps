@@ -256,12 +256,7 @@ class SubmitForm extends React.Component {
                 label="Share With Friends"
                 title="Covid Maps"
                 url="https://covidmaps.in/"
-                text={[
-                  "Covid Maps - find essentials services around you in the lockdown period ",
-                  "- track timings, stock levels and safety precautions at stores. ",
-                  "Make an update with info you find in your grocery run and share with neighbours! ",
-                  "- https://covidmaps.in/",
-                ].join()}
+                text={translations.website_share_description}
               />
             </div>
           </div>

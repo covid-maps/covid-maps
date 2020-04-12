@@ -1,66 +1,67 @@
 import pandas as pd
+import numpy as np
 from googleapiclient.discovery import build
-from google_auth_oauthlib.flow import InstalledAppFlow,Flow
+from google_auth_oauthlib.flow import InstalledAppFlow, Flow
 from google.auth.transport.requests import Request
-import os
-import pickle
+from flag import Flag
 from spreadsheets_helper import read_spreadsheet, create_service, export_data_to_sheets
+from database_helper import denormalised_reviews_to_df
 
 def main():
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
-    SPREADSHEET_ID_INPUT = '1jFQrYwbhPIaRL6t4TnpTO7W905U0B-W1FXS-GBYwz7M'
     SPREADSHEET_ID_OUTPUT = '1RZDZTswZxI-smwnyi8Oh5ck092hgl_CBxjtQURrczBs'
-    SPREADSHEET_RANGE = 'A1:Z1650'
+    SPREADSHEET_RANGE ='A1:Z3000'
     credentials_file_name = 'credentials.json'
     locality_by_place_id = {}
+    DATABASE_URL = 'postgres://u4s5nl6jojreas:p3b365a9a7cc291943314402f2a06d27acba79d932513d7400541f51c8a754fe9@ec2-54-210-160-194.compute-1.amazonaws.com:5432/d8a2u67pgoohhq'
 
-    df = read_spreadsheet(SPREADSHEET_ID_INPUT, SPREADSHEET_RANGE, SCOPES)
-    # df['dt_Timestamp'] = pd.to_datetime(df['Timestamp'])
-    df['flag'] = None
+    df = denormalised_reviews_to_df(DATABASE_URL)
     duplicate_reviews_dict = {}
 
     for index, row in df.iterrows():
-        store_name = row['Store Name']
-        useful_info = row['Useful Information'].strip().lower() if row['Useful Information'] else ''
-        safety_info = row['Safety Observations'].strip().lower() if row['Safety Observations'] else ''
-        timestamp = pd.to_datetime(row['Timestamp'])
+        store_name = row['name']
+        useful_info = row['availabilityInfo'].strip().lower() if row['availabilityInfo'] else ''
+        safety_info = row['safetyInfo'].strip().lower() if row['safetyInfo'] else ''
+        timestamp = pd.to_datetime(row['updatedAt'])
 
-        dict_key = (store_name.strip().lower(), row['User IP'])
+        dict_key = (store_name.strip().lower(), row['ip'])
 
         if dict_key in duplicate_reviews_dict:
-            review_proximity = pd.Timedelta(timestamp - pd.to_datetime(duplicate_reviews_dict[dict_key]['Timestamp'])).seconds / 60
+            review_proximity = pd.Timedelta(timestamp - pd.to_datetime(duplicate_reviews_dict[dict_key]['updatedAt'])).seconds / 60
             if abs(review_proximity) < 300:
                 # print("With review proxmity ", review_proximity, " minutes")
-                if (safety_info == duplicate_reviews_dict[dict_key]['Safety Observations'].strip().lower()) and (useful_info == duplicate_reviews_dict[dict_key]['Useful Information'].strip().lower()):
-                    # print("duplicate found: ", safety_info, duplicate_reviews_dict[dict_key]['Safety Observations'].strip().lower(), "and useful info ", useful_info, duplicate_reviews_dict[dict_key]['Useful Information'].strip().lower())
-                    row['flag'] = 'Duplicate'
+                if (safety_info == duplicate_reviews_dict[dict_key]['safetyInfo'].strip().lower()) and (useful_info == duplicate_reviews_dict[dict_key]['availabilityInfo'].strip().lower()):
+                    # print("duplicate found: ", safety_info, duplicate_reviews_dict[dict_key]['safetyInfo'].strip().lower(), "and useful info ", useful_info, duplicate_reviews_dict[dict_key]['availabilityInfo'].strip().lower())
+                    df.at[index , 'flag'] = Flag.DUPLICATE
                     continue                    
                 # else: 
-                    # print("duplicate NOT found: ", safety_info, duplicate_reviews_dict[dict_key]['Safety Observations'].strip().lower(), "and useful info ", useful_info, duplicate_reviews_dict[dict_key]['Useful Information'].strip().lower())
+                    # print("duplicate NOT found: ", safety_info, duplicate_reviews_dict[dict_key]['safetyInfo'].strip().lower(), "and useful info ", useful_info, duplicate_reviews_dict[dict_key]['availabilityInfo'].strip().lower())
 
         else:
             duplicate_reviews_dict[dict_key] = row
 
-        if not row['Latitude'] or not row['Longitude']:
-            row['flag'] = 'Empty lat/long'
+        if not row['latitude'] or not row['longitude'] or np.isnan(row['latitude']) or np.isnan(row['longitude']):
+            df.at[index , 'flag'] = str(Flag.MISSING_LAT_LONG)
             continue
             
-        if store_name.isdigit() or (row['Address'] and store_name == row['Address'][:len(store_name)]):
-            row['flag'] = 'Invalid store name'
+        if store_name.isdigit() or (row['address'] and store_name == row['address'][:len(store_name)]):
+            df.at[index , 'flag'] = Flag.INVALID_STORE_NAME
             continue
 
         if len(useful_info) < 5 and len(safety_info) < 5:
-            row['flag'] = 'Very short reviews'
+            df.at[index , 'flag'] = Flag.VERY_SHORT_REVIEW
             continue
 
         if len(useful_info) < 10 and len(safety_info) < 10:
-            row['flag'] = 'Short reviews'
+            df.at[index , 'flag'] = Flag.SHORT_REVIEW
             continue
 
         if (useful_info and len(set(useful_info)) < 4) or (safety_info and len(set(safety_info)) < 4):
-            row['flag'] = 'Spammy words'
+            df.at[index , 'flag'] = Flag.SPAMMY_REVIEW
 
-    # df = df.drop(columns=['dt_Timestamp'])
+    df = df.drop(columns=['updatedAt'])
+    # Convert NaN to None as JSON cannot serialise with NaN type
+    df = df.where(pd.notnull(df), None)
 
     service = create_service(credentials_file_name, 'sheets', 'v4', SCOPES)
     export_data_to_sheets(df, service, SPREADSHEET_ID_OUTPUT, SPREADSHEET_RANGE)

@@ -1,14 +1,14 @@
-var models  = require('../models');
+var models = require('../models');
 
 const DEFAULT_DISTANCE_RANGE = 0.1; //approx 11kms - https://stackoverflow.com/questions/8464666/distance-between-2-points-in-postgis-in-srid-4326-in-metres
 const MAX_DISTANCE_RADIUS_METERS = 200000
 
-async function addStoreData(data, forceUpdate = false){
+async function addStoreData(data, forceUpdate = false) {
     const store = await addInfoToDB(data, forceUpdate);
     return mapDBRow(store)[0];
 }
 
-async function findAllStores(){
+async function findAllStores() {
     const stores = await models.StoreInfo.findAll({
         include : [{
             model : models.StoreUpdates,
@@ -20,14 +20,14 @@ async function findAllStores(){
     return stores.flatMap(store => mapDBRow(store));
 }
 
-async function findNearbyStores(params){
-    if(!params.lat || !params.lng){
+async function findNearbyStores(params) {
+    if (!params.location.lat || !params.location.lng) {
         return [];
     }
-    return await models.StoreInfo.findAll({
+    const stores = await models.StoreInfo.findAll({
         include: [{
-                model : models.StoreUpdates
-            }],
+            model: models.StoreUpdates
+        }],
         where: models.sequelize.where(
             models.sequelize.fn(
                 "ST_DWithin",
@@ -35,23 +35,24 @@ async function findNearbyStores(params){
                 models.sequelize.fn(
                     "ST_Transform",
                     models.sequelize.cast(
-                        `SRID=4326;POINT(${params.lng} ${params.lat})`,
+                        `SRID=4326;POINT(${params.location.lng} ${params.location.lat})`,
                         "geometry"),
                     4326),
                 getDistanceRange(params)
             ),
             true
         )
-    })
+    });
+    return stores.flatMap(store => mapDBRow(store));
 }
 
-function getDistanceRange(params){
-    if(!params.radius){
+function getDistanceRange(params) {
+    if (!params.radius) {
         return DEFAULT_DISTANCE_RANGE
     }
-    if(params.radius > MAX_DISTANCE_RADIUS_METERS){
+    if (params.radius > MAX_DISTANCE_RADIUS_METERS) {
         return toRadialDistance(MAX_DISTANCE_RADIUS_METERS)
-    }else{
+    } else {
         return toRadialDistance(params.radius)
     }
 }
@@ -60,11 +61,11 @@ function getDistanceRange(params){
  *
  * @param mt Distance in meters
  */
-function toRadialDistance(mt){
-    return (0.001/111) * mt
+function toRadialDistance(mt) {
+    return (0.001 / 111) * mt
 }
 
-function mapDBRow(data){
+function mapDBRow(data) {
     return data.StoreUpdates.map(update => {
         return {
             "User IP": update.ip,
@@ -88,21 +89,21 @@ function mapDBRow(data){
     })
 }
 
-async function addInfoToDB(data, forceDateUpdate){
+async function addInfoToDB(data, forceDateUpdate) {
     let store = null
-    if(data["Place Id"] && data["Place Id"] != ""){
+    if (data["Place Id"] && data["Place Id"] != "") {
         store = await models.StoreInfo.findOne({ where: { placeId: data['Place Id'] } });
     }
-    if(store == null){
+    if (store == null) {
         return await addNewStore(data, forceDateUpdate)
-    }else{
+    } else {
         return await updateExistingStore(store, data, forceDateUpdate)
     }
 }
 
-function buildStoreObject(data, forceDateUpdate){
+function buildStoreObject(data, forceDateUpdate) {
     let dt = new Date();
-    if(forceDateUpdate && data.Timestamp){
+    if (forceDateUpdate && data.Timestamp) {
         dt = data.Timestamp;
     }
     return {
@@ -113,7 +114,7 @@ function buildStoreObject(data, forceDateUpdate){
         coordinate: {
             type: 'Point',
             coordinates: [parseFloat(data.Longitude), parseFloat(data.Latitude)],
-            crs: {type: 'name', properties: {name: 'EPSG:4326'}},
+            crs: { type: 'name', properties: { name: 'EPSG:4326' } },
         },
         placeId: data["Place Id"] || "",
         address: data.Address || "",
@@ -135,7 +136,7 @@ function buildStoreObject(data, forceDateUpdate){
     };
 }
 
-async function addNewStore(data, forceDateUpdate){
+async function addNewStore(data, forceDateUpdate) {
     let storeInfo = buildStoreObject(data, forceDateUpdate);
     return await models.StoreInfo.create(storeInfo, {
         include: [{
@@ -144,13 +145,13 @@ async function addNewStore(data, forceDateUpdate){
     })
 }
 
-async function updateExistingStore(store, data, forceDateUpdate){
+async function updateExistingStore(store, data, forceDateUpdate) {
     let categories = store.category.split(",");
-    if(!categories.includes(data["Store Category"])){
+    if (!categories.includes(data["Store Category"])) {
         categories.push(data["Store Category"])
     }
     let dt = new Date();
-    if(forceDateUpdate && data.Timestamp){
+    if (forceDateUpdate && data.Timestamp) {
         dt = data.Timestamp;
     }
     return await models.sequelize.transaction(async (t) => {
@@ -162,7 +163,7 @@ async function updateExistingStore(store, data, forceDateUpdate){
             coordinate: {
                 type: 'Point',
                 coordinates: [parseFloat(data.Longitude), parseFloat(data.Latitude)],
-                crs: {type: 'name', properties: {name: 'EPSG:4326'}},
+                crs: { type: 'name', properties: { name: 'EPSG:4326' } },
             },
             placeId: data["Place Id"] || "",
             address: data.Address || "",
@@ -190,7 +191,7 @@ async function updateExistingStore(store, data, forceDateUpdate){
 
 }
 
-module.exports =  {
+module.exports = {
     findAllStores,
     addStoreData,
     findNearbyStores

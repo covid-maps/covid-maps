@@ -39,5 +39,5 @@ export default {
   load_more: "Load More",
   add_to_homescreen: "Add to Homescreen",
   website_share_description:
-    "Covid Maps - find essentials services around you in the lockdown period. Track timings, stock levels and safety precautions at stores. Make an update with info you find in your grocery run and share with neighbours!",
+    "Covid Maps - find essentials services around you in the lockdown period - track timings, stock levels and safety precautions at stores. Make an update with info you find in your grocery run and share with neighbours!",
 };

@@ -7,7 +7,7 @@ import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
 import { getDistance } from "geolib";
-import HomepageMapWithSearch from '../MapsWithSearch/HomepageMap';
+import HomepageMapWithSearch from "../MapsWithSearch/HomepageMap";
 import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore, recordStoreFilterKeypress } from "../gaEvents";
 import Form from "react-bootstrap/Form";
@@ -50,7 +50,7 @@ class Homepage extends React.Component {
     translations: PropTypes.object.isRequired,
     ipLocation: PropTypes.object,
     geoLocation: PropTypes.object,
-    setIPlocation: PropTypes.func.isRequired
+    setIPlocation: PropTypes.func.isRequired,
   };
 
   state = {
@@ -89,23 +89,20 @@ class Homepage extends React.Component {
 
   goToStoreFromProps() {
     if (this.props.match.params.storeId) {
-      const storeId = parseInt(this.props.match.params.storeId)
-      const place = this.state.results.find(item => item.storeId === storeId)
+      const storeId = parseInt(this.props.match.params.storeId);
+      const place = this.state.results.find(item => item.storeId === storeId);
       // console.log(place)
       //Run the function only if place is real value ( not nul || undefined)
       //Reuse the onCardClick function.
       if (place) {
-        this.onCardClick(place)
+        this.onCardClick(place);
         const latLng = {
-          "lat": place.lat,
-          "lng": place.lng
-        }
+          lat: place.lat,
+          lng: place.lng,
+        };
         this.setState({
-          center: { "latLng": latLng },
-          results: this.calculateGroupDistance(
-            this.state.results,
-            latLng
-          )
+          center: { latLng: latLng },
+          results: this.calculateGroupDistance(this.state.results, latLng),
         });
       }
     }
@@ -193,7 +190,7 @@ class Homepage extends React.Component {
   }
 
   handleStoreFilterQuery = event => {
-    recordStoreFilterKeypress()
+    recordStoreFilterKeypress();
     this.setState({
       storeFilterQuery: event.target.value,
       selectedLocation: undefined,
@@ -255,7 +252,11 @@ class Homepage extends React.Component {
           selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
           currentLocation={this.props.geoLocation || this.props.ipLocation}
-          centerPosition={this.state.searchResultLatlng || this.props.geoLocation || this.props.ipLocation}
+          centerPosition={
+            this.state.searchResultLatlng ||
+            this.props.geoLocation ||
+            this.props.ipLocation
+          }
           locations={
             selectedForMissing
               ? [...markers, this.state.searchResultLatlng]
@@ -298,6 +299,7 @@ class Homepage extends React.Component {
             isLoading={this.state.isLoading}
             selectedLocation={this.state.selectedLocation}
             results={this.state.results}
+            loadMoreBtnText={this.props.translations.load_more}
           />
         </div>
       </div>

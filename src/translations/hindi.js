@@ -33,4 +33,6 @@ export default {
   select_location: "दुकान का स्थान चुनें",
   select_location_alert: "जारी रखने के लिए स्थान चुनें",
   closing_time_error: '"बंद करने का समय" खोलने के समय के बाद होना चाहिए',
+  load_more: "और लोड करें",
+  add_to_homescreen: "होम स्क्रीन में शामिल करें",
 };

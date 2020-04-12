@@ -1,6 +1,7 @@
 export const AVAILABLE_LANGUAGES = {
   ENGLISH: "english",
   HINDI: "hindi",
+  PORTUGUESE: "portugues",
 };
 
 export const FORM_FIELDS = {
@@ -15,10 +16,10 @@ export const FORM_FIELDS = {
 };
 
 export const ADDRESS_COMPONENTS = {
-  NEIGHBORHOOD: 'neighborhood',
-  LOCALITY: 'locality',
-  COUNTRY: 'country'
-}
+  NEIGHBORHOOD: "neighborhood",
+  LOCALITY: "locality",
+  COUNTRY: "country",
+};
 
 export const STORE_CATEGORIES = {
   GROCERY: "Grocery",

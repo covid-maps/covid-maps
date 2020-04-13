@@ -19,6 +19,6 @@ export const recordStoreShareClicked = recordEvent('store_share_clicked');
 export const recordLanguageSelection = selectedLanguage => {
   ReactGA.event({
     category,
-    action: `language_selected_${selectedLanguage}`,
+    action: `language_selected_${selectedLanguage.toLowerCase()}`,
   });
 };

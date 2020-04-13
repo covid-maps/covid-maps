@@ -102,7 +102,7 @@ class Homepage extends React.Component {
         mapShouldPan: isLocationSelected,
         alertType: isLocationSelected
           ? ALERTS_TYPE.FORM_SUBMIT_SUCESS
-          : ALERTS_TYPE.FORM_SUBMIT_SUCESS,
+          : ALERTS_TYPE.WEBSITE_PURPOSE,
       },
       () => {
         // remove query param from url

@@ -12,7 +12,7 @@ class LanguageSelector extends Component {
   };
 
   handleLanguageSelect = language => {
-    recordLanguageSelection(language);
+    recordLanguageSelection(AVAILABLE_LANGUAGES[language]);
     this.props.setLanguage(language);
   };
 

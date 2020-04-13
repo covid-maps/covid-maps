@@ -14,7 +14,6 @@ import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
 import { isMobile } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
-import ShareButton from "../ShareButton";
 import { withGlobalContext } from "../App";
 import { FORM_FIELDS, STORE_CATEGORIES } from "../constants";
 const {
@@ -115,10 +114,10 @@ class SubmitForm extends React.Component {
       };
 
       try {
-        // const response = await api.submit(data);
-        // console.log(data);
-        // console.log(response);
-        // recordFormSubmission();
+        const response = await api.submit(data);
+        console.log(data);
+        console.log(response);
+        recordFormSubmission();
         this.setState({ isLoading: false }, () => {
           // redirect the user to homepage and
           // keep submittd form data in state for further use

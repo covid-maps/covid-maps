@@ -108,7 +108,7 @@ class Homepage extends React.Component {
         // remove query param from url
         this.props.history.replace("/");
 
-        if (selectedLocation) {
+        if (isLocationSelected) {
           setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
         }
       }

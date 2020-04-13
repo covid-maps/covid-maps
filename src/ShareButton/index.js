@@ -1,11 +1,13 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
+import { recordAppShareClicked } from "../gaEvents";
 
 const shareApiIsAvailable = () => {
   return navigator && navigator.share;
 };
 
 const share = params => {
+  recordAppShareClicked();
   navigator.share({
     title: params.title,
     text: params.text,

@@ -45,6 +45,9 @@ production (called `toilet-paper-app`). This is how git remotes should
 look like on your local dev environment.
 
 ```
+$ git remote add staging https://git.heroku.com/covid-maps-staging.git
+$ git remote add production https://git.heroku.com/toilet-paper-app.git
+
 $ git remote -v
 
 origin  https://github.com/covid-maps/covid-maps.git (fetch)

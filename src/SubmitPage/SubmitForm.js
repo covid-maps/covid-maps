@@ -116,10 +116,10 @@ class SubmitForm extends React.Component {
       };
 
       try {
-        const response = await api.submit(data);
-        console.log(data);
-        console.log(response);
-        recordFormSubmission();
+        // const response = await api.submit(data);
+        // console.log(data);
+        // console.log(response);
+        // recordFormSubmission();
         this.setState({ isLoading: false, hasSubmitted: true }, () => {
           // redirect the user to homepage and
           // keep submittd form data in state for further use

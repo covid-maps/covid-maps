@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";
+import Snackbar from "@material-ui/core/Snackbar";
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
@@ -61,16 +62,6 @@ class Homepage extends React.Component {
   };
 
   async fetchResults() {
-    let queryLocation = this.state.searchResultLatlng;
-    const response = await api.query({
-      ...queryLocation,
-      radius: DISTANCE_FILTER,
-    });
-    const { results: data, location: locationComingFromServer } = response;
-    if (!queryLocation) {
-      this.props.setIPlocation(locationComingFromServer);
-    }
-
     let selectedLocation;
     let selectedStoreName;
 
@@ -81,6 +72,16 @@ class Homepage extends React.Component {
       const storeData = JSON.parse(atob(queryParams.submittedStore));
       selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude };
       selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
+    }
+
+    let queryLocation = selectedLocation || this.state.searchResultLatlng;
+    const response = await api.query({
+      ...queryLocation,
+      radius: DISTANCE_FILTER,
+    });
+    const { results: data, location: locationComingFromServer } = response;
+    if (!queryLocation) {
+      this.props.setIPlocation(locationComingFromServer);
     }
 
     const isLocationSelected = Boolean(selectedLocation);
@@ -110,6 +111,16 @@ class Homepage extends React.Component {
 
         if (isLocationSelected) {
           setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
+
+          const searchResultsContainer = document.querySelector(
+            ".search-results-container"
+          );
+          if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
+            searchResultsContainer.scrollIntoView();
+            // 120 is approx height of the sucess alert
+            // we will move the store card just below this alert
+            window.scrollBy(0, -120);
+          }
         }
       }
     );
@@ -279,26 +290,32 @@ class Homepage extends React.Component {
         );
       case ALERTS_TYPE.FORM_SUBMIT_SUCESS:
         return (
-          <Alert
-            className="mb-0"
-            show={this.state.showAlert}
-            key="form-submit-success"
-            variant="success"
+          <Snackbar
+            anchorOrigin={{ vertical: "top", horizontal: "center" }}
+            open={this.state.showAlert}
             onClose={this.toggleAlert}
-            dismissible
           >
-            {translations.form_submit_success}
-            <ShareButton
-              className="d-block mt-2"
+            <Alert
+              className="mb-0"
+              show={this.state.showAlert}
+              key="form-submit-success"
               variant="success"
-              size="sm"
-              title="Covid Maps"
-              url="https://covidmaps.in/"
-              text={translations.website_share_description}
+              onClose={this.toggleAlert}
+              dismissible
             >
-              {translations.share_app}
-            </ShareButton>
-          </Alert>
+              {translations.form_submit_success}
+              <ShareButton
+                className="d-block mt-2"
+                variant="success"
+                size="sm"
+                title="Covid Maps"
+                url="https://covidmaps.in/"
+                text={translations.website_share_description}
+              >
+                {translations.share_app}
+              </ShareButton>
+            </Alert>
+          </Snackbar>
         );
       default:
         return null;

@@ -44,10 +44,6 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/debug-sentry', function mainHandler(req, res) {
-  throw new Error('My first Sentry error!');
-});
-
 app.get("/", (req, res) => {
   res.send("hello, world!");
 });

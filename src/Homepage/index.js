@@ -117,9 +117,8 @@ class Homepage extends React.Component {
           );
           if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
             searchResultsContainer.scrollIntoView();
-            // 120 is approx height of the sucess alert
             // we will move the store card just below this alert
-            window.scrollBy(0, -120);
+            window.scrollBy(0, -80);
           }
         }
       }

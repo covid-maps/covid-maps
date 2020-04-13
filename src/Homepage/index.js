@@ -83,13 +83,11 @@ class Homepage extends React.Component {
     }
 
     const isLocationSelected = Boolean(selectedLocation);
+    const newCenter = selectedLocation || locationComingFromServer;
 
     this.setState(
       {
-        results: this.formatResults(
-          data,
-          selectedLocation || locationComingFromServer
-        ),
+        results: this.formatResults(data, newCenter),
         markers: data.map(result => ({
           lat: Number(result.Latitude),
           lng: Number(result.Longitude),
@@ -97,7 +95,7 @@ class Homepage extends React.Component {
         isLoading: false,
         selectedLocation,
         selectedStoreName,
-        searchResultLatlng: selectedLocation,
+        searchResultLatlng: newCenter,
         mapShouldPan: isLocationSelected,
         alertType: isLocationSelected
           ? ALERTS_TYPE.FORM_SUBMIT_SUCESS

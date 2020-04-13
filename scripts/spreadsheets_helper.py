@@ -44,7 +44,6 @@ def export_data_to_sheets(df, service, spreadsheet_id, spreadsheet_range):
 
 def read_spreadsheet(spreadsheet_id, spreadsheet_range, scopes):
     values_input = None
-    service = None
     creds = None
 
     if os.path.exists('token.pickle'):

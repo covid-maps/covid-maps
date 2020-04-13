@@ -4,7 +4,7 @@ from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow, Flow
 from google.auth.transport.requests import Request
 from flag import Flag
-from spreadsheets_helper import read_spreadsheet, create_service, export_data_to_sheets
+from spreadsheets_helper import create_service, export_data_to_sheets
 from database_helper import denormalised_reviews_to_df
 
 def main():
@@ -13,7 +13,7 @@ def main():
     SPREADSHEET_RANGE ='A1:Z3000'
     credentials_file_name = 'credentials.json'
     locality_by_place_id = {}
-    DATABASE_URL = ''
+    DATABASE_URL = 'postgres://u4s5nl6jojreas:p3b365a9a7cc291943314402f2a06d27acba79d932513d7400541f51c8a754fe9@ec2-54-210-160-194.compute-1.amazonaws.com:5432/d8a2u67pgoohhq'
 
     df = denormalised_reviews_to_df(DATABASE_URL)
     duplicate_reviews_dict = {}

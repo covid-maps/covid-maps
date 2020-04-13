@@ -31,11 +31,8 @@ def main():
             review_proximity = pd.Timedelta(timestamp - pd.to_datetime(duplicate_reviews_dict[dict_key]['updatedAt'])).seconds / 60
             if abs(review_proximity) < 300:
                 if (safety_info == duplicate_reviews_dict[dict_key]['safetyInfo'].strip().lower()) and (useful_info == duplicate_reviews_dict[dict_key]['availabilityInfo'].strip().lower() and pd.notnull(row['openingTime']) and pd.notnull(row['closingTime'])):
-                    # print("duplicate found: ", safety_info, duplicate_reviews_dict[dict_key]['safetyInfo'].strip().lower(), "and useful info ", useful_info, duplicate_reviews_dict[dict_key]['availabilityInfo'].strip().lower())
                     df.at[index , 'flag'] = Flag.DUPLICATE
                     continue                    
-                # else: 
-                    # print("duplicate NOT found: ", safety_info, duplicate_reviews_dict[dict_key]['safetyInfo'].strip().lower(), "and useful info ", useful_info, duplicate_reviews_dict[dict_key]['availabilityInfo'].strip().lower())
 
         else:
             duplicate_reviews_dict[dict_key] = row

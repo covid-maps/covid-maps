@@ -35,7 +35,7 @@ class SearchResults extends React.Component {
     isLoading: PropTypes.bool,
     onCardClick: PropTypes.func.isRequired,
     textFilter: PropTypes.string,
-  }
+  };
 
   state = {
     resultsShown: ITEM_PER_PAGE,
@@ -46,10 +46,11 @@ class SearchResults extends React.Component {
   }
 
   render() {
-    const selectedResult = this.props.results.find(result => (
-      isSameLocation(result, this.props.selectedLocation)
-      && this.props.selectedStoreName === result.name
-    ));
+    const selectedResult = this.props.results.find(
+      result =>
+        isSameLocation(result, this.props.selectedLocation) &&
+        this.props.selectedStoreName === result.name
+    );
     let filtered = this.props.results.filter(
       result => !isSameLocation(result, this.props.selectedLocation)
     );
@@ -63,7 +64,7 @@ class SearchResults extends React.Component {
         </div>
       </div>
     ) : (
-      <>
+      <div className="search-results-container">
         {selectedResult ? (
           <div>
             <ResultBlock result={selectedResult} isSelected />
@@ -91,7 +92,7 @@ class SearchResults extends React.Component {
             </Button>
           ) : null}
         </div>
-      </>
+      </div>
     );
   }
 }

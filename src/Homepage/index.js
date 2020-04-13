@@ -102,10 +102,10 @@ class Homepage extends React.Component {
           : ALERTS_TYPE.WEBSITE_PURPOSE,
       },
       () => {
-        // remove query param from url
-        this.props.history.replace("/");
-
         if (isLocationSelected) {
+          // remove query param from url
+          this.props.history.replace("/");
+
           setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
 
           const searchResultsContainer = document.querySelector(
@@ -211,8 +211,13 @@ class Homepage extends React.Component {
   }
 
   onMarkerSelected(latLng) {
+    const result = this.state.results.find(({ lat, lng }) => {
+      return lat === latLng.lat && lng == latLng.lng;
+    });
+    const storeName = result ? result.name : undefined;
     this.setState({
       selectedLocation: { ...latLng },
+      selectedStoreName: storeName,
       mapShouldPan: false,
     });
   }

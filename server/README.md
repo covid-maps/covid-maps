@@ -69,3 +69,5 @@ heroku logs --remote staging -t
 
 **Auto deployments**: Pushing to master will deploy to staging automatically.
 If staging looks good, we can **promote** to production - on the Heroku UI.
+
+[Access Heroku pipeline to promote](https://dashboard.heroku.com/pipelines/0dd78ad0-f357-4226-b17d-93fc97caba4e)

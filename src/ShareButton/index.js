@@ -1,22 +1,19 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 
-function share(params) {
-  if (navigator && navigator.share) {
-    return navigator.share({
-      title: params.title,
-      text: params.text,
-      url: params.url,
-    });
-  }
-}
-
 const shareApiIsAvailable = () => {
-  return true;
   return navigator && navigator.share;
 };
 
-function ShareButton(props) {
+const share = params => {
+  navigator.share({
+    title: params.title,
+    text: params.text,
+    url: params.url,
+  });
+};
+
+const ShareButton = props => {
   const { children, title, url, text, ...restProps } = props;
 
   if (!shareApiIsAvailable()) {
@@ -37,6 +34,6 @@ function ShareButton(props) {
       {children}
     </Button>
   );
-}
+};
 
 export default ShareButton;

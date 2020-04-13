@@ -294,6 +294,7 @@ class Homepage extends React.Component {
         <HomepageAlerts
           {...this.props}
           showAlert={this.state.showAlert}
+          alertType={this.state.alertType}
           toggleAlert={this.toggleAlert}
         />
         <HomepageMapWithSearch

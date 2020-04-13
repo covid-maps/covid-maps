@@ -60,6 +60,7 @@ HomepageAlerts.propTypes = {
   translations: PropTypes.object.isRequired,
   showAlert: PropTypes.bool.isRequired,
   toggleAlert: PropTypes.func.isRequired,
+  alertType: PropTypes.string.isRequired,
 };
 
 export default HomepageAlerts;

@@ -117,8 +117,9 @@ class Homepage extends React.Component {
           );
           if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
             searchResultsContainer.scrollIntoView();
+            // approx height of success alert is 120
             // we will move the store card just below this alert
-            window.scrollBy(0, -80);
+            window.scrollBy(0, -120);
           }
         }
       }
@@ -365,9 +366,9 @@ class Homepage extends React.Component {
           onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
           panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
         />
-        <div className="my-3 mx-2">
+        <div className="my-3 mx-2 search-results-container">
           {missingBlock}
-          <div className="my-1 px-1 d-flex justify-content-between align-items-center search-results-container">
+          <div className="my-1 px-1 d-flex justify-content-between align-items-center">
             <div>
               <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
                 {translations.store_nearby_label}

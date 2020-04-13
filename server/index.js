@@ -78,20 +78,24 @@ app.get("/v1/query", async (req, res) => {
 });
 
 app.get("/v2/query", async (req, res) => {
-  let location = { lat: req.query.lat, lng: req.query.lng };
-  if (!location.lat || !location.lng) {
+  const { query } = req;
+  let location = undefined;
+  if (query.lat && query.lng) {
+    location = { lat: parseFloat(query.lat), lng: parseFloat(query.lng) };
+  } else {
     location = await getLocationFromIp(req);
   }
-  let query = {
-    location: location,
-    radius: req.query.radius,
-    page: req.query.page
+  let params = {
+    location,
+    radius: query.radius,
+    page: query.page
   }
-
-  let results = await stores.findNearbyStores(query);
+  let results = await stores.findNearbyStores(params);
   res.send({ location, results });
 });
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());
-app.listen(process.env.PORT || 5000);
+const port = process.env.PORT || 5000
+app.listen(port);
+console.log('Server listening at port', port)

@@ -1,8 +1,10 @@
 export const AVAILABLE_LANGUAGES = {
-  ENGLISH: "english",
-  HINDI: "hindi",
-  PORTUGUESE: "portugues",
+  EN: "English",
+  HI: "Hindi",
+  PT: "Português",
 };
+
+export const FALLBACK_LANGUAGE = "EN";
 
 export const FORM_FIELDS = {
   STORE_NAME: "Store Name",

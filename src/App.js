@@ -14,7 +14,7 @@ import PWAInstallButton from "./PWAButton";
 import LanguageSelector from "./LanguageSelector";
 import ReactGA from "react-ga";
 import logo from "./Logo.svg";
-import { AVAILABLE_LANGUAGES } from "./constants";
+import { AVAILABLE_LANGUAGES, FALLBACK_LANGUAGE } from "./constants";
 import translations from "./translations";
 import { withLocalStorage } from "./withStorage";
 
@@ -75,14 +75,28 @@ class App extends Component {
     this.props.setItemToStorage("lastSelectedLanguage", language);
   };
 
+  getBrowserLanguageOrNull = () => {
+    const browserLanguage = navigator.language.slice(0, 2).toUpperCase();
+    const isBrowserLangSupported = AVAILABLE_LANGUAGES[browserLanguage];
+
+    return isBrowserLangSupported ? browserLanguage : null;
+  };
+
   getDefaultLanguage = () => {
-    const language = this.props.getItemFromStorage("lastSelectedLanguage");
-    return language || AVAILABLE_LANGUAGES.ENGLISH;
+    const preSelectedLanguage = this.props.getItemFromStorage(
+      "lastSelectedLanguage"
+    );
+
+    return (
+      preSelectedLanguage ||
+      this.getBrowserLanguageOrNull() ||
+      FALLBACK_LANGUAGE
+    );
   };
 
   getTranslations = () => {
     return {
-      ...translations[AVAILABLE_LANGUAGES.ENGLISH],
+      ...translations[FALLBACK_LANGUAGE],
       ...translations[this.state.language],
     };
   };

@@ -77,9 +77,7 @@ class App extends Component {
 
   getBrowserLanguageOrNull = () => {
     const browserLanguage = navigator.language.slice(0, 2).toUpperCase();
-    const isBrowserLangSupported = Object.keys(AVAILABLE_LANGUAGES).some(
-      lang => lang === browserLanguage
-    );
+    const isBrowserLangSupported = AVAILABLE_LANGUAGES[browserLanguage];
 
     return isBrowserLangSupported ? browserLanguage : null;
   };

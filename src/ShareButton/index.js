@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import Button from "react-bootstrap/Button";
 
 function share(params) {
@@ -11,28 +11,21 @@ function share(params) {
   }
 }
 
+const shareApiIsAvailable = () => {
+  return true;
+  return navigator && navigator.share;
+};
+
 function ShareButton(props) {
-  const {
-    label = "",
-    icon = <i className="far fa-share-alt"></i>,
-    title,
-    url,
-    text,
-  } = props;
+  const { children, title, url, text, ...restProps } = props;
 
-  const [showShareButton, setShowShareButton] = useState(false);
-  useEffect(() => {
-    if (navigator && navigator.share) {
-      setShowShareButton(true);
-    }
-  }, []);
-
-  if (!showShareButton) {
+  if (!shareApiIsAvailable()) {
     return null;
   }
 
   return (
     <Button
+      {...restProps}
       onClick={() =>
         share({
           title: title,
@@ -41,7 +34,7 @@ function ShareButton(props) {
         })
       }
     >
-      {label} {icon}
+      {children}
     </Button>
   );
 }

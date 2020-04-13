@@ -30,3 +30,8 @@ export const STORE_CATEGORIES = {
   PHARMACY: "Pharmacy",
   OTHER: "Other",
 };
+
+export const ALERTS_TYPE = {
+  WEBSITE_PURPOSE: "WEBSITE_PURPOSE",
+  FORM_SUBMIT_SUCESS: "FORM_SUBMIT_SUCESS",
+};

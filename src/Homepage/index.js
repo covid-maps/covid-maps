@@ -1,10 +1,9 @@
-import React, { useState } from "react";
-import qs from 'qs';
+import React from "react";
+import qs from "qs";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
 import Alert from "react-bootstrap/Alert";
-import Snackbar from '@material-ui/core/Snackbar';
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
@@ -13,8 +12,9 @@ import HomepageMapWithSearch from "../MapsWithSearch/HomepageMap";
 import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore, recordStoreFilterKeypress } from "../gaEvents";
 import Form from "react-bootstrap/Form";
+import ShareButton from "../ShareButton";
 import { withGlobalContext } from "../App";
-import { FORM_FIELDS } from "../constants";
+import { FORM_FIELDS, ALERTS_TYPE } from "../constants";
 
 const DISTANCE_FILTER = 200000; // meters
 
@@ -30,22 +30,6 @@ function searchResultToFormEntry(searchResult) {
     Address: searchResult.address,
     Country: searchResult.country,
   };
-}
-
-function NoOfUsersAlert(props) {
-  const [show, setShow] = useState(true);
-  return (
-    <Alert
-      key="no-of-users"
-      className="card no-of-users-alert"
-      variant="primary"
-      show={show}
-      onClose={() => setShow(false)}
-      dismissible
-    >
-      {props.alertText}
-    </Alert>
-  );
 }
 
 class Homepage extends React.Component {
@@ -66,64 +50,74 @@ class Homepage extends React.Component {
     selectedLocation: undefined,
     searchResultLatlng: undefined,
     searchResult: undefined,
-    showFormSubmissionNotification: false,
+    alertType: "",
+    showAlert: true,
+  };
+
+  toggleAlert = () => {
+    this.setState(prevState => {
+      return { showAlert: !prevState.showAlert };
+    });
   };
 
   async fetchResults() {
     let queryLocation = this.state.searchResultLatlng;
-    const response = await api.query({ ...queryLocation, radius: DISTANCE_FILTER });
-    const { results: data, location } = response;
+    const response = await api.query({
+      ...queryLocation,
+      radius: DISTANCE_FILTER,
+    });
+    const { results: data, location: locationComingFromServer } = response;
     if (!queryLocation) {
-      this.props.setIPlocation(location);
+      this.props.setIPlocation(locationComingFromServer);
     }
-    
+
     let selectedLocation;
     let selectedStoreName;
 
-    const queryParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
-    if ('submittedStore' in queryParams) {
+    const queryParams = qs.parse(this.props.location.search, {
+      ignoreQueryPrefix: true,
+    });
+    if ("submittedStore" in queryParams) {
       const storeData = JSON.parse(atob(queryParams.submittedStore));
-      selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude }
+      selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude };
       selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
     }
 
-    this.setState({
-      results: this.formatResults(data, selectedLocation || location),
-      markers: data.map(result => ({
-        lat: Number(result.Latitude),
-        lng: Number(result.Longitude),
-      })),
-      isLoading: false,
-      selectedLocation,
-      selectedStoreName,
-      searchResultLatlng: selectedLocation,
-      mapShouldPan: Boolean(selectedLocation),
-      showFormSubmissionNotification: Boolean(selectedLocation),
-    }, () => {
-      // remove query param from url
-      this.props.history.replace('/');
+    const isLocationSelected = Boolean(selectedLocation);
 
-      if (selectedLocation) {
-        setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
-        const searchResultsContainer = document.querySelector('.search-results-container');
+    this.setState(
+      {
+        results: this.formatResults(
+          data,
+          selectedLocation || locationComingFromServer
+        ),
+        markers: data.map(result => ({
+          lat: Number(result.Latitude),
+          lng: Number(result.Longitude),
+        })),
+        isLoading: false,
+        selectedLocation,
+        selectedStoreName,
+        searchResultLatlng: selectedLocation,
+        mapShouldPan: isLocationSelected,
+        alertType: isLocationSelected
+          ? ALERTS_TYPE.FORM_SUBMIT_SUCESS
+          : ALERTS_TYPE.FORM_SUBMIT_SUCESS,
+      },
+      () => {
+        // remove query param from url
+        this.props.history.replace("/");
 
-        if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
-          searchResultsContainer.scrollIntoView({ behavior: 'smooth' });
+        if (selectedLocation) {
+          setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
         }
       }
-    });
+    );
   }
 
   componentDidMount() {
     this.fetchResults().then(() => {
       this.goToStoreFromProps();
-    })
-  }
-
-  toggleFormSubmissionNotificaiton = () => {
-    this.setState(prevState => {
-      return {
-        showFormSubmissionNotification: !prevState.showFormSubmissionNotification }
     });
   }
 
@@ -240,26 +234,76 @@ class Homepage extends React.Component {
 
   onGeolocationFound = () => {
     // Clear search result and refresh distances
-    this.setState({
-      searchResult: undefined,
-      searchResultLatlng: undefined,
-      isLoading: true,
-    }, () => {
-      this.fetchResults();
-    })
-  }
-
-  onSearchCompleted = (result) => {
-    if (result && result.latLng) {
-      this.setState({
-        searchResultLatlng: result.latLng,
-        searchResult: result,
+    this.setState(
+      {
+        searchResult: undefined,
+        searchResultLatlng: undefined,
         isLoading: true,
-      }, () => {
+      },
+      () => {
         this.fetchResults();
-      });
+      }
+    );
+  };
+
+  onSearchCompleted = result => {
+    if (result && result.latLng) {
+      this.setState(
+        {
+          searchResultLatlng: result.latLng,
+          searchResult: result,
+          isLoading: true,
+        },
+        () => {
+          this.fetchResults();
+        }
+      );
     }
-  }
+  };
+
+  getAlertContent = () => {
+    const { translations } = this.props;
+    switch (this.state.alertType) {
+      case ALERTS_TYPE.WEBSITE_PURPOSE:
+        return (
+          <Alert
+            key="no-of-users"
+            className="card no-of-users-alert"
+            variant="primary"
+            show={this.state.showAlert}
+            onClose={this.toggleAlert}
+            dismissible
+          >
+            {translations.website_purpose_banner}
+          </Alert>
+        );
+      case ALERTS_TYPE.FORM_SUBMIT_SUCESS:
+        return (
+          <Alert
+            className="mb-0"
+            show={this.state.showAlert}
+            key="form-submit-success"
+            variant="success"
+            onClose={this.toggleAlert}
+            dismissible
+          >
+            {translations.form_submit_success}
+            <ShareButton
+              className="d-block mt-2"
+              variant="success"
+              size="sm"
+              title="Covid Maps"
+              url="https://covidmaps.in/"
+              text={translations.website_share_description}
+            >
+              Share CovidMaps
+            </ShareButton>
+          </Alert>
+        );
+      default:
+        return null;
+    }
+  };
 
   render() {
     let missingBlock = null;
@@ -284,9 +328,7 @@ class Homepage extends React.Component {
     const { translations } = this.props;
     return (
       <div>
-        <NoOfUsersAlert
-          alertText={translations.website_purpose_banner}
-        />
+        {this.getAlertContent()}
         <HomepageMapWithSearch
           value=""
           onSearchSuccess={this.onSearchCompleted}
@@ -345,21 +387,6 @@ class Homepage extends React.Component {
             loadMoreBtnText={this.props.translations.load_more}
           />
         </div>
-        <Snackbar
-          autoHideDuration={5000}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          open={this.state.showFormSubmissionNotification}
-          onClose={this.toggleFormSubmissionNotificaiton}>
-          <Alert
-            show
-            key="form-submit-success"
-            variant="success"
-            onClose={this.toggleFormSubmissionNotificaiton}
-            dismissible
-          >
-            {translations.form_submit_success}
-          </Alert>
-        </Snackbar>
       </div>
     );
   }

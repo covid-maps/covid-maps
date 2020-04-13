@@ -28,8 +28,8 @@ const {
   PLACE_ID,
 } = FORM_FIELDS;
 
-function ButtonWithLoading(props) {
-  return props.isLoading ? (
+function ButtonWithLoading({ isLoading, ...props }) {
+  return isLoading ? (
     <Button {...props} disabled>
       <Spinner
         as="span"

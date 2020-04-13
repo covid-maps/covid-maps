@@ -32,3 +32,7 @@ export const STORE_CATEGORIES = {
   PHARMACY: "Pharmacy",
   OTHER: "Other",
 };
+
+export const STORAGE_KEYS = {
+  LANGUAGE: "userSelectedLanguage",
+};

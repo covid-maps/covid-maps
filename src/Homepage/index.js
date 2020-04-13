@@ -101,9 +101,9 @@ class Homepage extends React.Component {
       mapShouldPan: Boolean(selectedLocation),
       showFormSubmissionNotification: Boolean(selectedLocation),
     }, () => {
-      // remove query param from url
 
       if (selectedLocation) {
+        // remove query param from url
         this.props.history.replace('/');
 
         setTimeout(() => this.setState({ mapShouldPan: false }), 1000);

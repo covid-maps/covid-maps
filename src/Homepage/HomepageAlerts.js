@@ -8,15 +8,15 @@ import ShareButton from "../ShareButton";
 const HomepageAlerts = props => {
   const { translations } = props;
 
-  switch (this.state.alertType) {
+  switch (props.alertType) {
     case ALERTS_TYPE.WEBSITE_PURPOSE:
       return (
         <Alert
           key="no-of-users"
           className="card no-of-users-alert"
           variant="primary"
-          show={this.state.showAlert}
-          onClose={this.toggleAlert}
+          show={props.showAlert}
+          onClose={props.toggleAlert}
           dismissible
         >
           {translations.website_purpose_banner}
@@ -26,15 +26,15 @@ const HomepageAlerts = props => {
       return (
         <Snackbar
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
-          open={this.state.showAlert}
-          onClose={this.toggleAlert}
+          open={props.showAlert}
+          onClose={props.toggleAlert}
         >
           <Alert
             className="mb-0"
-            show={this.state.showAlert}
+            show={props.showAlert}
             key="form-submit-success"
             variant="success"
-            onClose={this.toggleAlert}
+            onClose={props.toggleAlert}
             dismissible
           >
             {translations.form_submit_success}

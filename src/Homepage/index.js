@@ -76,7 +76,7 @@ class Homepage extends React.Component {
     if (!queryLocation) {
       this.props.setIPlocation(location);
     }
-    
+
     let selectedLocation;
     let selectedStoreName;
 
@@ -87,8 +87,9 @@ class Homepage extends React.Component {
       selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
     }
 
+    const newCenter = selectedLocation || location;
     this.setState({
-      results: this.formatResults(data, selectedLocation || location),
+      results: this.formatResults(data, newCenter),
       markers: data.map(result => ({
         lat: Number(result.Latitude),
         lng: Number(result.Longitude),
@@ -96,7 +97,7 @@ class Homepage extends React.Component {
       isLoading: false,
       selectedLocation,
       selectedStoreName,
-      searchResultLatlng: selectedLocation,
+      searchResultLatlng: newCenter,
       mapShouldPan: Boolean(selectedLocation),
       showFormSubmissionNotification: Boolean(selectedLocation),
     }, () => {
@@ -121,10 +122,9 @@ class Homepage extends React.Component {
   }
 
   toggleFormSubmissionNotificaiton = () => {
-    this.setState(prevState => {
-      return {
-        showFormSubmissionNotification: !prevState.showFormSubmissionNotification }
-    });
+    this.setState(prevState => ({
+      showFormSubmissionNotification: !prevState.showFormSubmissionNotification
+    }));
   }
 
   goToStoreFromProps() {

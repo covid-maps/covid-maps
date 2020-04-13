@@ -102,9 +102,10 @@ class Homepage extends React.Component {
       showFormSubmissionNotification: Boolean(selectedLocation),
     }, () => {
       // remove query param from url
-      this.props.history.replace('/');
 
       if (selectedLocation) {
+        this.props.history.replace('/');
+
         setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
         const searchResultsContainer = document.querySelector('.search-results-container');
 

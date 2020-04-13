@@ -210,8 +210,13 @@ class Homepage extends React.Component {
   }
 
   onMarkerSelected(latLng) {
+    const result = this.state.results.find(({ lat, lng }) => {
+      return lat === latLng.lat && lng == latLng.lng;
+    })
+    const storeName = result ? result.name : undefined;
     this.setState({
       selectedLocation: { ...latLng },
+      selectedStoreName: storeName,
       mapShouldPan: false,
     });
   }

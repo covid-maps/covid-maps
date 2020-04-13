@@ -136,14 +136,13 @@ class Map extends Component {
         {this.props.locations &&
           this.props.locations.map((latlng, index) => {
             const markerKey = `${latlng.lat}_${latlng.lng}_${index}`;
+            const isSelected = this.isMarkerSelected(latlng);
             return (
               <Marker
                 key={markerKey}
-                icon={
-                  this.isMarkerSelected(latlng)
-                    ? markerIcon(icons.highlighted)
-                    : markerIcon(icons.default)
-                }
+                zIndex={isSelected ? 10 : 1}
+                icon={isSelected ?
+                  markerIcon(icons.highlighted) : markerIcon(icons.default)}
                 position={latlng}
                 onClick={this.markerClickHandler}
               />

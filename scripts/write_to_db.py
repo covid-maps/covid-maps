@@ -6,7 +6,7 @@ from database_helper import connect_to_db, update_row_orm, close_connection
 def main():
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
     SPREADSHEET_ID_INPUT = '1RZDZTswZxI-smwnyi8Oh5ck092hgl_CBxjtQURrczBs'
-    SPREADSHEET_RANGE ='A1:Z10'
+    SPREADSHEET_RANGE ='A1:Z5000'
     credentials_file_name = 'credentials.json'
     DATABASE_URL = ''
 
@@ -25,6 +25,8 @@ def main():
         update_dict = {
             'flag': row['flag']
         }
+
+        print('Processing review ID {}'.format(row['id']))
 
         # If deleted is marked true, then it has been reviewed
         if deleted == 'TRUE':

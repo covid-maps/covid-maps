@@ -81,7 +81,6 @@ class SubmitForm extends React.Component {
   state = {
     isLoading: false,
     isValid: true,
-    hasSubmitted: true,
     data: { ...emptyData },
     showErrorNotification: false,
   };
@@ -120,7 +119,7 @@ class SubmitForm extends React.Component {
         // console.log(data);
         // console.log(response);
         // recordFormSubmission();
-        this.setState({ isLoading: false, hasSubmitted: true }, () => {
+        this.setState({ isLoading: false }, () => {
           // redirect the user to homepage and
           // keep submittd form data in state for further use
           this.props.history.push(
@@ -246,21 +245,6 @@ class SubmitForm extends React.Component {
 
     return (
       <>
-        {this.state.hasSubmitted ? (
-          <div className="alert alert-success text-center mb-0">
-            <span>
-              And now we're up-to-date! Thanks for keeping them coming 🙌
-            </span>
-            <div className="float-right">
-              <ShareButton
-                label="Share With Friends"
-                title="Covid Maps"
-                url="https://covidmaps.in/"
-                text={translations.website_share_description}
-              />
-            </div>
-          </div>
-        ) : null}
         <div
           className="d-flex justify-content-center"
           style={{ maxWidth: "100%" }}

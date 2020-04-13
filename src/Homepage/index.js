@@ -296,7 +296,7 @@ class Homepage extends React.Component {
               url="https://covidmaps.in/"
               text={translations.website_share_description}
             >
-              Share CovidMaps
+              {translations.share_app}
             </ShareButton>
           </Alert>
         );

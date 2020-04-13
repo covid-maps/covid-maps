@@ -37,7 +37,17 @@ class Homepage extends React.Component {
     ipLocation: PropTypes.object,
     geoLocation: PropTypes.object,
     setIPlocation: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired, // coming from react router
+
+    // coming from react router
+    location: PropTypes.shape({
+      search: PropTypes.string.isRequired,
+    }).isRequired,
+    history: PropTypes.shape({
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.object.isRequired,
+    }).isRequired,
   };
 
   state = {

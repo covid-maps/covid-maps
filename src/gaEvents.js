@@ -15,10 +15,11 @@ export const recordAddToHomescreen = recordEvent('add_to_homescreen_started');
 export const recordDirectionsClicked = recordEvent('directions_clicked');
 export const recordStoreFilterKeypress = recordEvent('store_filter_key_pressed');
 export const recordStoreShareClicked = recordEvent('store_share_clicked');
+export const recordAppShareClicked = recordEvent('app_share_clicked');
 
 export const recordLanguageSelection = selectedLanguage => {
   ReactGA.event({
     category,
-    action: `language_selected_${selectedLanguage}`,
+    action: `language_selected_${selectedLanguage.toLowerCase()}`,
   });
 };

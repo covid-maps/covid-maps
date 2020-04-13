@@ -2,7 +2,7 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import DateFnsUtils from "@date-io/date-fns";
 import cx from "classnames";
-import Snackbar from '@material-ui/core/Snackbar';
+import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "react-bootstrap/Alert";
 import { format, parse, roundToNearestMinutes, isBefore } from "date-fns";
 import { TimePicker, MuiPickersUtilsProvider } from "@material-ui/pickers";
@@ -27,8 +27,8 @@ const {
   PLACE_ID,
 } = FORM_FIELDS;
 
-function ButtonWithLoading(props) {
-  return props.isLoading ? (
+function ButtonWithLoading({ isLoading, ...props }) {
+  return isLoading ? (
     <Button {...props} disabled>
       <Spinner
         as="span"
@@ -80,7 +80,6 @@ class SubmitForm extends React.Component {
   state = {
     isLoading: false,
     isValid: true,
-    hasSubmitted: false,
     data: { ...emptyData },
     showErrorNotification: false,
   };
@@ -90,8 +89,8 @@ class SubmitForm extends React.Component {
       return {
         showErrorNotification: !prevState.showErrorNotification,
       };
-    })
-  }
+    });
+  };
 
   clearForm() {
     this.setState({
@@ -119,16 +118,17 @@ class SubmitForm extends React.Component {
         console.log(data);
         console.log(response);
         recordFormSubmission();
-        this.setState({ isLoading: false, hasSubmitted: true }, () => {
+        this.setState({ isLoading: false }, () => {
           // redirect the user to homepage and
           // keep submittd form data in state for further use
-          this.props.history.push(`/?submittedStore=${this.getBase64OfFormData(formData)}`);
+          this.props.history.push(
+            `/?submittedStore=${this.getBase64OfFormData(formData)}`
+          );
         });
       } catch (error) {
         console.log(error);
         this.setState({ isLoading: false, showErrorNotification: true });
       }
-
     } else {
       this.setState({ isValid: false, isLoading: false });
     }
@@ -136,12 +136,12 @@ class SubmitForm extends React.Component {
 
   getBase64OfFormData = formData => {
     return btoa(JSON.stringify(formData));
-  }
+  };
 
   onChangeInput({ target }, dataKey) {
     this.setState({
       isValid: true,
-      data: { ...this.state.data, [dataKey]: target.value }
+      data: { ...this.state.data, [dataKey]: target.value },
     });
   }
 
@@ -251,9 +251,10 @@ class SubmitForm extends React.Component {
           <MapImage location={position} />
         </div>
         <Snackbar
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+          anchorOrigin={{ vertical: "top", horizontal: "center" }}
           open={this.state.showErrorNotification}
-          onClose={this.toggleErrorNotification}>
+          onClose={this.toggleErrorNotification}
+        >
           <Alert
             show
             key="form-submit-error"

@@ -11,7 +11,8 @@ module.exports = (sequelize, DataTypes) => {
     createdAt: DataTypes.DATE,
     updatedAt: DataTypes.DATE,
     flag: DataTypes.STRING,
-    deleted: DataTypes.BOOLEAN
+    deleted: DataTypes.BOOLEAN,
+    reviewed: DataTypes.BOOLEAN
   }, {});
   StoreUpdates.associate = function(models) {
     StoreUpdates.belongsTo(models.StoreInfo, {

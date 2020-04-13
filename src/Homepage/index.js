@@ -1,10 +1,8 @@
-import React, { useState } from "react";
-import qs from 'qs';
+import React from "react";
+import qs from "qs";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
-import Alert from "react-bootstrap/Alert";
-import Snackbar from '@material-ui/core/Snackbar';
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
@@ -14,7 +12,8 @@ import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore, recordStoreFilterKeypress } from "../gaEvents";
 import Form from "react-bootstrap/Form";
 import { withGlobalContext } from "../App";
-import { FORM_FIELDS } from "../constants";
+import HomepageAlerts from "./HomepageAlerts";
+import { FORM_FIELDS, ALERTS_TYPE } from "../constants";
 
 const DISTANCE_FILTER = 200000; // meters
 
@@ -32,29 +31,23 @@ function searchResultToFormEntry(searchResult) {
   };
 }
 
-function NoOfUsersAlert(props) {
-  const [show, setShow] = useState(true);
-  return (
-    <Alert
-      key="no-of-users"
-      className="card no-of-users-alert"
-      variant="primary"
-      show={show}
-      onClose={() => setShow(false)}
-      dismissible
-    >
-      {props.alertText}
-    </Alert>
-  );
-}
-
 class Homepage extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
     ipLocation: PropTypes.object,
     geoLocation: PropTypes.object,
     setIPlocation: PropTypes.func.isRequired,
-    location: PropTypes.object.isRequired, // coming from react router
+
+    // coming from react router
+    location: PropTypes.shape({
+      search: PropTypes.string.isRequired,
+    }).isRequired,
+    history: PropTypes.shape({
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.object.isRequired,
+    }).isRequired,
   };
 
   state = {
@@ -66,64 +59,82 @@ class Homepage extends React.Component {
     selectedLocation: undefined,
     searchResultLatlng: undefined,
     searchResult: undefined,
-    showFormSubmissionNotification: false,
+    alertType: "",
+    showAlert: true,
+  };
+
+  toggleAlert = () => {
+    this.setState(prevState => {
+      return { showAlert: !prevState.showAlert };
+    });
   };
 
   async fetchResults() {
-    let queryLocation = this.state.searchResultLatlng;
-    const response = await api.query({ ...queryLocation, radius: DISTANCE_FILTER });
-    const { results: data, location } = response;
-    if (!queryLocation) {
-      this.props.setIPlocation(location);
-    }
-    
     let selectedLocation;
     let selectedStoreName;
 
-    const queryParams = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
-    if ('submittedStore' in queryParams) {
+    const queryParams = qs.parse(this.props.location.search, {
+      ignoreQueryPrefix: true,
+    });
+    if ("submittedStore" in queryParams) {
       const storeData = JSON.parse(atob(queryParams.submittedStore));
-      selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude }
+      selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude };
       selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
     }
 
-    this.setState({
-      results: this.formatResults(data, selectedLocation || location),
-      markers: data.map(result => ({
-        lat: Number(result.Latitude),
-        lng: Number(result.Longitude),
-      })),
-      isLoading: false,
-      selectedLocation,
-      selectedStoreName,
-      searchResultLatlng: selectedLocation,
-      mapShouldPan: Boolean(selectedLocation),
-      showFormSubmissionNotification: Boolean(selectedLocation),
-    }, () => {
-      // remove query param from url
-      this.props.history.replace('/');
+    let queryLocation = selectedLocation || this.state.searchResultLatlng;
+    const response = await api.query({
+      ...queryLocation,
+      radius: DISTANCE_FILTER,
+    });
+    const { results: data, location: locationComingFromServer } = response;
+    if (!queryLocation) {
+      this.props.setIPlocation(locationComingFromServer);
+    }
 
-      if (selectedLocation) {
-        setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
-        const searchResultsContainer = document.querySelector('.search-results-container');
+    const isLocationSelected = Boolean(selectedLocation);
+    const newCenter = selectedLocation || locationComingFromServer;
 
-        if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
-          searchResultsContainer.scrollIntoView({ behavior: 'smooth' });
+    this.setState(
+      {
+        results: this.formatResults(data, newCenter),
+        markers: data.map(result => ({
+          lat: Number(result.Latitude),
+          lng: Number(result.Longitude),
+        })),
+        isLoading: false,
+        selectedLocation,
+        selectedStoreName,
+        searchResultLatlng: newCenter,
+        mapShouldPan: isLocationSelected,
+        alertType: isLocationSelected
+          ? ALERTS_TYPE.FORM_SUBMIT_SUCESS
+          : ALERTS_TYPE.WEBSITE_PURPOSE,
+      },
+      () => {
+        if (isLocationSelected) {
+          // remove query param from url
+          this.props.history.replace("/");
+
+          setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
+
+          const searchResultsContainer = document.querySelector(
+            ".search-results-container"
+          );
+          if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
+            searchResultsContainer.scrollIntoView();
+            // approx height of success alert is 120
+            // we will move the store card just below this alert
+            window.scrollBy(0, -120);
+          }
         }
       }
-    });
+    );
   }
 
   componentDidMount() {
     this.fetchResults().then(() => {
       this.goToStoreFromProps();
-    })
-  }
-
-  toggleFormSubmissionNotificaiton = () => {
-    this.setState(prevState => {
-      return {
-        showFormSubmissionNotification: !prevState.showFormSubmissionNotification }
     });
   }
 
@@ -210,8 +221,13 @@ class Homepage extends React.Component {
   }
 
   onMarkerSelected(latLng) {
+    const result = this.state.results.find(({ lat, lng }) => {
+      return lat === latLng.lat && lng === latLng.lng;
+    });
+    const storeName = result ? result.name : undefined;
     this.setState({
       selectedLocation: { ...latLng },
+      selectedStoreName: storeName,
       mapShouldPan: false,
     });
   }
@@ -240,26 +256,32 @@ class Homepage extends React.Component {
 
   onGeolocationFound = () => {
     // Clear search result and refresh distances
-    this.setState({
-      searchResult: undefined,
-      searchResultLatlng: undefined,
-      isLoading: true,
-    }, () => {
-      this.fetchResults();
-    })
-  }
-
-  onSearchCompleted = (result) => {
-    if (result && result.latLng) {
-      this.setState({
-        searchResultLatlng: result.latLng,
-        searchResult: result,
+    this.setState(
+      {
+        searchResult: undefined,
+        searchResultLatlng: undefined,
         isLoading: true,
-      }, () => {
+      },
+      () => {
         this.fetchResults();
-      });
+      }
+    );
+  };
+
+  onSearchCompleted = result => {
+    if (result && result.latLng) {
+      this.setState(
+        {
+          searchResultLatlng: result.latLng,
+          searchResult: result,
+          isLoading: true,
+        },
+        () => {
+          this.fetchResults();
+        }
+      );
     }
-  }
+  };
 
   render() {
     let missingBlock = null;
@@ -284,8 +306,11 @@ class Homepage extends React.Component {
     const { translations } = this.props;
     return (
       <div>
-        <NoOfUsersAlert
-          alertText={translations.website_purpose_banner}
+        <HomepageAlerts
+          {...this.props}
+          showAlert={this.state.showAlert}
+          alertType={this.state.alertType}
+          toggleAlert={this.toggleAlert}
         />
         <HomepageMapWithSearch
           value=""
@@ -309,7 +334,7 @@ class Homepage extends React.Component {
         />
         <div className="my-3 mx-2">
           {missingBlock}
-          <div className="my-1 px-1 d-flex justify-content-between align-items-center search-results-container">
+          <div className="my-1 px-1 d-flex justify-content-between align-items-center">
             <div>
               <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
                 {translations.store_nearby_label}
@@ -345,21 +370,6 @@ class Homepage extends React.Component {
             loadMoreBtnText={this.props.translations.load_more}
           />
         </div>
-        <Snackbar
-          autoHideDuration={5000}
-          anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
-          open={this.state.showFormSubmissionNotification}
-          onClose={this.toggleFormSubmissionNotificaiton}>
-          <Alert
-            show
-            key="form-submit-success"
-            variant="success"
-            onClose={this.toggleFormSubmissionNotificaiton}
-            dismissible
-          >
-            {translations.form_submit_success}
-          </Alert>
-        </Snackbar>
       </div>
     );
   }

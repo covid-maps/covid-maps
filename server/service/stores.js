@@ -10,9 +10,12 @@ async function addStoreData(data, forceUpdate = false) {
 
 async function findAllStores() {
     const stores = await models.StoreInfo.findAll({
-        include: [{
-            model: models.StoreUpdates
-        }]
+        include : [{
+            model : models.StoreUpdates,
+            where: {
+                deleted: false
+            }
+        }],
     });
     return stores.flatMap(store => mapDBRow(store));
 }

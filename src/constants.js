@@ -1,8 +1,10 @@
 export const AVAILABLE_LANGUAGES = {
-  ENGLISH: "english",
-  HINDI: "hindi",
-  PORTUGUESE: "portugues",
+  EN: "English",
+  HI: "Hindi",
+  PT: "Português",
 };
+
+export const FALLBACK_LANGUAGE = "EN";
 
 export const FORM_FIELDS = {
   STORE_NAME: "Store Name",
@@ -29,4 +31,13 @@ export const STORE_CATEGORIES = {
   CLINIC: "Clinic",
   PHARMACY: "Pharmacy",
   OTHER: "Other",
+};
+
+export const ALERTS_TYPE = {
+  WEBSITE_PURPOSE: "WEBSITE_PURPOSE",
+  FORM_SUBMIT_SUCESS: "FORM_SUBMIT_SUCESS",
+};
+
+export const STORAGE_KEYS = {
+  LANGUAGE: "userSelectedLanguage",
 };

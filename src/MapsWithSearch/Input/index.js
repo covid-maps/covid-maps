@@ -55,7 +55,7 @@ class LocationSearchInput extends React.Component {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         }
-        this.props.setCurrentLocation(location, 'high')
+        this.props.setCurrentLocation({ latLng: location, accuracy: 'high' })
         this.setState({ isGeolocationLoading: false });
         if (this.props.onGeolocationFound) {
           this.props.onGeolocationFound(location);

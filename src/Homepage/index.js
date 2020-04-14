@@ -89,7 +89,9 @@ class Homepage extends React.Component {
     });
     const { results: data, location: locationComingFromServer } = response;
     if (!queryLocation) {
-      this.props.setCurrentLocation(locationComingFromServer, 'low');
+      this.props.setCurrentLocation({
+        latLng: locationComingFromServer, accuracy: 'low'
+      });
     }
 
     const isLocationSelected = Boolean(selectedLocation);
@@ -132,10 +134,27 @@ class Homepage extends React.Component {
     );
   }
 
-  componentDidMount() {
-    this.fetchResults().then(() => {
-      this.goToStoreFromProps();
-    });
+  async componentDidMount() {
+    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+    let currentLocation = undefined;
+
+    if (params.currentLocation) {
+      try {
+        const [lat, lng] = params.currentLocation.split(',').map(parseFloat);
+        const currentLatLng = { lat, lng };
+        const accuracy = params.accuracy === 'high' || params.accuracy === 'low' ?
+          params.accuracy : 'low';
+        currentLocation = { latLng: currentLatLng, accuracy };
+      } catch (e) {
+        console.log('Cannot parse les query params.')
+      }
+    }
+
+    if (currentLocation) {
+      await this.props.setCurrentLocation(currentLocation);
+    }
+    await this.fetchResults();
+    this.goToStoreFromProps();
   }
 
   goToStoreFromProps() {

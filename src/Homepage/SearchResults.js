@@ -86,6 +86,7 @@ class SearchResults extends React.Component {
             <Button
               size="sm"
               variant="outline-secondary"
+              className="btn-block text-uppercase"
               onClick={() => this.loadMore()}
             >
               {this.props.loadMoreBtnText}

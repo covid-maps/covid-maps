@@ -69,18 +69,18 @@ class Homepage extends React.Component {
   };
 
   async fetchResults() {
-    let selectedLocation;
+    let locationComingFromSubmission;
     let selectedStoreName;
     const queryParams = qs.parse(this.props.location.search, {
       ignoreQueryPrefix: true,
     });
     if ("submittedStore" in queryParams) {
       const storeData = JSON.parse(atob(queryParams.submittedStore));
-      selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude };
+      locationComingFromSubmission = { lat: storeData.Latitude, lng: storeData.Longitude };
       selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
     }
 
-    let queryLocation = selectedLocation
+    let queryLocation = locationComingFromSubmission
       || this.state.searchResultLatlng
       || this.props.currentLocation.latLng;
     const response = await api.query({
@@ -94,8 +94,8 @@ class Homepage extends React.Component {
       });
     }
 
-    const isLocationSelected = Boolean(selectedLocation);
-    const newCenter = selectedLocation || locationComingFromServer;
+    const isLocationSelected = Boolean(locationComingFromSubmission);
+    const newCenter = locationComingFromSubmission || locationComingFromServer;
 
     this.setState(
       {
@@ -105,7 +105,7 @@ class Homepage extends React.Component {
           lng: Number(result.Longitude),
         })),
         isLoading: false,
-        selectedLocation,
+        selectedLocation: locationComingFromSubmission,
         selectedStoreName,
         searchResultLatlng: newCenter,
         mapShouldPan: isLocationSelected,
@@ -153,8 +153,12 @@ class Homepage extends React.Component {
     if (currentLocation) {
       await this.props.setCurrentLocation(currentLocation);
     }
-    await this.fetchResults();
-    this.goToStoreFromProps();
+    try {
+      await this.fetchResults();
+      this.goToStoreFromProps();
+    } catch (e) {
+      console.log("Fetch results failed :(")
+    }
   }
 
   goToStoreFromProps() {

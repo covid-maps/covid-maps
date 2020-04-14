@@ -105,10 +105,10 @@ class App extends Component {
   };
 
   setCurrentLocation = ({ latLng, accuracy }) => {
-    return new Promise((resolve) => {
+    return new Promise(resolve => {
       this.setState({
         currentLocation: { latLng, accuracy }
-      }, resolve());
+      }, resolve);
     });
   }
 

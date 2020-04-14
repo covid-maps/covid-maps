@@ -71,7 +71,6 @@ class Homepage extends React.Component {
   async fetchResults() {
     let selectedLocation;
     let selectedStoreName;
-
     const queryParams = qs.parse(this.props.location.search, {
       ignoreQueryPrefix: true,
     });
@@ -81,7 +80,9 @@ class Homepage extends React.Component {
       selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
     }
 
-    let queryLocation = selectedLocation || this.state.searchResultLatlng;
+    let queryLocation = selectedLocation
+      || this.state.searchResultLatlng
+      || this.props.currentLocation.latLng;
     const response = await api.query({
       ...queryLocation,
       radius: DISTANCE_FILTER,

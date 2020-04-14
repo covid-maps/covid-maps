@@ -118,7 +118,6 @@ class Map extends Component {
     }
     const { currentLocation } = this.props;
     const isAccurate = currentLocation.accuracy === 'high';
-
     return (
       <GoogleMap
         ref={this.refMap}

@@ -317,7 +317,7 @@ class Homepage extends React.Component {
           onGeolocationFound={this.onGeolocationFound}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
-          currentLocation={this.props.currentLocation.latLng}
+          currentLocation={this.props.currentLocation}
           centerPosition={
             this.state.searchResultLatlng ||
             this.props.currentLocation.latLng

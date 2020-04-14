@@ -14,7 +14,7 @@ import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { recordSearchCompleted } from "../../gaEvents";
 import { withGlobalContext } from "../../App";
 import { ADDRESS_COMPONENTS, STORAGE_KEYS } from "../../constants";
-import { withLocalStorage } from "../../withStorage";
+import { withSessionStorage } from "../../withStorage";
 const { SEARCHED_ADDRESS } = STORAGE_KEYS;
 
 function GeolocationButton({ isLoading, onClick }) {
@@ -222,4 +222,4 @@ class LocationSearchControl extends React.Component {
   }
 }
 
-export default withLocalStorage(withGlobalContext(LocationSearchControl));
+export default withSessionStorage(withGlobalContext(LocationSearchControl));

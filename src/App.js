@@ -2,8 +2,16 @@ import React, { Component, createContext } from "react";
 import PropTypes from "prop-types";
 import { Router, Switch, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
+
+// Styles
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./App.css";
+import "./assets/styles/global.scss";
+import "./assets/styles/components/components.scss";
+
+// Assets
+import logo from "./assets/media/Logo.svg";
+
+// Pages
 import Homepage from "./Homepage";
 import SubmitPage from "./SubmitPage";
 import AboutPage from "./AboutPage";
@@ -13,7 +21,7 @@ import Navbar from "react-bootstrap/Navbar";
 import PWAInstallButton from "./PWAButton";
 import LanguageSelector from "./LanguageSelector";
 import ReactGA from "react-ga";
-import logo from "./Logo.svg";
+
 import {
   AVAILABLE_LANGUAGES,
   FALLBACK_LANGUAGE,
@@ -145,7 +153,7 @@ class App extends Component {
               </Switch>
             </div>
             <footer className="m-0 p-0">
-              <div className="container py-4 text-center text-uppercase">
+              <div className="container py-3 text-center text-uppercase">
                 <Link to="/">{translations.home}</Link> ·{" "}
                 <Link to="/location">{translations.add_store}</Link> ·{" "}
                 <Link to="/about">{translations.about}</Link>

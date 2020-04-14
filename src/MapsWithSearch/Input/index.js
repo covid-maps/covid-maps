@@ -13,8 +13,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { recordSearchCompleted } from "../../gaEvents";
 import { withGlobalContext } from "../../App";
-import { ADDRESS_COMPONENTS } from "../../constants";
+import { ADDRESS_COMPONENTS, STORAGE_KEYS } from "../../constants";
 import { withLocalStorage } from "../../withStorage";
+const { SEARCHED_ADDRESS } = STORAGE_KEYS;
 
 function GeolocationButton({ isLoading, onClick }) {
   return (
@@ -80,7 +81,7 @@ class LocationSearchInput extends React.Component {
   };
 
   persistLastSelectedAddress = address => {
-    this.props.setItemToStorage("lastSelecedAddress", address);
+    this.props.setItemToStorage(SEARCHED_ADDRESS, address);
   };
 
   handleSelect = address => {
@@ -135,7 +136,7 @@ class LocationSearchInput extends React.Component {
   }
 
   populateLastSelectedAddress = () => {
-    const address = this.props.getItemFromStorage("lastSelecedAddress");
+    const address = this.props.getItemFromStorage(SEARCHED_ADDRESS);
     if (address) {
       this.handleSelect(address);
     }
@@ -146,7 +147,7 @@ class LocationSearchInput extends React.Component {
   }
 
   removeLastSelectedAddress = () => {
-    this.props.removeItemFromStorage("lastSelecedAddress");
+    this.props.removeItemFromStorage(SEARCHED_ADDRESS);
   };
 
   render() {

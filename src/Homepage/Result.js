@@ -27,6 +27,15 @@ function Timestamp({ Timestamp: value }) {
   );
 }
 
+function Updated({ Timestamp: value }) {
+  const updated = new Date(value);
+  return (
+    <strong>
+      {updated.toLocaleDateString()} {updated.toLocaleTimeString()}
+    </strong>
+  );
+}
+
 function ResultEntry({ entries, highlightedText }) {
   return entries.map(result => (
     <div className="mt-3" key={result["Timestamp"]}>
@@ -70,7 +79,7 @@ function ResultEntry({ entries, highlightedText }) {
       <div style={{ fontSize: "0.85em" }}>
         <small className="text-muted text-uppercase d-inline-block mt-2">
           {" "}
-          Updated <Timestamp {...result} />
+          Updated <Timestamp {...result} /> at <Updated {...result}  />
         </small>
       </div>
     </div>

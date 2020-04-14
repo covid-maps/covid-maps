@@ -34,9 +34,8 @@ function searchResultToFormEntry(searchResult) {
 class Homepage extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
-    ipLocation: PropTypes.object,
-    geoLocation: PropTypes.object,
-    setIPlocation: PropTypes.func.isRequired,
+    currentLocation: PropTypes.object,
+    setCurrentLocation: PropTypes.func.isRequired,
 
     // coming from react router
     location: PropTypes.shape({
@@ -89,7 +88,7 @@ class Homepage extends React.Component {
     });
     const { results: data, location: locationComingFromServer } = response;
     if (!queryLocation) {
-      this.props.setIPlocation(locationComingFromServer);
+      this.props.setCurrentLocation(locationComingFromServer, 'low');
     }
 
     const isLocationSelected = Boolean(selectedLocation);
@@ -318,11 +317,10 @@ class Homepage extends React.Component {
           onGeolocationFound={this.onGeolocationFound}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
-          currentLocation={this.props.geoLocation || this.props.ipLocation}
+          currentLocation={this.props.currentLocation.latLng}
           centerPosition={
             this.state.searchResultLatlng ||
-            this.props.geoLocation ||
-            this.props.ipLocation
+            this.props.currentLocation.latLng
           }
           locations={
             selectedForMissing

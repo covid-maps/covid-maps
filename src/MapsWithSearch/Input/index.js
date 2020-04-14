@@ -29,7 +29,7 @@ function GeolocationButton({ isLoading, onClick }) {
 class LocationSearchInput extends React.Component {
   static propTypes = {
     translations: PropTypes.object,
-    setGeolocation: PropTypes.func.isRequired
+    setCurrentLocation: PropTypes.func.isRequired
   };
 
   constructor(props) {
@@ -55,7 +55,7 @@ class LocationSearchInput extends React.Component {
           lat: position.coords.latitude,
           lng: position.coords.longitude
         }
-        this.props.setGeolocation(location)
+        this.props.setCurrentLocation(location, 'high')
         this.setState({ isGeolocationLoading: false });
         if (this.props.onGeolocationFound) {
           this.props.onGeolocationFound(location);

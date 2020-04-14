@@ -3,8 +3,8 @@ import { GoogleMap, Marker } from "@react-google-maps/api";
 import { dotIcon, markerIcon, icons, isSameLocation } from "../utils";
 import { mapOptions } from "./theme";
 
-// Final fallback to a location in Vancouver (should never be shown)
-const defaultCenter = { lat: 49.281376, lng: -123.111382 };
+// Final fallback to a location in Bangalore
+const defaultCenter = { lat: 12.95396, lng: 77.4908577 };
 
 class Map extends Component {
   static defaultProps = {
@@ -116,7 +116,8 @@ class Map extends Component {
     if (this.props.panToLocation) {
       this.map && this.map.panTo(this.props.panToLocation);
     }
-
+    const { currentLocation } = this.props;
+    const isAccurate = currentLocation.accuracy === 'high';
     return (
       <GoogleMap
         ref={this.refMap}
@@ -129,21 +130,20 @@ class Map extends Component {
         zoom={13}
         center={this.mapCenter()}
       >
-        {this.props.currentLocation && this.props.currentLocation.lat ?
-          <Marker position={this.props.currentLocation} icon={dotIcon} />
+        {isAccurate ?
+          <Marker position={currentLocation.latLng} icon={dotIcon} />
           : null}
 
         {this.props.locations &&
           this.props.locations.map((latlng, index) => {
             const markerKey = `${latlng.lat}_${latlng.lng}_${index}`;
+            const isSelected = this.isMarkerSelected(latlng);
             return (
               <Marker
                 key={markerKey}
-                icon={
-                  this.isMarkerSelected(latlng)
-                    ? markerIcon(icons.highlighted)
-                    : markerIcon(icons.default)
-                }
+                zIndex={isSelected ? 10 : 1}
+                icon={isSelected ?
+                  markerIcon(icons.highlighted) : markerIcon(icons.default)}
                 position={latlng}
                 onClick={this.markerClickHandler}
               />

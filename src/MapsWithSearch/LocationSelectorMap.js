@@ -8,18 +8,15 @@ class LocationSelectorMapWithSearch extends React.Component {
       <LocationSearchControl
         onSearchSuccess={this.props.onSearchSuccess}
         value={this.props.value}
-        currentLocation={this.props.geoLocation || this.props.ipLocation}
+        currentLocation={this.props.currentLocation.latLng}
         onGeolocationFound={this.props.onGeolocationFound}
         activateInput={this.props.activateInput}
       />
       <LocationSelectorMap
         height={this.props.height}
-        markerPosition={this.props.markerPosition || this.props.geoLocation || this.props.ipLocation}
-        geoLocation={this.props.geoLocation}
-        ipLocation={this.props.ipLocation}
-        onBoundsChanged={this.props.onBoundsChanged}
+        markerPosition={this.props.markerPosition || this.props.currentLocation.latLng}
+        currentLocation={this.props.currentLocation}
         onMarkerDragged={this.props.onMarkerDragged}
-        onPositionChanged={this.props.onPositionChanged}
       />
     </>
   }

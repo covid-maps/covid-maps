@@ -24,8 +24,7 @@ const emptyData = {
 class LocationSelectionPage extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
-    ipLocation: PropTypes.object,
-    geoLocation: PropTypes.object
+    currentLocation: PropTypes.object,
   };
 
   state = {
@@ -97,8 +96,7 @@ class LocationSelectionPage extends React.Component {
           activateInput
           onSearchSuccess={this.onLocationSearchCompleted}
           searchValue={this.getSearchValue()}
-          ipLocation={this.props.ipLocation}
-          geoLocation={this.props.geoLocation}
+          currentLocation={this.props.currentLocation}
           height={"50vh"}
           markerPosition={
             this.state.data.Latitude

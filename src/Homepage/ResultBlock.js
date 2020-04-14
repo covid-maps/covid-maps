@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
-import PropTypes from "prop-types";
 import ResultEntry from "./Result";
 import { Link } from "react-router-dom";
 import { recordUpdateStore, recordDirectionsClicked, recordStoreShareClicked } from "../gaEvents";
 import Highlighter from "react-highlight-words";
 import { withGlobalContext } from "../App";
+import { STORE_CATEGORIES, FORM_FIELDS } from '../constants';
 
 function constructDirectionsUrl({ name, placeId, lat, lng }) {
   if (placeId) {
@@ -17,14 +17,14 @@ function constructDirectionsUrl({ name, placeId, lat, lng }) {
 function prepareStoreForUpdate(entry) {
   return {
     ...entry,
-    "Safety Observations": "",
-    "Useful Information": "",
-    "Opening Time": "",
-    "Closing Time": "",
-    "Store Category":
-      entry["Store Category"] && entry["Store Category"].length
-        ? entry["Store Category"][0]
-        : "",
+    [FORM_FIELDS.SAFETY_OBSERVATIONS]: "",
+    [FORM_FIELDS.USEFUL_INFORMATION]: "",
+    [FORM_FIELDS.OPENING_TIME]: "",
+    [FORM_FIELDS.CLOSING_TIME]: "",
+    [FORM_FIELDS.STORE_CATEGORY]:
+      entry[FORM_FIELDS.STORE_CATEGORY] && entry[FORM_FIELDS.STORE_CATEGORY].length
+        ? entry[FORM_FIELDS.STORE_CATEGORY][0]
+        : STORE_CATEGORIES.GROCERY,
   };
 }
 
@@ -43,11 +43,12 @@ function shareListing(event, store) {
   }
 }
 
-function ResultBlock(props) {
-  const propTypes = {
-    translations: PropTypes.object.isRequired,
-  };
+function onDirectionButtonClick(event) {
+  event.stopPropagation();
+  recordDirectionsClicked();
+}
 
+function ResultBlock(props) {
   const onClick = () => {
     window.scrollTo({
       top: 0,
@@ -72,46 +73,46 @@ function ResultBlock(props) {
         }`}
     >
       <div className="card-body p-3">
-        <a
-          href={constructDirectionsUrl(result)}
-          onClick={recordDirectionsClicked}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="float-right btn btn-sm btn-outline-secondary text-uppercase ml-2"
-        >
-          <i className="far fa-directions"></i>
-        </a>
-        <Link
-          to={{
-            pathname: "/update",
-            state: { item: prepareStoreForUpdate(entry) },
-          }}
-          className="float-right btn btn-sm btn-outline-success text-uppercase"
-          onClick={recordUpdateStore}
-        >
-          {props.translations.update}
-        </Link>
-        {
-          showShareButton &&
-          <div
-            onClick={(e) => shareListing(e, result)}
-            className="float-right btn btn-sm btn-outline-secondary text-uppercase mr-2"
-          >
-            <i className="far fa-share-alt"></i>
+        <div className='d-flex justify-content-between align-center-items'>
+          <h5 className="card-title m-0 p-0 d-inline-block">
+            <Highlighter
+              highlightClassName="highlighted-text"
+              searchWords={[props.highlightedText]}
+              autoEscape={true}
+              textToHighlight={result.name}
+            />
+          </h5>
+          <div style={{ minWidth: 160, textAlign: 'right' }}>
+            {
+              showShareButton &&
+              <div
+                onClick={(e) => shareListing(e, result)}
+                className="btn btn-sm btn-outline-secondary text-uppercase mr-2"
+              >
+                <i className="far fa-share-alt"></i>
+              </div>
+            }
+            <Link
+              to={{
+                pathname: "/update",
+                state: { item: prepareStoreForUpdate(entry) },
+              }}
+              className="btn btn-sm btn-outline-success text-uppercase"
+              onClick={recordUpdateStore}
+            >
+              {props.translations.update}
+            </Link>
+            <a
+              href={constructDirectionsUrl(result)}
+              onClick={(e) => onDirectionButtonClick(e)}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="btn btn-sm btn-outline-secondary text-uppercase ml-2"
+            >
+              <i className="far fa-directions"></i>
+            </a>
           </div>
-        }
-
-        <h5 className="card-title m-0 p-0 d-inline-block">
-          <Highlighter
-            highlightClassName="highlighted-text"
-            searchWords={[props.highlightedText]}
-            autoEscape={true}
-            textToHighlight={result.name}
-          />
-        </h5>
-        {result.openTime && result.closeTime ? (
-          <span className="mx-2">{`Hours: ${result.openTime} to ${result.closeTime}`}</span>
-        ) : null}
+        </div>
         <ResultEntry
           highlightedText={props.highlightedText}
           entries={result.entries}

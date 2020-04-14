@@ -4,6 +4,9 @@ const requestIp = require("request-ip");
 const bodyParser = require("body-parser");
 const stores = require("./service/stores");
 const axios = require('axios');
+const Sentry = require('@sentry/node');
+
+Sentry.init({ dsn: 'https://f26d1f5d8e2a45c9ad4b98eaabf8d101@o370711.ingest.sentry.io/5198144' });
 
 async function getLocationFromIp(req) {
   const ip = req.clientIp;
@@ -25,6 +28,9 @@ const getFormDataWithUserIp = req => {
 };
 
 const app = express();
+// The request handler must be the first middleware on the app
+app.use(Sentry.Handlers.requestHandler());
+
 app.use(express.json());
 app.use(compression());
 app.use(requestIp.mw());
@@ -68,13 +74,24 @@ app.get("/v1/query", async (req, res) => {
 });
 
 app.get("/v2/query", async (req, res) => {
-  let query = {
-    lat: req.query.lat,
-    lng: req.query.lng,
-    radius: req.query.radius,
-    page: req.query.page
+  const { query } = req;
+  let location = undefined;
+  if (query.lat && query.lng) {
+    location = { lat: parseFloat(query.lat), lng: parseFloat(query.lng) };
+  } else {
+    location = await getLocationFromIp(req);
   }
-  res.send(await stores.findNearbyStores(query));
+  let params = {
+    location,
+    radius: query.radius,
+    page: query.page
+  }
+  let results = await stores.findNearbyStores(params);
+  res.send({ location, results });
 });
 
-app.listen(process.env.PORT || 5000);
+// The error handler must be before any other error middleware and after all controllers
+app.use(Sentry.Handlers.errorHandler());
+const port = process.env.PORT || 5000
+app.listen(port);
+console.log('Server is now listening at port', port)

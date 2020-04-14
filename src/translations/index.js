@@ -1,7 +1,9 @@
-import english from "./english";
-import hindi from "./hindi";
+import EN from "./english";
+import HI from "./hindi";
+import PT from "./portuguese-br";
 
 export default {
-  english,
-  hindi
+  EN,
+  HI,
+  PT,
 };

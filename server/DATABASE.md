@@ -1,4 +1,4 @@
-# Database work
+# Database setup
 
 ## Local setup
 
@@ -8,7 +8,7 @@
    - Ensure you can run `psql`
    - In psql: `create database "covid_maps_0";`
 
-1. Run migrations through sequelize
+2. Run migrations through sequelize
 
    - `npx sequelize-cli db:migrate`
    - https://sequelize.org/v5/manual/migrations.html
@@ -17,7 +17,7 @@
 
 1. The `pg` NPM needs to be pinned to 7.12.1
    - https://github.com/brianc/node-postgres/issues/2009
-1. A newly provisioned database requires installing the PostGIS extension
+2. A newly provisioned database requires installing the PostGIS extension
    ```sh
    heroku pg:psql # launch psql
    create extension postgis; # inside psql
@@ -26,10 +26,9 @@
    ```
    psql covid_maps_0 -c "CREATE EXTENSION postgis";
    ```
+3. If a migration fails in the middle, you will need to drop the database and begin afresh.
 
 ## Notes
 
-1. Query to support: given lat-lng, find entries around it
-   - will need PostGIS
 1. Connection pooling?
    - https://sequelize.org/v5/manual/getting-started.html

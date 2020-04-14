@@ -1,17 +1,19 @@
-import React, { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import React from "react";
+import qs from "qs";
+import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
-import Alert from "react-bootstrap/Alert";
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
 import { getDistance } from "geolib";
-import HomepageMapWithSearch from '../MapsWithSearch/HomepageMap';
+import HomepageMapWithSearch from "../MapsWithSearch/HomepageMap";
 import { isStoreType, getFirstComma } from "../utils";
 import { recordAddNewStore, recordStoreFilterKeypress } from "../gaEvents";
 import Form from "react-bootstrap/Form";
 import { withGlobalContext } from "../App";
+import HomepageAlerts from "./HomepageAlerts";
+import { FORM_FIELDS, ALERTS_TYPE } from "../constants";
 
 const DISTANCE_FILTER = 200000; // meters
 
@@ -29,28 +31,22 @@ function searchResultToFormEntry(searchResult) {
   };
 }
 
-function NoOfUsersAlert(props) {
-  const [show, setShow] = useState(true);
-  return (
-    <Alert
-      key="no-of-users"
-      className="card no-of-users-alert"
-      variant="primary"
-      show={show}
-      onClose={() => setShow(false)}
-      dismissible
-    >
-      {props.alertText}
-    </Alert>
-  );
-}
-
 class Homepage extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
-    ipLocation: PropTypes.object,
-    geoLocation: PropTypes.object,
-    setIPlocation: PropTypes.func.isRequired
+    currentLocation: PropTypes.object,
+    setCurrentLocation: PropTypes.func.isRequired,
+
+    // coming from react router
+    location: PropTypes.shape({
+      search: PropTypes.string.isRequired,
+    }).isRequired,
+    history: PropTypes.shape({
+      replace: PropTypes.func.isRequired,
+    }).isRequired,
+    match: PropTypes.shape({
+      params: PropTypes.object.isRequired,
+    }).isRequired,
   };
 
   state = {
@@ -62,44 +58,125 @@ class Homepage extends React.Component {
     selectedLocation: undefined,
     searchResultLatlng: undefined,
     searchResult: undefined,
+    alertType: "",
+    showAlert: true,
   };
 
-  componentDidMount() {
-    api.query().then(response => {
-      const { results: data, location } = response;
-      this.props.setIPlocation(location);
-      this.setState({
-        results: this.formatResults(data, location),
+  toggleAlert = () => {
+    this.setState(prevState => {
+      return { showAlert: !prevState.showAlert };
+    });
+  };
+
+  async fetchResults() {
+    let locationComingFromSubmission;
+    let selectedStoreName;
+    const queryParams = qs.parse(this.props.location.search, {
+      ignoreQueryPrefix: true,
+    });
+    if ("submittedStore" in queryParams) {
+      const storeData = JSON.parse(atob(queryParams.submittedStore));
+      locationComingFromSubmission = { lat: storeData.Latitude, lng: storeData.Longitude };
+      selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
+    }
+
+    let queryLocation = locationComingFromSubmission
+      || this.state.searchResultLatlng
+      || this.props.currentLocation.latLng;
+    const response = await api.query({
+      ...queryLocation,
+      radius: DISTANCE_FILTER,
+    });
+    const { results: data, location: locationComingFromServer } = response;
+    if (!queryLocation) {
+      this.props.setCurrentLocation({
+        latLng: locationComingFromServer, accuracy: 'low'
+      });
+    }
+
+    const isLocationSelected = Boolean(locationComingFromSubmission);
+    const newCenter = locationComingFromSubmission || locationComingFromServer;
+
+    this.setState(
+      {
+        results: this.formatResults(data, newCenter),
         markers: data.map(result => ({
           lat: Number(result.Latitude),
           lng: Number(result.Longitude),
         })),
         isLoading: false,
-      });
-      this.goToStoreFromProps()
-    });
+        selectedLocation: locationComingFromSubmission,
+        selectedStoreName,
+        searchResultLatlng: newCenter,
+        mapShouldPan: isLocationSelected,
+        alertType: isLocationSelected
+          ? ALERTS_TYPE.FORM_SUBMIT_SUCESS
+          : ALERTS_TYPE.WEBSITE_PURPOSE,
+      },
+      () => {
+        if (isLocationSelected) {
+          // remove query param from url
+          this.props.history.replace("/");
 
+          setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
+
+          const searchResultsContainer = document.querySelector(
+            ".search-results-container"
+          );
+          if (searchResultsContainer && searchResultsContainer.scrollIntoView) {
+            searchResultsContainer.scrollIntoView();
+            // approx height of success alert is 120
+            // we will move the store card just below this alert
+            window.scrollBy(0, -120);
+          }
+        }
+      }
+    );
+  }
+
+  async componentDidMount() {
+    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+    let currentLocation = undefined;
+
+    if (params.currentLocation) {
+      try {
+        const [lat, lng] = params.currentLocation.split(',').map(parseFloat);
+        const currentLatLng = { lat, lng };
+        const accuracy = params.accuracy === 'high' || params.accuracy === 'low' ?
+          params.accuracy : 'low';
+        currentLocation = { latLng: currentLatLng, accuracy };
+      } catch (e) {
+        console.log('Cannot parse les query params.')
+      }
+    }
+
+    if (currentLocation) {
+      await this.props.setCurrentLocation(currentLocation);
+    }
+    try {
+      await this.fetchResults();
+      this.goToStoreFromProps();
+    } catch (e) {
+      console.log("Fetch results failed :(")
+    }
   }
 
   goToStoreFromProps() {
     if (this.props.match.params.storeId) {
-      const storeId = parseInt(this.props.match.params.storeId)
-      const place = this.state.results.find(item => item.storeId === storeId)
+      const storeId = parseInt(this.props.match.params.storeId);
+      const place = this.state.results.find(item => item.storeId === storeId);
       // console.log(place)
       //Run the function only if place is real value ( not nul || undefined)
       //Reuse the onCardClick function.
       if (place) {
-        this.onCardClick(place)
+        this.onCardClick(place);
         const latLng = {
-          "lat": place.lat,
-          "lng": place.lng
-        }
+          lat: place.lat,
+          lng: place.lng,
+        };
         this.setState({
-          center: { "latLng": latLng },
-          results: this.calculateGroupDistance(
-            this.state.results,
-            latLng
-          )
+          center: { latLng: latLng },
+          results: this.calculateGroupDistance(this.state.results, latLng),
         });
       }
     }
@@ -161,13 +238,19 @@ class Homepage extends React.Component {
     this.setState({
       selectedLocation: { lat: Number(card.lat), lng: Number(card.lng) },
       mapShouldPan: true,
+      selectedStoreName: card.name,
     });
     setTimeout(() => this.setState({ mapShouldPan: false }), 1000);
   }
 
   onMarkerSelected(latLng) {
+    const result = this.state.results.find(({ lat, lng }) => {
+      return lat === latLng.lat && lng === latLng.lng;
+    });
+    const storeName = result ? result.name : undefined;
     this.setState({
       selectedLocation: { ...latLng },
+      selectedStoreName: storeName,
       mapShouldPan: false,
     });
   }
@@ -187,7 +270,7 @@ class Homepage extends React.Component {
   }
 
   handleStoreFilterQuery = event => {
-    recordStoreFilterKeypress()
+    recordStoreFilterKeypress();
     this.setState({
       storeFilterQuery: event.target.value,
       selectedLocation: undefined,
@@ -196,12 +279,32 @@ class Homepage extends React.Component {
 
   onGeolocationFound = () => {
     // Clear search result and refresh distances
-    this.setState({
-      searchResult: undefined,
-      searchResultLatlng: undefined,
-      results: this.calculateGroupDistance(this.state.results, this.props.geoLocation || this.props.ipLocation)
-    })
-  }
+    this.setState(
+      {
+        searchResult: undefined,
+        searchResultLatlng: undefined,
+        isLoading: true,
+      },
+      () => {
+        this.fetchResults();
+      }
+    );
+  };
+
+  onSearchCompleted = result => {
+    if (result && result.latLng) {
+      this.setState(
+        {
+          searchResultLatlng: result.latLng,
+          searchResult: result,
+          isLoading: true,
+        },
+        () => {
+          this.fetchResults();
+        }
+      );
+    }
+  };
 
   render() {
     let missingBlock = null;
@@ -219,58 +322,51 @@ class Homepage extends React.Component {
       );
       selectedForMissing = searchResultLatlng;
     }
-    const closeByResults = this.state.results.filter(
-      result => result.distance < DISTANCE_FILTER
-    );
-    const closeByMarkers = closeByResults.map(res => ({
+    const markers = this.state.results.map(res => ({
       lat: Number(res.lat),
       lng: Number(res.lng),
     }));
+    const { translations } = this.props;
     return (
       <div>
-        <NoOfUsersAlert
-          alertText={this.props.translations.website_purpose_banner}
+        <HomepageAlerts
+          {...this.props}
+          showAlert={this.state.showAlert}
+          alertType={this.state.alertType}
+          toggleAlert={this.toggleAlert}
         />
         <HomepageMapWithSearch
           value=""
-          onSearchSuccess={result => {
-            if (result && result.latLng) {
-              this.setState({
-                searchResultLatlng: result.latLng,
-                searchResult: result,
-                results: this.calculateGroupDistance(
-                  this.state.results,
-                  result.latLng
-                ),
-              });
-            }
-          }}
+          onSearchSuccess={this.onSearchCompleted}
           onGeolocationFound={this.onGeolocationFound}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
-          currentLocation={this.props.geoLocation || this.props.ipLocation}
-          centerPosition={this.state.searchResultLatlng || this.props.geoLocation || this.props.ipLocation}
+          currentLocation={this.props.currentLocation}
+          centerPosition={
+            this.state.searchResultLatlng ||
+            this.props.currentLocation.latLng
+          }
           locations={
             selectedForMissing
-              ? [...closeByMarkers, this.state.searchResultLatlng]
-              : closeByMarkers
+              ? [...markers, this.state.searchResultLatlng]
+              : markers
           }
           onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
           panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
         />
         <div className="my-3 mx-2">
           {missingBlock}
-          <div className="my-1 px-1 d-flex justify-content-between align-items-center search-results-container">
+          <div className="my-1 px-1 d-flex justify-content-between align-items-center">
             <div>
               <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
-                {this.props.translations.store_nearby_label}
+                {translations.store_nearby_label}
               </h6>
               <Form.Control
                 type="text"
                 onChange={this.handleStoreFilterQuery}
                 className="d-inline-block mx-1 results-search-box"
                 value={this.state.storeFilterQuery}
-                placeholder={this.props.translations.store_search_placeholder}
+                placeholder={translations.store_search_placeholder}
               />
             </div>
             <div>
@@ -281,17 +377,19 @@ class Homepage extends React.Component {
                   className="text-uppercase"
                   onClick={recordAddNewStore}
                 >
-                  {this.props.translations.add_store}
+                  {translations.add_store}
                 </Button>
               </Link>
             </div>
           </div>
           <SearchResults
+            selectedStoreName={this.state.selectedStoreName}
             textFilter={this.state.storeFilterQuery}
             onCardClick={card => this.onCardClick(card)}
             isLoading={this.state.isLoading}
             selectedLocation={this.state.selectedLocation}
-            results={closeByResults}
+            results={this.state.results}
+            loadMoreBtnText={this.props.translations.load_more}
           />
         </div>
       </div>

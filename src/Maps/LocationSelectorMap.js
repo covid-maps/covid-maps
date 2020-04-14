@@ -59,7 +59,7 @@ class Map extends Component {
         onDragEnd={this.onDragEnd}
       >
         {this.props.geoLocation ?
-          <Marker position={this.props.geoLocation} icon={dotIcon} />
+          <Marker zIndex={100} position={this.props.geoLocation} icon={dotIcon} />
           : null}
         {this.state.markerPosition ?
           <Marker

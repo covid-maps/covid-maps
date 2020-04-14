@@ -61,7 +61,7 @@ class Map extends Component {
         onDragEnd={this.onDragEnd}
       >
         {isAccurate ?
-          <Marker position={this.props.currentLocation.latLng} icon={dotIcon} />
+          <Marker zIndex={100} position={this.props.currentLocation.latLng} icon={dotIcon} />
           : null}
         {this.state.markerPosition ?
           <Marker

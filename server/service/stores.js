@@ -10,11 +10,9 @@ async function addStoreData(data, forceUpdate = false) {
 
 async function findAllStores() {
     const stores = await models.StoreInfo.findAll({
-        include : [{
-            model : models.StoreUpdates,
-            where: {
-                deleted: false
-            }
+        include: [{
+            model: models.StoreUpdates,
+            where: { deleted: false }
         }],
     });
     return stores.flatMap(store => mapDBRow(store));
@@ -26,7 +24,8 @@ async function findNearbyStores(params) {
     }
     const stores = await models.StoreInfo.findAll({
         include: [{
-            model: models.StoreUpdates
+            model: models.StoreUpdates,
+            where: { deleted: false }
         }],
         where: models.sequelize.where(
             models.sequelize.fn(

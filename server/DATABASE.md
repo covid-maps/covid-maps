@@ -1,4 +1,4 @@
-# Database work
+# Database setup
 
 ## Local setup
 
@@ -30,7 +30,5 @@
 
 ## Notes
 
-1. Query to support: given lat-lng, find entries around it
-   - will need PostGIS
-2. Connection pooling?
+1. Connection pooling?
    - https://sequelize.org/v5/manual/getting-started.html

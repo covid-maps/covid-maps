@@ -40,5 +40,5 @@ export const ALERTS_TYPE = {
 
 export const STORAGE_KEYS = {
   LANGUAGE: "userSelectedLanguage",
-  SEARCHED_ADDRESS: "userSelectedAddress",
+  SELECTED_ADDRESS: "userSelectedAddress",
 };

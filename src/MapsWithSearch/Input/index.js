@@ -15,7 +15,7 @@ import { recordSearchCompleted } from "../../gaEvents";
 import { withGlobalContext } from "../../App";
 import { ADDRESS_COMPONENTS, STORAGE_KEYS } from "../../constants";
 import { withSessionStorage } from "../../withStorage";
-const { SEARCHED_ADDRESS } = STORAGE_KEYS;
+const { SELECTED_ADDRESS } = STORAGE_KEYS;
 
 function GeolocationButton({ isLoading, onClick }) {
   return (
@@ -81,7 +81,7 @@ class LocationSearchInput extends React.Component {
   };
 
   persistLastSelectedAddress = address => {
-    this.props.setItemToStorage(SEARCHED_ADDRESS, address);
+    this.props.setItemToStorage(SELECTED_ADDRESS, address);
   };
 
   handleSelect = address => {
@@ -136,7 +136,7 @@ class LocationSearchInput extends React.Component {
   }
 
   populateLastSelectedAddress = () => {
-    const address = this.props.getItemFromStorage(SEARCHED_ADDRESS);
+    const address = this.props.getItemFromStorage(SELECTED_ADDRESS);
     if (address) {
       this.handleSelect(address);
     }
@@ -147,7 +147,7 @@ class LocationSearchInput extends React.Component {
   }
 
   removeLastSelectedAddress = () => {
-    this.props.removeItemFromStorage(SEARCHED_ADDRESS);
+    this.props.removeItemFromStorage(SELECTED_ADDRESS);
   };
 
   render() {

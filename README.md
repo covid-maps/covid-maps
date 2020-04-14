@@ -18,11 +18,13 @@ Join our [WhatsApp Developer group](https://chat.whatsapp.com/HzZT0gMYoYYEDDjj2L
 
 ## Project structure
 
-- This is a react app built with the create-react-app scaffolding
+- **React app**: The frontend is built on React, built with the create-react-app scaffolding
   - Using react-router for navigation ([docs](https://reacttraining.com/react-router/web/guides/quick-start))
-- Using bootstrap (with the react-bootsrap package) basic css styling
-  - For UI changes, use [these docs](https://react-bootstrap.netlify.com/components/alerts) for components etc that bootstrap gives out of the box
-- Integration with google maps and google sheets as database (sheets to be built out)
+  - Google Maps for a bunch of stuff
+  - Bootstrap (with the react-bootsrap package) for basic css styling
+- **Nodejs/Express server**: The `server` dir has a basic web service that runs on top of PostgreSQL
+  - PostgreSQL is the primary data store for the app
+  - For more info on the server, see the server [README.md](server/README.md)
 
 ## Usage
 
@@ -41,18 +43,6 @@ We have continuous deployment on every push to `master` with a Netlify integrati
 
 The app is deployed at https://peaceful-rosalind-47c3e2.netlify.com
 
-## Google sheets integration
-
-The sheet is at https://docs.google.com/spreadsheets/d/1jFQrYwbhPIaRL6t4TnpTO7W905U0B-W1FXS-GBYwz7M/edit#gid=0
-
-- The app depends on the column names and sheet ordering for now
-- If any of these need to be changed, remember to update the code (the react app only), including:
-  - Submit form `onSubmit`
-  - "Share your experience" flow from home page to submit
-  - Showing results in `ResultBlock`
-- Column ordering can be changed without code changes - it will require a server restart
-  - So that the cached `header row` is deleted
-
 ## Location input - test scenarios
 
 1. "Update info" flow from homepage -> submit.
@@ -60,7 +50,7 @@ The sheet is at https://docs.google.com/spreadsheets/d/1jFQrYwbhPIaRL6t4TnpTO7W9
 3. Drag marker
 4. Drag map (marker stays in the center; "mobile friendly drag")
 
-## Formatting
+## Formatting with Prettier
 
 ```
 npx prettier --write --trailing-comma none --arrow-parens avoid src/**/*.js

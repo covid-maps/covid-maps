@@ -40,8 +40,7 @@ class LocationSelector extends React.Component {
         value={this.props.searchValue}
         height={this.props.height}
         markerPosition={this.props.markerPosition}
-        ipLocation={this.props.ipLocation}
-        geoLocation={this.props.geoLocation}
+        currentLocation={this.props.currentLocation}
         onGeolocationFound={this.geocodeAndInformParent}
         onMarkerDragged={this.geocodeAndInformParent}
       />

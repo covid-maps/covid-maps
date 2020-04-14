@@ -34,9 +34,8 @@ function searchResultToFormEntry(searchResult) {
 class Homepage extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
-    ipLocation: PropTypes.object,
-    geoLocation: PropTypes.object,
-    setIPlocation: PropTypes.func.isRequired,
+    currentLocation: PropTypes.object,
+    setCurrentLocation: PropTypes.func.isRequired,
 
     // coming from react router
     location: PropTypes.shape({
@@ -70,30 +69,33 @@ class Homepage extends React.Component {
   };
 
   async fetchResults() {
-    let selectedLocation;
+    let locationComingFromSubmission;
     let selectedStoreName;
-
     const queryParams = qs.parse(this.props.location.search, {
       ignoreQueryPrefix: true,
     });
     if ("submittedStore" in queryParams) {
       const storeData = JSON.parse(atob(queryParams.submittedStore));
-      selectedLocation = { lat: storeData.Latitude, lng: storeData.Longitude };
+      locationComingFromSubmission = { lat: storeData.Latitude, lng: storeData.Longitude };
       selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
     }
 
-    let queryLocation = selectedLocation || this.state.searchResultLatlng;
+    let queryLocation = locationComingFromSubmission
+      || this.state.searchResultLatlng
+      || this.props.currentLocation.latLng;
     const response = await api.query({
       ...queryLocation,
       radius: DISTANCE_FILTER,
     });
     const { results: data, location: locationComingFromServer } = response;
     if (!queryLocation) {
-      this.props.setIPlocation(locationComingFromServer);
+      this.props.setCurrentLocation({
+        latLng: locationComingFromServer, accuracy: 'low'
+      });
     }
 
-    const isLocationSelected = Boolean(selectedLocation);
-    const newCenter = selectedLocation || locationComingFromServer;
+    const isLocationSelected = Boolean(locationComingFromSubmission);
+    const newCenter = locationComingFromSubmission || locationComingFromServer;
 
     this.setState(
       {
@@ -103,7 +105,7 @@ class Homepage extends React.Component {
           lng: Number(result.Longitude),
         })),
         isLoading: false,
-        selectedLocation,
+        selectedLocation: locationComingFromSubmission,
         selectedStoreName,
         searchResultLatlng: newCenter,
         mapShouldPan: isLocationSelected,
@@ -132,10 +134,31 @@ class Homepage extends React.Component {
     );
   }
 
-  componentDidMount() {
-    this.fetchResults().then(() => {
+  async componentDidMount() {
+    const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
+    let currentLocation = undefined;
+
+    if (params.currentLocation) {
+      try {
+        const [lat, lng] = params.currentLocation.split(',').map(parseFloat);
+        const currentLatLng = { lat, lng };
+        const accuracy = params.accuracy === 'high' || params.accuracy === 'low' ?
+          params.accuracy : 'low';
+        currentLocation = { latLng: currentLatLng, accuracy };
+      } catch (e) {
+        console.log('Cannot parse les query params.')
+      }
+    }
+
+    if (currentLocation) {
+      await this.props.setCurrentLocation(currentLocation);
+    }
+    try {
+      await this.fetchResults();
       this.goToStoreFromProps();
-    });
+    } catch (e) {
+      console.log("Fetch results failed :(")
+    }
   }
 
   goToStoreFromProps() {
@@ -318,11 +341,10 @@ class Homepage extends React.Component {
           onGeolocationFound={this.onGeolocationFound}
           selectedLocation={selectedForMissing || this.state.selectedLocation}
           style={{ height: "45vh" }}
-          currentLocation={this.props.geoLocation || this.props.ipLocation}
+          currentLocation={this.props.currentLocation}
           centerPosition={
             this.state.searchResultLatlng ||
-            this.props.geoLocation ||
-            this.props.ipLocation
+            this.props.currentLocation.latLng
           }
           locations={
             selectedForMissing

@@ -14,7 +14,7 @@ class Map extends Component {
   };
 
   mapCenter = () => {
-    return this.props.markerPosition || this.props.geoLocation || this.props.ipLocation || defaultCenter;
+    return this.props.markerPosition || this.props.currentLocation.latLng || defaultCenter;
   };
 
   onMapLoaded = map => {
@@ -45,6 +45,8 @@ class Map extends Component {
 
   render() {
     const center = this.mapCenter();
+    const { currentLocation } = this.props;
+    const isAccurate = currentLocation.accuracy === 'high';
     return (
       <GoogleMap
         options={mapOptions}
@@ -58,8 +60,8 @@ class Map extends Component {
         onDrag={this.onDrag}
         onDragEnd={this.onDragEnd}
       >
-        {this.props.geoLocation ?
-          <Marker zIndex={100} position={this.props.geoLocation} icon={dotIcon} />
+        {isAccurate ?
+          <Marker zIndex={100} position={this.props.currentLocation.latLng} icon={dotIcon} />
           : null}
         {this.state.markerPosition ?
           <Marker

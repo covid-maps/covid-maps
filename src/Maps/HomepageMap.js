@@ -116,7 +116,8 @@ class Map extends Component {
     if (this.props.panToLocation) {
       this.map && this.map.panTo(this.props.panToLocation);
     }
-
+    const { currentLocation } = this.props;
+    const isAccurate = currentLocation.accuracy === 'high';
     return (
       <GoogleMap
         ref={this.refMap}
@@ -129,8 +130,8 @@ class Map extends Component {
         zoom={13}
         center={this.mapCenter()}
       >
-        {this.props.currentLocation && this.props.currentLocation.lat ?
-          <Marker position={this.props.currentLocation} icon={dotIcon} />
+        {isAccurate ?
+          <Marker position={currentLocation.latLng} icon={dotIcon} />
           : null}
 
         {this.props.locations &&

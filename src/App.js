@@ -65,8 +65,7 @@ class App extends Component {
 
     this.state = {
       language: this.getDefaultLanguage(),
-      ipLocation: undefined,
-      geoLocation: undefined,
+      currentLocation: { latLng: undefined, accuracy: 'low' },
     };
   }
 
@@ -105,17 +104,13 @@ class App extends Component {
     };
   };
 
-  setGeolocation = location => {
-    this.setState({
-      geoLocation: location,
+  setCurrentLocation = ({ latLng, accuracy }) => {
+    return new Promise(resolve => {
+      this.setState({
+        currentLocation: { latLng, accuracy }
+      }, resolve);
     });
-  };
-
-  setIPlocation = location => {
-    this.setState({
-      ipLocation: location,
-    });
-  };
+  }
 
   render() {
     const translations = this.getTranslations();
@@ -126,10 +121,8 @@ class App extends Component {
             translations,
             currentLanguage: this.state.language,
             setLanguage: this.setLanguage,
-            ipLocation: this.state.ipLocation,
-            geoLocation: this.state.geoLocation,
-            setGeolocation: this.setGeolocation,
-            setIPlocation: this.setIPlocation,
+            currentLocation: this.state.currentLocation,
+            setCurrentLocation: this.setCurrentLocation,
           }}
         >
           <div className="App">

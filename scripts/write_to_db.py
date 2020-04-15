@@ -1,49 +1,68 @@
 import pandas as pd
 import numpy as np
 from spreadsheets_helper import read_spreadsheet
-from database_helper import connect_to_db, update_row_orm, close_connection
+from database_helper import load_engine, close_connection
+from daos.dao import DAO
+from models.core import Update
+import db_urls
+
+
+def apply_updates(update_row, store_update):
+    store_update.flag = update_row.get('flag')
+
+    if update_row.get('Reviewed', 'No') == 'Yes':
+        store_update.reviewed = True
+    
+    # Don't change if not marked deleted, as it is False by default (and to avoid over-writing)
+    deleted = update_row.get('deleted', 'FALSE')
+    if deleted == 'TRUE':
+        store_update.deleted = True
+
+    opening_time = update_row.get('openingTime')
+    if opening_time and opening_time != store_update.openingTime:
+        store_update.openingTime = update_row['openingTime']
+
+    closing_time = update_row.get('closingTime')
+    if closing_time and closing_time != store_update.closingTime:
+        store_update.closingTime = update_row['closingTime']
+
+    useful_info = update_row.get('availabilityInfo')
+    if useful_info and useful_info != store_update.availabilityInfo:
+        store_update.availabilityInfo = update_row['availabilityInfo']
+
+    safety_info = update_row.get('safetyInfo')
+    if safety_info and safety_info != store_update.safetyInfo:
+        store_update.safetyInfo = safety_info
+
+    return store_update
 
 def main():
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
     SPREADSHEET_ID_INPUT = '1RZDZTswZxI-smwnyi8Oh5ck092hgl_CBxjtQURrczBs'
     SPREADSHEET_RANGE ='A1:Z5000'
     credentials_file_name = 'credentials.json'
-    DATABASE_URL = ''
+    DATABASE_URL =  db_urls.db_urls['STAGING']
 
     df = read_spreadsheet(SPREADSHEET_ID_INPUT, SPREADSHEET_RANGE, SCOPES)
     df['id'] = df['id'].astype(int)
-    db_session = connect_to_db(DATABASE_URL)
+    engine = load_engine(DATABASE_URL)
+    update_dao = DAO(Update, engine)
 
     for index, row in df.iterrows():
-        store_name = row['name']
-        flagged = row['flag']
-        deleted = row['deleted']
-        reviewed = row['Reviewed']
-        useful_info = row['availabilityInfo'].strip().lower() if row['availabilityInfo'] else ''
-        safety_info = row['safetyInfo'].strip().lower() if row['safetyInfo'] else ''
+        row_id = row.get('id')
+        reviewed = row.get('Reviewed')
 
-        update_dict = {
-            'flag': row['flag']
-        }
+        if not row_id:
+            print("Skipping row; no ID found.")
+            continue
 
-        print('Processing review ID {}'.format(row['id']))
+        if reviewed == 'Yes':
+            print('Processing review ID {}'.format(row_id))
+            store_update = update_dao.get(row_id)
+            store_update = apply_updates(row, store_update)
 
-        # If deleted is marked true, then it has been reviewed
-        if deleted == 'TRUE':
-            update_dict['deleted'] = True
-            update_dict['reviewed'] = True
-
-        if row['openingTime']:
-            update_dict['openingTime'] = row['openingTime']
-
-        if row['closingTime']:
-            update_dict['closingTime'] = row['closingTime']
-            
-        update_row_orm(db_session, row['id'], update_dict)
-
-
-    db_session.commit()
-    close_connection(db_session)
+        update_dao.session.commit()
+    close_connection(update_dao.session)
 
 if __name__ == "__main__":
     main()

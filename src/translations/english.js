@@ -1,6 +1,6 @@
 export default {
   website_purpose_banner:
-    "Help 35,000+ users by adding updates on essential services around you",
+    "Crowdsourced info on essentials – help 50,000+ users by sharing store updates",
   location_search_placeholder: "Search by store, address or landmark",
   store_search_placeholder: "Filter by name or item",
   add_store: "Add a store",

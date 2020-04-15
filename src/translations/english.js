@@ -41,4 +41,6 @@ export default {
   website_share_description:
     "Covid Maps - find essentials services around you in the lockdown period - track timings, stock levels and safety precautions at stores. Make an update with info you find in your grocery run and share with neighbours!",
   share_app: "Share App",
+  view_old_updates: "View old updates",
+  hide_old_updates: "Hide old updates",
 };

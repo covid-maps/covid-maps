@@ -116,6 +116,7 @@ function ResultBlock(props) {
         <EntriesGroup
           highlightedText={props.highlightedText}
           entries={result.entries}
+          translations={props.translations}
         />
       </div>
     </div>

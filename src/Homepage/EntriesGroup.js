@@ -93,6 +93,7 @@ class EntriesGroup extends Component {
   static propTypes = {
     entries: PropTypes.arrayOf(PropTypes.object).isRequired,
     highlightedText: PropTypes.string,
+    translations: PropTypes.object.isRequired,
   }
 
   constructor(props) {
@@ -132,12 +133,12 @@ class EntriesGroup extends Component {
   getToggleButtonContent() {
     return this.state.showPastEntries ? (
       <Fragment>
-        <span>Hide past updates</span>
+        <span>{this.props.translations.hide_old_updates}</span>
         <i className="fas fa-chevron-down ml-1"></i>
       </Fragment>
     ) : (
       <Fragment>
-        <span>View past updates</span>
+        <span>{this.props.translations.view_old_updates}</span>
         <i className="fas fa-chevron-right ml-1"></i>
       </Fragment>
     );

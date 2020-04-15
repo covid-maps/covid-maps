@@ -20,12 +20,15 @@ body {
   text-transform: uppercase;
   color: #e9e9e9;
 }
+
 .navbar-brand a {
   color: #e9e9e9;
 }
+
 .navbar-brand a:hover {
   text-decoration: none;
 }
+
 .navbar-brand a:hover span {
   color: #1b1b1b !important;
 }
@@ -40,9 +43,11 @@ footer {
   font-size: smaller;
   margin-top: 1.5em;
 }
+
 footer a {
   color: #666;
 }
+
 footer a:hover {
   color: #888;
 }
@@ -59,6 +64,7 @@ footer a:hover {
   z-index: 100;
   width: 100%;
 }
+
 .autocomplete-dropdown-container div {
   cursor: pointer;
   background-color: #ffffff;
@@ -67,6 +73,7 @@ footer a:hover {
   line-height: 1.5em;
   border-bottom: 1px solid #bbb;
 }
+
 .autocomplete-dropdown-container div.suggestion-item--active {
   background-color: #fafafa;
 }
@@ -78,6 +85,7 @@ footer a:hover {
   padding-right: 1.4em;
   font-size: 12px;
 }
+
 .no-of-users-alert button {
   padding: 0.2em 0.6em !important;
 }
@@ -87,24 +95,30 @@ footer a:hover {
   font-size: 0.925em;
   line-height: 1.5;
 }
+
 .card-result-block {
   background: #fff;
   cursor: pointer;
 }
+
 .card-result-block:hover {
   background: #eee;
 }
+
 .card-result-block-selected {
   background: #fff9e7;
 }
+
 .results-search-box {
   width: 13em;
 }
+
 @media only screen and (max-width: 600px) {
   .search-results-title {
     display: none !important;
   }
 }
+
 .highlighted-text {
   background: #fff8a0;
   padding: 0.2em 0;
@@ -163,4 +177,14 @@ footer a:hover {
 .btn-success.disabled,
 .btn-success:disabled {
   pointer-events: none;
+}
+
+.places-autocomplete-wrapper .sticky {
+  z-index: 5;
+  background-color: #fff;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09),
+    0 4px 2px rgba(0, 0, 0, 0.09),
+    0 8px 4px rgba(0, 0, 0, 0.09),
+    0 16px 8px rgba(0, 0, 0, 0.09),
+    0 32px 16px rgba(0, 0, 0, 0.09);
 }

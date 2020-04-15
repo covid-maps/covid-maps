@@ -1,6 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Form from "react-bootstrap/Form";
+import Sticky from "react-sticky-el";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -167,49 +168,55 @@ class LocationSearchInput extends React.Component {
         debounce={750}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
-            <InputGroup className="location-search-group">
-              <Form.Control
-                {...getInputProps({
-                  placeholder: this.props.translations
-                    .location_search_placeholder,
-                  defaultValue: this.props.defaultValue,
-                  className: "location-search-input",
-                })}
-                ref={this.textInput}
-              />
-              <InputGroup.Append>
-                <GeolocationButton
-                  onClick={this.getGeolocation}
-                  isLoading={this.state.isGeolocationLoading}
+          <Sticky
+            stickyClassName="sticky"
+            className="places-autocomplete-wrapper"
+          >
+            <div>
+              <InputGroup className="location-search-group">
+                <Form.Control
+                  {...getInputProps({
+                    placeholder: this.props.translations
+                      .location_search_placeholder,
+                    defaultValue: this.props.defaultValue,
+                    className: "location-search-input rounded-0",
+                  })}
+                  ref={this.textInput}
                 />
-                <Button
-                  onClick={e => this.clearInput(e)}
-                  variant="outline-secondary"
-                >
-                  <FontAwesomeIcon icon={faTimes} />
-                </Button>
-              </InputGroup.Append>
-            </InputGroup>
-            <div className="autocomplete-dropdown-container">
-              {loading && <div>Loading...</div>}
-              {suggestions.map(suggestion => {
-                const className = suggestion.active
-                  ? "suggestion-item--active"
-                  : "suggestion-item";
-
-                return (
-                  <div
-                    {...getSuggestionItemProps(suggestion, {
-                      className,
-                    })}
+                <InputGroup.Append>
+                  <GeolocationButton
+                    onClick={this.getGeolocation}
+                    isLoading={this.state.isGeolocationLoading}
+                  />
+                  <Button
+                    className="rounded-0"
+                    onClick={e => this.clearInput(e)}
+                    variant="outline-secondary"
                   >
-                    <span>{suggestion.description}</span>
-                  </div>
-                );
-              })}
+                    <FontAwesomeIcon icon={faTimes} />
+                  </Button>
+                </InputGroup.Append>
+              </InputGroup>
+              <div className="autocomplete-dropdown-container">
+                {loading && <div>Loading...</div>}
+                {suggestions.map(suggestion => {
+                  const className = suggestion.active
+                    ? "suggestion-item--active"
+                    : "suggestion-item";
+
+                  return (
+                    <div
+                      {...getSuggestionItemProps(suggestion, {
+                        className,
+                      })}
+                    >
+                      <span>{suggestion.description}</span>
+                    </div>
+                  );
+                })}
+              </div>
             </div>
-          </div>
+          </Sticky>
         )}
       </PlacesAutocomplete>
     );

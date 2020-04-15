@@ -354,9 +354,9 @@ class Homepage extends React.Component {
           onMarkerSelected={latLng => this.onMarkerSelected(latLng)}
           panToLocation={this.state.mapShouldPan && this.state.selectedLocation}
         />
-        <div className="my-3 mx-2">
+        <div className="mx-2">
           {missingBlock}
-          <div className="my-1 d-flex justify-content-between align-items-center">
+          <div className="my-4 d-flex justify-content-between align-items-center">
             <div>
               <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
                 {translations.store_nearby_label}

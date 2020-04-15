@@ -68,7 +68,7 @@ function ResultBlock(props) {
   return (
     <div
       onClick={() => onClick()}
-      className={`card my-1 card-result-block ${
+      className={`card mb-4 card-result-block ${
         props.isSelected ? "card-result-block-selected" : ""
         }`}
     >

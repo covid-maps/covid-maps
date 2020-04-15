@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ResultEntry from "./Result";
+import ResultEntry from "./ResultEntry";
 import { Link } from "react-router-dom";
 import { recordUpdateStore, recordDirectionsClicked, recordStoreShareClicked } from "../gaEvents";
 import Highlighter from "react-highlight-words";

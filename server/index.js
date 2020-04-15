@@ -86,7 +86,9 @@ app.get("/v2/query", async (req, res) => {
     radius: query.radius,
     page: query.page
   }
-  let results = await stores.findNearbyStores(params);
+  let nearbyResults = await stores.findNearbyStores(params);
+  let storeResults = await stores.findNearbyStoreByStoreId(query.storeId)
+  let results = nearbyResults.concat(storeResults)
   res.send({ location, results });
 });
 

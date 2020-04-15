@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from "react";
+import PropTypes from "prop-types";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Button from "react-bootstrap/Button";
@@ -83,7 +84,17 @@ const SingleEntry = ({ entry, highlightedText }) => {
   );
 };
 
+SingleEntry.propTypes = {
+  entry: PropTypes.object.isRequired,
+  highlightedText: PropTypes.string,
+}
+
 class EntriesGroup extends Component {
+  static propTypes = {
+    entries: PropTypes.arrayOf(PropTypes.object).isRequired,
+    highlightedText: PropTypes.string,
+  }
+
   constructor(props) {
     super(props);
 

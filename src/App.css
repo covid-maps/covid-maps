@@ -7,10 +7,6 @@ body {
   margin: 0;
 }
 
-.page {
-  margin-top: 48px; /* Since the navbar is fixed. */
-}
-
 .container {
   padding: 0.5em;
 }

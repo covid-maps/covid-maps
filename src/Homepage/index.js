@@ -356,7 +356,7 @@ class Homepage extends React.Component {
         />
         <div className="my-3 mx-2">
           {missingBlock}
-          <div className="my-1 px-1 d-flex justify-content-between align-items-center">
+          <div className="my-1 d-flex justify-content-between align-items-center">
             <div>
               <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
                 {translations.store_nearby_label}
@@ -364,7 +364,7 @@ class Homepage extends React.Component {
               <Form.Control
                 type="text"
                 onChange={this.handleStoreFilterQuery}
-                className="d-inline-block mx-1 results-search-box"
+                className="d-inline-block results-search-box"
                 value={this.state.storeFilterQuery}
                 placeholder={translations.store_search_placeholder}
               />

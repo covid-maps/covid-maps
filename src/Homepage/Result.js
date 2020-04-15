@@ -2,6 +2,7 @@ import React from "react";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Highlighter from "react-highlight-words";
+import { FORM_FIELDS } from "../constants";
 
 const humanizeDuration = require("humanize-duration");
 
@@ -29,9 +30,9 @@ function Timestamp({ Timestamp: value }) {
 
 function ResultEntry({ entries, highlightedText }) {
   return entries.map(result => (
-    <div className="mt-3" key={result["Timestamp"]}>
+    <div className="mt-3" key={result[FORM_FIELDS.TIMESTAMP]}>
       <div>
-        {result["Safety Observations"] ? (
+        {result[FORM_FIELDS.SAFETY_OBSERVATIONS] ? (
           <div>
             <Overlay text="Safety Observations">
               <i className="far fa-shield-virus"></i>
@@ -40,11 +41,11 @@ function ResultEntry({ entries, highlightedText }) {
               highlightClassName="highlighted-text"
               searchWords={[highlightedText]}
               autoEscape={true}
-              textToHighlight={result["Safety Observations"]}
+              textToHighlight={result[FORM_FIELDS.SAFETY_OBSERVATIONS]}
             />
           </div>
         ) : null}
-        {result["Useful Information"] ? (
+        {result[FORM_FIELDS.USEFUL_INFORMATION] ? (
           <div>
             <Overlay text="Useful Information">
               <i className="far fa-info-circle"></i>
@@ -53,17 +54,22 @@ function ResultEntry({ entries, highlightedText }) {
               highlightClassName="highlighted-text"
               searchWords={[highlightedText]}
               autoEscape={true}
-              textToHighlight={result["Useful Information"]}
+              textToHighlight={result[FORM_FIELDS.USEFUL_INFORMATION]}
             />
           </div>
         ) : null}
-        {result["Opening Time"] || result["Closing Time"] ? (
+        {result[FORM_FIELDS.OPENING_TIME] ||
+        result[FORM_FIELDS.CLOSING_TIME] ? (
           <div>
             <Overlay text="Store timings">
               <i className="far fa-clock"></i>
             </Overlay>{" "}
-            {result["Opening Time"] ? `Opens at ${result["Opening Time"]}. ` : null}
-            {result["Closing Time"] ? `Closes at ${result["Closing Time"]}. ` : null}
+            {result[FORM_FIELDS.OPENING_TIME]
+              ? `Opens at ${result[FORM_FIELDS.OPENING_TIME]}. `
+              : null}
+            {result[FORM_FIELDS.CLOSING_TIME]
+              ? `Closes at ${result[FORM_FIELDS.CLOSING_TIME]}. `
+              : null}
           </div>
         ) : null}
       </div>

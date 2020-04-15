@@ -16,6 +16,7 @@ export const FORM_FIELDS = {
   CLOSING_TIME: "Closing Time",
   PLACE_ID: "Place Id",
   STORE_ID: "StoreId",
+  TIMESTAMP: "Timestamp",
 };
 
 export const ADDRESS_COMPONENTS = {

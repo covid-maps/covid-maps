@@ -1,0 +1,22 @@
+.location-card {
+  border: 0 transparent;
+
+  .card-header {
+    background: transparent;
+    border-bottom: 0 transparent;
+    padding: 1em 1em 0;
+
+    .card-title {
+      font-weight: 600;
+      font-size: 1.05em;
+    }
+  }
+
+  .card-body {
+    padding: 0 1em  1em;
+  }
+
+  .location-buttons {
+    min-width: 220px;
+  }
+}

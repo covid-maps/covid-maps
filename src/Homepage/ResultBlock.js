@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ResultEntry from "./ResultEntry";
+import EntriesGroup from "./EntriesGroup";
 import { Link } from "react-router-dom";
 import { recordUpdateStore, recordDirectionsClicked, recordStoreShareClicked } from "../gaEvents";
 import Highlighter from "react-highlight-words";
@@ -113,7 +113,7 @@ function ResultBlock(props) {
             </a>
           </div>
         </div>
-        <ResultEntry
+        <EntriesGroup
           highlightedText={props.highlightedText}
           entries={result.entries}
         />

@@ -182,9 +182,12 @@ footer a:hover {
 .places-autocomplete-wrapper .sticky {
   z-index: 5;
   background-color: #fff;
-  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09),
-    0 4px 2px rgba(0, 0, 0, 0.09),
-    0 8px 4px rgba(0, 0, 0, 0.09),
-    0 16px 8px rgba(0, 0, 0, 0.09),
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.09), 0 4px 2px rgba(0, 0, 0, 0.09),
+    0 8px 4px rgba(0, 0, 0, 0.09), 0 16px 8px rgba(0, 0, 0, 0.09),
     0 32px 16px rgba(0, 0, 0, 0.09);
+}
+
+.toggle-past-entries i {
+  position: relative;
+  top: 1px;
 }

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import ResultEntry from "./Result";
+import EntriesGroup from "./EntriesGroup";
 import { Link } from "react-router-dom";
 import { recordUpdateStore, recordDirectionsClicked, recordStoreShareClicked } from "../gaEvents";
 import Highlighter from "react-highlight-words";
@@ -68,7 +68,7 @@ function ResultBlock(props) {
   return (
     <div
       onClick={() => onClick()}
-      className={`card my-1 card-result-block ${
+      className={`card mb-4 card-result-block ${
         props.isSelected ? "card-result-block-selected" : ""
         }`}
     >
@@ -113,9 +113,10 @@ function ResultBlock(props) {
             </a>
           </div>
         </div>
-        <ResultEntry
+        <EntriesGroup
           highlightedText={props.highlightedText}
           entries={result.entries}
+          translations={props.translations}
         />
       </div>
     </div>

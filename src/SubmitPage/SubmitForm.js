@@ -12,7 +12,7 @@ import Col from "react-bootstrap/Col";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import * as api from "../api";
-import { isMobile } from "../utils";
+import { isMobile, titleCase } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import { withGlobalContext } from "../App";
 import { FORM_FIELDS, STORE_CATEGORIES } from "../constants";
@@ -71,6 +71,14 @@ const emptyData = {
   [CLOSING_TIME]: null,
   Country: "",
 };
+
+const fieldFormatter = {
+  [STORE_NAME] : val => titleCase(val),
+  [STORE_ADDRESS]: val => val,
+  [STORE_CATEGORY]: val => val,
+  [USEFUL_INFORMATION]: val => val,
+  [SAFETY_OBSERVATIONS]: val => val
+}
 
 class SubmitForm extends React.Component {
   static propTypes = {
@@ -141,8 +149,8 @@ class SubmitForm extends React.Component {
   onChangeInput({ target }, dataKey) {
     this.setState({
       isValid: true,
-      data: { ...this.state.data, [dataKey]: target.value },
-    });
+      data: { ...this.state.data, [dataKey]: fieldFormatter[dataKey](target.value)}
+  });
   }
 
   componentDidMount() {

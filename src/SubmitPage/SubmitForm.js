@@ -240,7 +240,8 @@ class SubmitForm extends React.Component {
   };
 
   render() {
-    const { translations } = this.props;
+    const { translations, location } = this.props;
+    const isUpdate = location && location.state && location.state.item && location.state.item.StoreId;
     const position = this.state.data.Latitude
       ? {
           lat: parseFloat(this.state.data.Latitude),
@@ -280,13 +281,14 @@ class SubmitForm extends React.Component {
               {translations.add_update_store}
             </h6>
             <Form.Group controlId="formBasicStore">
-              <Form.Label className="">{translations.store_name}</Form.Label>
+              <Form.Label className="">{titleCase(translations.store_name)}</Form.Label>
               <Form.Control
                 type="text"
                 onChange={e => this.onChangeInput(e, STORE_NAME)}
                 value={formData[STORE_NAME]}
                 placeholder={translations.store_name_placeholder}
                 required
+                disabled={isUpdate}
               />
             </Form.Group>
 

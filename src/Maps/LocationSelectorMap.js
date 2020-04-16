@@ -14,7 +14,12 @@ class Map extends Component {
   };
 
   mapCenter = () => {
-    return this.props.markerPosition || this.props.geoLocation || this.props.ipLocation || defaultCenter;
+    return (
+      this.props.markerPosition ||
+      this.props.geoLocation ||
+      this.props.ipLocation ||
+      defaultCenter
+    );
   };
 
   onMapLoaded = map => {
@@ -24,7 +29,7 @@ class Map extends Component {
   onDrag = () => {
     if (this.map) {
       const mapCenter = this.map.getCenter();
-      const center = { lat: mapCenter.lat(), lng: mapCenter.lng() }
+      const center = { lat: mapCenter.lat(), lng: mapCenter.lng() };
       this.setState({ markerPosition: center });
     }
   };
@@ -50,7 +55,7 @@ class Map extends Component {
         options={mapOptions}
         mapContainerStyle={{
           height: this.props.height,
-          width: "100%"
+          width: "100%",
         }}
         onLoad={this.onMapLoaded}
         zoom={16}
@@ -58,10 +63,10 @@ class Map extends Component {
         onDrag={this.onDrag}
         onDragEnd={this.onDragEnd}
       >
-        {this.props.geoLocation ?
+        {this.props.geoLocation ? (
           <Marker position={this.props.geoLocation} icon={dotIcon} />
-          : null}
-        {this.state.markerPosition ?
+        ) : null}
+        {this.state.markerPosition ? (
           <Marker
             draggable={!!this.props.onMarkerDragged}
             position={this.state.markerPosition}
@@ -71,10 +76,11 @@ class Map extends Component {
               this.props.onMarkerDragged &&
               this.props.onMarkerDragged({
                 lat: event.latLng.lat(),
-                lng: event.latLng.lng()
+                lng: event.latLng.lng(),
               })
             }
-          /> : null}
+          />
+        ) : null}
       </GoogleMap>
     );
   }

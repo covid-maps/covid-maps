@@ -7,7 +7,7 @@ import * as serviceWorker from "./serviceWorker";
 
 if (process.env.NODE_ENV !== "development") {
   Sentry.init({
-    dsn: "https://6fe517461b7b4a37bee8795a6c233efb@sentry.io/5181458"
+    dsn: "https://6fe517461b7b4a37bee8795a6c233efb@sentry.io/5181458",
   });
 }
 
@@ -22,13 +22,13 @@ ReactDOM.render(
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.register({
-  onSuccess: (registration) => {
-    console.log(registration)
+  onSuccess: registration => {
+    console.log(registration);
   },
-  onUpdate: (registration) => {
+  onUpdate: registration => {
     if (registration && registration.waiting) {
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      registration.waiting.postMessage({ type: "SKIP_WAITING" });
     }
     window.location.reload();
-  }
+  },
 });

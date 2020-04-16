@@ -71,15 +71,19 @@ function ResultEntry({ entries, highlightedText }) {
             <Overlay text="Store timings">
               <i className="far fa-clock"></i>
             </Overlay>{" "}
-            {result["Opening Time"] ? `Opens at ${result["Opening Time"]}. ` : null}
-            {result["Closing Time"] ? `Closes at ${result["Closing Time"]}. ` : null}
+            {result["Opening Time"]
+              ? `Opens at ${result["Opening Time"]}. `
+              : null}
+            {result["Closing Time"]
+              ? `Closes at ${result["Closing Time"]}. `
+              : null}
           </div>
         ) : null}
       </div>
       <div style={{ fontSize: "0.85em" }}>
         <small className="text-muted text-uppercase d-inline-block mt-2">
           {" "}
-          Updated <Timestamp {...result} /> at <Updated {...result}  />
+          Updated <Timestamp {...result} /> at <Updated {...result} />
         </small>
       </div>
     </div>

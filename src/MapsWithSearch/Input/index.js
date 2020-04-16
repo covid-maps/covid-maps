@@ -2,11 +2,11 @@ import React from "react";
 import PropTypes from "prop-types";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
-import Spinner from 'react-bootstrap/Spinner';
+import Spinner from "react-bootstrap/Spinner";
 import InputGroup from "react-bootstrap/InputGroup";
 import PlacesAutocomplete, {
   geocodeByAddress,
-  getLatLng
+  getLatLng,
 } from "react-places-autocomplete";
 import { getAddressComponent } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -16,20 +16,21 @@ import { withGlobalContext } from "../../App";
 import { ADDRESS_COMPONENTS } from "../../constants";
 
 function GeolocationButton({ isLoading, onClick }) {
-  return <Button
-    onClick={onClick}
-    variant="outline-secondary"
-  >
-    {isLoading ? <Spinner animation="border" size="sm" /> :
-      <FontAwesomeIcon icon={faCrosshairs} />
-    }
-  </Button>
+  return (
+    <Button onClick={onClick} variant="outline-secondary">
+      {isLoading ? (
+        <Spinner animation="border" size="sm" />
+      ) : (
+        <FontAwesomeIcon icon={faCrosshairs} />
+      )}
+    </Button>
+  );
 }
 
 class LocationSearchInput extends React.Component {
   static propTypes = {
     translations: PropTypes.object,
-    setGeolocation: PropTypes.func.isRequired
+    setGeolocation: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -44,28 +45,31 @@ class LocationSearchInput extends React.Component {
   getGeolocation = () => {
     this.setState({
       isGeolocationLoading: true,
-      address: ""
+      address: "",
     });
     if (!navigator.geolocation) {
       // TODO: geolocation error handling
       this.setState({ isGeolocationLoading: false });
     } else {
-      navigator.geolocation.getCurrentPosition(position => {
-        const location = {
-          lat: position.coords.latitude,
-          lng: position.coords.longitude
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const location = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude,
+          };
+          this.props.setGeolocation(location);
+          this.setState({ isGeolocationLoading: false });
+          if (this.props.onGeolocationFound) {
+            this.props.onGeolocationFound(location);
+          }
+        },
+        error => {
+          console.log("error", error.message);
+          this.setState({ isGeolocationLoading: false });
         }
-        this.props.setGeolocation(location)
-        this.setState({ isGeolocationLoading: false });
-        if (this.props.onGeolocationFound) {
-          this.props.onGeolocationFound(location);
-        }
-      }, error => {
-        console.log('error', error.message)
-        this.setState({ isGeolocationLoading: false });
-      })
+      );
     }
-  }
+  };
 
   handleChange = address => {
     this.setState({ address });
@@ -86,7 +90,10 @@ class LocationSearchInput extends React.Component {
           address: result.formatted_address,
           place_id: result.place_id,
           types: result.types,
-          city: getAddressComponent(result.address_components, ADDRESS_COMPONENTS.LOCALITY),
+          city: getAddressComponent(
+            result.address_components,
+            ADDRESS_COMPONENTS.LOCALITY
+          ),
           locality: getAddressComponent(
             result.address_components,
             ADDRESS_COMPONENTS.NEIGHBORHOOD
@@ -95,7 +102,7 @@ class LocationSearchInput extends React.Component {
             result.address_components,
             ADDRESS_COMPONENTS.COUNTRY,
             true
-          )
+          ),
         });
       })
       .catch(error => console.error("Error", error));
@@ -122,9 +129,9 @@ class LocationSearchInput extends React.Component {
   render() {
     const location = this.props.currentLocation
       ? new window.google.maps.LatLng(
-        this.props.currentLocation.lat,
-        this.props.currentLocation.lng
-      )
+          this.props.currentLocation.lat,
+          this.props.currentLocation.lng
+        )
       : undefined;
     const options = location ? { location, radius: 200000 } : undefined;
     return (
@@ -143,7 +150,7 @@ class LocationSearchInput extends React.Component {
                   placeholder: this.props.translations
                     .location_search_placeholder,
                   defaultValue: this.props.defaultValue,
-                  className: "location-search-input"
+                  className: "location-search-input",
                 })}
                 ref={this.textInput}
               />
@@ -170,7 +177,7 @@ class LocationSearchInput extends React.Component {
                 return (
                   <div
                     {...getSuggestionItemProps(suggestion, {
-                      className
+                      className,
                     })}
                   >
                     <span>{suggestion.description}</span>

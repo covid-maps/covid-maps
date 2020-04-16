@@ -12,7 +12,7 @@ class Map extends Component {
     currentLocation: {},
     locations: [],
     panToLocation: false,
-    selectedLocation: undefined
+    selectedLocation: undefined,
   };
 
   map = undefined;
@@ -20,7 +20,7 @@ class Map extends Component {
   markerClickHandler = event => {
     this.props.onMarkerSelected({
       lat: event.latLng.lat(),
-      lng: event.latLng.lng()
+      lng: event.latLng.lng(),
     });
   };
 
@@ -51,7 +51,7 @@ class Map extends Component {
       currentLocation,
       locations,
       panToLocation,
-      selectedLocation
+      selectedLocation,
     } = nextProps;
 
     // if centerPosition changes
@@ -123,15 +123,15 @@ class Map extends Component {
         options={mapOptions}
         mapContainerStyle={{
           height: "45vh",
-          width: "100%"
+          width: "100%",
         }}
         onLoad={this.onMapLoaded}
         zoom={13}
         center={this.mapCenter()}
       >
-        {this.props.currentLocation && this.props.currentLocation.lat ?
+        {this.props.currentLocation && this.props.currentLocation.lat ? (
           <Marker position={this.props.currentLocation} icon={dotIcon} />
-          : null}
+        ) : null}
 
         {this.props.locations &&
           this.props.locations.map((latlng, index) => {
@@ -141,8 +141,11 @@ class Map extends Component {
               <Marker
                 key={markerKey}
                 zIndex={isSelected ? 10 : 1}
-                icon={isSelected ?
-                  markerIcon(icons.highlighted) : markerIcon(icons.default)}
+                icon={
+                  isSelected
+                    ? markerIcon(icons.highlighted)
+                    : markerIcon(icons.default)
+                }
                 position={latlng}
                 onClick={this.markerClickHandler}
               />

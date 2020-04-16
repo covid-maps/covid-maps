@@ -9,7 +9,7 @@ class LocationSelector extends React.Component {
     try {
       results = await geocodeByLatlng(latLng);
     } catch (e) {
-      console.log('Geocoding failed for', latLng);
+      console.log("Geocoding failed for", latLng);
     }
     if (results && results.length) {
       const result = results[0];
@@ -26,11 +26,17 @@ class LocationSelector extends React.Component {
           result.address_components,
           ADDRESS_COMPONENTS.NEIGHBORHOOD
         ),
-        city: getAddressComponent(result.address_components, ADDRESS_COMPONENTS.LOCALITY),
-        country: getAddressComponent(result.address_components, ADDRESS_COMPONENTS.COUNTRY)
+        city: getAddressComponent(
+          result.address_components,
+          ADDRESS_COMPONENTS.LOCALITY
+        ),
+        country: getAddressComponent(
+          result.address_components,
+          ADDRESS_COMPONENTS.COUNTRY
+        ),
       });
     }
-  }
+  };
 
   render() {
     return (

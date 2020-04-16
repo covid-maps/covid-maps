@@ -3,8 +3,8 @@ import axios from "axios";
 const BASE_URLS = {
   PROD: "https://toilet-paper-app.herokuapp.com",
   STAGING: "http://covid-maps-staging.herokuapp.com",
-  LOCAL: "http://localhost:5000"
-}
+  LOCAL: "http://localhost:5000",
+};
 
 export async function query(params) {
   const response = await axios.get(`${BASE_URLS.PROD}/v2/query`, { params });

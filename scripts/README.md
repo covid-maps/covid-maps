@@ -10,6 +10,7 @@ Step by step instructions are given in this article: https://medium.com/analytic
 ```
 	pip install google_spreadsheet
 	pip install google-auth-oauthlib
+	pip install --upgrade google-api-python-client --ignore-installed six
 	pip install pandas
 ```
 - Get the Google sheet IDs for the sheet you're reading from and the sheeting you're writing to

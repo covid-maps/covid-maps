@@ -168,3 +168,8 @@ footer a:hover {
 .btn-success:disabled {
   pointer-events: none;
 }
+
+.toggle-past-entries i {
+  position: relative;
+  top: 1px;
+}

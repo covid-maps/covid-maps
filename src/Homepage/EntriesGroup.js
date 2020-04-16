@@ -6,8 +6,6 @@ import Button from "react-bootstrap/Button";
 import Highlighter from "react-highlight-words";
 import { FORM_FIELDS } from "../constants";
 
-const humanizeDuration = require("humanize-duration");
-
 function Overlay(props) {
   return (
     <OverlayTrigger
@@ -23,10 +21,27 @@ function Overlay(props) {
 function Timestamp({ Timestamp: value }) {
   const then = new Date(value);
   const now = new Date();
+  const timeDifference = now - then;
+  const HOURS_24 = 24 * 60 * 60 * 1000;
+  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+
+  let hh = then.getHours();
+  let mm = then.getMinutes();
+  let period = (hh < 12) ? "am" : "pm";
+  hh = (hh === 0 || hh === 12) ? 12 : (hh % 12);
+  mm = (mm < 10) ? ("0" + mm) : mm;
+
+  let time = hh + ":" + mm + " " + period;
+
+  if (timeDifference >= HOURS_24 && timeDifference < (7 * HOURS_24)) {
+    time += " on " + days[then.getDay()];
+  }
+  else if (timeDifference >= (7 * HOURS_24)) {
+    time += " " + (timeDifference / HOURS_24).toFixed() + " days ago";
+  }
+
   return (
-    <strong>
-      {humanizeDuration(Math.abs(now - then), { largest: 1 })} ago
-    </strong>
+    <strong>{time}</strong>
   );
 }
 

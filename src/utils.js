@@ -80,3 +80,13 @@ export function isMobile() {
     navigator.userAgent.indexOf("IEMobile") !== -1
   );
 }
+
+export function clusterCalculator(stores) {
+  const shortMessage = `${stores.length} Stores`
+  const longMessage = `${stores.length} Store are around here`
+  return {
+    text: shortMessage,
+    title: longMessage,
+    index: 1
+  }
+}

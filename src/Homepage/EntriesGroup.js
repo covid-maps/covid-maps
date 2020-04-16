@@ -138,7 +138,7 @@ class EntriesGroup extends Component {
       </Fragment>
     ) : (
       <Fragment>
-        <span>{this.props.translations.view_old_updates}</span>
+        <span>{`${this.props.translations.view_old_updates} (${this.props.entries.length - 1})`}</span>
         <i className="fas fa-chevron-right ml-1"></i>
       </Fragment>
     );

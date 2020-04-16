@@ -5,8 +5,8 @@ import Tooltip from "react-bootstrap/Tooltip";
 import Button from "react-bootstrap/Button";
 import Highlighter from "react-highlight-words";
 import { FORM_FIELDS } from "../constants";
-
-const humanizeDuration = require("humanize-duration");
+import { format, differenceInCalendarDays } from "date-fns";
+import { Collapse } from "@material-ui/core";
 
 function Overlay(props) {
   return (
@@ -23,10 +23,20 @@ function Overlay(props) {
 function Timestamp({ Timestamp: value }) {
   const then = new Date(value);
   const now = new Date();
+  const dayDifference = differenceInCalendarDays(now, then);
+
+  let time = format(then, "h':'mm a");
+
+  if (dayDifference >= 1 && dayDifference < 7) {
+    let dayOfWeek = format(then, "EEEE");
+    time += " on " + dayOfWeek;
+  }
+  else if (dayDifference >= 7) {
+    time += " " + dayDifference + " days ago";
+  }
+
   return (
-    <strong>
-      {humanizeDuration(Math.abs(now - then), { largest: 1 })} ago
-    </strong>
+    <strong>{time}</strong>
   );
 }
 
@@ -137,11 +147,11 @@ class EntriesGroup extends Component {
         <i className="fas fa-chevron-down ml-1"></i>
       </Fragment>
     ) : (
-      <Fragment>
-        <span>{`${this.props.translations.view_old_updates} (${this.props.entries.length - 1})`}</span>
-        <i className="fas fa-chevron-right ml-1"></i>
-      </Fragment>
-    );
+        <Fragment>
+          <span>{`${this.props.translations.view_old_updates} (${this.props.entries.length - 1})`}</span>
+          <i className="fas fa-chevron-right ml-1"></i>
+        </Fragment>
+      );
   }
 
   render() {
@@ -163,7 +173,9 @@ class EntriesGroup extends Component {
             {this.getToggleButtonContent()}
           </Button>
         )}
-        {this.state.showPastEntries && this.getPastEntries(pastEntries)}
+        <Collapse in={this.state.showPastEntries}>
+          {this.getPastEntries(pastEntries)}
+        </Collapse>
       </Fragment>
     );
   }

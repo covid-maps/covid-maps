@@ -80,3 +80,20 @@ export function isMobile() {
     navigator.userAgent.indexOf("IEMobile") !== -1
   );
 }
+
+export function clusterCalculator(stores) {
+  const shortMessage = `${stores.length} Stores`
+  const longMessage = `${stores.length} Store are around here`
+  return {
+    text: shortMessage,
+    title: longMessage,
+    index: 1
+  }
+}
+export function titleCase(str) {
+  let splitStr = str.toLowerCase().split(' ');
+  for (var i = 0; i < splitStr.length; i++) {
+    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+  }
+  return splitStr.join(' ');
+}

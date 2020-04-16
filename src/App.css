@@ -58,7 +58,9 @@ footer a:hover {
 
 /* Location autocomplete */
 .autocomplete-dropdown-container {
-  position: fixed;
+  position: absolute;
+  top: 38px;
+  left: 0;
   max-height: 300px;
   overflow: auto;
   z-index: 100;

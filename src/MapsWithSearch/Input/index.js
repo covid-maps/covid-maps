@@ -49,8 +49,8 @@ class LocationSearchInput extends React.Component {
     };
     this.textInput = React.createRef();
     this.placesAutocompleteWrapperRef = React.createRef();
-    this.determineSearchStickiness = debounce(
-      this.determineSearchStickiness.bind(this),
+    this.checkIfSearchIsSticky = debounce(
+      this.checkIfSearchIsSticky.bind(this),
       200
     );
   }
@@ -142,7 +142,7 @@ class LocationSearchInput extends React.Component {
 
     this.populateLastSelectedAddress();
 
-    window.addEventListener("scroll", this.determineSearchStickiness);
+    window.addEventListener("scroll", this.checkIfSearchIsSticky);
   }
 
   componentWillUnmount() {
@@ -164,7 +164,7 @@ class LocationSearchInput extends React.Component {
     this.props.removeItemFromStorage(SELECTED_ADDRESS);
   };
 
-  determineSearchStickiness = () => {
+  checkIfSearchIsSticky = () => {
     const pageOffset = window.pageYOffset;
     const elementOffset = this.placesAutocompleteWrapperRef.current.offsetTop;
     this.setState({ showBoxShadowOnSearch: pageOffset === elementOffset });

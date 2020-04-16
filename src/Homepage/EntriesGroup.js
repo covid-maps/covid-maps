@@ -5,9 +5,8 @@ import Tooltip from "react-bootstrap/Tooltip";
 import Button from "react-bootstrap/Button";
 import Highlighter from "react-highlight-words";
 import { FORM_FIELDS } from "../constants";
+import { format, differenceInCalendarDays } from "date-fns";
 import { Collapse } from "@material-ui/core";
-
-const humanizeDuration = require("humanize-duration");
 
 function Overlay(props) {
   return (
@@ -24,10 +23,20 @@ function Overlay(props) {
 function Timestamp({ Timestamp: value }) {
   const then = new Date(value);
   const now = new Date();
+  const dayDifference = differenceInCalendarDays(now, then);
+
+  let time = format(then, "h':'mm a");
+
+  if (dayDifference >= 1 && dayDifference < 7) {
+    let dayOfWeek = format(then, "EEEE");
+    time += " on " + dayOfWeek;
+  }
+  else if (dayDifference >= 7) {
+    time += " " + dayDifference + " days ago";
+  }
+
   return (
-    <strong>
-      {humanizeDuration(Math.abs(now - then), { largest: 1 })} ago
-    </strong>
+    <strong>{time}</strong>
   );
 }
 

@@ -72,6 +72,14 @@ const emptyData = {
   Country: "",
 };
 
+const fieldFormatter = {
+  [STORE_NAME] : val => titleCase(val),
+  [STORE_ADDRESS]: val => val,
+  [STORE_CATEGORY]: val => val,
+  [USEFUL_INFORMATION]: val => val,
+  [SAFETY_OBSERVATIONS]: val => val
+}
+
 class SubmitForm extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
@@ -141,8 +149,8 @@ class SubmitForm extends React.Component {
   onChangeInput({ target }, dataKey) {
     this.setState({
       isValid: true,
-      data: { ...this.state.data, [dataKey]: titleCase(target.value) },
-    });
+      data: { ...this.state.data, [dataKey]: fieldFormatter[dataKey](target.value)}
+  });
   }
 
   componentDidMount() {

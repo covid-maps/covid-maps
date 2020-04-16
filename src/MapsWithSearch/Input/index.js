@@ -146,7 +146,7 @@ class LocationSearchInput extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener("scroll");
+    window.removeEventListener("scroll", this.checkIfSearchIsSticky);
   }
 
   populateLastSelectedAddress = () => {

@@ -1,6 +1,6 @@
 import React, { Component } from "react";
-import { GoogleMap, Marker } from "@react-google-maps/api";
-import { dotIcon, markerIcon, icons, isSameLocation } from "../utils";
+import { GoogleMap, Marker, MarkerClusterer } from "@react-google-maps/api";
+import { dotIcon, markerIcon, icons, isSameLocation, clusterCalculator } from "../utils";
 import { mapOptions } from "./theme";
 
 // Final fallback to a location in Bangalore
@@ -131,25 +131,31 @@ class Map extends Component {
         center={this.mapCenter()}
       >
         {isAccurate ?
-          <Marker position={currentLocation.latLng} icon={dotIcon} />
+          <Marker zIndex={100} position={currentLocation.latLng} icon={dotIcon} />
           : null}
-
-        {this.props.locations &&
-          this.props.locations.map((latlng, index) => {
-            const markerKey = `${latlng.lat}_${latlng.lng}_${index}`;
-            const isSelected = this.isMarkerSelected(latlng);
-            return (
-              <Marker
-                key={markerKey}
-                zIndex={isSelected ? 10 : 1}
-                icon={isSelected ?
-                  markerIcon(icons.highlighted) : markerIcon(icons.default)}
-                position={latlng}
-                onClick={this.markerClickHandler}
-              />
-            );
-          })}
-      </GoogleMap>
+        <MarkerClusterer
+          enableRetinaIcons={true}
+          minimumClusterSize={30}
+          calculator={(stores) => clusterCalculator(stores)}
+        >
+          {clusterer =>
+            this.props.locations.map((latlng, index) => {
+              const markerKey = `${latlng.lat}_${latlng.lng}_${index}`;
+              const isSelected = this.isMarkerSelected(latlng);
+              return (
+                <Marker
+                  key={markerKey}
+                  zIndex={isSelected ? 10 : 1}
+                  icon={isSelected ?
+                    markerIcon(icons.highlighted) : markerIcon(icons.default)}
+                  position={latlng}
+                  onClick={this.markerClickHandler}
+                  clusterer={clusterer} />
+              )
+            })
+          }
+        </MarkerClusterer>
+      </GoogleMap >
     );
   }
 }

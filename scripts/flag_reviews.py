@@ -8,6 +8,7 @@ from spreadsheets_helper import create_service, export_data_to_sheets
 from database_helper import load_engine
 from daos.update_dao import UpdateDAO
 import config
+import re
 
 def is_same_location(new_store, original_store):
     """
@@ -26,6 +27,55 @@ def is_same_location(new_store, original_store):
         return True
 
     return False
+
+def _tokenise(text):
+    words = re.compile(r'\w+').findall(text)
+    return words
+
+def _get_overlap_perc(text_1, text_2):
+    text_1_words = 0.0
+    text_1_overlap_words = 0.0
+    for word in text_1:
+        # Ignore filler (very short) words
+        if len(word) < 3:
+            continue
+        text_1_words += 1
+
+        if word in text_2:
+            text_1_overlap_words += 1
+
+    if text_1_words > 0:
+        return float(text_1_overlap_words / text_1_words) 
+    return 0
+
+
+def is_similar_text(new_review, original_review):
+    """
+    Compares safety and availability text of two stores based on the following factors:
+    1. If they both have exactly the same content
+    2. If they have more than 50% similar words
+    """
+    new_review_safety_cleaned = new_review.safetyInfo.strip().lower()
+    original_review_safety_cleaned = original_review.safetyInfo.strip().lower()
+    new_review_availability_cleaned = new_review.availabilityInfo.strip().lower()
+    original_review_availability_cleaned = original_review.availabilityInfo.strip().lower()
+    
+    if new_review_safety_cleaned == original_review_safety_cleaned and new_review_availability_cleaned == original_review_availability_cleaned:
+        return True
+
+    new_review_safety_tokenised = _tokenise(new_review.safetyInfo)
+    original_review_safety_tokenised = _tokenise(original_review.safetyInfo)
+    new_review_availability_tokenised = _tokenise(new_review.availabilityInfo)
+    original_review_availability_tokenised = _tokenise(original_review.availabilityInfo)
+
+    new_review_safety_overlap_perc = _get_overlap_perc(new_review_safety_tokenised, original_review_safety_tokenised)
+    new_review_availability_overlap_perc = _get_overlap_perc(new_review_availability_tokenised, original_review_availability_tokenised)
+    
+    if new_review_safety_overlap_perc >= 0.5 and new_review_availability_overlap_perc >= 0.5:
+        return True
+
+    return False
+
 
 def main():
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
@@ -53,12 +103,12 @@ def main():
             # Only consider as duplicate if 
             # 1. The two reviews are 300 mins apart
             # 2. Have the same location
-            #
+            # 3. Have the exact same text
+            # 4. Or have a high degree of overlap in their review text
             review_proximity = pd.Timedelta(timestamp - pd.to_datetime(original_review.updatedAt)).seconds / 60
-            if abs(review_proximity) < 300 and is_same_location(review.Store, original_review.Store):
-                if (safety_info == original_review.safetyInfo.strip().lower()) and (useful_info == original_review.availabilityInfo.strip().lower()):
-                    review.flag = Flag.DUPLICATE.value
-                    continue                    
+            if abs(review_proximity) < 300 and is_same_location(review.Store, original_review.Store) and is_similar_text(review, original_review):
+                review.flag = Flag.DUPLICATE.value
+                continue                    
 
         else:
             duplicate_reviews_dict[dict_key] = review

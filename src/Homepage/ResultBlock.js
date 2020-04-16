@@ -5,7 +5,6 @@ import { recordUpdateStore, recordDirectionsClicked, recordStoreShareClicked } f
 import Highlighter from "react-highlight-words";
 import { withGlobalContext } from "../App";
 import { STORE_CATEGORIES, FORM_FIELDS } from '../constants';
-import { titleCase } from "../utils";
 
 function constructDirectionsUrl({ name, placeId, lat, lng }) {
   if (placeId) {
@@ -80,7 +79,7 @@ function ResultBlock(props) {
               highlightClassName="highlighted-text"
               searchWords={[props.highlightedText]}
               autoEscape={true}
-              textToHighlight={titleCase(result.name)}
+              textToHighlight={result.name}
             />
           </h5>
           <div style={{ minWidth: 160, textAlign: 'right' }}>

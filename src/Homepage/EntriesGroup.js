@@ -5,6 +5,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import Button from "react-bootstrap/Button";
 import Highlighter from "react-highlight-words";
 import { FORM_FIELDS } from "../constants";
+import { format, differenceInCalendarDays } from "date-fns";
 
 function Overlay(props) {
   return (
@@ -21,23 +22,16 @@ function Overlay(props) {
 function Timestamp({ Timestamp: value }) {
   const then = new Date(value);
   const now = new Date();
-  const timeDifference = now - then;
-  const HOURS_24 = 24 * 60 * 60 * 1000;
-  const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+  const dayDifference = differenceInCalendarDays(now, then);
 
-  let hh = then.getHours();
-  let mm = then.getMinutes();
-  let period = (hh < 12) ? "am" : "pm";
-  hh = (hh === 0 || hh === 12) ? 12 : (hh % 12);
-  mm = (mm < 10) ? ("0" + mm) : mm;
+  let time = format(then, "h':'mm a");
 
-  let time = hh + ":" + mm + " " + period;
-
-  if (timeDifference >= HOURS_24 && timeDifference < (7 * HOURS_24)) {
-    time += " on " + days[then.getDay()];
+  if (dayDifference >= 1 && dayDifference < 7) {
+    let dayOfWeek = format(then, "EEEE");
+    time += " on " + dayOfWeek;
   }
-  else if (timeDifference >= (7 * HOURS_24)) {
-    time += " " + (timeDifference / HOURS_24).toFixed() + " days ago";
+  else if (dayDifference >= 7) {
+    time += " " + dayDifference + " days ago";
   }
 
   return (

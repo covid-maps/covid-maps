@@ -22,7 +22,7 @@ class Store(Base):
     updatedAt = Column(DateTime(timezone=True))
 
     def __repr__(self):
-        return '<Store %r>' % self.Name
+        return '<Store %r>' % self.name
 
 class Update(Base):
     __tablename__ = "StoreUpdates"
@@ -42,3 +42,19 @@ class Update(Base):
     reviewed = Column(Boolean(), default=False)
 
     Store = relationship('Store', foreign_keys=[storeId], lazy='joined')
+
+    def to_dict(self):
+        return {
+            "id": self.id,
+            "name": self.Store.name,
+            "latitude": self.Store.latitude,
+            "longitude": self.Store.longitude,
+            "address": self.Store.address,
+            "ip": self.ip,
+            "availabilityInfo": self.availabilityInfo,
+            "safetyInfo": self.safetyInfo,
+            "openingTime": self.openingTime,
+            "closingTime": self.closingTime,
+            "flag": self.flag,
+            "deleted": self.deleted
+        }

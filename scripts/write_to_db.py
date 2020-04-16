@@ -4,7 +4,7 @@ from spreadsheets_helper import read_spreadsheet
 from database_helper import load_engine, close_connection
 from daos.dao import DAO
 from models.core import Update
-import db_urls
+import config
 
 
 def apply_updates(update_row, store_update):
@@ -41,7 +41,7 @@ def main():
     SPREADSHEET_ID_INPUT = '1RZDZTswZxI-smwnyi8Oh5ck092hgl_CBxjtQURrczBs'
     SPREADSHEET_RANGE ='A1:Z5000'
     credentials_file_name = 'credentials.json'
-    DATABASE_URL =  db_urls.db_urls['STAGING']
+    DATABASE_URL =  config.db_urls['PROD']
 
     df = read_spreadsheet(SPREADSHEET_ID_INPUT, SPREADSHEET_RANGE, SCOPES)
     df['id'] = df['id'].astype(int)
@@ -59,6 +59,9 @@ def main():
         if reviewed == 'Yes':
             print('Processing review ID {}'.format(row_id))
             store_update = update_dao.get(row_id)
+            if not store_update:
+                print("Could not find record with ID {}".format(row_id))
+                continue
             store_update = apply_updates(row, store_update)
 
         update_dao.session.commit()

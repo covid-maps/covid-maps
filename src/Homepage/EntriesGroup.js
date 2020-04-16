@@ -5,6 +5,7 @@ import Tooltip from "react-bootstrap/Tooltip";
 import Button from "react-bootstrap/Button";
 import Highlighter from "react-highlight-words";
 import { FORM_FIELDS } from "../constants";
+import { Collapse } from "@material-ui/core";
 
 const humanizeDuration = require("humanize-duration");
 
@@ -137,11 +138,11 @@ class EntriesGroup extends Component {
         <i className="fas fa-chevron-down ml-1"></i>
       </Fragment>
     ) : (
-      <Fragment>
-        <span>{`${this.props.translations.view_old_updates} (${this.props.entries.length - 1})`}</span>
-        <i className="fas fa-chevron-right ml-1"></i>
-      </Fragment>
-    );
+        <Fragment>
+          <span>{`${this.props.translations.view_old_updates} (${this.props.entries.length - 1})`}</span>
+          <i className="fas fa-chevron-right ml-1"></i>
+        </Fragment>
+      );
   }
 
   render() {
@@ -163,7 +164,9 @@ class EntriesGroup extends Component {
             {this.getToggleButtonContent()}
           </Button>
         )}
-        {this.state.showPastEntries && this.getPastEntries(pastEntries)}
+        <Collapse in={this.state.showPastEntries}>
+          {this.getPastEntries(pastEntries)}
+        </Collapse>
       </Fragment>
     );
   }

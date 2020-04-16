@@ -9,6 +9,24 @@ from database_helper import load_engine
 from daos.update_dao import UpdateDAO
 import config
 
+def is_same_location(new_store, original_store):
+    """
+    Compares locations of two stores based on the following factors:
+    1. If they both have the same place ID
+    2. If they neither have a place ID but have the same address
+    3. If one of them does not have either place ID or address
+    """
+    if new_store.placeId and original_store.placeId and new_store.placeId == original_store.placeId:
+        return True
+
+    if new_store.address and original_store.address and new_store.address == original_store.address:
+        return True
+
+    if (new_store.placeId is None and new_store.address is None) or (original_store.placeId is None and original_store.address is None):
+        return True
+
+    return False
+
 def main():
     SCOPES = ['https://www.googleapis.com/auth/spreadsheets']
     SPREADSHEET_ID_OUTPUT = '1RZDZTswZxI-smwnyi8Oh5ck092hgl_CBxjtQURrczBs'
@@ -31,10 +49,14 @@ def main():
         dict_key = (store_name.strip().lower(), review.ip)
 
         if dict_key in duplicate_reviews_dict:
-            # Only count as duplicate if the two reviews are 300 mins apart
-            review_proximity = pd.Timedelta(timestamp - pd.to_datetime(duplicate_reviews_dict[dict_key].updatedAt)).seconds / 60
-            if abs(review_proximity) < 300:
-                if (safety_info == duplicate_reviews_dict[dict_key].safetyInfo.strip().lower()) and (useful_info == duplicate_reviews_dict[dict_key].availabilityInfo.strip().lower()):
+            original_review = duplicate_reviews_dict[dict_key]
+            # Only consider as duplicate if 
+            # 1. The two reviews are 300 mins apart
+            # 2. Have the same location
+            #
+            review_proximity = pd.Timedelta(timestamp - pd.to_datetime(original_review.updatedAt)).seconds / 60
+            if abs(review_proximity) < 300 and is_same_location(review.Store, original_review.Store):
+                if (safety_info == original_review.safetyInfo.strip().lower()) and (useful_info == original_review.availabilityInfo.strip().lower()):
                     review.flag = Flag.DUPLICATE.value
                     continue                    
 

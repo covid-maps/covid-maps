@@ -209,7 +209,7 @@ footer a:hover {
   font-size: 12px;
 }
 
-.availability_tag {
+.availability-tags-wrapper .tag {
   cursor: pointer;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -217,8 +217,15 @@ footer a:hover {
   user-select: none;
 }
 
-.availability_tag.isChecked {
+.availability-tags-wrapper .tag.isChecked {
   background-color: rgba(40, 167, 69, 0.22) !important;
+}
+
+.availability-tags-wrapper .add-new-tag {
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
 }
 
 .cluster {

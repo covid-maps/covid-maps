@@ -1,5 +1,7 @@
 import axios from "axios";
 
+// coming from .env files
+// you can setup a new .env.local file to override these vars locally
 const BASE_URL = process.env.REACT_APP_BASE_URL;
 
 export async function query(params) {

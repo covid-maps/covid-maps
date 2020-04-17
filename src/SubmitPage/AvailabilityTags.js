@@ -36,14 +36,17 @@ class AvailabilityTags extends Component {
     return (
       <div className="d-flex flex-wrap">
         {Object.keys(this.state.tags).map(tag => {
+          const isCurrentChecked = this.state.tags[tag];
           return (
             <div
               key={tag}
               onClick={() => this.onTagCheck(tag)}
               className={cx(
-                "availability_tag border border-secondary mr-2 mb-2 py-1 px-2 rounded-pill text-capitalize text-xs",
+                "availability_tag border mr-2 mb-2 py-1 px-2 rounded-pill text-capitalize font-weight-bold text-xs",
                 {
-                  isChecked: this.state.tags[tag],
+                  isChecked: isCurrentChecked,
+                  "border-secondary": !isCurrentChecked,
+                  "border-success": isCurrentChecked,
                 }
               )}
             >

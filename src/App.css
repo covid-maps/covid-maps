@@ -211,6 +211,14 @@ footer a:hover {
 
 .availability_tag {
   cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.availability_tag.isChecked {
+  background-color: rgba(40, 167, 69, 0.22) !important;
 }
 
 .cluster {

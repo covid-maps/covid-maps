@@ -1,6 +1,7 @@
-import React, { Component } from "react";
+import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import Form from "react-bootstrap/Form";
+import Button from "react-bootstrap/Button";
 import cx from "classnames";
 
 class AvailabilityTags extends Component {
@@ -58,6 +59,16 @@ class AvailabilityTags extends Component {
     );
   };
 
+  addNewTag = () => {
+    const newTagObject = {
+      tagName: this.state.newTag.trim(),
+      checked: true,
+    };
+
+    const updatedTagsList = [...this.state.tags, newTagObject];
+    this.setState({ tags: updatedTagsList }, this.toggleEditMode);
+  };
+
   onNewTagValueChange = e => {
     this.setState({ newTag: e.target.value });
   };
@@ -69,8 +80,13 @@ class AvailabilityTags extends Component {
   };
 
   render() {
+    const isThereAlreadyADuplicateTag = this.state.tags.some(tag => {
+      return (
+        tag.tagName.toLowerCase() === this.state.newTag.toLowerCase().trim()
+      );
+    });
     return (
-      <div className="availability-tags-wrapper">
+      <div className="availability-tags-wrapper mb-4">
         <div className="d-flex flex-wrap ">
           {this.state.tags.map((tag, index) => {
             const isChecked = tag.checked;
@@ -99,15 +115,38 @@ class AvailabilityTags extends Component {
           </div>
         </div>
         {this.state.editMode && (
-          <div className="d-flex align-items-center justify-content-between">
+          <div className="d-flex align-items-center mt-2">
             <Form.Control
               type="text"
               onChange={this.onNewTagValueChange}
               value={this.state.newTag}
-              placeholder="Add new tag"
+              placeholder="food take-away"
+              className="rounded-0 border-dark bg-transparent text-sm"
             />
-            <i className="far fa-check"></i>
-            <i className="far fa-times"></i>
+            {isThereAlreadyADuplicateTag ? (
+              <div className="text-danger ml-4 text-xs">
+                Oops, this tag already exists
+              </div>
+            ) : (
+              <Fragment>
+                <Button
+                  variant="outline-success"
+                  size="sm"
+                  className="ml-3"
+                  onClick={this.addNewTag}
+                >
+                  Add
+                </Button>
+                <Button
+                  variant="outline-danger"
+                  size="sm"
+                  className="ml-3"
+                  onClick={this.toggleEditMode}
+                >
+                  Cancel
+                </Button>
+              </Fragment>
+            )}
           </div>
         )}
       </div>

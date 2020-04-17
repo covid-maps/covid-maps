@@ -1,6 +1,8 @@
 import React from "react";
 import PropTypes from "prop-types";
 import Form from "react-bootstrap/Form";
+import cx from "classnames";
+import debounce from "debounce";
 import Button from "react-bootstrap/Button";
 import Spinner from "react-bootstrap/Spinner";
 import InputGroup from "react-bootstrap/InputGroup";
@@ -43,8 +45,14 @@ class LocationSearchInput extends React.Component {
     this.state = {
       address: props.value,
       isGeolocationLoading: false,
+      showBoxShadowOnSearch: false,
     };
     this.textInput = React.createRef();
+    this.placesAutocompleteWrapperRef = React.createRef();
+    this.checkIfSearchIsSticky = debounce(
+      this.checkIfSearchIsSticky.bind(this),
+      200
+    );
   }
 
   getGeolocation = () => {
@@ -133,6 +141,12 @@ class LocationSearchInput extends React.Component {
     }
 
     this.populateLastSelectedAddress();
+
+    window.addEventListener("scroll", this.checkIfSearchIsSticky);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener("scroll", this.checkIfSearchIsSticky);
   }
 
   populateLastSelectedAddress = () => {
@@ -148,6 +162,12 @@ class LocationSearchInput extends React.Component {
 
   removeLastSelectedAddress = () => {
     this.props.removeItemFromStorage(SELECTED_ADDRESS);
+  };
+
+  checkIfSearchIsSticky = () => {
+    const pageOffset = window.pageYOffset;
+    const elementOffset = this.placesAutocompleteWrapperRef.current.offsetTop;
+    this.setState({ showBoxShadowOnSearch: pageOffset === elementOffset });
   };
 
   render() {
@@ -167,14 +187,19 @@ class LocationSearchInput extends React.Component {
         debounce={750}
       >
         {({ getInputProps, suggestions, getSuggestionItemProps, loading }) => (
-          <div>
+          <div
+            className={cx("places-autocomplete-wrapper", {
+              showBoxShadowOnSearch: this.state.showBoxShadowOnSearch,
+            })}
+            ref={this.placesAutocompleteWrapperRef}
+          >
             <InputGroup className="location-search-group">
               <Form.Control
                 {...getInputProps({
                   placeholder: this.props.translations
                     .location_search_placeholder,
                   defaultValue: this.props.defaultValue,
-                  className: "location-search-input",
+                  className: "location-search-input rounded-0",
                 })}
                 ref={this.textInput}
               />
@@ -184,6 +209,7 @@ class LocationSearchInput extends React.Component {
                   isLoading={this.state.isGeolocationLoading}
                 />
                 <Button
+                  className="rounded-0"
                   onClick={e => this.clearInput(e)}
                   variant="outline-secondary"
                 >

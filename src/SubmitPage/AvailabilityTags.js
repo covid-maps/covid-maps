@@ -13,32 +13,44 @@ class AvailabilityTags extends Component {
     super(props);
 
     this.state = {
-      tags: {
-        medecines: false,
-        groceries: false,
-        vegetables: false,
-        meat_and_dairy: false,
-        personal_and_homecare: false,
-      },
+      tags: [
+        { tagName: "medecines", checked: false, translationKey: "medecines" },
+        { tagName: "groceries", checked: false, translationKey: "groceries" },
+        { tagName: "vegetables", checked: false, translationKey: "vegetables" },
+        {
+          tagName: "meat_and_dairy",
+          checked: false,
+          translationKey: "meat_and_dairy",
+        },
+        {
+          tagName: "personal_and_homecare",
+          checked: false,
+          translationKey: "personal_and_homecare",
+        },
+      ],
       editMode: false,
       newTag: "",
     };
   }
 
-  onTagCheck = tagKey => {
+  onTagCheck = tagIndex => {
     this.setState(
       prevState => {
+        const currentTag = prevState.tags[tagIndex];
+        const updatedTag = { ...currentTag, checked: !currentTag.checked };
+        const updatedTagsList = [
+          ...prevState.tags.slice(0, tagIndex),
+          updatedTag,
+          ...prevState.tags.slice(tagIndex + 1),
+        ];
         return {
-          tags: {
-            ...prevState.tags,
-            [tagKey]: !prevState.tags[tagKey],
-          },
+          tags: updatedTagsList,
         };
       },
       () => {
         if (this.props.sendCheckedTags) {
-          const checkedTags = Object.keys(this.state.tags).filter(tag => {
-            return this.state.tags[tag];
+          const checkedTags = this.state.tags.filter(tag => {
+            return tag.checked;
           });
           this.props.sendCheckedTags(checkedTags);
         }
@@ -60,22 +72,22 @@ class AvailabilityTags extends Component {
     return (
       <div className="availability-tags-wrapper">
         <div className="d-flex flex-wrap ">
-          {Object.keys(this.state.tags).map(tag => {
-            const isCurrentChecked = this.state.tags[tag];
+          {this.state.tags.map((tag, index) => {
+            const isChecked = tag.checked;
             return (
               <div
-                key={tag}
-                onClick={() => this.onTagCheck(tag)}
+                key={tag.tagName}
+                onClick={() => this.onTagCheck(index)}
                 className={cx(
                   "tag border mr-2 mb-2 py-1 px-2 rounded-pill text-capitalize font-weight-bold text-xs",
                   {
-                    isChecked: isCurrentChecked,
-                    "border-secondary": !isCurrentChecked,
-                    "border-success": isCurrentChecked,
+                    isChecked: isChecked,
+                    "border-secondary": !isChecked,
+                    "border-success": isChecked,
                   }
                 )}
               >
-                {tag}
+                {tag.tagName}
               </div>
             );
           })}

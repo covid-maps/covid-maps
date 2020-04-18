@@ -48,4 +48,6 @@ export default {
   vegetables: "सब्जियां",
   meat_and_dairy: "मांस और डेयरी",
   toiletries: "टॉयलेटरीज़",
+  duplicate_tag_error: "यह टैग पहले से मौजूद है",
+  available_tags_label: "यहाँ क्या उपलब्ध है?",
 };

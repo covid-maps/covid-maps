@@ -48,4 +48,6 @@ export default {
   vegetables: "Vegetables",
   meat_and_dairy: "Meat and Dairy",
   toiletries: "Toiletries",
+  duplicate_tag_error: "Oops, this tag already exists",
+  available_tags_label: "What's available here?",
 };

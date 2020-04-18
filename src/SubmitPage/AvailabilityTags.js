@@ -84,7 +84,8 @@ class AvailabilityTags extends Component {
       return tag.name.toLowerCase() === this.state.newTag.toLowerCase().trim();
     });
     return (
-      <div className="availability-tags-wrapper mb-4">
+      <div className="availability-tags-wrapper mb-3">
+        <div className="mb-2">{translations.available_tags_label}</div>
         <div className="d-flex flex-wrap ">
           {tags.map((tag, index) => {
             const isChecked = tag.checked;
@@ -119,7 +120,7 @@ class AvailabilityTags extends Component {
             />
             {isThereAlreadyADuplicateTag ? (
               <div className="text-danger ml-4 text-xs">
-                Oops, this tag already exists
+                {translations.duplicate_tag_error}
               </div>
             ) : (
               <Fragment>

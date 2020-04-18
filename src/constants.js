@@ -44,10 +44,12 @@ export const STORAGE_KEYS = {
   SELECTED_ADDRESS: "userSelectedAddress",
 };
 
-export const SUGGESTED_TAGS_WITH_TRANSLATION_KEYS = {
-  medicines: "medicines",
-  groceries: "groceries",
-  vegetables: "vegetables",
-  meat_and_dairy: "meat_and_dairy",
-  toiletries: "toiletries",
+export const SUGGESTED_TAGS = {
+  fruits: "Fruits",
+  vegetables: "Vegetables",
+  meat: "Meat",
+  eggs_dairy: "Eggs & Dairy",
+  pulses_grains: "Pulses & Grains",
+  medicines: "Medicines",
+  prepared_food: "Prepared Food",
 };

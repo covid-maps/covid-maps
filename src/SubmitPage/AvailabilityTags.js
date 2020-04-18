@@ -29,7 +29,6 @@ class AvailabilityTags extends Component {
       PropTypes.shape({
         name: PropTypes.string.isRequired,
         checked: PropTypes.bool.isRequired,
-        translationKey: PropTypes.string,
       })
     ).isRequired,
     setTags: PropTypes.func.isRequired,
@@ -89,9 +88,7 @@ class AvailabilityTags extends Component {
         <div className="d-flex flex-wrap ">
           {tags.map((tag, index) => {
             const isChecked = tag.checked;
-            const label = tag.translationKey
-              ? translations[tag.translationKey]
-              : tag.name;
+            const label = translations[tag.name] || tag.name;
             return (
               <Tag
                 key={tag.name}

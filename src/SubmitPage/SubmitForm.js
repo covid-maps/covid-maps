@@ -16,11 +16,7 @@ import * as api from "../api";
 import { isMobile, titleCase } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import { withGlobalContext } from "../App";
-import {
-  FORM_FIELDS,
-  STORE_CATEGORIES,
-  SUGGESTED_TAGS_WITH_TRANSLATION_KEYS,
-} from "../constants";
+import { FORM_FIELDS, STORE_CATEGORIES, SUGGESTED_TAGS } from "../constants";
 import AvailabilityTags from "./AvailabilityTags";
 const {
   STORE_NAME,
@@ -206,21 +202,17 @@ class SubmitForm extends React.Component {
     // first generate a map for unchecked suggested tags
     // then loop over incoming tagsList to first check suggested tags
     // and then create entries for the custom ones
-    const tagsMap = Object.keys(SUGGESTED_TAGS_WITH_TRANSLATION_KEYS).reduce(
-      (acc, tagKey) => {
-        acc[tagKey] = {
-          name: tagKey,
-          checked: false,
-          translationKey: SUGGESTED_TAGS_WITH_TRANSLATION_KEYS[tagKey],
-        };
-        return acc;
-      },
-      {}
-    );
+    const tagsMap = Object.keys(SUGGESTED_TAGS).reduce((acc, tagKey) => {
+      acc[tagKey] = {
+        name: tagKey,
+        checked: false,
+      };
+      return acc;
+    }, {});
 
     tags.forEach(tag => {
       const formattedTag = tag.toLowerCase().trim();
-      const isSuggestedTag = SUGGESTED_TAGS_WITH_TRANSLATION_KEYS[formattedTag];
+      const isSuggestedTag = SUGGESTED_TAGS[formattedTag];
       if (isSuggestedTag) {
         tagsMap[formattedTag].checked = true;
       } else {

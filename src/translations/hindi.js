@@ -50,4 +50,6 @@ export default {
   pulses_grains: "दाल और अनाज",
   medicines: "दवाइयाँ",
   prepared_food: "बनाया हुआ खाना",
+  duplicate_tag_error: "यह टैग पहले से मौजूद है",
+  available_tags_label: "यहाँ क्या उपलब्ध है?",
 };

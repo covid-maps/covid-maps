@@ -50,4 +50,6 @@ export default {
   pulses_grains: "Pulses & Grains",
   medicines: "Medicines",
   prepared_food: "Prepared Food",
+  duplicate_tag_error: "Oops, this tag already exists",
+  available_tags_label: "What's available here?",
 };

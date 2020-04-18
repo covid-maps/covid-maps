@@ -343,14 +343,6 @@ class SubmitForm extends React.Component {
               {translations.add_update_store}
             </h6>
 
-            {enableTags && (
-              <AvailabilityTags
-                tags={this.state.tags}
-                setTags={this.setTags}
-                translations={translations}
-              />
-            )}
-
             <Form.Group controlId="formBasicStore">
               <Form.Label className="">
                 {titleCase(translations.store_name)}
@@ -375,31 +367,43 @@ class SubmitForm extends React.Component {
               />
             </Form.Group>
 
-            <Form.Group controlId="formBasicServiceType">
-              <Form.Label>{translations.store_category}</Form.Label>
-              <Form.Control
-                as="select"
-                value={formData[STORE_CATEGORY]}
-                onChange={e => this.onChangeInput(e, STORE_CATEGORY)}
-              >
-                <option value={STORE_CATEGORIES.GROCERY}>
-                  {translations.grocery}
-                </option>
-                <option value={STORE_CATEGORIES.RESTAURANT}>
-                  {translations.restaurant}
-                </option>
-                <option value={STORE_CATEGORIES.ATM}>{translations.atm}</option>
-                <option value={STORE_CATEGORIES.CLINIC}>
-                  {translations.clinic}
-                </option>
-                <option value={STORE_CATEGORIES.PHARMACY}>
-                  {translations.pharmacy}
-                </option>
-                <option value={STORE_CATEGORIES.OTHER}>
-                  {translations.other}
-                </option>
-              </Form.Control>
-            </Form.Group>
+            {enableTags && (
+              <AvailabilityTags
+                tags={this.state.tags}
+                setTags={this.setTags}
+                translations={translations}
+              />
+            )}
+
+            {!enableTags && (
+              <Form.Group controlId="formBasicServiceType">
+                <Form.Label>{translations.store_category}</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={formData[STORE_CATEGORY]}
+                  onChange={e => this.onChangeInput(e, STORE_CATEGORY)}
+                >
+                  <option value={STORE_CATEGORIES.GROCERY}>
+                    {translations.grocery}
+                  </option>
+                  <option value={STORE_CATEGORIES.RESTAURANT}>
+                    {translations.restaurant}
+                  </option>
+                  <option value={STORE_CATEGORIES.ATM}>
+                    {translations.atm}
+                  </option>
+                  <option value={STORE_CATEGORIES.CLINIC}>
+                    {translations.clinic}
+                  </option>
+                  <option value={STORE_CATEGORIES.PHARMACY}>
+                    {translations.pharmacy}
+                  </option>
+                  <option value={STORE_CATEGORIES.OTHER}>
+                    {translations.other}
+                  </option>
+                </Form.Control>
+              </Form.Group>
+            )}
 
             {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>

@@ -43,4 +43,9 @@ export default {
   share_app: "Share App",
   view_old_updates: "View older updates",
   hide_old_updates: "Hide older updates",
+  medicines: "Medicines",
+  groceries: "Groceries",
+  vegetables: "Vegetables",
+  meat_and_dairy: "Meat and Dairy",
+  personal_and_homecare: "Personal and Homecare",
 };

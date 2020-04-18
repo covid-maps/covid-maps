@@ -199,7 +199,7 @@ class SubmitForm extends React.Component {
     const tagsMap = Object.keys(SUGGESTED_TAGS_WITH_TRANSLATION_KEYS).reduce(
       (acc, tagKey) => {
         acc[tagKey] = {
-          tagName: tagKey,
+          name: tagKey,
           checked: false,
           translationKey: SUGGESTED_TAGS_WITH_TRANSLATION_KEYS[tagKey],
         };
@@ -214,7 +214,7 @@ class SubmitForm extends React.Component {
       if (isSuggestedTag) {
         tagsMap[formattedTag].checked = true;
       } else {
-        tagsMap[tag] = { tagName: tag, checked: true };
+        tagsMap[tag] = { name: tag, checked: true };
       }
     });
 
@@ -337,7 +337,11 @@ class SubmitForm extends React.Component {
             </h6>
 
             {true && (
-              <AvailabilityTags tags={this.state.tags} setTags={this.setTags} />
+              <AvailabilityTags
+                tags={this.state.tags}
+                setTags={this.setTags}
+                translations={translations}
+              />
             )}
 
             <Form.Group controlId="formBasicStore">

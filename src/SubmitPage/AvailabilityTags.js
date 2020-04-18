@@ -4,10 +4,35 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import cx from "classnames";
 
+const Tag = ({ index, onTagCheck, isChecked, label }) => {
+  return (
+    <div
+      onClick={() => onTagCheck(index)}
+      className={cx(
+        "tag border mr-2 mb-2 py-1 px-2 rounded-pill text-capitalize font-weight-bold text-xs",
+        {
+          isChecked: isChecked,
+          "border-secondary": !isChecked,
+          "border-success": isChecked,
+        }
+      )}
+    >
+      {label}
+    </div>
+  );
+};
+
 class AvailabilityTags extends Component {
   static propTypes = {
-    tags: PropTypes.array.isRequired,
+    tags: PropTypes.arrayOf(
+      PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        checked: PropTypes.bool.isRequired,
+        translationKey: PropTypes.string,
+      })
+    ).isRequired,
     setTags: PropTypes.func.isRequired,
+    translations: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -33,7 +58,7 @@ class AvailabilityTags extends Component {
 
   addNewTag = () => {
     const newTagObject = {
-      tagName: this.state.newTag.trim(),
+      name: this.state.newTag.trim(),
       checked: true,
     };
 
@@ -53,32 +78,26 @@ class AvailabilityTags extends Component {
   };
 
   render() {
-    const { tags } = this.props;
+    const { tags, translations } = this.props;
     const isThereAlreadyADuplicateTag = tags.some(tag => {
-      return (
-        tag.tagName.toLowerCase() === this.state.newTag.toLowerCase().trim()
-      );
+      return tag.name.toLowerCase() === this.state.newTag.toLowerCase().trim();
     });
     return (
       <div className="availability-tags-wrapper mb-4">
         <div className="d-flex flex-wrap ">
           {tags.map((tag, index) => {
             const isChecked = tag.checked;
+            const label = tag.translationKey
+              ? translations[tag.translationKey]
+              : tag.name;
             return (
-              <div
-                key={tag.tagName}
-                onClick={() => this.onTagCheck(index)}
-                className={cx(
-                  "tag border mr-2 mb-2 py-1 px-2 rounded-pill text-capitalize font-weight-bold text-xs",
-                  {
-                    isChecked: isChecked,
-                    "border-secondary": !isChecked,
-                    "border-success": isChecked,
-                  }
-                )}
-              >
-                {tag.tagName}
-              </div>
+              <Tag
+                key={tag.name}
+                index={index}
+                isChecked={isChecked}
+                onTagCheck={this.onTagCheck}
+                label={label}
+              />
             );
           })}
           <div

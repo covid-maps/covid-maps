@@ -7,7 +7,7 @@ import cx from "classnames";
 class AvailabilityTags extends Component {
   static propTypes = {
     onChangeCallback: PropTypes.func,
-    sendCheckedTags: PropTypes.func,
+    onChange: PropTypes.func,
   };
 
   constructor(props) {
@@ -49,11 +49,8 @@ class AvailabilityTags extends Component {
         };
       },
       () => {
-        if (this.props.sendCheckedTags) {
-          const checkedTags = this.state.tags.filter(tag => {
-            return tag.checked;
-          });
-          this.props.sendCheckedTags(checkedTags);
+        if (this.props.onChange) {
+          this.props.onChange(this.getCheckedTagKeys());
         }
       }
     );
@@ -77,6 +74,10 @@ class AvailabilityTags extends Component {
     this.setState(prevState => {
       return { editMode: !prevState.editMode, newTag: "" };
     });
+  };
+
+  getCheckedTagKeys = () => {
+    return this.state.tags.filter(tag => tag.checked).map(tag => tag.tagName);
   };
 
   render() {

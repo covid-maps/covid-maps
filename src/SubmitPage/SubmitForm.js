@@ -2,7 +2,6 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import DateFnsUtils from "@date-io/date-fns";
 import cx from "classnames";
-import xss from "xss";
 import Snackbar from "@material-ui/core/Snackbar";
 import Alert from "react-bootstrap/Alert";
 import { format, parse, roundToNearestMinutes, isBefore } from "date-fns";
@@ -228,7 +227,7 @@ class SubmitForm extends React.Component {
   };
 
   getTagsForSubmission = () => {
-    return this.state.tags.filter(tag => tag.checked).map(tag => xss(tag.name));
+    return this.state.tags.filter(tag => tag.checked).map(tag => tag.name);
   };
 
   parseTimeAndRoundToNearestHalfHour = time => {

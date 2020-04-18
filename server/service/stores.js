@@ -208,18 +208,20 @@ async function findStoreById(storeId) {
     return mappedStores[0]
 }
 
-async function findNearbyStoreByStoreId(storeId) {
+
+async function findNearbyStoreByStoreId(params) {
+    const storeId = params.storeId
     return new Promise(async (resolve, reject) => {
         if (storeId) {
             let store = await findStoreById(storeId).catch((e) => {
                 resolve([])
             })
             let storeLocation = { lat: store.Latitude, lng: store.Longitude }
-            let params = {
+            let queryParams = {
                 location: storeLocation,
-                radius: 7000,
+                radius: params.radius,
             }
-            let storesNearTheStore = await findNearbyStores(params);
+            let storesNearTheStore = await findNearbyStores(queryParams);
             resolve(storesNearTheStore)
         } else {
             resolve([])

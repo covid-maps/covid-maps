@@ -6,54 +6,29 @@ import cx from "classnames";
 
 class AvailabilityTags extends Component {
   static propTypes = {
-    onChangeCallback: PropTypes.func,
-    onChange: PropTypes.func,
+    tags: PropTypes.array.isRequired,
+    setTags: PropTypes.func.isRequired,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      tags: [
-        { tagName: "medicines", checked: false, translationKey: "medicines" },
-        { tagName: "groceries", checked: false, translationKey: "groceries" },
-        { tagName: "vegetables", checked: false, translationKey: "vegetables" },
-        {
-          tagName: "meat_and_dairy",
-          checked: false,
-          translationKey: "meat_and_dairy",
-        },
-        {
-          tagName: "personal_and_homecare",
-          checked: false,
-          translationKey: "personal_and_homecare",
-        },
-      ],
       editMode: false,
       newTag: "",
     };
   }
 
   onTagCheck = tagIndex => {
-    this.setState(
-      prevState => {
-        const currentTag = prevState.tags[tagIndex];
-        const updatedTag = { ...currentTag, checked: !currentTag.checked };
-        const updatedTagsList = [
-          ...prevState.tags.slice(0, tagIndex),
-          updatedTag,
-          ...prevState.tags.slice(tagIndex + 1),
-        ];
-        return {
-          tags: updatedTagsList,
-        };
-      },
-      () => {
-        if (this.props.onChange) {
-          this.props.onChange(this.getCheckedTagKeys());
-        }
-      }
-    );
+    const { tags } = this.props;
+    const currentTag = tags[tagIndex];
+    const updatedTag = { ...currentTag, checked: !currentTag.checked };
+    const updatedTagsList = [
+      ...tags.slice(0, tagIndex),
+      updatedTag,
+      ...tags.slice(tagIndex + 1),
+    ];
+    this.props.setTags(updatedTagsList);
   };
 
   addNewTag = () => {
@@ -62,8 +37,9 @@ class AvailabilityTags extends Component {
       checked: true,
     };
 
-    const updatedTagsList = [...this.state.tags, newTagObject];
-    this.setState({ tags: updatedTagsList }, this.toggleEditMode);
+    const updatedTagsList = [...this.props.tags, newTagObject];
+    this.props.setTags(updatedTagsList);
+    this.toggleEditMode();
   };
 
   onNewTagValueChange = e => {
@@ -76,12 +52,9 @@ class AvailabilityTags extends Component {
     });
   };
 
-  getCheckedTagKeys = () => {
-    return this.state.tags.filter(tag => tag.checked).map(tag => tag.tagName);
-  };
-
   render() {
-    const isThereAlreadyADuplicateTag = this.state.tags.some(tag => {
+    const { tags } = this.props;
+    const isThereAlreadyADuplicateTag = tags.some(tag => {
       return (
         tag.tagName.toLowerCase() === this.state.newTag.toLowerCase().trim()
       );
@@ -89,7 +62,7 @@ class AvailabilityTags extends Component {
     return (
       <div className="availability-tags-wrapper mb-4">
         <div className="d-flex flex-wrap ">
-          {this.state.tags.map((tag, index) => {
+          {tags.map((tag, index) => {
             const isChecked = tag.checked;
             return (
               <div

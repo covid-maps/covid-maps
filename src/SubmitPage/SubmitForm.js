@@ -15,7 +15,11 @@ import * as api from "../api";
 import { isMobile, titleCase } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import { withGlobalContext } from "../App";
-import { FORM_FIELDS, STORE_CATEGORIES } from "../constants";
+import {
+  FORM_FIELDS,
+  STORE_CATEGORIES,
+  SUGGESTED_TAGS_WITH_TRANSLATION_KEYS,
+} from "../constants";
 import AvailabilityTags from "./AvailabilityTags";
 const {
   STORE_NAME,
@@ -86,13 +90,17 @@ class SubmitForm extends React.Component {
     translations: PropTypes.object.isRequired,
   };
 
-  state = {
-    isLoading: false,
-    isValid: true,
-    data: { ...emptyData },
-    showErrorNotification: false,
-    tags: [],
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoading: false,
+      isValid: true,
+      data: { ...emptyData },
+      showErrorNotification: false,
+      tags: this.initializeTags(),
+    };
+  }
 
   toggleErrorNotification = () => {
     this.setState(prevState => {
@@ -178,10 +186,44 @@ class SubmitForm extends React.Component {
             selectedStoreData[CLOSING_TIME]
           ),
         },
+        tags: this.initializeTags(this.state.data.tags),
         searchFieldValue: this.props.location.state.searchFieldValue,
       });
     }
   }
+
+  initializeTags = (tags = []) => {
+    // first generate a map for unchecked suggested tags
+    // then loop over incoming tagsList to first check suggested tags
+    // and then create entries for the custom ones
+    const tagsMap = Object.keys(SUGGESTED_TAGS_WITH_TRANSLATION_KEYS).reduce(
+      (acc, tagKey) => {
+        acc[tagKey] = {
+          tagName: tagKey,
+          checked: false,
+          translationKey: SUGGESTED_TAGS_WITH_TRANSLATION_KEYS[tagKey],
+        };
+        return acc;
+      },
+      {}
+    );
+
+    tags.forEach(tag => {
+      const formattedTag = tag.toLowerCase().trim();
+      const isSuggestedTag = SUGGESTED_TAGS_WITH_TRANSLATION_KEYS[formattedTag];
+      if (isSuggestedTag) {
+        tagsMap[formattedTag].checked = true;
+      } else {
+        tagsMap[tag] = { tagName: tag, checked: true };
+      }
+    });
+
+    return Object.keys(tagsMap).map(tagKey => tagsMap[tagKey]);
+  };
+
+  setTags = tags => {
+    this.setState({ tags });
+  };
 
   parseTimeAndRoundToNearestHalfHour = time => {
     if (time) {
@@ -294,7 +336,9 @@ class SubmitForm extends React.Component {
               {translations.add_update_store}
             </h6>
 
-            <AvailabilityTags onChange={this.onTagsChange} />
+            {true && (
+              <AvailabilityTags tags={this.state.tags} setTags={this.setTags} />
+            )}
 
             <Form.Group controlId="formBasicStore">
               <Form.Label className="">

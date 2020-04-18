@@ -15,7 +15,7 @@ class AvailabilityTags extends Component {
 
     this.state = {
       tags: [
-        { tagName: "medecines", checked: false, translationKey: "medecines" },
+        { tagName: "medicines", checked: false, translationKey: "medicines" },
         { tagName: "groceries", checked: false, translationKey: "groceries" },
         { tagName: "vegetables", checked: false, translationKey: "vegetables" },
         {

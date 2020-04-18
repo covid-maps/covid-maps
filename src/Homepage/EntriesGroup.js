@@ -28,12 +28,12 @@ function Timestamp({ Timestamp: value }) {
   let time = format(then, "h':'mm a");
 
   if (dayDifference === 1) {
-    let dayOfWeek = format(then, "EEEE");
-    time += " on " + dayOfWeek + " (1 day ago)";
+    let dayOfWeek = format(then, "EEE");
+    time += ", " + dayOfWeek + " (1 day ago)";
   }
   else if (dayDifference > 1) {
-    let dayOfWeek = format(then, "EEEE");
-    time += " on " + dayOfWeek + " (" + dayDifference + " days ago)";
+    let dayOfWeek = format(then, "EEE");
+    time += ", " + dayOfWeek + " (" + dayDifference + " days ago)";
   }
 
   return (

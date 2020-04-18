@@ -91,6 +91,7 @@ class SubmitForm extends React.Component {
     isValid: true,
     data: { ...emptyData },
     showErrorNotification: false,
+    tags: [],
   };
 
   toggleErrorNotification = () => {
@@ -106,6 +107,10 @@ class SubmitForm extends React.Component {
       data: { ...emptyData },
     });
   }
+
+  onTagsChange = tagsList => {
+    this.setState({ tags: tagsList });
+  };
 
   async onSubmit(event) {
     event.preventDefault();
@@ -289,7 +294,7 @@ class SubmitForm extends React.Component {
               {translations.add_update_store}
             </h6>
 
-            <AvailabilityTags />
+            <AvailabilityTags onChange={this.onTagsChange} />
 
             <Form.Group controlId="formBasicStore">
               <Form.Label className="">

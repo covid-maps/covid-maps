@@ -141,6 +141,9 @@ class SubmitForm extends React.Component {
         data.tags = this.getTagsForSubmission();
       }
 
+      console.log({ data });
+      return;
+
       try {
         const response = await api.submit(data);
         console.log(data);

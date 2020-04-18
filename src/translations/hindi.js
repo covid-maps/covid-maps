@@ -43,4 +43,9 @@ export default {
   share_app: "ऐप शेयर करें",
   view_old_updates: "पुराने अपडेट देखें",
   hide_old_updates: "पुराने अपडेट छिपाएं",
+  medicines: "दवाइयाँ",
+  groceries: "किराने का सामान",
+  vegetables: "सब्जियां",
+  meat_and_dairy: "मांस और डेयरी",
+  toiletries: "टॉयलेटरीज़",
 };

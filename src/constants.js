@@ -49,5 +49,5 @@ export const SUGGESTED_TAGS_WITH_TRANSLATION_KEYS = {
   groceries: "groceries",
   vegetables: "vegetables",
   meat_and_dairy: "meat_and_dairy",
-  personal_and_homecare: "personal_and_homecare",
+  toiletries: "toiletries",
 };

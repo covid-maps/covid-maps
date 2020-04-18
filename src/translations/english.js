@@ -47,5 +47,5 @@ export default {
   groceries: "Groceries",
   vegetables: "Vegetables",
   meat_and_dairy: "Meat and Dairy",
-  personal_and_homecare: "Personal and Homecare",
+  toiletries: "Toiletries",
 };

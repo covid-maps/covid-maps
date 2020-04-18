@@ -86,9 +86,22 @@ app.get("/v2/query", async (req, res) => {
     radius: query.radius,
     page: query.page
   }
-  let nearbyResults = await stores.findNearbyStores(params);
-  let storeResults = await stores.findNearbyStoreByStoreId(query.storeId)
-  let results = nearbyResults.concat(storeResults)
+  let results = await stores.findNearbyStores(params);
+  res.send({ location, results });
+});
+
+app.get("/v2/queryByStoreId", async (req, res) => {
+  const { query } = req;
+  let params = {
+    storeId: query.storeId,
+    radius: query.radius,
+    page: query.page
+  }
+  let results = await stores.findNearbyStoreByStoreId(params)
+  let location = {
+    lat: results[0].Latitude,
+    lng: results[0].Longitude
+  }
   res.send({ location, results });
 });
 

@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
 import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
+import { Collapse } from "@material-ui/core";
 import cx from "classnames";
 
 const Tag = ({ index, onTagCheck, isChecked, label }) => {
@@ -107,7 +108,7 @@ class AvailabilityTags extends Component {
             <i className="far fa-plus"></i>
           </div>
         </div>
-        {this.state.editMode && (
+        <Collapse in={this.state.editMode}>
           <div className="d-flex align-items-center mt-2">
             <Form.Control
               type="text"
@@ -141,7 +142,7 @@ class AvailabilityTags extends Component {
               </Fragment>
             )}
           </div>
-        )}
+        </Collapse>
       </div>
     );
   }

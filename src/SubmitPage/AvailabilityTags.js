@@ -116,7 +116,7 @@ class AvailabilityTags extends Component {
               onChange={this.onNewTagValueChange}
               value={this.state.newTag}
               placeholder="food take-away"
-              className="rounded-0 border-dark bg-transparent text-sm"
+              className="rounded-0 border-dark bg-transparent"
             />
             {isThereAlreadyADuplicateTag ? (
               <div className="text-danger ml-4 text-xs">

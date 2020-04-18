@@ -222,7 +222,7 @@ footer a:hover {
 }
 
 .availability-tags-wrapper .tag.isChecked {
-  background-color: rgba(40, 167, 69, 0.22) !important;
+  background-color: rgba(40, 167, 69, 0.2) !important;
 }
 
 .availability-tags-wrapper .add-new-tag {

@@ -35,7 +35,7 @@ if (process.env.NODE_ENV !== "development") {
 const AppNavbar = () => {
   return (
     <>
-      <Navbar bg="light" variant="light" fixed="top">
+      <Navbar bg="light" variant="light">
         <Navbar.Brand className="navbar-brand">
           <Link to="/">
             <img

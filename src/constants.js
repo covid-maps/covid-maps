@@ -16,6 +16,7 @@ export const FORM_FIELDS = {
   CLOSING_TIME: "Closing Time",
   PLACE_ID: "Place Id",
   STORE_ID: "StoreId",
+  TIMESTAMP: "Timestamp",
 };
 
 export const ADDRESS_COMPONENTS = {
@@ -40,4 +41,5 @@ export const ALERTS_TYPE = {
 
 export const STORAGE_KEYS = {
   LANGUAGE: "userSelectedLanguage",
+  SELECTED_ADDRESS: "userSelectedAddress",
 };

@@ -1,6 +1,6 @@
 export default {
   website_purpose_banner:
-    "Help 35,000+ users by adding updates on essential services around you",
+    "Crowdsourced info on essentials – help 50,000+ users by sharing store updates",
   location_search_placeholder: "Search by store, address or landmark",
   store_search_placeholder: "Filter by name or item",
   add_store: "Add a store",
@@ -41,4 +41,6 @@ export default {
   website_share_description:
     "Covid Maps - find essentials services around you in the lockdown period - track timings, stock levels and safety precautions at stores. Make an update with info you find in your grocery run and share with neighbours!",
   share_app: "Share App",
+  view_old_updates: "View older updates",
+  hide_old_updates: "Hide older updates",
 };

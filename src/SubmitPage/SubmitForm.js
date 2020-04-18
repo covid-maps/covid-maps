@@ -32,6 +32,8 @@ const {
   PLACE_ID,
 } = FORM_FIELDS;
 
+const enableTags = true;
+
 function ButtonWithLoading({ isLoading, ...props }) {
   return isLoading ? (
     <Button {...props} disabled>
@@ -135,6 +137,10 @@ class SubmitForm extends React.Component {
         Timestamp: new Date().toISOString(),
       };
 
+      if (enableTags) {
+        data.tags = this.getTagsForSubmission();
+      }
+
       try {
         const response = await api.submit(data);
         console.log(data);
@@ -225,6 +231,10 @@ class SubmitForm extends React.Component {
     this.setState({ tags });
   };
 
+  getTagsForSubmission = () => {
+    return this.state.tags.filter(tag => tag.checked).map(tag => tag.name);
+  };
+
   parseTimeAndRoundToNearestHalfHour = time => {
     if (time) {
       const incomingFormat = "HH:mm";
@@ -263,7 +273,8 @@ class SubmitForm extends React.Component {
       data[SAFETY_OBSERVATIONS].length ||
       data[USEFUL_INFORMATION].length ||
       data[OPENING_TIME] ||
-      data[CLOSING_TIME]
+      data[CLOSING_TIME] ||
+      (enableTags && Boolean(this.getTagsForSubmission().length))
     );
   }
 
@@ -336,7 +347,7 @@ class SubmitForm extends React.Component {
               {translations.add_update_store}
             </h6>
 
-            {true && (
+            {enableTags && (
               <AvailabilityTags
                 tags={this.state.tags}
                 setTags={this.setTags}

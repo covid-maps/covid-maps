@@ -129,6 +129,7 @@ class AvailabilityTags extends Component {
                   size="sm"
                   className="ml-3"
                   onClick={this.addNewTag}
+                  disabled={!this.state.newTag.trim()}
                 >
                   Add
                 </Button>

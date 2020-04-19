@@ -60,11 +60,18 @@ class Homepage extends React.Component {
     searchResult: undefined,
     alertType: "",
     showAlert: true,
+    showMissing: true,
   };
 
   toggleAlert = () => {
     this.setState(prevState => {
       return { showAlert: !prevState.showAlert };
+    });
+  };
+
+  hideMissing = () => {
+    this.setState(() => {
+      return { showMissing: false };
     });
   };
 
@@ -298,6 +305,7 @@ class Homepage extends React.Component {
           searchResultLatlng: result.latLng,
           searchResult: result,
           isLoading: true,
+          showMissing: true
         },
         () => {
           this.fetchResults();
@@ -318,6 +326,8 @@ class Homepage extends React.Component {
             name: searchResult.name,
             entries: [searchResultToFormEntry(searchResult)],
           }}
+          showMissing={this.state.showMissing}
+          onClose={this.hideMissing}
         ></MissingBlock>
       );
       selectedForMissing = searchResultLatlng;

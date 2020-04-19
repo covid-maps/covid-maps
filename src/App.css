@@ -201,6 +201,43 @@ footer a:hover {
   top: 1px;
 }
 
+.text-sm {
+  font-size: 14px;
+}
+
+.text-xs {
+  font-size: 12px;
+}
+
+.cursor-pointer {
+  cursor: pointer;
+}
+
+.availability-tags-wrapper .tag {
+  cursor: pointer;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.availability-tags-wrapper .tag.isChecked {
+  background-color: rgba(40, 167, 69, 0.2) !important;
+}
+
+.availability-tags-wrapper .add-new-tag {
+  cursor: pointer;
+  width: 28px;
+  height: 28px;
+  line-height: 28px;
+}
+
+.availability-tags-wrapper input {
+  width: 200px;
+  border-width: 0;
+  border-bottom-width: 1px;
+}
+
 .cluster {
   z-index: 5;
   border-radius: 50px;
@@ -212,7 +249,7 @@ footer a:hover {
   z-index: 5;
   font-size: 10px !important;
   backdrop-filter: blur(15px);
-  background-color: #F7F7F700;
+  background-color: #f7f7f700;
   border-radius: 50px;
 }
 

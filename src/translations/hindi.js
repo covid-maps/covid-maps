@@ -43,4 +43,13 @@ export default {
   share_app: "ऐप शेयर करें",
   view_old_updates: "पुराने अपडेट देखें",
   hide_old_updates: "पुराने अपडेट छिपाएं",
+  fruits: "फल",
+  vegetables: "सब्जियां",
+  meat: "मांस",
+  eggs_dairy: "अंडे और डेयरी",
+  pulses_grains: "दाल और अनाज",
+  medicines: "दवाइयाँ",
+  prepared_food: "बनाया हुआ खाना",
+  duplicate_tag_error: "यह टैग पहले से मौजूद है",
+  available_tags_label: "यहाँ क्या उपलब्ध है?",
 };

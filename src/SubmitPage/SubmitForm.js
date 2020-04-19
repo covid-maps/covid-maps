@@ -15,7 +15,8 @@ import * as api from "../api";
 import { isMobile, titleCase } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import { withGlobalContext } from "../App";
-import { FORM_FIELDS, STORE_CATEGORIES } from "../constants";
+import { FORM_FIELDS, STORE_CATEGORIES, SUGGESTED_TAGS } from "../constants";
+import AvailabilityTags from "./AvailabilityTags";
 const {
   STORE_NAME,
   STORE_ADDRESS,
@@ -26,6 +27,8 @@ const {
   SAFETY_OBSERVATIONS,
   PLACE_ID,
 } = FORM_FIELDS;
+
+const enableTags = false;
 
 function ButtonWithLoading({ isLoading, ...props }) {
   return isLoading ? (
@@ -73,24 +76,29 @@ const emptyData = {
 };
 
 const fieldFormatter = {
-  [STORE_NAME] : val => titleCase(val),
+  [STORE_NAME]: val => titleCase(val),
   [STORE_ADDRESS]: val => val,
   [STORE_CATEGORY]: val => val,
   [USEFUL_INFORMATION]: val => val,
-  [SAFETY_OBSERVATIONS]: val => val
-}
+  [SAFETY_OBSERVATIONS]: val => val,
+};
 
 class SubmitForm extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
   };
 
-  state = {
-    isLoading: false,
-    isValid: true,
-    data: { ...emptyData },
-    showErrorNotification: false,
-  };
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      isLoading: false,
+      isValid: true,
+      data: { ...emptyData },
+      showErrorNotification: false,
+      tags: this.initializeTags(),
+    };
+  }
 
   toggleErrorNotification = () => {
     this.setState(prevState => {
@@ -106,6 +114,10 @@ class SubmitForm extends React.Component {
     });
   }
 
+  onTagsChange = tagsList => {
+    this.setState({ tags: tagsList });
+  };
+
   async onSubmit(event) {
     event.preventDefault();
     if (this.canBeSubmitted()) {
@@ -120,6 +132,10 @@ class SubmitForm extends React.Component {
         [CLOSING_TIME]: this.convertDateObjectToTime(formData[CLOSING_TIME]),
         Timestamp: new Date().toISOString(),
       };
+
+      if (enableTags) {
+        data.tags = this.getTagsForSubmission();
+      }
 
       try {
         const response = await api.submit(data);
@@ -149,8 +165,11 @@ class SubmitForm extends React.Component {
   onChangeInput({ target }, dataKey) {
     this.setState({
       isValid: true,
-      data: { ...this.state.data, [dataKey]: fieldFormatter[dataKey](target.value)}
-  });
+      data: {
+        ...this.state.data,
+        [dataKey]: fieldFormatter[dataKey](target.value),
+      },
+    });
   }
 
   componentDidMount() {
@@ -169,10 +188,46 @@ class SubmitForm extends React.Component {
             selectedStoreData[CLOSING_TIME]
           ),
         },
+        tags: this.initializeTags(this.state.data.tags),
         searchFieldValue: this.props.location.state.searchFieldValue,
       });
     }
   }
+
+  initializeTags = (tags = []) => {
+    // first generate a map for unchecked suggested tags
+    // then loop over incoming tagsList to first check suggested tags
+    // and then create entries for the custom ones
+    const tagsMap = Object.keys(SUGGESTED_TAGS).reduce((acc, tagKey) => {
+      acc[tagKey] = {
+        name: tagKey,
+        checked: false,
+      };
+      return acc;
+    }, {});
+
+    tags.forEach(tag => {
+      const formattedTag = tag.toLowerCase().trim();
+      const isSuggestedTag = SUGGESTED_TAGS[formattedTag];
+      if (isSuggestedTag) {
+        tagsMap[formattedTag].checked = true;
+      } else {
+        tagsMap[tag] = { name: tag, checked: true };
+      }
+    });
+
+    return Object.keys(tagsMap).map(tagKey => tagsMap[tagKey]);
+  };
+
+  setTags = tags => {
+    this.setState({ tags });
+  };
+
+  getTagsForSubmission = () => {
+    return this.state.tags
+      .filter(tag => tag.checked)
+      .map(tag => tag.name.toLowerCase().trim());
+  };
 
   parseTimeAndRoundToNearestHalfHour = time => {
     if (time) {
@@ -212,7 +267,8 @@ class SubmitForm extends React.Component {
       data[SAFETY_OBSERVATIONS].length ||
       data[USEFUL_INFORMATION].length ||
       data[OPENING_TIME] ||
-      data[CLOSING_TIME]
+      data[CLOSING_TIME] ||
+      (enableTags && Boolean(this.getTagsForSubmission().length))
     );
   }
 
@@ -241,7 +297,11 @@ class SubmitForm extends React.Component {
 
   render() {
     const { translations, location } = this.props;
-    const isUpdate = location && location.state && location.state.item && location.state.item.StoreId;
+    const isUpdate =
+      location &&
+      location.state &&
+      location.state.item &&
+      location.state.item.StoreId;
     const position = this.state.data.Latitude
       ? {
           lat: parseFloat(this.state.data.Latitude),
@@ -280,8 +340,11 @@ class SubmitForm extends React.Component {
             <h6 className="text-uppercase font-weight-bold mb-3">
               {translations.add_update_store}
             </h6>
+
             <Form.Group controlId="formBasicStore">
-              <Form.Label className="">{titleCase(translations.store_name)}</Form.Label>
+              <Form.Label className="">
+                {titleCase(translations.store_name)}
+              </Form.Label>
               <Form.Control
                 type="text"
                 onChange={e => this.onChangeInput(e, STORE_NAME)}
@@ -302,31 +365,43 @@ class SubmitForm extends React.Component {
               />
             </Form.Group>
 
-            <Form.Group controlId="formBasicServiceType">
-              <Form.Label>{translations.store_category}</Form.Label>
-              <Form.Control
-                as="select"
-                value={formData[STORE_CATEGORY]}
-                onChange={e => this.onChangeInput(e, STORE_CATEGORY)}
-              >
-                <option value={STORE_CATEGORIES.GROCERY}>
-                  {translations.grocery}
-                </option>
-                <option value={STORE_CATEGORIES.RESTAURANT}>
-                  {translations.restaurant}
-                </option>
-                <option value={STORE_CATEGORIES.ATM}>{translations.atm}</option>
-                <option value={STORE_CATEGORIES.CLINIC}>
-                  {translations.clinic}
-                </option>
-                <option value={STORE_CATEGORIES.PHARMACY}>
-                  {translations.pharmacy}
-                </option>
-                <option value={STORE_CATEGORIES.OTHER}>
-                  {translations.other}
-                </option>
-              </Form.Control>
-            </Form.Group>
+            {enableTags && (
+              <AvailabilityTags
+                tags={this.state.tags}
+                setTags={this.setTags}
+                translations={translations}
+              />
+            )}
+
+            {!enableTags && (
+              <Form.Group controlId="formBasicServiceType">
+                <Form.Label>{translations.store_category}</Form.Label>
+                <Form.Control
+                  as="select"
+                  value={formData[STORE_CATEGORY]}
+                  onChange={e => this.onChangeInput(e, STORE_CATEGORY)}
+                >
+                  <option value={STORE_CATEGORIES.GROCERY}>
+                    {translations.grocery}
+                  </option>
+                  <option value={STORE_CATEGORIES.RESTAURANT}>
+                    {translations.restaurant}
+                  </option>
+                  <option value={STORE_CATEGORIES.ATM}>
+                    {translations.atm}
+                  </option>
+                  <option value={STORE_CATEGORIES.CLINIC}>
+                    {translations.clinic}
+                  </option>
+                  <option value={STORE_CATEGORIES.PHARMACY}>
+                    {translations.pharmacy}
+                  </option>
+                  <option value={STORE_CATEGORIES.OTHER}>
+                    {translations.other}
+                  </option>
+                </Form.Control>
+              </Form.Group>
+            )}
 
             {
               <MuiPickersUtilsProvider utils={DateFnsUtils}>

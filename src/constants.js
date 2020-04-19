@@ -43,3 +43,13 @@ export const STORAGE_KEYS = {
   LANGUAGE: "userSelectedLanguage",
   SELECTED_ADDRESS: "userSelectedAddress",
 };
+
+export const SUGGESTED_TAGS = {
+  fruits: "Fruits",
+  vegetables: "Vegetables",
+  meat: "Meat",
+  eggs_dairy: "Eggs & Dairy",
+  pulses_grains: "Pulses & Grains",
+  medicines: "Medicines",
+  prepared_food: "Prepared Food",
+};

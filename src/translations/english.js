@@ -43,4 +43,13 @@ export default {
   share_app: "Share App",
   view_old_updates: "View older updates",
   hide_old_updates: "Hide older updates",
+  fruits: "Fruits",
+  vegetables: "Vegetables",
+  meat: "Meat",
+  eggs_dairy: "Eggs & Dairy",
+  pulses_grains: "Pulses & Grains",
+  medicines: "Medicines",
+  prepared_food: "Prepared Food",
+  duplicate_tag_error: "Oops, this tag already exists",
+  available_tags_label: "What's available here?",
 };

@@ -188,7 +188,7 @@ class SubmitForm extends React.Component {
             selectedStoreData[CLOSING_TIME]
           ),
         },
-        tags: this.initializeTags(this.state.data.tags),
+        tags: this.initializeTags(selectedStoreData.tags),
         searchFieldValue: this.props.location.state.searchFieldValue,
       });
     }

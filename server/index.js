@@ -92,6 +92,11 @@ app.get("/v2/query", async (req, res) => {
 
 app.get("/v2/queryByStoreId", async (req, res) => {
   const { query } = req;
+  if (!query.storeId) {
+    console.log("EMPTY")
+    res.status(400).send("storeId is empty.")
+    return;
+  }
   let params = {
     storeId: query.storeId,
     radius: query.radius,

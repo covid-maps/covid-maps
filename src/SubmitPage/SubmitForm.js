@@ -224,7 +224,9 @@ class SubmitForm extends React.Component {
   };
 
   getTagsForSubmission = () => {
-    return this.state.tags.filter(tag => tag.checked).map(tag => tag.name);
+    return this.state.tags
+      .filter(tag => tag.checked)
+      .map(tag => tag.name.toLowerCase().trim());
   };
 
   parseTimeAndRoundToNearestHalfHour = time => {

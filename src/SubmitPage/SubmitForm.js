@@ -468,7 +468,7 @@ class SubmitForm extends React.Component {
 
             {enableSafetyChecks && (
               <Form.Group controlId="formBasicCrowdDetails">
-                <Form.Label>{translations.safety_observations}</Form.Label>
+                <Form.Label>Important Information</Form.Label>
                 {Object.keys(this.state.safety_checks).map(check => {
                   return (
                     <Form.Check
@@ -476,7 +476,8 @@ class SubmitForm extends React.Component {
                       name={check}
                       id={check}
                       type="checkbox"
-                      label={check}
+                      className="mb-2"
+                      label={translations[check]}
                       checked={this.state.safety_checks[check]}
                       onChange={this.onCheckboxToggle}
                     />

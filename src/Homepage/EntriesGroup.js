@@ -27,12 +27,13 @@ function Timestamp({ Timestamp: value }) {
 
   let time = format(then, "h':'mm a");
 
-  if (dayDifference >= 1 && dayDifference < 7) {
-    let dayOfWeek = format(then, "EEEE");
-    time += " on " + dayOfWeek;
+  if (dayDifference === 1) {
+    let dayOfWeek = format(then, "EEE");
+    time += ", " + dayOfWeek + " (1 day ago)";
   }
-  else if (dayDifference >= 7) {
-    time += " " + dayDifference + " days ago";
+  else if (dayDifference > 1) {
+    let dayOfWeek = format(then, "EEE");
+    time += ", " + dayOfWeek + " (" + dayDifference + " days ago)";
   }
 
   return (

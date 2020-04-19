@@ -18,8 +18,8 @@ async function findAllStores() {
     return stores.flatMap(store => mapDBRow(store));
 }
 
-async function findNearbyStores(params) {
-    if (!params.location.lat || !params.location.lng) {
+async function findNearbyStores({ location, radius }) {
+    if (!location.lat || !location.lng) {
         return [];
     }
     const stores = await models.StoreInfo.findAll({
@@ -34,10 +34,10 @@ async function findNearbyStores(params) {
                 models.sequelize.fn(
                     "ST_Transform",
                     models.sequelize.cast(
-                        `SRID=4326;POINT(${params.location.lng} ${params.location.lat})`,
+                        `SRID=4326;POINT(${location.lng} ${location.lat})`,
                         "geometry"),
                     4326),
-                getDistanceRange(params)
+                getDistanceRange(radius)
             ),
             true
         )
@@ -45,14 +45,14 @@ async function findNearbyStores(params) {
     return stores.flatMap(store => mapDBRow(store));
 }
 
-function getDistanceRange(params) {
-    if (!params.radius) {
+function getDistanceRange(radius) {
+    if (!radius) {
         return DEFAULT_DISTANCE_RANGE
     }
-    if (params.radius > MAX_DISTANCE_RADIUS_METERS) {
+    if (radius > MAX_DISTANCE_RADIUS_METERS) {
         return toRadialDistance(MAX_DISTANCE_RADIUS_METERS)
     } else {
-        return toRadialDistance(params.radius)
+        return toRadialDistance(radius)
     }
 }
 
@@ -190,8 +190,28 @@ async function updateExistingStore(store, data, forceDateUpdate) {
 
 }
 
+async function findStoreById(storeId) {
+    const store = await models.StoreInfo.findOne(
+        {
+            include: [{
+                model: models.StoreUpdates,
+                where: { deleted: false, storeId: storeId }
+            }]
+        });
+    if (!store) {
+        throw new Error("Store Not Found")
+    }
+    const mappedStores = [store].flatMap(store => mapDBRow(store));
+    if (mappedStores.length == 0) {
+        throw new Error("Store Not Found")
+    }
+    return mappedStores[0]
+}
+
+
 module.exports = {
     findAllStores,
     addStoreData,
-    findNearbyStores
+    findNearbyStores,
+    findStoreById,
 };

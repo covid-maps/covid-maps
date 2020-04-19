@@ -97,3 +97,6 @@ export function titleCase(str) {
   }
   return splitStr.join(' ');
 }
+export function spacesAfterCommas(str) {
+  return str.replace(/, /g, ",").replace(/,/g, ", ");
+}

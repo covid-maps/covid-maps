@@ -8,7 +8,7 @@ import MissingBlock from "./MissingBlock";
 import * as api from "../api";
 import { getDistance } from "geolib";
 import HomepageMapWithSearch from "../MapsWithSearch/HomepageMap";
-import { isStoreType, getFirstComma, titleCase } from "../utils";
+import { isStoreType, getFirstComma, titleCase, spacesAfterCommas } from "../utils";
 import { recordAddNewStore, recordStoreFilterKeypress } from "../gaEvents";
 import Form from "react-bootstrap/Form";
 import { withGlobalContext } from "../App";
@@ -221,7 +221,7 @@ class Homepage extends React.Component {
         .sort((a, b) => b.Timestamp - a.Timestamp)
         .reverse();
       return {
-        name: titleCase(entries[0]["Store Name"]),
+        name: spacesAfterCommas(titleCase(entries[0]["Store Name"])),
         placeId: entries[0]["Place Id"],
         storeId: entries[0]["StoreId"],
         lat: Number(entries[0].Latitude),

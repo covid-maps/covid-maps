@@ -41,17 +41,17 @@ export function getAddressComponent(
 export const icons = {
   default: "/assets/marker_red.png",
   highlighted: "/assets/marker_green.png",
-  currentLocation: "/assets/current_location.png"
+  currentLocation: "/assets/current_location.png",
 };
 
 export const markerIcon = url => ({
   url,
-  scaledSize: { height: 35, width: 21 }
+  scaledSize: { height: 35, width: 21 },
 });
 
 export const dotIcon = {
   url: icons.currentLocation,
-  scaledSize: new window.google.maps.Size(25, 25)
+  scaledSize: new window.google.maps.Size(25, 25),
 };
 
 export const isStoreType = types => {
@@ -82,21 +82,23 @@ export function isMobile() {
 }
 
 export function clusterCalculator(stores) {
-  const shortMessage = `${stores.length} Stores`
-  const longMessage = `${stores.length} Store are around here`
+  const shortMessage = `${stores.length} Stores`;
+  const longMessage = `${stores.length} Store are around here`;
   return {
     text: shortMessage,
     title: longMessage,
-    index: 1
-  }
+    index: 1,
+  };
 }
 export function titleCase(str) {
-  let splitStr = str.toLowerCase().split(' ');
+  let splitStr = str.split(" ");
   for (var i = 0; i < splitStr.length; i++) {
-    splitStr[i] = splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
+    splitStr[i] =
+      splitStr[i].charAt(0).toUpperCase() + splitStr[i].substring(1);
   }
-  return splitStr.join(' ');
+  return splitStr.join(" ");
 }
+
 export function spacesAfterCommas(str) {
   return str.replace(/, /g, ",").replace(/,/g, ", ");
 }

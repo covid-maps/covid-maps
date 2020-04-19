@@ -34,7 +34,7 @@ const app = express();
 app.set('trust proxy', true);
 app.use(rateLimit({
   windowMs: 60 * 1000,
-  max: 60
+  max: 120
 }));
 
 // The request handler must be the first middleware on the app

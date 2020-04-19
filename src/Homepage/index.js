@@ -80,16 +80,13 @@ class Homepage extends React.Component {
       selectedStoreName = storeData[FORM_FIELDS.STORE_NAME];
     }
 
-
     let queryLocation = locationComingFromSubmission
       || this.state.searchResultLatlng
       || this.props.currentLocation.latLng;
-
     const response = await api.query({
       ...queryLocation,
       radius: DISTANCE_FILTER,
     });
-
     const { results: data, location: locationComingFromServer } = response;
     if (!queryLocation) {
       this.props.setCurrentLocation({
@@ -164,18 +161,13 @@ class Homepage extends React.Component {
     }
   }
 
-  async goToStoreFromProps() {
+  goToStoreFromProps() {
     if (this.props.match.params.storeId) {
       const storeId = parseInt(this.props.match.params.storeId);
-      const response = await api.queryByStoreId({
-        storeId,
-        radius: DISTANCE_FILTER
-      })
-
-      const { results: data, location: locationComingFromServer } = response;
-      this.setState({ results: this.formatResults(data, locationComingFromServer), })
-
       const place = this.state.results.find(item => item.storeId === storeId);
+      // console.log(place)
+      //Run the function only if place is real value ( not nul || undefined)
+      //Reuse the onCardClick function.
       if (place) {
         this.onCardClick(place);
         const latLng = {

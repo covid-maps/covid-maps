@@ -9,11 +9,6 @@ export async function query(params) {
   return response.data;
 }
 
-export async function queryByStoreId(params) {
-  const response = await axios.get(`${BASE_URL}/v2/queryByStoreId`, { params });
-  return response.data;
-}
-
 export async function submit(data) {
   const response = await axios.post(`${BASE_URL}/v1/update`, data);
   return response.data;

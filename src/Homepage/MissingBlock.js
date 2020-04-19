@@ -18,18 +18,18 @@ export default class MissingBlock extends React.Component {
             className="float-right mt-n2 mr-n2 ml-1"
             onClick={this.props.onClose}
           />
-          <Link
-            to={{ pathname: "/update", state: { item: entry } }}
-            className="float-right my-3 btn btn-sm btn-outline-light text-uppercase"
-            onClick={recordAddInfoToStoreCard}
-          >
-            Add
-          </Link>
           <h5 className="card-title m-0 p-0">{result.name}</h5>
           <p className="card-text">
             We don't have information on this location yet. Help out by adding
             some!
           </p>
+          <Link
+            to={{ pathname: "/update", state: { item: entry } }}
+            className="btn btn-sm btn-outline-light text-uppercase"
+            onClick={recordAddInfoToStoreCard}
+          >
+            Add
+          </Link>
         </div>
       </div>
     ) : null;

@@ -53,3 +53,10 @@ export const SUGGESTED_TAGS = {
   medicines: "Medicines",
   prepared_food: "Prepared Food",
 };
+
+export const SAFETY_OBSERVATION_CHECKS = {
+  long_wait: false,
+  masks_required: false,
+  adequate_social_distancing: false,
+  home_delivery: false,
+};

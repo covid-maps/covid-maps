@@ -25,8 +25,8 @@ function GeolocationButton({ isLoading, onClick }) {
       {isLoading ? (
         <Spinner animation="border" size="sm" />
       ) : (
-        <FontAwesomeIcon icon={faCrosshairs} />
-      )}
+          <FontAwesomeIcon icon={faCrosshairs} />
+        )}
     </Button>
   );
 }
@@ -171,11 +171,11 @@ class LocationSearchInput extends React.Component {
   };
 
   render() {
-    const location = this.props.currentLocation
+    const location = this.props.currentLocation.latLng
       ? new window.google.maps.LatLng(
-          this.props.currentLocation.lat,
-          this.props.currentLocation.lng
-        )
+        this.props.currentLocation.latLng.lat,
+        this.props.currentLocation.latLng.lng
+      )
       : undefined;
     const options = location ? { location, radius: 200000 } : undefined;
     return (

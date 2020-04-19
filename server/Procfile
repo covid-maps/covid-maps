@@ -1,1 +1,1 @@
-web: npx sequelize-cli db:migrate && node index.js
+web: npx sequelize-cli db:migrate && ERROR_TRACKING=true node index.js

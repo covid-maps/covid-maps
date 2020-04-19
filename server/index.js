@@ -5,6 +5,7 @@ const bodyParser = require("body-parser");
 const stores = require("./service/stores");
 const axios = require('axios');
 const Sentry = require('@sentry/node');
+const rateLimit = require("express-rate-limit");
 
 Sentry.init({ dsn: 'https://f26d1f5d8e2a45c9ad4b98eaabf8d101@o370711.ingest.sentry.io/5198144' });
 
@@ -28,6 +29,14 @@ const getFormDataWithUserIp = req => {
 };
 
 const app = express();
+// Since heroku runs a reverse proxy, we need to change how we get request IPs
+// https://expressjs.com/en/guide/behind-proxies.html
+app.set('trust proxy', true);
+app.use(rateLimit({
+  windowMs: 60 * 1000,
+  max: 120
+}));
+
 // The request handler must be the first middleware on the app
 app.use(Sentry.Handlers.requestHandler());
 

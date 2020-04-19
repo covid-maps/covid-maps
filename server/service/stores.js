@@ -18,8 +18,8 @@ async function findAllStores() {
     return stores.flatMap(store => mapDBRow(store));
 }
 
-async function findNearbyStores(params) {
-    if (!params.location.lat || !params.location.lng) {
+async function findNearbyStores({ location, radius }) {
+    if (!location.lat || !location.lng) {
         return [];
     }
     const stores = await models.StoreInfo.findAll({
@@ -34,10 +34,10 @@ async function findNearbyStores(params) {
                 models.sequelize.fn(
                     "ST_Transform",
                     models.sequelize.cast(
-                        `SRID=4326;POINT(${params.location.lng} ${params.location.lat})`,
+                        `SRID=4326;POINT(${location.lng} ${location.lat})`,
                         "geometry"),
                     4326),
-                getDistanceRange(params)
+                getDistanceRange(radius)
             ),
             true
         )
@@ -45,14 +45,14 @@ async function findNearbyStores(params) {
     return stores.flatMap(store => mapDBRow(store));
 }
 
-function getDistanceRange(params) {
-    if (!params.radius) {
+function getDistanceRange(radius) {
+    if (!radius) {
         return DEFAULT_DISTANCE_RANGE
     }
-    if (params.radius > MAX_DISTANCE_RADIUS_METERS) {
+    if (radius > MAX_DISTANCE_RADIUS_METERS) {
         return toRadialDistance(MAX_DISTANCE_RADIUS_METERS)
     } else {
-        return toRadialDistance(params.radius)
+        return toRadialDistance(radius)
     }
 }
 
@@ -209,21 +209,9 @@ async function findStoreById(storeId) {
 }
 
 
-async function findNearbyStoreByStoreId(params) {
-    const storeId = params.storeId
-    let store = await findStoreById(storeId)
-    let storeLocation = { lat: store.Latitude, lng: store.Longitude }
-    let queryParams = {
-        location: storeLocation,
-        radius: params.radius,
-    }
-    let storesNearTheStore = await findNearbyStores(queryParams);
-    return { results: storesNearTheStore, storeLocation }
-}
-
 module.exports = {
     findAllStores,
     addStoreData,
     findNearbyStores,
-    findNearbyStoreByStoreId
+    findStoreById,
 };

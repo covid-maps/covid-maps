@@ -28,7 +28,7 @@ const {
   PLACE_ID,
 } = FORM_FIELDS;
 
-const enableTags = true;
+const enableTags = false;
 
 function ButtonWithLoading({ isLoading, ...props }) {
   return isLoading ? (
@@ -136,9 +136,6 @@ class SubmitForm extends React.Component {
       if (enableTags) {
         data.tags = this.getTagsForSubmission();
       }
-
-      console.log({ data });
-      return;
 
       try {
         const response = await api.submit(data);

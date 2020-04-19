@@ -6,7 +6,9 @@ const stores = require("./service/stores");
 const axios = require('axios');
 const Sentry = require('@sentry/node');
 
-Sentry.init({ dsn: 'https://f26d1f5d8e2a45c9ad4b98eaabf8d101@o370711.ingest.sentry.io/5198144' });
+if (process.env.ERROR_TRACKING) {
+  Sentry.init({ dsn: 'https://f26d1f5d8e2a45c9ad4b98eaabf8d101@o370711.ingest.sentry.io/5198144' });
+}
 
 async function getLocationFromIp(req) {
   const ip = req.clientIp;
@@ -45,6 +47,7 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
+  throw new Error('testing')
   res.send("hello, world!");
 });
 

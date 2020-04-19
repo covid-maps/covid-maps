@@ -101,8 +101,12 @@ app.get("/v2/queryByStoreId", async (req, res) => {
     radius: query.radius,
     page: query.page
   }
-  let { results, storeLocation } = await stores.findNearbyStoreByStoreId(params)
-  res.send({ location: storeLocation, results });
+  try {
+    let { results, storeLocation } = await stores.findNearbyStoreByStoreId(params)
+    res.send({ location: storeLocation, results });
+  } catch (e) {
+    res.sendStatus(400)
+  }
 });
 
 // The error handler must be before any other error middleware and after all controllers

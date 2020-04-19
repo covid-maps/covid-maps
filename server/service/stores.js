@@ -191,9 +191,6 @@ async function updateExistingStore(store, data, forceDateUpdate) {
 }
 
 async function findStoreById(storeId) {
-    if (!storeId) {
-        return undefined;
-    }
     const store = await models.StoreInfo.findOne(
         {
             include: [{
@@ -201,9 +198,12 @@ async function findStoreById(storeId) {
                 where: { deleted: false, storeId: storeId }
             }]
         });
+    if (!store) {
+        throw new Error("Store Not Found")
+    }
     const mappedStores = [store].flatMap(store => mapDBRow(store));
     if (mappedStores.length == 0) {
-        throw Error("Store not found")
+        throw new Error("Store Not Found")
     }
     return mappedStores[0]
 }
@@ -211,22 +211,14 @@ async function findStoreById(storeId) {
 
 async function findNearbyStoreByStoreId(params) {
     const storeId = params.storeId
-    return new Promise(async (resolve, reject) => {
-        if (storeId) {
-            let store = await findStoreById(storeId).catch((e) => {
-                resolve([])
-            })
-            let storeLocation = { lat: store.Latitude, lng: store.Longitude }
-            let queryParams = {
-                location: storeLocation,
-                radius: params.radius,
-            }
-            let storesNearTheStore = await findNearbyStores(queryParams);
-            resolve(storesNearTheStore)
-        } else {
-            resolve([])
-        }
-    })
+    let store = await findStoreById(storeId)
+    let storeLocation = { lat: store.Latitude, lng: store.Longitude }
+    let queryParams = {
+        location: storeLocation,
+        radius: params.radius,
+    }
+    let storesNearTheStore = await findNearbyStores(queryParams);
+    return { results: storesNearTheStore, storeLocation }
 }
 
 module.exports = {

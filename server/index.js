@@ -93,8 +93,7 @@ app.get("/v2/query", async (req, res) => {
 app.get("/v2/queryByStoreId", async (req, res) => {
   const { query } = req;
   if (!query.storeId) {
-    console.log("EMPTY")
-    res.status(400).send("storeId is empty.")
+    res.sendStatus(400)
     return;
   }
   let params = {
@@ -102,12 +101,8 @@ app.get("/v2/queryByStoreId", async (req, res) => {
     radius: query.radius,
     page: query.page
   }
-  let results = await stores.findNearbyStoreByStoreId(params)
-  let location = {
-    lat: results[0].Latitude,
-    lng: results[0].Longitude
-  }
-  res.send({ location, results });
+  let { results, storeLocation } = await stores.findNearbyStoreByStoreId(params)
+  res.send({ location: storeLocation, results });
 });
 
 // The error handler must be before any other error middleware and after all controllers

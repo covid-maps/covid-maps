@@ -90,6 +90,25 @@ app.get("/v2/query", async (req, res) => {
   res.send({ location, results });
 });
 
+app.get("/v2/queryByStoreId", async (req, res) => {
+  const { query } = req;
+  if (!query.storeId) {
+    res.sendStatus(400)
+    return;
+  }
+  let params = {
+    storeId: query.storeId,
+    radius: query.radius,
+    page: query.page
+  }
+  try {
+    let { results, storeLocation } = await stores.findNearbyStoreByStoreId(params)
+    res.send({ location: storeLocation, results });
+  } catch (e) {
+    res.sendStatus(400)
+  }
+});
+
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());
 const port = process.env.PORT || 5000

@@ -190,8 +190,40 @@ async function updateExistingStore(store, data, forceDateUpdate) {
 
 }
 
+async function findStoreById(storeId) {
+    const store = await models.StoreInfo.findOne(
+        {
+            include: [{
+                model: models.StoreUpdates,
+                where: { deleted: false, storeId: storeId }
+            }]
+        });
+    if (!store) {
+        throw new Error("Store Not Found")
+    }
+    const mappedStores = [store].flatMap(store => mapDBRow(store));
+    if (mappedStores.length == 0) {
+        throw new Error("Store Not Found")
+    }
+    return mappedStores[0]
+}
+
+
+async function findNearbyStoreByStoreId(params) {
+    const storeId = params.storeId
+    let store = await findStoreById(storeId)
+    let storeLocation = { lat: store.Latitude, lng: store.Longitude }
+    let queryParams = {
+        location: storeLocation,
+        radius: params.radius,
+    }
+    let storesNearTheStore = await findNearbyStores(queryParams);
+    return { results: storesNearTheStore, storeLocation }
+}
+
 module.exports = {
     findAllStores,
     addStoreData,
-    findNearbyStores
+    findNearbyStores,
+    findNearbyStoreByStoreId
 };

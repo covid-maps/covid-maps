@@ -56,7 +56,6 @@ app.use((req, res, next) => {
 });
 
 app.get("/", (req, res) => {
-  throw new Error('testing')
   res.send("hello, world!");
 });
 

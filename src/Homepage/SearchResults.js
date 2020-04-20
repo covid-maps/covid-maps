@@ -83,13 +83,15 @@ class SearchResults extends React.Component {
             );
           })}
           {isPaginated ? (
-            <Button
-              size="sm"
-              variant="outline-secondary"
-              onClick={() => this.loadMore()}
-            >
-              {this.props.loadMoreBtnText}
-            </Button>
+            <div className="text-center">
+              <Button
+                size="sm"
+                variant="outline-secondary"
+                onClick={() => this.loadMore()}
+              >
+                {this.props.loadMoreBtnText}
+              </Button>
+            </div>
           ) : null}
         </div>
       </div>

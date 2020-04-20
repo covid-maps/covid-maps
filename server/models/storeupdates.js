@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
     flag: DataTypes.STRING,
     deleted: DataTypes.BOOLEAN,
     reviewed: DataTypes.BOOLEAN,
-    tags: DataTypes.ARRAY(DataTypes.STRING)
+    availabilityTags: DataTypes.ARRAY(DataTypes.STRING)
   }, {});
   StoreUpdates.associate = function(models) {
     StoreUpdates.belongsTo(models.StoreInfo, {

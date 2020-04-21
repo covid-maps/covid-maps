@@ -4,8 +4,12 @@ import PWAPrompt from "react-ios-pwa-prompt";
 import { recordAddToHomescreen } from "../gaEvents";
 import { isMobile } from "../utils";
 import { withGlobalContext } from "../App";
+import { messaging } from "../Firebase"
 
-function addToHomeScreen(setShowIOSPrompt) {
+async function addToHomeScreen(setShowIOSPrompt) {
+  messaging.requestPermission()
+  const token = await messaging.getToken()
+  console.log(token)
   recordAddToHomescreen();
   if (["iPhone", "iPad", "iPod"].includes(navigator.platform)) {
     setShowIOSPrompt(false);

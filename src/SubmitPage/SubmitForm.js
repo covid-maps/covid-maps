@@ -16,7 +16,7 @@ import { isMobile, titleCase } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import { withGlobalContext } from "../App";
 import { FORM_FIELDS, STORE_CATEGORIES, SUGGESTED_TAGS } from "../constants";
-import AvailabilityTags from "./AvailabilityTags";
+import { AvailabilityTags } from "./AvailabilityTags";
 const {
   STORE_NAME,
   STORE_ADDRESS,
@@ -28,7 +28,7 @@ const {
   PLACE_ID,
 } = FORM_FIELDS;
 
-const enableTags = false;
+const enableTags = true;
 
 function ButtonWithLoading({ isLoading, ...props }) {
   return isLoading ? (
@@ -134,7 +134,7 @@ class SubmitForm extends React.Component {
       };
 
       if (enableTags) {
-        data.tags = this.getTagsForSubmission();
+        data[FORM_FIELDS.AVAILABILITY_TAGS] = this.getTagsForSubmission();
       }
 
       try {

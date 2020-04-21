@@ -4,11 +4,13 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Collapse } from "@material-ui/core";
 import cx from "classnames";
+import { SUGGESTED_TAGS } from "../constants";
 
 const Tag = ({ index, onTagCheck, isChecked, label }) => {
+  const onClick = onTagCheck ? () => onTagCheck(index) : undefined;
   return (
     <div
-      onClick={() => onTagCheck(index)}
+      onClick={onClick}
       className={cx(
         "tag border mr-2 mb-2 py-1 px-2 rounded-pill text-capitalize font-weight-bold text-xs",
         {
@@ -23,7 +25,22 @@ const Tag = ({ index, onTagCheck, isChecked, label }) => {
   );
 };
 
-class AvailabilityTags extends Component {
+export const ReadOnlyTags = ({ labels }) => {
+  if (labels) {
+    return (
+      <div className="availability-tags-wrapper d-flex flex-wrap ">
+        {labels.map(label => {
+          const correctLabel = SUGGESTED_TAGS[label]
+            ? SUGGESTED_TAGS[label]
+            : label;
+          return <Tag label={correctLabel} isChecked />;
+        })}
+      </div>
+    );
+  }
+};
+
+export class AvailabilityTags extends Component {
   static propTypes = {
     tags: PropTypes.arrayOf(
       PropTypes.shape({
@@ -146,5 +163,3 @@ class AvailabilityTags extends Component {
     );
   }
 }
-
-export default AvailabilityTags;

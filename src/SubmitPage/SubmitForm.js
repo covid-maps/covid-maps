@@ -151,6 +151,7 @@ class SubmitForm extends React.Component {
         [CLOSING_TIME]: this.convertDateObjectToTime(formData[CLOSING_TIME]),
         [TIMESTAMP]: new Date().toISOString(),
         [AVAILABILITY_TAGS]: this.getTagsForSubmission(),
+        [SAFETY_CHECKS]: this.getSafetyChecksForSubmission(),
       };
 
       try {

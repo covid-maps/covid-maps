@@ -31,9 +31,10 @@ const {
   USEFUL_INFORMATION,
   SAFETY_OBSERVATIONS,
   PLACE_ID,
+  AVAILABILITY_TAGS,
+  TIMESTAMP,
 } = FORM_FIELDS;
 
-const enableTags = true;
 const enableSafetyChecks = true;
 
 function ButtonWithLoading({ isLoading, ...props }) {
@@ -147,12 +148,9 @@ class SubmitForm extends React.Component {
         ...formData,
         [OPENING_TIME]: this.convertDateObjectToTime(formData[OPENING_TIME]),
         [CLOSING_TIME]: this.convertDateObjectToTime(formData[CLOSING_TIME]),
-        Timestamp: new Date().toISOString(),
+        [TIMESTAMP]: new Date().toISOString(),
+        [AVAILABILITY_TAGS]: this.getTagsForSubmission(),
       };
-
-      if (enableTags) {
-        data[FORM_FIELDS.AVAILABILITY_TAGS] = this.getTagsForSubmission();
-      }
 
       try {
         const response = await api.submit(data);
@@ -289,7 +287,7 @@ class SubmitForm extends React.Component {
       data[USEFUL_INFORMATION].length ||
       data[OPENING_TIME] ||
       data[CLOSING_TIME] ||
-      (enableTags && Boolean(this.getTagsForSubmission().length))
+      Boolean(this.getTagsForSubmission().length)
     );
   }
 
@@ -386,43 +384,11 @@ class SubmitForm extends React.Component {
               />
             </Form.Group>
 
-            {enableTags && (
-              <AvailabilityTags
-                tags={this.state.tags}
-                setTags={this.setTags}
-                translations={translations}
-              />
-            )}
-
-            {!enableTags && (
-              <Form.Group controlId="formBasicServiceType">
-                <Form.Label>{translations.store_category}</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={formData[STORE_CATEGORY]}
-                  onChange={e => this.onChangeInput(e, STORE_CATEGORY)}
-                >
-                  <option value={STORE_CATEGORIES.GROCERY}>
-                    {translations.grocery}
-                  </option>
-                  <option value={STORE_CATEGORIES.RESTAURANT}>
-                    {translations.restaurant}
-                  </option>
-                  <option value={STORE_CATEGORIES.ATM}>
-                    {translations.atm}
-                  </option>
-                  <option value={STORE_CATEGORIES.CLINIC}>
-                    {translations.clinic}
-                  </option>
-                  <option value={STORE_CATEGORIES.PHARMACY}>
-                    {translations.pharmacy}
-                  </option>
-                  <option value={STORE_CATEGORIES.OTHER}>
-                    {translations.other}
-                  </option>
-                </Form.Control>
-              </Form.Group>
-            )}
+            <AvailabilityTags
+              tags={this.state.tags}
+              setTags={this.setTags}
+              translations={translations}
+            />
 
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
               <Row>

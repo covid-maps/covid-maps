@@ -56,4 +56,5 @@ export default {
   safety_check__adequate_social_distancing:
     "अंदर पर्याप्त दूरी बनाए रखने की आवश्यकता है",
   safety_check__home_delivery: "होम डिलीवरी उपलब्ध है",
+  safety_checks_label: "क्या आपने निम्नलिखित बातों में से किसी पर ध्यान दिया?",
 };

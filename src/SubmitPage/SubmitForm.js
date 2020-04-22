@@ -451,7 +451,7 @@ class SubmitForm extends React.Component {
 
             {enableSafetyChecks && (
               <Form.Group controlId="formBasicCrowdDetails">
-                <Form.Label>Important Information</Form.Label>
+                <Form.Label>{translations.safety_checks_label}</Form.Label>
                 {this.state[SAFETY_CHECKS].map((check, index) => {
                   return (
                     <Form.Check

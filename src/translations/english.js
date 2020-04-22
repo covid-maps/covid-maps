@@ -56,4 +56,5 @@ export default {
   safety_check__adequate_social_distancing:
     "Adequate social distancing inside store",
   safety_check__home_delivery: "Home Delivery offered",
+  safety_checks_label: "Did you notice any of the following?",
 };

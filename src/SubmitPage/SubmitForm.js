@@ -33,6 +33,7 @@ const {
   PLACE_ID,
   AVAILABILITY_TAGS,
   TIMESTAMP,
+  SAFETY_CHECKS,
 } = FORM_FIELDS;
 
 const enableSafetyChecks = true;
@@ -104,7 +105,7 @@ class SubmitForm extends React.Component {
       data: { ...emptyData },
       showErrorNotification: false,
       tags: this.initializeTags(),
-      safety_checks: SAFETY_OBSERVATION_CHECKS,
+      safetyChecks: SAFETY_OBSERVATION_CHECKS,
     };
   }
 
@@ -131,7 +132,7 @@ class SubmitForm extends React.Component {
     console.log({ name, checked });
     this.setState(prevState => {
       return {
-        safety_checks: { ...prevState.safety_checks, [name]: checked },
+        safetyChecks: { ...prevState.safetyChecks, [name]: checked },
       };
     });
   };
@@ -204,9 +205,9 @@ class SubmitForm extends React.Component {
           ),
         },
         tags: this.initializeTags(selectedStoreData.tags),
-        safety_checks: {
-          ...this.state.safety_checks,
-          ...selectedStoreData.safety_checks,
+        safetyChecks: {
+          ...this.state.safetyChecks,
+          ...selectedStoreData.safetyChecks,
         },
         searchFieldValue: this.props.location.state.searchFieldValue,
       });
@@ -246,6 +247,12 @@ class SubmitForm extends React.Component {
     return this.state.tags
       .filter(tag => tag.checked)
       .map(tag => tag.name.toLowerCase().trim());
+  };
+
+  getSafetyChecksForSubmission = () => {
+    return Object.keys(this.state.safetyChecks).filter(check => {
+      return this.state.safetyChecks[check];
+    });
   };
 
   parseTimeAndRoundToNearestHalfHour = time => {
@@ -435,7 +442,7 @@ class SubmitForm extends React.Component {
             {enableSafetyChecks && (
               <Form.Group controlId="formBasicCrowdDetails">
                 <Form.Label>Important Information</Form.Label>
-                {Object.keys(this.state.safety_checks).map(check => {
+                {Object.keys(this.state.safetyChecks).map(check => {
                   return (
                     <Form.Check
                       key={check}
@@ -444,7 +451,7 @@ class SubmitForm extends React.Component {
                       type="checkbox"
                       className="mb-2 user-select-none"
                       label={translations[check]}
-                      checked={this.state.safety_checks[check]}
+                      checked={this.state.safetyChecks[check]}
                       onChange={this.onCheckboxToggle}
                     />
                   );

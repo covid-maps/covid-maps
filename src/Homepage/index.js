@@ -373,7 +373,7 @@ class Homepage extends React.Component {
           {missingBlock}
           <div className="my-4 d-flex justify-content-between align-items-center">
             <div>
-              <h6 className="text-uppercase m-0 font-weight-bold search-results-title d-inline-block">
+              <h6 className="m-0 mr-2 font-weight-bold search-results-title d-inline-block">
                 {translations.store_nearby_label}
               </h6>
               <Form.Control

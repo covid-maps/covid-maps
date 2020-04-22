@@ -15,17 +15,11 @@ import * as api from "../api";
 import { isMobile, titleCase } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import { withGlobalContext } from "../App";
-import {
-  FORM_FIELDS,
-  STORE_CATEGORIES,
-  SUGGESTED_TAGS,
-  SAFETY_CHECKS_LIST,
-} from "../constants";
+import { FORM_FIELDS, SUGGESTED_TAGS, SAFETY_CHECKS_LIST } from "../constants";
 import { AvailabilityTags } from "./AvailabilityTags";
 const {
   STORE_NAME,
   STORE_ADDRESS,
-  STORE_CATEGORY,
   OPENING_TIME,
   CLOSING_TIME,
   USEFUL_INFORMATION,
@@ -69,7 +63,6 @@ function MapImage({ location }) {
 
 const emptyData = {
   [STORE_NAME]: "",
-  [STORE_CATEGORY]: STORE_CATEGORIES.GROCERY, // default selection
   [USEFUL_INFORMATION]: "",
   [SAFETY_OBSERVATIONS]: "",
   Latitude: "",
@@ -86,7 +79,6 @@ const emptyData = {
 const fieldFormatter = {
   [STORE_NAME]: val => titleCase(val),
   [STORE_ADDRESS]: val => val,
-  [STORE_CATEGORY]: val => val,
   [USEFUL_INFORMATION]: val => val,
   [SAFETY_OBSERVATIONS]: val => val,
 };

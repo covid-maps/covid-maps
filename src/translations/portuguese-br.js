@@ -12,7 +12,6 @@ export default {
   store_name_placeholder: "Supermercado Extra",
   store_address: "Endereço do Estabelecimento",
   store_address_placeholder: "Endereço do Estabelecimento",
-  store_category: "Categoria do Estabelecimento",
   grocery: "Supermercado",
   restaurant: "Restaurante",
   atm: "Caixa Eletrônico",

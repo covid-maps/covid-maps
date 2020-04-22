@@ -11,7 +11,6 @@ export default {
   store_name_placeholder: "e.g. Target or Nature's Basket",
   store_address: "Store Address",
   store_address_placeholder: "Store Address",
-  store_category: "Store Category",
   grocery: "Grocery",
   restaurant: "Restaurant",
   atm: "ATM",

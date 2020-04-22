@@ -11,7 +11,6 @@ export default {
   store_name_placeholder: "जैसे टारगेट या वॉलमार्ट",
   store_address: "स्टोर का पता",
   store_address_placeholder: "स्टोर का पता",
-  store_category: "दुकान की श्रेणी",
   grocery: "किराना",
   restaurant: "खाने की दुकान",
   atm: "एटीएम",

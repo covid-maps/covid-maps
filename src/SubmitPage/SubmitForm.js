@@ -104,7 +104,7 @@ class SubmitForm extends React.Component {
       isValid: true,
       data: { ...emptyData },
       showErrorNotification: false,
-      tags: this.initializeTags(),
+      [AVAILABILITY_TAGS]: this.initializeTags(),
       [SAFETY_CHECKS]: this.initializeSafetyChecks(),
     };
   }
@@ -206,7 +206,9 @@ class SubmitForm extends React.Component {
             selectedStoreData[CLOSING_TIME]
           ),
         },
-        tags: this.initializeTags(selectedStoreData[AVAILABILITY_TAGS]),
+        [AVAILABILITY_TAGS]: this.initializeTags(
+          selectedStoreData[AVAILABILITY_TAGS]
+        ),
         [SAFETY_CHECKS]: this.initializeSafetyChecks(
           selectedStoreData[SAFETY_CHECKS]
         ),
@@ -241,13 +243,13 @@ class SubmitForm extends React.Component {
   };
 
   setTags = tags => {
-    this.setState({ tags });
+    this.setState({ [AVAILABILITY_TAGS]: tags });
   };
 
   getTagsForSubmission = () => {
-    return this.state.tags
-      .filter(tag => tag.checked)
-      .map(tag => tag.name.toLowerCase().trim());
+    return this.state[AVAILABILITY_TAGS].filter(tag => tag.checked).map(tag =>
+      tag.name.toLowerCase().trim()
+    );
   };
 
   initializeSafetyChecks = (checks = []) => {
@@ -408,7 +410,7 @@ class SubmitForm extends React.Component {
             </Form.Group>
 
             <AvailabilityTags
-              tags={this.state.tags}
+              tags={this.state[AVAILABILITY_TAGS]}
               setTags={this.setTags}
               translations={translations}
             />

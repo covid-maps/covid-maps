@@ -51,8 +51,9 @@ export default {
   prepared_food: "Prepared Food",
   duplicate_tag_error: "Oops, this tag already exists",
   available_tags_label: "What's available here?",
-  long_wait: "Long wait times to enter store",
-  masks_required: "Masks required to enter store",
-  adequate_social_distancing: "Adequate social distancing inside store",
-  home_delivery: "Home Delivery offered",
+  safety_check__long_wait: "Long wait times to enter store",
+  safety_check__masks_required: "Masks required to enter store",
+  safety_check__adequate_social_distancing:
+    "Adequate social distancing inside store",
+  safety_check__home_delivery: "Home Delivery offered",
 };

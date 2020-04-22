@@ -56,7 +56,7 @@ const SingleEntry = ({ entry, highlightedText, translations }) => {
               return (
                 <li key={check} className="d-flex align-items-center mb-2">
                   <i className="far fa-check text-success mr-2"></i>
-                  <div>{translations[check]}</div>
+                  <div>{translations[`safety_check__${check}`]}</div>
                 </li>
               );
             })}

@@ -460,7 +460,7 @@ class SubmitForm extends React.Component {
                       id={check.name}
                       type="checkbox"
                       className="mb-2 user-select-none"
-                      label={translations[check.name]}
+                      label={translations[`safety_check__${check.name}`]}
                       checked={check.checked}
                       onChange={() => this.onCheckboxToggle(index)}
                     />

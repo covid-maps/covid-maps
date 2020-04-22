@@ -4,7 +4,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Collapse } from "@material-ui/core";
 import cx from "classnames";
-import { SUGGESTED_TAGS } from "../constants";
 
 const Tag = ({ index, onTagCheck, isChecked, label }) => {
   const onClick = onTagCheck ? () => onTagCheck(index) : undefined;
@@ -30,8 +29,11 @@ export const ReadOnlyTags = ({ labels, translations }) => {
     return (
       <div className="availability-tags-wrapper d-flex flex-wrap ">
         {labels.map(label => {
+          const tagTranslationKey = `suggested_tag__${label}`;
           const correctLabel =
-            label in SUGGESTED_TAGS ? translations[label] : label;
+            tagTranslationKey in translations
+              ? translations[tagTranslationKey]
+              : label;
           return <Tag key={label} label={correctLabel} isChecked />;
         })}
       </div>
@@ -104,7 +106,11 @@ export class AvailabilityTags extends Component {
         <div className="d-flex flex-wrap ">
           {tags.map((tag, index) => {
             const isChecked = tag.checked;
-            const label = translations[tag.name] || tag.name;
+            const tagTranslationKey = `suggested_tag__${tag.name}`;
+            const label =
+              tagTranslationKey in translations
+                ? translations[tagTranslationKey]
+                : tag.name;
             return (
               <Tag
                 key={tag.name}

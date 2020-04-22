@@ -36,15 +36,15 @@ export const STORAGE_KEYS = {
   SELECTED_ADDRESS: "userSelectedAddress",
 };
 
-export const SUGGESTED_TAGS = {
-  fruits: "Fruits",
-  vegetables: "Vegetables",
-  meat: "Meat",
-  eggs_dairy: "Eggs & Dairy",
-  pulses_grains: "Pulses & Grains",
-  medicines: "Medicines",
-  prepared_food: "Prepared Food",
-};
+export const SUGGESTED_TAGS = [
+  "fruits",
+  "vegetables",
+  "meat",
+  "eggs_dairy",
+  "pulses_grains",
+  "medicines",
+  "prepared_food",
+];
 
 export const SAFETY_CHECKS_LIST = [
   "long_wait",

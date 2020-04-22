@@ -213,7 +213,7 @@ class SubmitForm extends React.Component {
     // first generate a map for unchecked suggested tags
     // then loop over incoming tagsList to first check suggested tags
     // and then create entries for the custom ones
-    const tagsMap = Object.keys(SUGGESTED_TAGS).reduce((acc, tagKey) => {
+    const tagsMap = SUGGESTED_TAGS.reduce((acc, tagKey) => {
       acc[tagKey] = {
         name: tagKey,
         checked: false,
@@ -223,7 +223,7 @@ class SubmitForm extends React.Component {
 
     tags.forEach(tag => {
       const formattedTag = tag.toLowerCase().trim();
-      const isSuggestedTag = SUGGESTED_TAGS[formattedTag];
+      const isSuggestedTag = SUGGESTED_TAGS.includes(formattedTag);
       if (isSuggestedTag) {
         tagsMap[formattedTag].checked = true;
       } else {

@@ -25,14 +25,13 @@ const Tag = ({ index, onTagCheck, isChecked, label }) => {
   );
 };
 
-export const ReadOnlyTags = ({ labels }) => {
+export const ReadOnlyTags = ({ labels, translations }) => {
   if (labels) {
     return (
       <div className="availability-tags-wrapper d-flex flex-wrap ">
         {labels.map(label => {
-          const correctLabel = SUGGESTED_TAGS[label]
-            ? SUGGESTED_TAGS[label]
-            : label;
+          const correctLabel =
+            label in SUGGESTED_TAGS ? translations[label] : label;
           return <Tag label={correctLabel} isChecked />;
         })}
       </div>

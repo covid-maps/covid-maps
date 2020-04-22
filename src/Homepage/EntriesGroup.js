@@ -39,12 +39,15 @@ function Timestamp({ Timestamp: value }) {
   return <strong>{time}</strong>;
 }
 
-const SingleEntry = ({ entry, highlightedText }) => {
+const SingleEntry = ({ entry, highlightedText, translations }) => {
   return (
     <div className="mt-3">
       <div>
         {entry[FORM_FIELDS.AVAILABILITY_TAGS] ? (
-          <ReadOnlyTags labels={entry[FORM_FIELDS.AVAILABILITY_TAGS]} />
+          <ReadOnlyTags
+            labels={entry[FORM_FIELDS.AVAILABILITY_TAGS]}
+            translations={translations}
+          />
         ) : null}
         {entry[FORM_FIELDS.SAFETY_OBSERVATIONS] ? (
           <div>
@@ -99,6 +102,7 @@ const SingleEntry = ({ entry, highlightedText }) => {
 SingleEntry.propTypes = {
   entry: PropTypes.object.isRequired,
   highlightedText: PropTypes.string,
+  translations: PropTypes.object.isRequired,
 };
 
 class EntriesGroup extends Component {
@@ -164,6 +168,7 @@ class EntriesGroup extends Component {
     return (
       <Fragment>
         <SingleEntry
+          translations={this.props.translations}
           entry={firstEntry}
           highlightedText={this.props.highlightedText}
         />

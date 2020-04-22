@@ -12,7 +12,7 @@ const Tag = ({ index, onTagCheck, isChecked, label }) => {
     <div
       onClick={onClick}
       className={cx(
-        "tag border mr-2 mb-2 py-1 px-2 rounded-pill text-capitalize font-weight-bold text-xs",
+        "tag user-select-none border mr-2 mb-2 py-1 px-2 rounded-pill text-capitalize font-weight-bold text-xs",
         {
           isChecked: isChecked,
           "border-secondary": !isChecked,

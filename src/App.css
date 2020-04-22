@@ -213,12 +213,15 @@ footer a:hover {
   cursor: pointer;
 }
 
-.availability-tags-wrapper .tag {
-  cursor: pointer;
+.user-select-none {
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+}
+
+.availability-tags-wrapper .tag {
+  cursor: pointer;
 }
 
 .availability-tags-wrapper .tag.isChecked {

@@ -101,7 +101,7 @@ export class AvailabilityTags extends Component {
       return tag.name.toLowerCase() === this.state.newTag.toLowerCase().trim();
     });
     return (
-      <div className="availability-tags-wrapper mb-3">
+      <div className="availability-tags-wrapper my-4">
         <div className="mb-2">{translations.available_tags_label}</div>
         <div className="d-flex flex-wrap ">
           {tags.map((tag, index) => {

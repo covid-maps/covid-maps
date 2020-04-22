@@ -372,7 +372,7 @@ class SubmitForm extends React.Component {
         </Snackbar>
 
         <Form onSubmit={e => this.onSubmit(e)}>
-          <div className="container p-3">
+          <div className="submit-form container p-3">
             <h6 className="text-uppercase font-weight-bold mb-3">
               {translations.add_update_store}
             </h6>
@@ -408,7 +408,7 @@ class SubmitForm extends React.Component {
             />
 
             <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Row>
+              <Row className="mt-4 mb-3">
                 <Col>
                   <Form.Group controlId="formBasicOpenTimings">
                     <Form.Label>{translations.opening_time}</Form.Label>

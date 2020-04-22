@@ -259,3 +259,7 @@ footer a:hover {
 .cluster img {
   display: none;
 }
+
+.submit-form .form-group {
+  margin-bottom: 1.5rem;
+}

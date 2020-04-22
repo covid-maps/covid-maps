@@ -142,6 +142,7 @@ class EntriesGroup extends Component {
         key={entry[FORM_FIELDS.TIMESTAMP]}
         entry={entry}
         highlightedText={this.props.highlightedText}
+        translations={this.props.translations}
       />
     ));
   }

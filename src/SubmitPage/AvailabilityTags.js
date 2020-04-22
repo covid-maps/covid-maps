@@ -32,7 +32,7 @@ export const ReadOnlyTags = ({ labels, translations }) => {
         {labels.map(label => {
           const correctLabel =
             label in SUGGESTED_TAGS ? translations[label] : label;
-          return <Tag label={correctLabel} isChecked />;
+          return <Tag key={label} label={correctLabel} isChecked />;
         })}
       </div>
     );

@@ -51,4 +51,9 @@ export default {
   prepared_food: "बनाया हुआ खाना",
   duplicate_tag_error: "यह टैग पहले से मौजूद है",
   available_tags_label: "यहाँ क्या उपलब्ध है?",
+  safety_check__long_wait: "प्रवेश के लिए लंबा इंतजार करना पड़ता है",
+  safety_check__masks_required: "प्रवेश करने के लिए मास्क की आवश्यकता होती है",
+  safety_check__adequate_social_distancing:
+    "अंदर पर्याप्त दूरी बनाए रखने की आवश्यकता है",
+  safety_check__home_delivery: "होम डिलीवरी उपलब्ध है",
 };

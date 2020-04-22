@@ -21,7 +21,7 @@ import {
   SUGGESTED_TAGS,
   SAFETY_OBSERVATION_CHECKS,
 } from "../constants";
-import AvailabilityTags from "./AvailabilityTags";
+import { AvailabilityTags } from "./AvailabilityTags";
 const {
   STORE_NAME,
   STORE_ADDRESS,
@@ -33,7 +33,7 @@ const {
   PLACE_ID,
 } = FORM_FIELDS;
 
-const enableTags = false;
+const enableTags = true;
 const enableSafetyChecks = true;
 
 function ButtonWithLoading({ isLoading, ...props }) {
@@ -151,7 +151,7 @@ class SubmitForm extends React.Component {
       };
 
       if (enableTags) {
-        data.tags = this.getTagsForSubmission();
+        data[FORM_FIELDS.AVAILABILITY_TAGS] = this.getTagsForSubmission();
       }
 
       try {

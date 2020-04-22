@@ -7,6 +7,7 @@ import Highlighter from "react-highlight-words";
 import { FORM_FIELDS } from "../constants";
 import { format, differenceInCalendarDays } from "date-fns";
 import { Collapse } from "@material-ui/core";
+import { ReadOnlyTags } from "../SubmitPage/AvailabilityTags";
 
 function Overlay(props) {
   return (
@@ -30,21 +31,24 @@ function Timestamp({ Timestamp: value }) {
   if (dayDifference === 1) {
     let dayOfWeek = format(then, "EEE");
     time += ", " + dayOfWeek + " (1 day ago)";
-  }
-  else if (dayDifference > 1) {
+  } else if (dayDifference > 1) {
     let dayOfWeek = format(then, "EEE");
     time += ", " + dayOfWeek + " (" + dayDifference + " days ago)";
   }
 
-  return (
-    <strong>{time}</strong>
-  );
+  return <strong>{time}</strong>;
 }
 
-const SingleEntry = ({ entry, highlightedText }) => {
+const SingleEntry = ({ entry, highlightedText, translations }) => {
   return (
     <div className="mt-3">
       <div>
+        {entry[FORM_FIELDS.AVAILABILITY_TAGS] ? (
+          <ReadOnlyTags
+            labels={entry[FORM_FIELDS.AVAILABILITY_TAGS]}
+            translations={translations}
+          />
+        ) : null}
         {entry[FORM_FIELDS.SAFETY_OBSERVATIONS] ? (
           <div>
             <Overlay text="Safety Observations">
@@ -98,14 +102,15 @@ const SingleEntry = ({ entry, highlightedText }) => {
 SingleEntry.propTypes = {
   entry: PropTypes.object.isRequired,
   highlightedText: PropTypes.string,
-}
+  translations: PropTypes.object.isRequired,
+};
 
 class EntriesGroup extends Component {
   static propTypes = {
     entries: PropTypes.arrayOf(PropTypes.object).isRequired,
     highlightedText: PropTypes.string,
     translations: PropTypes.object.isRequired,
-  }
+  };
 
   constructor(props) {
     super(props);
@@ -137,6 +142,7 @@ class EntriesGroup extends Component {
         key={entry[FORM_FIELDS.TIMESTAMP]}
         entry={entry}
         highlightedText={this.props.highlightedText}
+        translations={this.props.translations}
       />
     ));
   }
@@ -148,11 +154,13 @@ class EntriesGroup extends Component {
         <i className="fas fa-chevron-down ml-1"></i>
       </Fragment>
     ) : (
-        <Fragment>
-          <span>{`${this.props.translations.view_old_updates} (${this.props.entries.length - 1})`}</span>
-          <i className="fas fa-chevron-right ml-1"></i>
-        </Fragment>
-      );
+      <Fragment>
+        <span>{`${this.props.translations.view_old_updates} (${
+          this.props.entries.length - 1
+        })`}</span>
+        <i className="fas fa-chevron-right ml-1"></i>
+      </Fragment>
+    );
   }
 
   render() {
@@ -161,6 +169,7 @@ class EntriesGroup extends Component {
     return (
       <Fragment>
         <SingleEntry
+          translations={this.props.translations}
           entry={firstEntry}
           highlightedText={this.props.highlightedText}
         />

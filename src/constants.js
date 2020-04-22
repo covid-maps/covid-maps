@@ -17,6 +17,7 @@ export const FORM_FIELDS = {
   PLACE_ID: "Place Id",
   STORE_ID: "StoreId",
   TIMESTAMP: "Timestamp",
+  AVAILABILITY_TAGS: "availabilityTags",
 };
 
 export const ADDRESS_COMPONENTS = {

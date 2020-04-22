@@ -308,7 +308,9 @@ class SubmitForm extends React.Component {
   canBeSubmitted() {
     const data = this.state.data;
     return (
-      data[SAFETY_OBSERVATIONS].length ||
+      (!enableSafetyChecks && data[SAFETY_OBSERVATIONS].length) ||
+      (enableSafetyChecks &&
+        Boolean(this.getSafetyChecksForSubmission().length)) ||
       data[USEFUL_INFORMATION].length ||
       data[OPENING_TIME] ||
       data[CLOSING_TIME] ||

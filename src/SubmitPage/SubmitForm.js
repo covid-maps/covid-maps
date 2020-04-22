@@ -19,7 +19,7 @@ import {
   FORM_FIELDS,
   STORE_CATEGORIES,
   SUGGESTED_TAGS,
-  SAFETY_OBSERVATION_CHECKS,
+  SAFETY_CHECKS_LIST,
 } from "../constants";
 import { AvailabilityTags } from "./AvailabilityTags";
 const {
@@ -105,7 +105,7 @@ class SubmitForm extends React.Component {
       data: { ...emptyData },
       showErrorNotification: false,
       tags: this.initializeTags(),
-      safetyChecks: SAFETY_OBSERVATION_CHECKS,
+      [SAFETY_CHECKS]: this.initializeSafetyChecks(),
     };
   }
 
@@ -127,12 +127,17 @@ class SubmitForm extends React.Component {
     this.setState({ tags: tagsList });
   };
 
-  onCheckboxToggle = event => {
-    const { name, checked } = event.target;
-    console.log({ name, checked });
+  onCheckboxToggle = index => {
     this.setState(prevState => {
+      const currentCheck = prevState[SAFETY_CHECKS][index];
+      const updatedCheck = { ...currentCheck, checked: !currentCheck.checked };
+      const updatedList = [
+        ...prevState[SAFETY_CHECKS].slice(0, index),
+        updatedCheck,
+        ...prevState[SAFETY_CHECKS].slice(index + 1),
+      ];
       return {
-        safetyChecks: { ...prevState.safetyChecks, [name]: checked },
+        [SAFETY_CHECKS]: updatedList,
       };
     });
   };
@@ -205,11 +210,10 @@ class SubmitForm extends React.Component {
             selectedStoreData[CLOSING_TIME]
           ),
         },
-        tags: this.initializeTags(selectedStoreData.tags),
-        safetyChecks: {
-          ...this.state.safetyChecks,
-          ...selectedStoreData.safetyChecks,
-        },
+        tags: this.initializeTags(selectedStoreData[AVAILABILITY_TAGS]),
+        [SAFETY_CHECKS]: this.initializeSafetyChecks(
+          selectedStoreData[SAFETY_CHECKS]
+        ),
         searchFieldValue: this.props.location.state.searchFieldValue,
       });
     }
@@ -250,10 +254,23 @@ class SubmitForm extends React.Component {
       .map(tag => tag.name.toLowerCase().trim());
   };
 
-  getSafetyChecksForSubmission = () => {
-    return Object.keys(this.state.safetyChecks).filter(check => {
-      return this.state.safetyChecks[check];
+  initializeSafetyChecks = (checks = []) => {
+    // first we will loop over the incoming checks list
+    // to generate a map of all checked items
+    const checkedMap = checks.reduce((acc, check) => {
+      acc[check] = true;
+      return acc;
+    }, {});
+
+    return SAFETY_CHECKS_LIST.map(check => {
+      return { name: check, checked: Boolean(checkedMap[check]) };
     });
+  };
+
+  getSafetyChecksForSubmission = () => {
+    return this.state[SAFETY_CHECKS].filter(check => {
+      return check.checked;
+    }).map(check => check.name);
   };
 
   parseTimeAndRoundToNearestHalfHour = time => {
@@ -443,17 +460,17 @@ class SubmitForm extends React.Component {
             {enableSafetyChecks && (
               <Form.Group controlId="formBasicCrowdDetails">
                 <Form.Label>Important Information</Form.Label>
-                {Object.keys(this.state.safetyChecks).map(check => {
+                {this.state[SAFETY_CHECKS].map((check, index) => {
                   return (
                     <Form.Check
-                      key={check}
-                      name={check}
-                      id={check}
+                      key={check.name}
+                      name={check.name}
+                      id={check.name}
                       type="checkbox"
                       className="mb-2 user-select-none"
-                      label={translations[check]}
-                      checked={this.state.safetyChecks[check]}
-                      onChange={this.onCheckboxToggle}
+                      label={translations[check.name]}
+                      checked={check.checked}
+                      onChange={() => this.onCheckboxToggle(index)}
                     />
                   );
                 })}

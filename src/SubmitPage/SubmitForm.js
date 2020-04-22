@@ -123,10 +123,6 @@ class SubmitForm extends React.Component {
     });
   }
 
-  onTagsChange = tagsList => {
-    this.setState({ tags: tagsList });
-  };
-
   onCheckboxToggle = index => {
     this.setState(prevState => {
       const currentCheck = prevState[SAFETY_CHECKS][index];

@@ -406,6 +406,7 @@ class SubmitForm extends React.Component {
                 onChange={e => this.onChangeInput(e, STORE_ADDRESS)}
                 value={formData[STORE_ADDRESS]}
                 placeholder={translations.store_address_placeholder}
+                disabled={isUpdate}
               />
             </Form.Group>
 

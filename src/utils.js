@@ -102,3 +102,9 @@ export function titleCase(str) {
 export function spacesAfterCommas(str) {
   return str.replace(/, /g, ",").replace(/,/g, ", ");
 }
+
+export function isPwa() {
+  const iosPwa = window.navigator && window.navigator.standalone;
+  const androidPwa = window.matchMedia("(display-mode: standalone)").matches;
+  return iosPwa || androidPwa;
+}

@@ -209,7 +209,11 @@ class SubmitForm extends React.Component {
     }
   }
 
-  initializeTags = (tags = []) => {
+  initializeTags = tags => {
+    if (!tags) {
+      tags = [];
+    }
+
     // first generate a map for unchecked suggested tags
     // then loop over incoming tagsList to first check suggested tags
     // and then create entries for the custom ones

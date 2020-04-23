@@ -5,7 +5,7 @@ export default {
   store_search_placeholder: "Filter by name or item",
   add_store: "Add a store",
   store_nearby_label: "Stores Nearby",
-  update: "Update",
+  add_update: "Add Update",
   add_update_store: "Add or update store",
   store_name: "Store Name (required)",
   store_name_placeholder: "e.g. Target or Nature's Basket",

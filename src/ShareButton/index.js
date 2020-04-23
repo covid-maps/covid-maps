@@ -1,10 +1,7 @@
 import React from "react";
 import Button from "react-bootstrap/Button";
 import { recordAppShareClicked } from "../gaEvents";
-
-const shareApiIsAvailable = () => {
-  return navigator && navigator.share;
-};
+import { shareApiIsAvailable } from "../utils";
 
 const share = params => {
   recordAppShareClicked();

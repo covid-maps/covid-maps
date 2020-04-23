@@ -5,7 +5,7 @@ export default {
   store_search_placeholder: "नाम या वस्तु से छाने",
   add_store: "सूची में नया स्टोर जोड़ें",
   store_nearby_label: "आसपास की दुकानें",
-  update: "अपडेट करें",
+  add_update: "अपडेट करें",
   add_update_store: "दुकान जोड़ें या अपडेट करें",
   store_name: "दुकान का नाम (आवश्यक)",
   store_name_placeholder: "जैसे टारगेट या वॉलमार्ट",

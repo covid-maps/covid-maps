@@ -49,6 +49,20 @@ const SingleEntry = ({ entry, highlightedText, translations }) => {
             translations={translations}
           />
         ) : null}
+
+        {entry[FORM_FIELDS.SAFETY_CHECKS] && (
+          <ul className="list-unstyled my-3">
+            {entry[FORM_FIELDS.SAFETY_CHECKS].map(check => {
+              return (
+                <li key={check} className="d-flex align-items-center mb-2">
+                  <i className="far fa-check text-success mr-2"></i>
+                  <div>{translations[`safety_check__${check}`]}</div>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+
         {entry[FORM_FIELDS.SAFETY_OBSERVATIONS] ? (
           <div>
             <Overlay text="Safety Observations">

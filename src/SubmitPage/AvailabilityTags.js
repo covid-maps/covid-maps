@@ -4,7 +4,6 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Collapse } from "@material-ui/core";
 import cx from "classnames";
-import { SUGGESTED_TAGS } from "../constants";
 
 const Tag = ({ index, onTagCheck, isChecked, label }) => {
   const onClick = onTagCheck ? () => onTagCheck(index) : undefined;
@@ -12,7 +11,7 @@ const Tag = ({ index, onTagCheck, isChecked, label }) => {
     <div
       onClick={onClick}
       className={cx(
-        "tag border mr-2 mb-2 py-1 px-2 rounded-pill text-capitalize font-weight-bold text-xs",
+        "tag user-select-none border mr-2 mb-2 py-1 px-2 rounded-pill text-capitalize font-weight-bold text-xs",
         {
           isChecked: isChecked,
           "border-secondary": !isChecked,
@@ -30,8 +29,11 @@ export const ReadOnlyTags = ({ labels, translations }) => {
     return (
       <div className="availability-tags-wrapper d-flex flex-wrap ">
         {labels.map(label => {
+          const tagTranslationKey = `suggested_tag__${label}`;
           const correctLabel =
-            label in SUGGESTED_TAGS ? translations[label] : label;
+            tagTranslationKey in translations
+              ? translations[tagTranslationKey]
+              : label;
           return <Tag key={label} label={correctLabel} isChecked />;
         })}
       </div>
@@ -99,12 +101,16 @@ export class AvailabilityTags extends Component {
       return tag.name.toLowerCase() === this.state.newTag.toLowerCase().trim();
     });
     return (
-      <div className="availability-tags-wrapper mb-3">
+      <div className="availability-tags-wrapper my-4">
         <div className="mb-2">{translations.available_tags_label}</div>
         <div className="d-flex flex-wrap ">
           {tags.map((tag, index) => {
             const isChecked = tag.checked;
-            const label = translations[tag.name] || tag.name;
+            const tagTranslationKey = `suggested_tag__${tag.name}`;
+            const label =
+              tagTranslationKey in translations
+                ? translations[tagTranslationKey]
+                : tag.name;
             return (
               <Tag
                 key={tag.name}

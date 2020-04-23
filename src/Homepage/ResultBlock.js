@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { recordUpdateStore, recordDirectionsClicked, recordStoreShareClicked } from "../gaEvents";
 import Highlighter from "react-highlight-words";
 import { withGlobalContext } from "../App";
-import { STORE_CATEGORIES, FORM_FIELDS } from '../constants';
+import { FORM_FIELDS } from '../constants';
 
 function constructDirectionsUrl({ name, placeId, lat, lng }) {
   if (placeId) {
@@ -21,10 +21,6 @@ function prepareStoreForUpdate(entry) {
     [FORM_FIELDS.USEFUL_INFORMATION]: "",
     [FORM_FIELDS.OPENING_TIME]: "",
     [FORM_FIELDS.CLOSING_TIME]: "",
-    [FORM_FIELDS.STORE_CATEGORY]:
-      entry[FORM_FIELDS.STORE_CATEGORY] && entry[FORM_FIELDS.STORE_CATEGORY].length
-        ? entry[FORM_FIELDS.STORE_CATEGORY][0]
-        : STORE_CATEGORIES.GROCERY,
   };
 }
 

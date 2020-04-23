@@ -15,20 +15,22 @@ import * as api from "../api";
 import { isMobile, titleCase } from "../utils";
 import { recordFormSubmission } from "../gaEvents";
 import { withGlobalContext } from "../App";
-import { FORM_FIELDS, STORE_CATEGORIES, SUGGESTED_TAGS } from "../constants";
+import { FORM_FIELDS, SUGGESTED_TAGS, SAFETY_CHECKS_LIST } from "../constants";
 import { AvailabilityTags } from "./AvailabilityTags";
 const {
   STORE_NAME,
   STORE_ADDRESS,
-  STORE_CATEGORY,
   OPENING_TIME,
   CLOSING_TIME,
   USEFUL_INFORMATION,
   SAFETY_OBSERVATIONS,
   PLACE_ID,
+  AVAILABILITY_TAGS,
+  TIMESTAMP,
+  SAFETY_CHECKS,
 } = FORM_FIELDS;
 
-const enableTags = true;
+const enableSafetyChecks = false;
 
 function ButtonWithLoading({ isLoading, ...props }) {
   return isLoading ? (
@@ -61,7 +63,6 @@ function MapImage({ location }) {
 
 const emptyData = {
   [STORE_NAME]: "",
-  [STORE_CATEGORY]: STORE_CATEGORIES.GROCERY, // default selection
   [USEFUL_INFORMATION]: "",
   [SAFETY_OBSERVATIONS]: "",
   Latitude: "",
@@ -78,7 +79,6 @@ const emptyData = {
 const fieldFormatter = {
   [STORE_NAME]: val => titleCase(val),
   [STORE_ADDRESS]: val => val,
-  [STORE_CATEGORY]: val => val,
   [USEFUL_INFORMATION]: val => val,
   [SAFETY_OBSERVATIONS]: val => val,
 };
@@ -96,7 +96,8 @@ class SubmitForm extends React.Component {
       isValid: true,
       data: { ...emptyData },
       showErrorNotification: false,
-      tags: this.initializeTags(),
+      [AVAILABILITY_TAGS]: this.initializeTags(),
+      [SAFETY_CHECKS]: this.initializeSafetyChecks(),
     };
   }
 
@@ -114,8 +115,19 @@ class SubmitForm extends React.Component {
     });
   }
 
-  onTagsChange = tagsList => {
-    this.setState({ tags: tagsList });
+  onCheckboxToggle = index => {
+    this.setState(prevState => {
+      const currentCheck = prevState[SAFETY_CHECKS][index];
+      const updatedCheck = { ...currentCheck, checked: !currentCheck.checked };
+      const updatedList = [
+        ...prevState[SAFETY_CHECKS].slice(0, index),
+        updatedCheck,
+        ...prevState[SAFETY_CHECKS].slice(index + 1),
+      ];
+      return {
+        [SAFETY_CHECKS]: updatedList,
+      };
+    });
   };
 
   async onSubmit(event) {
@@ -130,12 +142,10 @@ class SubmitForm extends React.Component {
         ...formData,
         [OPENING_TIME]: this.convertDateObjectToTime(formData[OPENING_TIME]),
         [CLOSING_TIME]: this.convertDateObjectToTime(formData[CLOSING_TIME]),
-        Timestamp: new Date().toISOString(),
+        [TIMESTAMP]: new Date().toISOString(),
+        [AVAILABILITY_TAGS]: this.getTagsForSubmission(),
+        [SAFETY_CHECKS]: this.getSafetyChecksForSubmission(),
       };
-
-      if (enableTags) {
-        data[FORM_FIELDS.AVAILABILITY_TAGS] = this.getTagsForSubmission();
-      }
 
       try {
         const response = await api.submit(data);
@@ -188,7 +198,12 @@ class SubmitForm extends React.Component {
             selectedStoreData[CLOSING_TIME]
           ),
         },
-        tags: this.initializeTags(selectedStoreData.tags),
+        [AVAILABILITY_TAGS]: this.initializeTags(
+          selectedStoreData[AVAILABILITY_TAGS]
+        ),
+        [SAFETY_CHECKS]: this.initializeSafetyChecks(
+          selectedStoreData[SAFETY_CHECKS]
+        ),
         searchFieldValue: this.props.location.state.searchFieldValue,
       });
     }
@@ -198,7 +213,7 @@ class SubmitForm extends React.Component {
     // first generate a map for unchecked suggested tags
     // then loop over incoming tagsList to first check suggested tags
     // and then create entries for the custom ones
-    const tagsMap = Object.keys(SUGGESTED_TAGS).reduce((acc, tagKey) => {
+    const tagsMap = SUGGESTED_TAGS.reduce((acc, tagKey) => {
       acc[tagKey] = {
         name: tagKey,
         checked: false,
@@ -208,7 +223,7 @@ class SubmitForm extends React.Component {
 
     tags.forEach(tag => {
       const formattedTag = tag.toLowerCase().trim();
-      const isSuggestedTag = SUGGESTED_TAGS[formattedTag];
+      const isSuggestedTag = SUGGESTED_TAGS.includes(formattedTag);
       if (isSuggestedTag) {
         tagsMap[formattedTag].checked = true;
       } else {
@@ -220,13 +235,32 @@ class SubmitForm extends React.Component {
   };
 
   setTags = tags => {
-    this.setState({ tags });
+    this.setState({ [AVAILABILITY_TAGS]: tags });
   };
 
   getTagsForSubmission = () => {
-    return this.state.tags
-      .filter(tag => tag.checked)
-      .map(tag => tag.name.toLowerCase().trim());
+    return this.state[AVAILABILITY_TAGS].filter(tag => tag.checked).map(tag =>
+      tag.name.toLowerCase().trim()
+    );
+  };
+
+  initializeSafetyChecks = (checks = []) => {
+    // first we will loop over the incoming checks list
+    // to generate a map of all checked items
+    const checkedMap = checks.reduce((acc, check) => {
+      acc[check] = true;
+      return acc;
+    }, {});
+
+    return SAFETY_CHECKS_LIST.map(check => {
+      return { name: check, checked: Boolean(checkedMap[check]) };
+    });
+  };
+
+  getSafetyChecksForSubmission = () => {
+    return this.state[SAFETY_CHECKS].filter(check => {
+      return check.checked;
+    }).map(check => check.name);
   };
 
   parseTimeAndRoundToNearestHalfHour = time => {
@@ -264,11 +298,13 @@ class SubmitForm extends React.Component {
   canBeSubmitted() {
     const data = this.state.data;
     return (
-      data[SAFETY_OBSERVATIONS].length ||
+      (!enableSafetyChecks && data[SAFETY_OBSERVATIONS].length) ||
+      (enableSafetyChecks &&
+        Boolean(this.getSafetyChecksForSubmission().length)) ||
       data[USEFUL_INFORMATION].length ||
       data[OPENING_TIME] ||
       data[CLOSING_TIME] ||
-      (enableTags && Boolean(this.getTagsForSubmission().length))
+      Boolean(this.getTagsForSubmission().length)
     );
   }
 
@@ -336,7 +372,7 @@ class SubmitForm extends React.Component {
         </Snackbar>
 
         <Form onSubmit={e => this.onSubmit(e)}>
-          <div className="container p-3">
+          <div className="submit-form container p-3">
             <h6 className="text-uppercase font-weight-bold mb-3">
               {translations.add_update_store}
             </h6>
@@ -365,98 +401,86 @@ class SubmitForm extends React.Component {
               />
             </Form.Group>
 
-            {enableTags && (
-              <AvailabilityTags
-                tags={this.state.tags}
-                setTags={this.setTags}
-                translations={translations}
-              />
-            )}
+            <AvailabilityTags
+              tags={this.state[AVAILABILITY_TAGS]}
+              setTags={this.setTags}
+              translations={translations}
+            />
 
-            {!enableTags && (
-              <Form.Group controlId="formBasicServiceType">
-                <Form.Label>{translations.store_category}</Form.Label>
-                <Form.Control
-                  as="select"
-                  value={formData[STORE_CATEGORY]}
-                  onChange={e => this.onChangeInput(e, STORE_CATEGORY)}
-                >
-                  <option value={STORE_CATEGORIES.GROCERY}>
-                    {translations.grocery}
-                  </option>
-                  <option value={STORE_CATEGORIES.RESTAURANT}>
-                    {translations.restaurant}
-                  </option>
-                  <option value={STORE_CATEGORIES.ATM}>
-                    {translations.atm}
-                  </option>
-                  <option value={STORE_CATEGORIES.CLINIC}>
-                    {translations.clinic}
-                  </option>
-                  <option value={STORE_CATEGORIES.PHARMACY}>
-                    {translations.pharmacy}
-                  </option>
-                  <option value={STORE_CATEGORIES.OTHER}>
-                    {translations.other}
-                  </option>
-                </Form.Control>
+            <MuiPickersUtilsProvider utils={DateFnsUtils}>
+              <Row className="mt-4 mb-3">
+                <Col>
+                  <Form.Group controlId="formBasicOpenTimings">
+                    <Form.Label>{translations.opening_time}</Form.Label>
+                    <TimePicker
+                      clearable
+                      className="time-picker"
+                      placeholder="08:00 AM"
+                      minutesStep={30}
+                      value={formData[OPENING_TIME]}
+                      onChange={time =>
+                        this.handleTimeChange(time, OPENING_TIME)
+                      }
+                    />
+                  </Form.Group>
+                </Col>
+                <Col>
+                  <Form.Group controlId="formBasicCloseTimings">
+                    <Form.Label>{translations.closing_time}</Form.Label>
+                    <TimePicker
+                      clearable
+                      className={cx("time-picker", {
+                        hasError: isClosingTimeInvalid,
+                      })}
+                      placeholder="08:00 PM"
+                      minutesStep={30}
+                      value={formData[CLOSING_TIME]}
+                      onChange={time =>
+                        this.handleTimeChange(time, CLOSING_TIME)
+                      }
+                    />
+                    {isClosingTimeInvalid && (
+                      <p className="closing-time-error">
+                        {translations.closing_time_error}
+                      </p>
+                    )}
+                  </Form.Group>
+                </Col>
+              </Row>
+            </MuiPickersUtilsProvider>
+
+            {enableSafetyChecks && (
+              <Form.Group controlId="formBasicCrowdDetails">
+                <Form.Label>{translations.safety_checks_label}</Form.Label>
+                {this.state[SAFETY_CHECKS].map((check, index) => {
+                  return (
+                    <Form.Check
+                      key={check.name}
+                      name={check.name}
+                      id={check.name}
+                      type="checkbox"
+                      className="mb-2 user-select-none"
+                      label={translations[`safety_check__${check.name}`]}
+                      checked={check.checked}
+                      onChange={() => this.onCheckboxToggle(index)}
+                    />
+                  );
+                })}
               </Form.Group>
             )}
 
-            {
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <Row>
-                  <Col>
-                    <Form.Group controlId="formBasicOpenTimings">
-                      <Form.Label>{translations.opening_time}</Form.Label>
-                      <TimePicker
-                        clearable
-                        className="time-picker"
-                        placeholder="08:00 AM"
-                        minutesStep={30}
-                        value={formData[OPENING_TIME]}
-                        onChange={time =>
-                          this.handleTimeChange(time, OPENING_TIME)
-                        }
-                      />
-                    </Form.Group>
-                  </Col>
-                  <Col>
-                    <Form.Group controlId="formBasicCloseTimings">
-                      <Form.Label>{translations.closing_time}</Form.Label>
-                      <TimePicker
-                        clearable
-                        className={cx("time-picker", {
-                          hasError: isClosingTimeInvalid,
-                        })}
-                        placeholder="08:00 PM"
-                        minutesStep={30}
-                        value={formData[CLOSING_TIME]}
-                        onChange={time =>
-                          this.handleTimeChange(time, CLOSING_TIME)
-                        }
-                      />
-                      {isClosingTimeInvalid && (
-                        <p className="closing-time-error">
-                          {translations.closing_time_error}
-                        </p>
-                      )}
-                    </Form.Group>
-                  </Col>
-                </Row>
-              </MuiPickersUtilsProvider>
-            }
-
-            <Form.Group controlId="formBasicCrowdDetails">
-              <Form.Label>{translations.safety_observations}</Form.Label>
-              <Form.Control
-                as="textarea"
-                rows="2"
-                value={formData[SAFETY_OBSERVATIONS]}
-                onChange={e => this.onChangeInput(e, SAFETY_OBSERVATIONS)}
-                placeholder={translations.safety_placeholder}
-              />
-            </Form.Group>
+            {!enableSafetyChecks && (
+              <Form.Group controlId="formBasicCrowdDetails">
+                <Form.Label>{translations.safety_observations}</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows="2"
+                  value={formData[SAFETY_OBSERVATIONS]}
+                  onChange={e => this.onChangeInput(e, SAFETY_OBSERVATIONS)}
+                  placeholder={translations.safety_placeholder}
+                />
+              </Form.Group>
+            )}
 
             <Form.Group controlId="formBasicComments">
               <Form.Label>{translations.useful_information}</Form.Label>

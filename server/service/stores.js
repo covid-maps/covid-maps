@@ -84,7 +84,8 @@ function mapDBRow(data) {
             Country: data.country,
             "Opening Time": update.openingTime,
             "Closing Time": update.closingTime,
-            availabilityTags: update.availabilityTags
+            availabilityTags: update.availabilityTags,
+            safetyChecks: update.safetyChecks
         }
     })
 }
@@ -132,7 +133,8 @@ function buildStoreObject(data, forceDateUpdate) {
             closingTime: data["Closing Time"],
             createdAt: dt,
             updatedAt: dt,
-            availabilityTags: data["availabilityTags"]
+            availabilityTags: data["availabilityTags"],
+            safetyChecks: data["safetyChecks"]
         }]
     };
 }
@@ -184,7 +186,8 @@ async function updateExistingStore(store, data, forceDateUpdate) {
             closingTime: data["Closing Time"],
             createdAt: dt,
             updatedAt: dt,
-            availabilityTags: data["availabilityTags"]
+            availabilityTags: data["availabilityTags"],
+            safetyChecks: data["safetyChecks"]
         }, { transaction: t });
 
         updatedStore.StoreUpdates = [updatedInfo];

@@ -91,27 +91,26 @@ function ResultBlock(props) {
               pathname: "/update",
               state: { item: prepareStoreForUpdate(entry) },
             }}
-            className="btn btn-link text-success rounded-0 border-top border-right flex-1"
+            className="btn btn-link text-success text-sm rounded-0 border-top border-right flex-1"
             onClick={recordUpdateStore}
           >
-            <i className="far fa-sync-alt mr-2" />
-            <span>{props.translations.add_update}</span>
+            {props.translations.add_update}
           </Link>
           <a
             href={constructDirectionsUrl(result)}
             onClick={e => onDirectionButtonClick(e)}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-link text-success rounded-0 border-top border-right flex-1"
+            className="btn btn-link text-success text-sm rounded-0 border-top border-right flex-1"
           >
-            <i className="far fa-map mr-2" /> <span>Open in Maps</span>
+            Open in Maps
           </a>
           {showShareButton && (
             <div
               onClick={e => shareListing(e, result)}
-              className="btn btn-link text-success rounded-0 border-top flex-1"
+              className="btn btn-link text-success text-sm rounded-0 border-top flex-1"
             >
-              <i className="far fa-share-alt mr-2" /> <span>Share</span>
+              Share
             </div>
           )}
         </div>

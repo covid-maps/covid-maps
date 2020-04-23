@@ -30,7 +30,7 @@ const {
   SAFETY_CHECKS,
 } = FORM_FIELDS;
 
-const enableSafetyChecks = true;
+const enableSafetyChecks = false;
 
 function ButtonWithLoading({ isLoading, ...props }) {
   return isLoading ? (

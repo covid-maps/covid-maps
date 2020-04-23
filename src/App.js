@@ -88,7 +88,7 @@ class App extends Component {
 
   getDefaultLanguage = () => {
     const preSelectedLanguage = this.props.getItemFromStorage(
-      STORAGE_KEYS.LANGUAGE.LANGUAGE
+      STORAGE_KEYS.LANGUAGE
     );
 
     return (

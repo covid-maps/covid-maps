@@ -30,7 +30,7 @@ const {
   SAFETY_CHECKS,
 } = FORM_FIELDS;
 
-const enableSafetyChecks = false;
+const enableSafetyChecks = true;
 
 function ButtonWithLoading({ isLoading, ...props }) {
   return isLoading ? (
@@ -247,6 +247,10 @@ class SubmitForm extends React.Component {
   initializeSafetyChecks = (checks = []) => {
     // first we will loop over the incoming checks list
     // to generate a map of all checked items
+    if (!checks) {
+      // default value on server-side is null
+      checks = [];
+    }
     const checkedMap = checks.reduce((acc, check) => {
       acc[check] = true;
       return acc;

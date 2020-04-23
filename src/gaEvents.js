@@ -32,3 +32,11 @@ export const recordLanguageSelection = selectedLanguage => {
     action: `language_selected_${selectedLanguage.toLowerCase()}`,
   });
 };
+
+export const recordCustomTagAdded = tagName => {
+  ReactGA.event({
+    category,
+    action: "custom_tag_added",
+    label: tagName,
+  });
+};

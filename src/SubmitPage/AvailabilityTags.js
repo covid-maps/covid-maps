@@ -4,6 +4,7 @@ import Form from "react-bootstrap/Form";
 import Button from "react-bootstrap/Button";
 import { Collapse } from "@material-ui/core";
 import cx from "classnames";
+import { recordCustomTagAdded } from "../gaEvents";
 
 const Tag = ({ index, onTagCheck, isChecked, label }) => {
   const onClick = onTagCheck ? () => onTagCheck(index) : undefined;
@@ -75,10 +76,13 @@ export class AvailabilityTags extends Component {
   };
 
   addNewTag = () => {
+    const newTag = this.state.newTag.trim();
     const newTagObject = {
-      name: this.state.newTag.trim(),
+      name: newTag,
       checked: true,
     };
+
+    recordCustomTagAdded(newTag);
 
     const updatedTagsList = [...this.props.tags, newTagObject];
     this.props.setTags(updatedTagsList);

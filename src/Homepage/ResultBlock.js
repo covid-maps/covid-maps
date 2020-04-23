@@ -21,6 +21,8 @@ function prepareStoreForUpdate(entry) {
     [FORM_FIELDS.USEFUL_INFORMATION]: "",
     [FORM_FIELDS.OPENING_TIME]: "",
     [FORM_FIELDS.CLOSING_TIME]: "",
+    [FORM_FIELDS.AVAILABILITY_TAGS]: [],
+    [FORM_FIELDS.SAFETY_CHECKS]: [],
   };
 }
 

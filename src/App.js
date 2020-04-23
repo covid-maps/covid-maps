@@ -8,7 +8,7 @@ import Homepage from "./Homepage";
 import SubmitPage from "./SubmitPage";
 import AboutPage from "./AboutPage";
 import LocationSelectionPage from "./LocationSelectionPage";
-import { ScrollToTop } from "./utils";
+import { ScrollToTop, isPwa } from "./utils";
 import Navbar from "react-bootstrap/Navbar";
 import PWAInstallButton from "./PWAButton";
 import LanguageSelector from "./LanguageSelector";
@@ -21,6 +21,7 @@ import {
 } from "./constants";
 import translations from "./translations";
 import { withLocalStorage } from "./withStorage";
+import { recordPwaLaunched } from "./gaEvents";
 
 const history = createBrowserHistory();
 if (process.env.NODE_ENV !== "development") {
@@ -65,7 +66,7 @@ class App extends Component {
 
     this.state = {
       language: this.getDefaultLanguage(),
-      currentLocation: { latLng: undefined, accuracy: 'low' },
+      currentLocation: { latLng: undefined, accuracy: "low" },
     };
   }
 
@@ -106,10 +107,19 @@ class App extends Component {
 
   setCurrentLocation = ({ latLng, accuracy }) => {
     return new Promise(resolve => {
-      this.setState({
-        currentLocation: { latLng, accuracy }
-      }, resolve);
+      this.setState(
+        {
+          currentLocation: { latLng, accuracy },
+        },
+        resolve
+      );
     });
+  };
+
+  componentDidMount() {
+    if (isPwa()) {
+      recordPwaLaunched();
+    }
   }
 
   render() {

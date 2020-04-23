@@ -413,7 +413,6 @@ class SubmitForm extends React.Component {
                   <Form.Group controlId="formBasicOpenTimings">
                     <Form.Label>{translations.opening_time}</Form.Label>
                     <TimePicker
-                      clearable
                       className="time-picker"
                       placeholder="08:00 AM"
                       minutesStep={30}
@@ -428,7 +427,6 @@ class SubmitForm extends React.Component {
                   <Form.Group controlId="formBasicCloseTimings">
                     <Form.Label>{translations.closing_time}</Form.Label>
                     <TimePicker
-                      clearable
                       className={cx("time-picker", {
                         hasError: isClosingTimeInvalid,
                       })}

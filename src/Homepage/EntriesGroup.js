@@ -106,6 +106,29 @@ const SingleEntry = ({ entry, highlightedText, translations }) => {
       <small className="text-muted d-block mt-2">
         Updated <Timestamp {...entry} />
       </small>
+      <div className="d-flex align-items-center mt-2">
+        <span className="mr-3">Is this information correct?</span>
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          className="mr-2 rounded-pill text-xs"
+        >
+          Yes{" "}
+          <span role="img" aria-label="thumbs up">
+            👍
+          </span>
+        </Button>
+        <Button
+          variant="outline-secondary"
+          size="sm"
+          className="mr-2 rounded-pill text-xs"
+        >
+          No{" "}
+          <span role="img" aria-label="thumbs down">
+            👎
+          </span>
+        </Button>
+      </div>
     </div>
   );
 };

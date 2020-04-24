@@ -3,41 +3,46 @@ const compression = require("compression");
 const requestIp = require("request-ip");
 const bodyParser = require("body-parser");
 const stores = require("./service/stores");
-const axios = require('axios');
-const Sentry = require('@sentry/node');
+const axios = require("axios");
+const Sentry = require("@sentry/node");
 const rateLimit = require("express-rate-limit");
 
 if (process.env.ERROR_TRACKING) {
-  Sentry.init({ dsn: 'https://f26d1f5d8e2a45c9ad4b98eaabf8d101@o370711.ingest.sentry.io/5198144' });
+  Sentry.init({
+    dsn:
+      "https://f26d1f5d8e2a45c9ad4b98eaabf8d101@o370711.ingest.sentry.io/5198144",
+  });
 }
 
 async function getLocationFromIp(req) {
   const ip = req.clientIp;
   let url = `https://ipinfo.io/${ip}/json?token=737774ee26668f`;
-  if (ip === '::1') {
+  if (ip === "::1") {
     // For local testing
     url = `https://ipinfo.io/json?token=737774ee26668f`;
   }
   const response = await axios.get(url);
   const [lat, lng] = response.data.loc.split(",");
-  return { lat: parseFloat(lat), lng: parseFloat(lng) }
+  return { lat: parseFloat(lat), lng: parseFloat(lng) };
 }
 
 const getFormDataWithUserIp = req => {
   return {
     ...req.body,
-    "User IP": req.clientIp
+    "User IP": req.clientIp,
   };
 };
 
 const app = express();
 // Since heroku runs a reverse proxy, we need to change how we get request IPs
 // https://expressjs.com/en/guide/behind-proxies.html
-app.set('trust proxy', true);
-app.use(rateLimit({
-  windowMs: 60 * 1000,
-  max: 120
-}));
+app.set("trust proxy", true);
+app.use(
+  rateLimit({
+    windowMs: 60 * 1000,
+    max: 120,
+  })
+);
 
 // The request handler must be the first middleware on the app
 app.use(Sentry.Handlers.requestHandler());
@@ -79,7 +84,8 @@ app.post("/v1/admin-add", async (req, res) => {
 
 app.get("/v1/query", async (req, res) => {
   const [results, location] = await Promise.all([
-    stores.findAllStores(), getLocationFromIp(req)
+    stores.findAllStores(),
+    getLocationFromIp(req),
   ]);
   res.send({ results, location });
 });
@@ -95,8 +101,8 @@ app.get("/v2/query", async (req, res) => {
   let params = {
     location,
     radius: query.radius,
-    page: query.page
-  }
+    page: query.page,
+  };
   let results = await stores.findNearbyStores(params);
   res.send({ location, results });
 });
@@ -104,25 +110,25 @@ app.get("/v2/query", async (req, res) => {
 app.get("/v2/queryByStoreId", async (req, res) => {
   const { query } = req;
   if (!query.storeId) {
-    res.sendStatus(400)
+    res.sendStatus(400);
     return;
   }
   let params = {
     storeId: query.storeId,
     radius: query.radius,
-    page: query.page
-  }
+    page: query.page,
+  };
   if (!params.storeId) {
     res.sendStatus(400);
   }
   let store = await stores.findStoreById(params.storeId);
   params.location = { lat: store.Latitude, lng: store.Longitude };
   let results = await stores.findNearbyStores(params);
-  res.send({ location: params.location, results })
+  res.send({ location: params.location, results });
 });
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 5000;
 app.listen(port);
-console.log('Server is now listening at port', port)
+console.log("Server is now listening at port", port);

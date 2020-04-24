@@ -110,7 +110,7 @@ function ResultBlock(props) {
               onClick={e => shareListing(e, result)}
               className="btn btn-link text-success text-sm rounded-0 border-top flex-1"
             >
-              Share
+              <i className="far fa-share-alt mr-2" /> <span>Share</span>
             </div>
           )}
         </div>

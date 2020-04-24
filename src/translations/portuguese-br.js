@@ -36,5 +36,4 @@ export default {
   closing_time_error: "Horário de fechamento deve ser após horário de abertura",
   load_more: "Mostrar mais",
   add_to_homescreen: "Adicionar à Tela Inicial",
-  within_distance: (distance) => `${distance} km`
 };

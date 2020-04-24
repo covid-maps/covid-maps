@@ -61,6 +61,7 @@ function ResultBlock(props) {
   };
 
   const { result } = props;
+  const distanceKM = (result.distance / 1000).toFixed(1);
   const entry = result.entries.length ? result.entries[0] : undefined;
   const showShareButton = shareApiIsAvailable();
 
@@ -81,6 +82,12 @@ function ResultBlock(props) {
               textToHighlight={result.name}
             />
           </h5>
+          <small className="text-muted d-block mt-1">
+            <strong>
+              {props.translations.within_distance} {distanceKM} km
+            </strong>
+          </small>
+          <div></div>
           <EntriesGroup
             highlightedText={props.highlightedText}
             entries={result.entries}

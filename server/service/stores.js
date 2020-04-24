@@ -71,31 +71,29 @@ function toRadialDistance(mt) {
 }
 
 function mapDBRow(data) {
-  return data.StoreUpdates.map(update => {
-    return {
-      id: update.id,
-      "User IP": update.ip,
-      Timestamp: update.createdAt,
-      Latitude: data.latitude,
-      Longitude: data.longitude,
-      Coordinate: data.coordinate,
-      StoreId: data.id,
-      "Store Category":
-        data.category && data.category.length ? data.category.split(",") : [],
-      "Store Name": data.name,
-      "Safety Observations": update.safetyInfo,
-      "Useful Information": update.availabilityInfo,
-      "Place Id": data.placeId,
-      City: data.city,
-      Locality: data.locality,
-      Address: data.address,
-      Country: data.country,
-      "Opening Time": update.openingTime,
-      "Closing Time": update.closingTime,
-      availabilityTags: update.availabilityTags,
-      safetyChecks: update.safetyChecks,
-    };
-  });
+  return data.StoreUpdates.map(update => ({
+    id: update.id,
+    "User IP": update.ip,
+    Timestamp: update.createdAt,
+    Latitude: data.latitude,
+    Longitude: data.longitude,
+    Coordinate: data.coordinate,
+    StoreId: data.id,
+    "Store Category":
+      data.category && data.category.length ? data.category.split(",") : [],
+    "Store Name": data.name,
+    "Safety Observations": update.safetyInfo,
+    "Useful Information": update.availabilityInfo,
+    "Place Id": data.placeId,
+    City: data.city,
+    Locality: data.locality,
+    Address: data.address,
+    Country: data.country,
+    "Opening Time": update.openingTime,
+    "Closing Time": update.closingTime,
+    availabilityTags: update.availabilityTags,
+    safetyChecks: update.safetyChecks,
+  }));
 }
 
 async function addInfoToDB(data, forceDateUpdate) {

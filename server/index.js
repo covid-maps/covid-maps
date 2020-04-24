@@ -3,6 +3,7 @@ const compression = require("compression");
 const requestIp = require("request-ip");
 const bodyParser = require("body-parser");
 const stores = require("./service/stores");
+const votes = require("./service/votes");
 const axios = require("axios");
 const Sentry = require("@sentry/node");
 const rateLimit = require("express-rate-limit");
@@ -26,10 +27,10 @@ async function getLocationFromIp(req) {
   return { lat: parseFloat(lat), lng: parseFloat(lng) };
 }
 
-const getFormDataWithUserIp = req => {
+const getFormDataWithUserIp = (req, key) => {
   return {
     ...req.body,
-    "User IP": req.clientIp,
+    [key]: req.clientIp,
   };
 };
 
@@ -66,7 +67,7 @@ app.get("/", (req, res) => {
 
 app.post("/v1/update", async (req, res) => {
   try {
-    res.send(await stores.addStoreData(getFormDataWithUserIp(req)));
+    res.send(await stores.addStoreData(getFormDataWithUserIp(req, "User IP")));
   } catch (error) {
     console.log("Error in submit:", error);
     res.status(500).send({ error });
@@ -125,6 +126,17 @@ app.get("/v2/queryByStoreId", async (req, res) => {
   params.location = { lat: store.Latitude, lng: store.Longitude };
   let results = await stores.findNearbyStores(params);
   res.send({ location: params.location, results });
+});
+
+app.post("/v1/vote", async (req, res) => {
+  res.send(await votes.addVote(getFormDataWithUserIp(req, "ip")));
+});
+app.get("/v1/votes", async (req, res) => {
+  if (!req.query.updateId) {
+    res.sendStatus(400);
+  } else {
+    res.send(await votes.votesForUpdate(req.query.updateId));
+  }
 });
 
 // The error handler must be before any other error middleware and after all controllers

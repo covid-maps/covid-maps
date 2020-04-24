@@ -91,7 +91,7 @@ function ResultBlock(props) {
               pathname: "/update",
               state: { item: prepareStoreForUpdate(entry) },
             }}
-            className="btn btn-link text-success text-sm rounded-0 border-top border-right flex-1"
+            className="btn btn-link text-success text-sm rounded-0 border-top border-right flex-grow-1"
             onClick={recordUpdateStore}
           >
             {props.translations.add_update}
@@ -101,14 +101,14 @@ function ResultBlock(props) {
             onClick={e => onDirectionButtonClick(e)}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn btn-link text-success text-sm rounded-0 border-top border-right flex-1"
+            className="btn btn-link text-success text-sm rounded-0 border-top border-right flex-grow-1"
           >
             Open in Maps
           </a>
           {showShareButton && (
             <div
               onClick={e => shareListing(e, result)}
-              className="btn btn-link text-success text-sm rounded-0 border-top flex-1"
+              className="btn btn-link text-success text-sm rounded-0 border-top flex-grow-1"
             >
               <i className="far fa-share-alt mr-2" /> <span>Share</span>
             </div>

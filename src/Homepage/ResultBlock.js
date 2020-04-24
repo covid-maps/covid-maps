@@ -82,9 +82,9 @@ function ResultBlock(props) {
               textToHighlight={result.name}
             />
           </h5>
-          <div className="mt-n1">
-            <small className="text-muted d-inline-block mt-2">
-              <strong>Within {distanceKM} km</strong>
+          <div>
+            <small className="text-muted d-inline-block mt-1">
+              <strong>{props.translations.within_distance(distanceKM)}</strong>
             </small>
           </div>
           <EntriesGroup

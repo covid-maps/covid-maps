@@ -7,27 +7,22 @@ import * as serviceWorker from "./serviceWorker";
 
 if (process.env.NODE_ENV !== "development") {
   Sentry.init({
-    dsn: "https://6fe517461b7b4a37bee8795a6c233efb@sentry.io/5181458"
+    dsn: "https://6fe517461b7b4a37bee8795a6c233efb@sentry.io/5181458",
   });
 }
 
-ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
-  document.getElementById("root")
-);
+ReactDOM.render(<App />, document.getElementById("root"));
 
 // If you want your app to work offline and load faster, you can change
 // unregister() to register() below. Note this comes with some pitfalls.
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.register({
-  onSuccess: (registration) => {
-    console.log(registration)
+  onSuccess: registration => {
+    console.log(registration);
   },
-  onUpdate: (registration) => {
+  onUpdate: registration => {
     if (registration && registration.waiting) {
-      registration.waiting.postMessage({ type: 'SKIP_WAITING' });
+      registration.waiting.postMessage({ type: "SKIP_WAITING" });
     }
-  }
+  },
 });

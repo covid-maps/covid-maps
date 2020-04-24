@@ -113,7 +113,7 @@ const SingleEntry = ({ entry, highlightedText, translations }) => {
           size="sm"
           className="mr-2 rounded-pill text-xs"
         >
-          Yes{" "}
+          <span className="mr-2">Yes</span>
           <span role="img" aria-label="thumbs up">
             👍
           </span>
@@ -123,7 +123,7 @@ const SingleEntry = ({ entry, highlightedText, translations }) => {
           size="sm"
           className="mr-2 rounded-pill text-xs"
         >
-          No{" "}
+          <span className="mr-2">No</span>
           <span role="img" aria-label="thumbs down">
             👎
           </span>

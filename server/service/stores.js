@@ -73,6 +73,7 @@ function toRadialDistance(mt) {
 function mapDBRow(data) {
   return data.StoreUpdates.map(update => {
     return {
+      id: update.id,
       "User IP": update.ip,
       Timestamp: update.createdAt,
       Latitude: data.latitude,

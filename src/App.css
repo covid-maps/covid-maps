@@ -103,10 +103,6 @@ footer a:hover {
   cursor: pointer;
 }
 
-.card-result-block:hover {
-  background: #eee;
-}
-
 .card-result-block-selected {
   background: #fff9e7;
 }
@@ -262,4 +258,8 @@ footer a:hover {
 
 .submit-form .form-group {
   margin-bottom: 1.5rem;
+}
+
+.flex-1 {
+  flex: 1;
 }

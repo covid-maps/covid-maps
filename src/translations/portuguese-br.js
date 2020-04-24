@@ -6,7 +6,7 @@ export default {
   store_search_placeholder: "Filtre pelo nome",
   add_store: "Adicione um estabelecimento",
   store_nearby_label: "Estabelecimentos Próximos",
-  update: "Atualize",
+  add_update: "Atualize",
   add_update_store: "Adicione ou atualize um estabelecimento",
   store_name: "Nome do estabelecimento (obrigatório)",
   store_name_placeholder: "Supermercado Extra",

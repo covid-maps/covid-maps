@@ -108,3 +108,7 @@ export function isPwa() {
   const androidPwa = window.matchMedia("(display-mode: standalone)").matches;
   return iosPwa || androidPwa;
 }
+
+export const shareApiIsAvailable = () => {
+  return navigator && navigator.share;
+};

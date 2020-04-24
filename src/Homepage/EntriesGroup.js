@@ -103,11 +103,9 @@ const SingleEntry = ({ entry, highlightedText, translations }) => {
           </div>
         ) : null}
       </div>
-      <div style={{ fontSize: "0.85em" }}>
-        <small className="text-muted d-inline-block mt-2">
-          Updated <Timestamp {...entry} />
-        </small>
-      </div>
+      <small className="text-muted d-block mt-2">
+        Updated <Timestamp {...entry} />
+      </small>
     </div>
   );
 };

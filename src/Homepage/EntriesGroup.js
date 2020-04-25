@@ -1,14 +1,14 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
-import cx from "classnames";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Button from "react-bootstrap/Button";
 import Highlighter from "react-highlight-words";
-import { FORM_FIELDS, VOTE } from "../constants";
+import { FORM_FIELDS } from "../constants";
 import { format, differenceInCalendarDays } from "date-fns";
 import { Collapse } from "@material-ui/core";
 import { ReadOnlyTags } from "../SubmitPage/AvailabilityTags";
+import UpvoteDownvote from "./UpvoteDownvote";
 import { withLocalStorage } from "../withStorage";
 
 function Overlay(props) {
@@ -41,14 +41,7 @@ function Timestamp({ Timestamp: value }) {
   return <strong>{time}</strong>;
 }
 
-const SingleEntry = ({
-  entry,
-  highlightedText,
-  translations,
-  isYesVoted,
-  isNoVoted,
-  handleVote,
-}) => {
+const SingleEntry = ({ entry, highlightedText, translations }) => {
   return (
     <div className="mt-3">
       <div>
@@ -115,35 +108,7 @@ const SingleEntry = ({
       <small className="text-muted d-block mt-2">
         Updated <Timestamp {...entry} />
       </small>
-      <div className="d-flex align-items-center mt-2">
-        <span className="mr-3">Is this information correct?</span>
-        <Button
-          variant={isYesVoted ? "outline-success" : "outline-secondary"}
-          size="sm"
-          className={cx("mr-2 rounded-pill text-xs", {
-            "font-weight-bold": isYesVoted,
-          })}
-          onClick={e => !isYesVoted && handleVote(e, VOTE.YES, entry)}
-        >
-          <span className="mr-2">Yes</span>
-          <span role="img" aria-label="thumbs up">
-            👍
-          </span>
-        </Button>
-        <Button
-          variant={isNoVoted ? "outline-success" : "outline-secondary"}
-          size="sm"
-          className={cx("mr-2 rounded-pill text-xs", {
-            "font-weight-bold": isNoVoted,
-          })}
-          onClick={e => !isNoVoted && handleVote(e, VOTE.NO, entry)}
-        >
-          <span className="mr-2">No</span>
-          <span role="img" aria-label="thumbs down">
-            👎
-          </span>
-        </Button>
-      </div>
+      <UpvoteDownvote entry={entry} />
     </div>
   );
 };
@@ -159,8 +124,6 @@ class EntriesGroup extends Component {
     entries: PropTypes.arrayOf(PropTypes.object).isRequired,
     highlightedText: PropTypes.string,
     translations: PropTypes.object.isRequired,
-    getItemFromStorage: PropTypes.func.isRequired,
-    setItemToStorage: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -176,9 +139,6 @@ class EntriesGroup extends Component {
     this.togglePastEntries = this.togglePastEntries.bind(this);
     this.getPastEntries = this.getPastEntries.bind(this);
     this.getToggleButtonContent = this.getToggleButtonContent.bind(this);
-    this.getVoteKey = this.getVoteKey.bind(this);
-    this.handleVote = this.handleVote.bind(this);
-    this.getEntryVote = this.getEntryVote.bind(this);
   }
 
   togglePastEntries(event) {
@@ -192,16 +152,12 @@ class EntriesGroup extends Component {
 
   getPastEntries(entryList) {
     return entryList.map(entry => {
-      const voteValue = this.getEntryVote(entry);
       return (
         <SingleEntry
           key={entry[FORM_FIELDS.TIMESTAMP]}
           entry={entry}
           highlightedText={this.props.highlightedText}
           translations={this.props.translations}
-          isYesVoted={voteValue === VOTE.YES}
-          isNoVoted={voteValue === VOTE.NO}
-          handleVote={this.handleVote}
         />
       );
     });
@@ -223,38 +179,15 @@ class EntriesGroup extends Component {
     );
   }
 
-  getVoteKey(entry) {
-    return `vote_${entry[FORM_FIELDS.STORE_ID]}_${
-      entry[FORM_FIELDS.TIMESTAMP]
-    }`;
-  }
-
-  handleVote(event, voteValue, entry) {
-    event.stopPropagation();
-    const voteKey = this.getVoteKey(entry);
-
-    this.props.setItemToStorage(voteKey, voteValue);
-
-    // then make api call
-  }
-
-  getEntryVote(entry) {
-    return this.props.getItemFromStorage(this.getVoteKey(entry));
-  }
-
   render() {
     const [firstEntry, ...pastEntries] = this.props.entries;
     const thereAreMoreThanOneEntries = pastEntries.length > 0;
-    const firstEntryVote = this.getEntryVote(firstEntry);
     return (
       <Fragment>
         <SingleEntry
           translations={this.props.translations}
           entry={firstEntry}
           highlightedText={this.props.highlightedText}
-          isYesVoted={firstEntryVote === VOTE.YES}
-          isNoVoted={firstEntryVote === VOTE.NO}
-          handleVote={this.handleVote}
         />
         {thereAreMoreThanOneEntries && (
           <Button

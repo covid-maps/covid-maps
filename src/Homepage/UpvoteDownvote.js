@@ -53,15 +53,13 @@ class UpvoteDownvote extends Component {
     const isDown = this.state.voteValue === DOWN;
 
     return (
-      <div className="d-flex align-items-center mt-2">
-        <span className="mr-3">Is this information correct?</span>
+      <div className="d-flex align-items-center mt-4">
+        <span className="mr-2">Is this information correct?</span>
         <button
-          className={cx(
-            "mr-2 rounded-pill text-xs py-1 px-2 border outline-none",
-            {
-              "bg-light-green border-transparent": isUp,
-            }
-          )}
+          className={cx("mr-2 rounded-pill text-xs px-2 border outline-none", {
+            "bg-light-green border-transparent": isUp,
+            "bg-white": !isUp,
+          })}
           onClick={e => this.handleVote(e, UP)}
         >
           <span className="mr-2">Yes</span>
@@ -70,12 +68,10 @@ class UpvoteDownvote extends Component {
           </span>
         </button>
         <button
-          className={cx(
-            "mr-2 rounded-pill text-xs py-1 px-2 border outline-none",
-            {
-              "bg-light-green border-transparent": isDown,
-            }
-          )}
+          className={cx("mr-2 rounded-pill text-xs px-2 border outline-none", {
+            "bg-light-green border-transparent": isDown,
+            "bg-white": !isDown,
+          })}
           onClick={e => this.handleVote(e, DOWN)}
         >
           <span className="mr-2">No</span>

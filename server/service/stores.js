@@ -163,7 +163,11 @@ async function addNewStore(data, forceDateUpdate) {
 }
 
 async function updateExistingStore(store, data, forceDateUpdate) {
-  let categories = store.category.split(",");
+  let categories = [];
+  if (store.category != null) {
+    categories = store.category.split(",");
+  }
+
   if (!categories.includes(data["Store Category"])) {
     categories.push(data["Store Category"]);
   }

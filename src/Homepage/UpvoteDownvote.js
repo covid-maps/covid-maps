@@ -25,7 +25,6 @@ class UpvoteDownvote extends Component {
 
     this.getVoteKey = this.getVoteKey.bind(this);
     this.handleVote = this.handleVote.bind(this);
-    this.getEntryVote = this.getEntryVote.bind(this);
   }
 
   getVoteKey(entry) {
@@ -48,10 +47,6 @@ class UpvoteDownvote extends Component {
 
       // then make api call
     }
-  }
-
-  getEntryVote(entry) {
-    return this.props.getItemFromStorage(this.getVoteKey(entry));
   }
 
   render() {

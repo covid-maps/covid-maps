@@ -57,7 +57,7 @@ class UpvoteDownvote extends Component {
         <span className="mr-2">Is this information correct?</span>
         <button
           className={cx("mr-2 rounded-pill text-xs px-2 border outline-none", {
-            "bg-light-green border-transparent": isUp,
+            "border-success text-success font-weight-bold": isUp,
             "bg-white": !isUp,
           })}
           onClick={e => this.handleVote(e, UP)}
@@ -69,7 +69,7 @@ class UpvoteDownvote extends Component {
         </button>
         <button
           className={cx("mr-2 rounded-pill text-xs px-2 border outline-none", {
-            "bg-light-green border-transparent": isDown,
+            "border-danger text-danger font-weight-bold": isDown,
             "bg-white": !isDown,
           })}
           onClick={e => this.handleVote(e, DOWN)}

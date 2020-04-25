@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import Button from "react-bootstrap/Button";
 import { withLocalStorage } from "../withStorage";
 import cx from "classnames";
 import { FORM_FIELDS, VOTE } from "../constants";
@@ -56,32 +55,34 @@ class UpvoteDownvote extends Component {
     return (
       <div className="d-flex align-items-center mt-2">
         <span className="mr-3">Is this information correct?</span>
-        <Button
-          variant={isUp ? "outline-success" : "outline-secondary"}
-          size="sm"
-          className={cx("mr-2 rounded-pill text-xs", {
-            "font-weight-bold": isUp,
-          })}
+        <button
+          className={cx(
+            "mr-2 rounded-pill text-xs py-1 px-2 border outline-none",
+            {
+              "bg-light-green border-transparent": isUp,
+            }
+          )}
           onClick={e => this.handleVote(e, UP)}
         >
           <span className="mr-2">Yes</span>
           <span role="img" aria-label="thumbs up">
             👍
           </span>
-        </Button>
-        <Button
-          variant={isDown ? "outline-success" : "outline-secondary"}
-          size="sm"
-          className={cx("mr-2 rounded-pill text-xs", {
-            "font-weight-bold": isDown,
-          })}
+        </button>
+        <button
+          className={cx(
+            "mr-2 rounded-pill text-xs py-1 px-2 border outline-none",
+            {
+              "bg-light-green border-transparent": isDown,
+            }
+          )}
           onClick={e => this.handleVote(e, DOWN)}
         >
           <span className="mr-2">No</span>
           <span role="img" aria-label="thumbs down">
             👎
           </span>
-        </Button>
+        </button>
       </div>
     );
   }

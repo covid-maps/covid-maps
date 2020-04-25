@@ -263,3 +263,15 @@ footer a:hover {
 .flex-1 {
   flex: 1;
 }
+
+.bg-light-green {
+  background-color: rgba(40, 167, 69, 0.2);
+}
+
+.outline-none {
+  outline: none !important;
+}
+
+.border-transparent {
+  border-color: transparent !important;
+}

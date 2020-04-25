@@ -1,8 +1,10 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
-import { withLocalStorage } from "../withStorage";
 import cx from "classnames";
+import { withLocalStorage } from "../withStorage";
+import { withGlobalContext } from "../App";
 import { FORM_FIELDS, VOTE } from "../constants";
+
 const { UP, DOWN } = VOTE;
 
 class UpvoteDownvote extends Component {
@@ -10,6 +12,7 @@ class UpvoteDownvote extends Component {
     getItemFromStorage: PropTypes.func.isRequired,
     setItemToStorage: PropTypes.func.isRequired,
     entry: PropTypes.object.isRequired,
+    translations: PropTypes.object.isRequired,
   };
 
   constructor(props) {
@@ -51,30 +54,35 @@ class UpvoteDownvote extends Component {
   render() {
     const isUp = this.state.voteValue === UP;
     const isDown = this.state.voteValue === DOWN;
+    const { translations } = this.props;
 
     return (
       <div className="d-flex align-items-center mt-4">
-        <span className="mr-2">Is this information correct?</span>
+        <span className="mr-2">{translations.voting_label}</span>
         <button
-          className={cx("mr-2 rounded-pill text-xs px-2 border outline-none", {
-            "border-success text-success": isUp,
-            "bg-white": !isUp,
-          })}
+          className={cx(
+            "mr-2 rounded-pill text-xs px-2 border outline-none bg-white",
+            {
+              "border-success text-success": isUp,
+            }
+          )}
           onClick={e => this.handleVote(e, UP)}
         >
-          <span className="mr-2">Yes</span>
+          <span className="mr-2">{translations.vote_yes}</span>
           <span role="img" aria-label="thumbs up">
             👍
           </span>
         </button>
         <button
-          className={cx("mr-2 rounded-pill text-xs px-2 border outline-none", {
-            "border-danger text-danger": isDown,
-            "bg-white": !isDown,
-          })}
+          className={cx(
+            "mr-2 rounded-pill text-xs px-2 border outline-none bg-white",
+            {
+              "border-danger text-danger": isDown,
+            }
+          )}
           onClick={e => this.handleVote(e, DOWN)}
         >
-          <span className="mr-2">No</span>
+          <span className="mr-2">{translations.vote_no}</span>
           <span role="img" aria-label="thumbs down">
             👎
           </span>
@@ -84,4 +92,4 @@ class UpvoteDownvote extends Component {
   }
 }
 
-export default withLocalStorage(UpvoteDownvote);
+export default withGlobalContext(withLocalStorage(UpvoteDownvote));

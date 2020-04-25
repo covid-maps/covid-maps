@@ -52,3 +52,8 @@ export const SAFETY_CHECKS_LIST = [
   "adequate_social_distancing",
   "home_delivery",
 ];
+
+export const VOTE = {
+  YES: "YES",
+  NO: "NO",
+};

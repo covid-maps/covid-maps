@@ -9,7 +9,6 @@ import { format, differenceInCalendarDays } from "date-fns";
 import { Collapse } from "@material-ui/core";
 import { ReadOnlyTags } from "../SubmitPage/AvailabilityTags";
 import UpvoteDownvote from "./UpvoteDownvote";
-import { withLocalStorage } from "../withStorage";
 
 function Overlay(props) {
   return (
@@ -207,4 +206,4 @@ class EntriesGroup extends Component {
   }
 }
 
-export default withLocalStorage(EntriesGroup);
+export default EntriesGroup;

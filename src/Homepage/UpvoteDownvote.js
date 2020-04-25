@@ -4,6 +4,7 @@ import Button from "react-bootstrap/Button";
 import { withLocalStorage } from "../withStorage";
 import cx from "classnames";
 import { FORM_FIELDS, VOTE } from "../constants";
+const { UP, DOWN } = VOTE;
 
 class UpvoteDownvote extends Component {
   static propTypes = {
@@ -54,19 +55,19 @@ class UpvoteDownvote extends Component {
   }
 
   render() {
-    const isYes = this.state.voteValue === VOTE.YES;
-    const isNo = this.state.voteValue === VOTE.NO;
+    const isUp = this.state.voteValue === UP;
+    const isDown = this.state.voteValue === DOWN;
 
     return (
       <div className="d-flex align-items-center mt-2">
         <span className="mr-3">Is this information correct?</span>
         <Button
-          variant={isYes ? "outline-success" : "outline-secondary"}
+          variant={isUp ? "outline-success" : "outline-secondary"}
           size="sm"
           className={cx("mr-2 rounded-pill text-xs", {
-            "font-weight-bold": isYes,
+            "font-weight-bold": isUp,
           })}
-          onClick={e => this.handleVote(e, VOTE.YES)}
+          onClick={e => this.handleVote(e, UP)}
         >
           <span className="mr-2">Yes</span>
           <span role="img" aria-label="thumbs up">
@@ -74,12 +75,12 @@ class UpvoteDownvote extends Component {
           </span>
         </Button>
         <Button
-          variant={isNo ? "outline-success" : "outline-secondary"}
+          variant={isDown ? "outline-success" : "outline-secondary"}
           size="sm"
           className={cx("mr-2 rounded-pill text-xs", {
-            "font-weight-bold": isNo,
+            "font-weight-bold": isDown,
           })}
-          onClick={e => this.handleVote(e, VOTE.NO)}
+          onClick={e => this.handleVote(e, DOWN)}
         >
           <span className="mr-2">No</span>
           <span role="img" aria-label="thumbs down">

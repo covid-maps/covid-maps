@@ -10,6 +10,8 @@ import { Collapse } from "@material-ui/core";
 import { ReadOnlyTags } from "../SubmitPage/AvailabilityTags";
 import UpvoteDownvote from "./UpvoteDownvote";
 
+const enableUpvoteDownvote = true;
+
 function Overlay(props) {
   return (
     <OverlayTrigger
@@ -107,7 +109,7 @@ const SingleEntry = ({ entry, highlightedText, translations }) => {
       <small className="text-muted d-block mt-2">
         Updated <Timestamp {...entry} />
       </small>
-      <UpvoteDownvote entry={entry} />
+      {enableUpvoteDownvote && <UpvoteDownvote entry={entry} />}
     </div>
   );
 };

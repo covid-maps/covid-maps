@@ -33,16 +33,16 @@ class UpvoteDownvote extends Component {
     }`;
   }
 
-  handleVote(event, voteValue) {
+  handleVote(event, newVoteValue) {
     event.stopPropagation();
 
     // update local state
     // update local storage
     // make api call
 
-    if (voteValue !== this.state.voteValue) {
-      this.setState({ voteValue }, () => {
-        this.props.setItemToStorage(this.state.voteKey, voteValue);
+    if (newVoteValue !== this.state.voteValue) {
+      this.setState({ voteValue: newVoteValue }, () => {
+        this.props.setItemToStorage(this.state.voteKey, newVoteValue);
       });
 
       // then make api call

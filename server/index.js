@@ -3,6 +3,7 @@ const compression = require("compression");
 const requestIp = require("request-ip");
 const bodyParser = require("body-parser");
 const stores = require("./service/stores");
+const listing = require("./service/listing");
 const axios = require("axios");
 const Sentry = require("@sentry/node");
 const rateLimit = require("express-rate-limit");
@@ -126,6 +127,29 @@ app.get("/v2/queryByStoreId", async (req, res) => {
   let results = await stores.findNearbyStores(params);
   res.send({ location: params.location, results });
 });
+
+
+app.get("/v3/query", async (req, res) => {
+  const { query } = req;
+  let location = await extractLocation(query);
+  let params = {
+    location,
+    radius: query.radius,
+    page: query.page,
+  };
+  let results = await listing.findStoreListings(params, false);
+  res.send({ location, results });
+});
+
+
+async function extractLocation(query){
+  if (query.lat && query.lng) {
+    location = { lat: parseFloat(query.lat), lng: parseFloat(query.lng) };
+  } else {
+    location = await getLocationFromIp(req);
+  }
+  return location;
+}
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());

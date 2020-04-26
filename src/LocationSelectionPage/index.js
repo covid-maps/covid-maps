@@ -9,7 +9,6 @@ import { withGlobalContext } from "../App";
 
 const emptyData = {
   "Store Name": "",
-  "Store Category": "Grocery", // default selection
   "Useful Information": "",
   "Safety Observations": "",
   Latitude: "",

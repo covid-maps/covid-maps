@@ -37,8 +37,22 @@ function addScoringParameters(listings, params){
             storeUpdate.scoreParams = getScoringParameters(storeUpdate, params);
             storeUpdate.scoreParams.bucket = getBucket(storeUpdate);
         });
+    normalizeQuality(listings);
 }
 
+function normalizeQuality(listings){
+    let scores = {};
+    listings.forEach(u => {
+        let quality = u.scoreParams.quality;
+        scores[u.StoreId] = scores[u.StoreId] || quality;
+        if(scores[u.StoreId] < quality ){
+            scores[u.StoreId] = quality;
+        }
+    });
+    listings.forEach(u => {
+        u.scoreParams.quality = scores[u.StoreId];
+    })
+}
 
 function sortBuckets(listingsByBucket){
     return Object.keys(listingsByBucket)

@@ -24,6 +24,8 @@ class UpvoteDownvote extends Component {
     this.state = {
       voteKey,
       voteValue: props.getItemFromStorage(voteKey),
+      upCount: props.entry.votes[VOTE.UP],
+      downCount: props.entry.votes[VOTE.DOWN],
     };
 
     this.getVoteKey = this.getVoteKey.bind(this);
@@ -75,6 +77,9 @@ class UpvoteDownvote extends Component {
           )}
           onClick={e => this.handleVote(e, UP)}
         >
+          {Boolean(this.state.upCount) && (
+            <span>{`(${this.state.upCount}) `}</span>
+          )}
           <span className="mr-2">{translations.vote_yes}</span>
           <span role="img" aria-label="thumbs up">
             👍
@@ -82,13 +87,16 @@ class UpvoteDownvote extends Component {
         </button>
         <button
           className={cx(
-            "mr-2 rounded-pill text-xs px-2 border outline-none bg-white",
+            "rounded-pill text-xs px-2 border outline-none bg-white",
             {
               "border-danger text-danger": isDown,
             }
           )}
           onClick={e => this.handleVote(e, DOWN)}
         >
+          {Boolean(this.state.downCount) && (
+            <span>{`(${this.state.downCount}) `}</span>
+          )}
           <span className="mr-2">{translations.vote_no}</span>
           <span role="img" aria-label="thumbs down">
             👎

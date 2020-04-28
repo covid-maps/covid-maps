@@ -151,10 +151,7 @@ function getDistance(storeUpdate, params){
 function getQuality(storeUpdate){
     let availabilityScore = getQualityAvailabilityInfo(storeUpdate);
     let safetyScore = getQualitySafetyInfo(storeUpdate);
-    if(availabilityScore > safetyScore){
-        return availabilityScore;
-    }
-    return safetyScore;
+    return Math.max(availabilityScore, safetyScore);
 }
 
 function getQualityAvailabilityInfo(storeUpdate){

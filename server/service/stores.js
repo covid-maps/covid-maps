@@ -1,4 +1,5 @@
-var models = require("../models");
+const models = require("../models");
+const { Op, Sequelize } = require("sequelize");
 
 const DEFAULT_DISTANCE_RANGE = 0.1; //approx 11kms - https://stackoverflow.com/questions/8464666/distance-between-2-points-in-postgis-in-srid-4326-in-metres
 const MAX_DISTANCE_RADIUS_METERS = 200000;
@@ -25,19 +26,13 @@ async function findNearbyStores({ location, radius }) {
     return [];
   }
   const stores = await models.StoreInfo.findAll({
-    include: [
-      {
-        model: models.StoreUpdates,
-        where: { deleted: false },
-      },
-    ],
     where: models.sequelize.where(
-      models.sequelize.fn(
+      Sequelize.fn(
         "ST_DWithin",
-        models.sequelize.col("coordinate"),
-        models.sequelize.fn(
+        Sequelize.col("coordinate"),
+        Sequelize.fn(
           "ST_Transform",
-          models.sequelize.cast(
+          Sequelize.cast(
             `SRID=4326;POINT(${location.lng} ${location.lat})`,
             "geometry"
           ),
@@ -48,7 +43,31 @@ async function findNearbyStores({ location, radius }) {
       true
     ),
   });
-  return stores.flatMap(store => mapDBRow(store));
+  const storeUpdates = await models.StoreUpdates.findAll({
+    where: {
+      storeId: {
+        [Op.in]: stores.map(store => store.id),
+      },
+    },
+    include: [
+      {
+        model: models.Votes,
+      },
+    ],
+  });
+  return storeUpdates.map(update =>
+    buildResult(
+      stores.find(store => store.id === update.storeId),
+      update,
+      votesCount(update)
+    )
+  );
+}
+
+function votesCount(data) {
+  const up = data.Votes.reduce((k, v) => (v.type === "up" ? k + 1 : k), 0);
+  const down = data.Votes.reduce((k, v) => (v.type === "down" ? k + 1 : k), 0);
+  return { up, down };
 }
 
 function getDistanceRange(radius) {
@@ -71,31 +90,34 @@ function toRadialDistance(mt) {
 }
 
 function mapDBRow(data) {
-  return data.StoreUpdates.map(update => {
-    return {
-      id: update.id,
-      "User IP": update.ip,
-      Timestamp: update.createdAt,
-      Latitude: data.latitude,
-      Longitude: data.longitude,
-      Coordinate: data.coordinate,
-      StoreId: data.id,
-      "Store Category":
-        data.category && data.category.length ? data.category.split(",") : [],
-      "Store Name": data.name,
-      "Safety Observations": update.safetyInfo,
-      "Useful Information": update.availabilityInfo,
-      "Place Id": data.placeId,
-      City: data.city,
-      Locality: data.locality,
-      Address: data.address,
-      Country: data.country,
-      "Opening Time": update.openingTime,
-      "Closing Time": update.closingTime,
-      availabilityTags: update.availabilityTags,
-      safetyChecks: update.safetyChecks,
-    };
-  });
+  return data.StoreUpdates.map(update => buildResult(data, update));
+}
+
+function buildResult(store, update, votes = undefined) {
+  return {
+    id: update.id,
+    "User IP": update.ip,
+    Timestamp: update.createdAt,
+    Latitude: store.latitude,
+    Longitude: store.longitude,
+    Coordinate: store.coordinate,
+    StoreId: store.id,
+    "Store Category":
+      store.category && store.category.length ? store.category.split(",") : [],
+    "Store Name": store.name,
+    "Safety Observations": update.safetyInfo,
+    "Useful Information": update.availabilityInfo,
+    "Place Id": store.placeId,
+    City: store.city,
+    Locality: store.locality,
+    Address: store.address,
+    Country: store.country,
+    "Opening Time": update.openingTime,
+    "Closing Time": update.closingTime,
+    availabilityTags: update.availabilityTags,
+    safetyChecks: update.safetyChecks,
+    votes,
+  };
 }
 
 async function addInfoToDB(data, forceDateUpdate) {

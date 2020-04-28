@@ -4,11 +4,14 @@ const requestIp = require("request-ip");
 const bodyParser = require("body-parser");
 const stores = require("./service/stores");
 const listing = require("./service/listing");
+const votes = require("./service/votes");
 const axios = require("axios");
 const Sentry = require("@sentry/node");
 const rateLimit = require("express-rate-limit");
 
-if (process.env.ERROR_TRACKING) {
+const IS_PRODUCTION = process.env.ERROR_TRACKING; // defined in Procfile
+
+if (IS_PRODUCTION) {
   Sentry.init({
     dsn:
       "https://f26d1f5d8e2a45c9ad4b98eaabf8d101@o370711.ingest.sentry.io/5198144",
@@ -27,10 +30,10 @@ async function getLocationFromIp(req) {
   return { lat: parseFloat(lat), lng: parseFloat(lng) };
 }
 
-const getFormDataWithUserIp = req => {
+const getFormDataWithUserIp = (req, key) => {
   return {
     ...req.body,
-    "User IP": req.clientIp,
+    [key]: req.clientIp,
   };
 };
 
@@ -67,7 +70,7 @@ app.get("/", (req, res) => {
 
 app.post("/v1/update", async (req, res) => {
   try {
-    res.send(await stores.addStoreData(getFormDataWithUserIp(req)));
+    res.send(await stores.addStoreData(getFormDataWithUserIp(req, "User IP")));
   } catch (error) {
     console.log("Error in submit:", error);
     res.status(500).send({ error });
@@ -141,6 +144,9 @@ app.get("/v3/query", async (req, res) => {
   res.send({ location, results });
 });
 
+app.post("/v1/vote", async (req, res) => {
+  res.send(await votes.addVote(getFormDataWithUserIp(req, "ip")));
+});
 
 async function extractLocation(query){
   if (query.lat && query.lng) {
@@ -154,5 +160,4 @@ async function extractLocation(query){
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());
 const port = process.env.PORT || 5000;
-app.listen(port);
-console.log("Server is now listening at port", port);
+app.listen(port, () => console.log("Server is now listening at port", port));

@@ -3,6 +3,7 @@ import qs from "qs";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
+import { isBefore } from 'date-fns';
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
@@ -14,8 +15,10 @@ import Form from "react-bootstrap/Form";
 import { withGlobalContext } from "../App";
 import HomepageAlerts from "./HomepageAlerts";
 import { FORM_FIELDS, ALERTS_TYPE } from "../constants";
+import { withSessionStorage } from "../withStorage";
 
 const DISTANCE_FILTER = 200000; // meters
+const SHOW_MISSING_KEY = "showMissing";
 
 function searchResultToFormEntry(searchResult) {
   if (!searchResult) return undefined;
@@ -36,6 +39,8 @@ class Homepage extends React.Component {
     translations: PropTypes.object.isRequired,
     currentLocation: PropTypes.object,
     setCurrentLocation: PropTypes.func.isRequired,
+    getItemFromStorage: PropTypes.func.isRequired,
+    setItemToStorage: PropTypes.func.isRequired,
 
     // coming from react router
     location: PropTypes.shape({
@@ -60,7 +65,8 @@ class Homepage extends React.Component {
     searchResult: undefined,
     alertType: "",
     showAlert: true,
-    showMissing: true,
+    showMissing: false,
+    usePrevShowMissing: true,
   };
 
   toggleAlert = () => {
@@ -70,10 +76,25 @@ class Homepage extends React.Component {
   };
 
   hideMissing = () => {
+    this.props.setItemToStorage(SHOW_MISSING_KEY, false);
     this.setState(() => {
       return { showMissing: false };
     });
   };
+
+  updateShowMissing = () => {
+    let showMissing = true;
+    if (this.state.usePrevShowMissing) {
+      let prevMissing = JSON.parse(this.props.getItemFromStorage(SHOW_MISSING_KEY));
+      showMissing = prevMissing === null || prevMissing === true;
+    }
+    this.props.setItemToStorage(SHOW_MISSING_KEY, showMissing);
+
+    this.setState({
+      showMissing: showMissing,
+      usePrevShowMissing: false,
+    })
+  }
 
   async fetchResults() {
     let locationComingFromSubmission;
@@ -223,7 +244,9 @@ class Homepage extends React.Component {
       }, {})
     ).map(entries => {
       const sortedEntries = entries
-        .sort((a, b) => b.Timestamp - a.Timestamp)
+        .sort((a, b) => {
+          return isBefore(new Date(a.Timestamp), new Date(b.Timestamp)) ? -1 : 1;
+        })
         .reverse();
       return {
         name: spacesAfterCommas(titleCase(entries[0]["Store Name"])),
@@ -310,10 +333,11 @@ class Homepage extends React.Component {
           searchResultLatlng: result.latLng,
           searchResult: result,
           isLoading: true,
-          showMissing: true
+          showMissing: false,
         },
         () => {
           this.fetchResults();
+          setTimeout(this.updateShowMissing, 500);
         }
       );
     }
@@ -412,4 +436,4 @@ class Homepage extends React.Component {
   }
 }
 
-export default withGlobalContext(Homepage);
+export default withSessionStorage(withGlobalContext(Homepage));

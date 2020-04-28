@@ -117,6 +117,7 @@ app.get("/v2/queryByStoreId", async (req, res) => {
     return;
   }
   let params = {
+    location: undefined,
     storeId: query.storeId,
     radius: query.radius,
     page: query.page,

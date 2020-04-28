@@ -4,12 +4,12 @@ const { Op, Sequelize } = require("sequelize");
 const DEFAULT_DISTANCE_RANGE = 0.1; //approx 11kms - https://stackoverflow.com/questions/8464666/distance-between-2-points-in-postgis-in-srid-4326-in-metres
 const MAX_DISTANCE_RADIUS_METERS = 200000;
 
-async function addStoreData(data, forceUpdate = false) {
+export async function addStoreData(data, forceUpdate = false) {
   const store = await addInfoToDB(data, forceUpdate);
   return mapDBRow(store)[0];
 }
 
-async function findAllStores() {
+export async function findAllStores() {
   const stores = await models.StoreInfo.findAll({
     include: [
       {
@@ -21,7 +21,7 @@ async function findAllStores() {
   return stores.flatMap(store => mapDBRow(store));
 }
 
-async function findNearbyStores({ location, radius }) {
+export async function findNearbyStores({ location, radius }) {
   if (!location.lat || !location.lng) {
     return [];
   }
@@ -240,7 +240,7 @@ async function updateExistingStore(store, data, forceDateUpdate) {
   });
 }
 
-async function findStoreById(storeId) {
+export async function findStoreById(storeId) {
   const store = await models.StoreInfo.findOne({
     include: [
       {
@@ -258,10 +258,3 @@ async function findStoreById(storeId) {
   }
   return mappedStores[0];
 }
-
-module.exports = {
-  findAllStores,
-  addStoreData,
-  findNearbyStores,
-  findStoreById,
-};

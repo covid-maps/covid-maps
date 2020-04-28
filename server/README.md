@@ -9,7 +9,9 @@ This will run the server on localhost:5000. See [DATABASE.md](DATABASE.md) for t
 ```sh
 npm install
 npx sequelize db:migrate
-npx nodemon index.js # or just `node index.js` without hot reload
+
+npx tsc
+npx nodemon out/index.js
 ```
 
 ## Deployment

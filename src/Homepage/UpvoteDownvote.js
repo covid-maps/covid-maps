@@ -12,6 +12,7 @@ class UpvoteDownvote extends Component {
   static propTypes = {
     getItemFromStorage: PropTypes.func.isRequired,
     setItemToStorage: PropTypes.func.isRequired,
+    removeItemFromStorage: PropTypes.func.isRequired,
     entry: PropTypes.object.isRequired,
     translations: PropTypes.object.isRequired,
   };
@@ -24,12 +25,16 @@ class UpvoteDownvote extends Component {
     this.state = {
       voteKey,
       voteValue: props.getItemFromStorage(voteKey),
-      upCount: props.entry.votes[VOTE.UP],
-      downCount: props.entry.votes[VOTE.DOWN],
+      voteCount: {
+        [UP]: props.entry.votes[UP],
+        [DOWN]: props.entry.votes[DOWN],
+      },
     };
 
     this.getVoteKey = this.getVoteKey.bind(this);
     this.handleVote = this.handleVote.bind(this);
+    this.handleUnselection = this.handleUnselection.bind(this);
+    this.handleNewSelection = this.handleNewSelection.bind(this);
   }
 
   getVoteKey(entry) {
@@ -46,26 +51,53 @@ class UpvoteDownvote extends Component {
     // make api call
 
     if (newVoteValue === this.state.voteValue) {
-      const payload = {
-        updateId: this.props.entry.id,
-        type: newVoteValue,
-      };
-      deleteVote(payload);
+      this.handleUnselection(newVoteValue);
     } else {
-      if (newVoteValue !== this.state.voteValue) {
-        this.setState({ voteValue: newVoteValue }, () => {
-          this.props.setItemToStorage(this.state.voteKey, newVoteValue);
-
-          const payload = {
-            updateId: this.props.entry.id,
-            type: newVoteValue,
-          };
-          submitVote(payload);
-        });
-
-        // then make api call
-      }
+      this.handleNewSelection(newVoteValue);
     }
+  }
+
+  handleUnselection(voteType) {
+    const payload = {
+      updateId: this.props.entry.id,
+      type: voteType,
+    };
+    this.setState(prevState => {
+      return {
+        voteCount: {
+          ...prevState.voteCount,
+          [voteType]: prevState.voteCount[voteType] - 1,
+        },
+        voteValue: null,
+      };
+    });
+
+    this.props.removeItemFromStorage(this.state.voteKey);
+
+    deleteVote(payload);
+  }
+
+  handleNewSelection(voteType) {
+    this.setState(
+      prevState => {
+        return {
+          voteValue: voteType,
+          voteCount: {
+            ...prevState.voteCount,
+            [voteType]: prevState.voteCount[voteType] + 1,
+          },
+        };
+      },
+      () => {
+        this.props.setItemToStorage(this.state.voteKey, voteType);
+
+        const payload = {
+          updateId: this.props.entry.id,
+          type: voteType,
+        };
+        submitVote(payload);
+      }
+    );
   }
 
   render() {
@@ -88,8 +120,8 @@ class UpvoteDownvote extends Component {
           <span role="img" aria-label="thumbs up">
             👍
           </span>
-          {Boolean(this.state.upCount) && (
-            <span className="ml-1">{this.state.upCount}</span>
+          {Boolean(this.state.voteCount[UP]) && (
+            <span className="ml-1">{this.state.voteCount[UP]}</span>
           )}
         </button>
         <button
@@ -104,8 +136,8 @@ class UpvoteDownvote extends Component {
           <span role="img" aria-label="thumbs down">
             👎
           </span>
-          {Boolean(this.state.downCount) && (
-            <span className="ml-1">{this.state.downCount}</span>
+          {Boolean(this.state.voteCount[DOWN]) && (
+            <span className="ml-1">{this.state.voteCount[DOWN]}</span>
           )}
         </button>
       </div>

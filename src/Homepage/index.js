@@ -229,6 +229,7 @@ class Homepage extends React.Component {
     const groupedResult = grouped.map(group => ({
       ...group,
       distance: this.calculateDistance(group, center),
+      distanceToUser: this.calculateDistance(group, this.props.currentLocation.latLng)
     }));
     return groupedResult.sort((a, b) => a.distance - b.distance);
   }

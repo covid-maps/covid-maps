@@ -3,6 +3,7 @@ import qs from "qs";
 import { Link } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import PropTypes from "prop-types";
+import { isBefore } from 'date-fns';
 import SearchResults from "./SearchResults";
 import MissingBlock from "./MissingBlock";
 import * as api from "../api";
@@ -243,7 +244,9 @@ class Homepage extends React.Component {
       }, {})
     ).map(entries => {
       const sortedEntries = entries
-        .sort((a, b) => b.Timestamp - a.Timestamp)
+        .sort((a, b) => {
+          return isBefore(new Date(a.Timestamp), new Date(b.Timestamp)) ? -1 : 1;
+        })
         .reverse();
       return {
         name: spacesAfterCommas(titleCase(entries[0]["Store Name"])),

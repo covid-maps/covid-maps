@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
+import { submitVote } from "../api";
 import { withLocalStorage } from "../withStorage";
 import { withGlobalContext } from "../App";
 import { FORM_FIELDS, VOTE } from "../constants";
@@ -45,6 +46,12 @@ class UpvoteDownvote extends Component {
     if (newVoteValue !== this.state.voteValue) {
       this.setState({ voteValue: newVoteValue }, () => {
         this.props.setItemToStorage(this.state.voteKey, newVoteValue);
+
+        const payload = {
+          updateId: this.props.entry.id,
+          type: newVoteValue,
+        };
+        submitVote(payload);
       });
 
       // then make api call

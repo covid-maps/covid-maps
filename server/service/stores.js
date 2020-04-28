@@ -55,9 +55,6 @@ async function findNearbyStores({ location, radius }) {
       },
     ],
   });
-  // console.log(updates.map(u => u.dataValues.votesCount));
-  // console.log(updates.map(u => votesCount(u)));
-  // return stores.flatMap(store => mapDBRow(store));
   return storeUpdates.map(update =>
     buildResult(
       stores.find(store => store.id === update.storeId),

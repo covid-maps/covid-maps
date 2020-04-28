@@ -78,6 +78,10 @@ class UpvoteDownvote extends Component {
   }
 
   handleNewSelection(newVoteType) {
+    // we have 2 scenarios
+    // 1. user hasn't selected anything before
+    // 2. user is switching his selection
+
     let deleteOldSelectionCount = false;
     let oldVoteType = null;
 

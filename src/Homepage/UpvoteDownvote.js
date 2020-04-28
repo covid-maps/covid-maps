@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
 import cx from "classnames";
-import { submitVote } from "../api";
+import { submitVote, deleteVote } from "../api";
 import { withLocalStorage } from "../withStorage";
 import { withGlobalContext } from "../App";
 import { FORM_FIELDS, VOTE } from "../constants";
@@ -45,18 +45,26 @@ class UpvoteDownvote extends Component {
     // update local storage
     // make api call
 
-    if (newVoteValue !== this.state.voteValue) {
-      this.setState({ voteValue: newVoteValue }, () => {
-        this.props.setItemToStorage(this.state.voteKey, newVoteValue);
+    if (newVoteValue === this.state.voteValue) {
+      const payload = {
+        updateId: this.props.entry.id,
+        type: newVoteValue,
+      };
+      deleteVote(payload);
+    } else {
+      if (newVoteValue !== this.state.voteValue) {
+        this.setState({ voteValue: newVoteValue }, () => {
+          this.props.setItemToStorage(this.state.voteKey, newVoteValue);
 
-        const payload = {
-          updateId: this.props.entry.id,
-          type: newVoteValue,
-        };
-        submitVote(payload);
-      });
+          const payload = {
+            updateId: this.props.entry.id,
+            type: newVoteValue,
+          };
+          submitVote(payload);
+        });
 
-      // then make api call
+        // then make api call
+      }
     }
   }
 
@@ -77,13 +85,12 @@ class UpvoteDownvote extends Component {
           )}
           onClick={e => this.handleVote(e, UP)}
         >
-          {Boolean(this.state.upCount) && (
-            <span>{`(${this.state.upCount}) `}</span>
-          )}
-          <span className="mr-2">{translations.vote_yes}</span>
           <span role="img" aria-label="thumbs up">
             👍
           </span>
+          {Boolean(this.state.upCount) && (
+            <span className="ml-1">{this.state.upCount}</span>
+          )}
         </button>
         <button
           className={cx(
@@ -94,13 +101,12 @@ class UpvoteDownvote extends Component {
           )}
           onClick={e => this.handleVote(e, DOWN)}
         >
-          {Boolean(this.state.downCount) && (
-            <span>{`(${this.state.downCount}) `}</span>
-          )}
-          <span className="mr-2">{translations.vote_no}</span>
           <span role="img" aria-label="thumbs down">
             👎
           </span>
+          {Boolean(this.state.downCount) && (
+            <span className="ml-1">{this.state.downCount}</span>
+          )}
         </button>
       </div>
     );

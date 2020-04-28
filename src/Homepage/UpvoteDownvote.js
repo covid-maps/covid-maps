@@ -77,23 +77,42 @@ class UpvoteDownvote extends Component {
     deleteVote(payload);
   }
 
-  handleNewSelection(voteType) {
+  handleNewSelection(newVoteType) {
+    let deleteOldSelectionCount = false;
+    let oldVoteType = null;
+
     this.setState(
       prevState => {
+        oldVoteType = prevState.voteValue;
+        deleteOldSelectionCount = oldVoteType !== null;
+
+        const newVoteCount = {
+          ...prevState.voteCount,
+          [newVoteType]: prevState.voteCount[newVoteType] + 1,
+        };
+
+        if (deleteOldSelectionCount) {
+          newVoteCount[oldVoteType] = prevState.voteCount[oldVoteType] - 1;
+        }
+
         return {
-          voteValue: voteType,
-          voteCount: {
-            ...prevState.voteCount,
-            [voteType]: prevState.voteCount[voteType] + 1,
-          },
+          voteValue: newVoteType,
+          voteCount: newVoteCount,
         };
       },
       () => {
-        this.props.setItemToStorage(this.state.voteKey, voteType);
+        this.props.setItemToStorage(this.state.voteKey, newVoteType);
+
+        if (deleteOldSelectionCount) {
+          deleteVote({
+            updateId: this.props.entry.id,
+            type: oldVoteType,
+          });
+        }
 
         const payload = {
           updateId: this.props.entry.id,
-          type: voteType,
+          type: newVoteType,
         };
         submitVote(payload);
       }

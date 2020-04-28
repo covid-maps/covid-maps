@@ -54,6 +54,6 @@ export const SAFETY_CHECKS_LIST = [
 ];
 
 export const VOTE = {
-  UP: "UP",
-  DOWN: "DOWN",
+  UP: "up",
+  DOWN: "down",
 };

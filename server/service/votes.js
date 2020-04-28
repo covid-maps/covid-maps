@@ -6,23 +6,6 @@ async function addVote(data) {
   return await models.Votes.create(data);
 }
 
-async function votesForUpdate(updateId) {
-  const up = await models.Votes.count({
-    where: {
-      updateId,
-      type: "up",
-    },
-  });
-  const down = await models.Votes.count({
-    where: {
-      updateId,
-      type: "down",
-    },
-  });
-  return { up, down };
-}
-
 module.exports = {
   addVote,
-  votesForUpdate,
 };

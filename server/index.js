@@ -8,7 +8,9 @@ const axios = require("axios");
 const Sentry = require("@sentry/node");
 const rateLimit = require("express-rate-limit");
 
-if (process.env.ERROR_TRACKING) {
+const IS_PRODUCTION = process.env.ERROR_TRACKING; // defined in Procfile
+
+if (IS_PRODUCTION) {
   Sentry.init({
     dsn:
       "https://f26d1f5d8e2a45c9ad4b98eaabf8d101@o370711.ingest.sentry.io/5198144",
@@ -131,16 +133,8 @@ app.get("/v2/queryByStoreId", async (req, res) => {
 app.post("/v1/vote", async (req, res) => {
   res.send(await votes.addVote(getFormDataWithUserIp(req, "ip")));
 });
-app.get("/v1/votes", async (req, res) => {
-  if (!req.query.updateId) {
-    res.sendStatus(400);
-  } else {
-    res.send(await votes.votesForUpdate(req.query.updateId));
-  }
-});
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());
 const port = process.env.PORT || 5000;
-app.listen(port);
-console.log("Server is now listening at port", port);
+app.listen(port, () => console.log("Server is now listening at port", port));

@@ -59,6 +59,4 @@ export default {
   safety_checks_label: "Did you notice any of the following?",
   within_distance: "Within",
   voting_label: "Is this information correct?",
-  vote_yes: "Yes",
-  vote_no: "No",
 };

@@ -58,6 +58,4 @@ export default {
   safety_check__home_delivery: "होम डिलीवरी उपलब्ध है",
   safety_checks_label: "क्या आपने निम्नलिखित बातों में से किसी पर ध्यान दिया?",
   voting_label: "क्या यह जानकारी सही है?",
-  vote_yes: "हाँ",
-  vote_no: "नहीं",
 };

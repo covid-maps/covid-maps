@@ -4,7 +4,7 @@ import cx from "classnames";
 import { submitVote, deleteVote } from "../api";
 import { withLocalStorage } from "../withStorage";
 import { withGlobalContext } from "../App";
-import { FORM_FIELDS, VOTE } from "../constants";
+import { VOTE } from "../constants";
 
 const { UP, DOWN } = VOTE;
 
@@ -38,9 +38,7 @@ class UpvoteDownvote extends Component {
   }
 
   getVoteKey(entry) {
-    return `vote_${entry[FORM_FIELDS.STORE_ID]}_${
-      entry[FORM_FIELDS.TIMESTAMP]
-    }`;
+    return `vote_${entry.id}`;
   }
 
   handleVote(event, newVoteValue) {

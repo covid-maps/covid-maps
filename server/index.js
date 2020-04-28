@@ -133,6 +133,9 @@ app.get("/v2/queryByStoreId", async (req, res) => {
 app.post("/v1/vote", async (req, res) => {
   res.send(await votes.addVote(getFormDataWithUserIp(req, "ip")));
 });
+app.delete("/v1/vote", async (req, res) => {
+  res.send(await votes.deleteVote(getFormDataWithUserIp(req, "ip")));
+});
 
 // The error handler must be before any other error middleware and after all controllers
 app.use(Sentry.Handlers.errorHandler());

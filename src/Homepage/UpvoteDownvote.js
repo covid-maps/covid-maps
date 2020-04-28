@@ -131,7 +131,7 @@ class UpvoteDownvote extends Component {
         <span className="mr-2">{translations.voting_label}</span>
         <button
           className={cx(
-            "mr-2 rounded-pill text-xs px-2 py-1 border outline-none bg-white",
+            "mr-2 rounded-pill text-sm px-2 py-1 border outline-none bg-white",
             {
               "border-success text-success": isUp,
             }
@@ -147,7 +147,7 @@ class UpvoteDownvote extends Component {
         </button>
         <button
           className={cx(
-            "rounded-pill text-xs px-2 py-1 border outline-none bg-white",
+            "rounded-pill text-sm px-2 py-1 border outline-none bg-white",
             {
               "border-danger text-danger": isDown,
             }

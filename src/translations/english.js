@@ -58,4 +58,5 @@ export default {
   safety_check__home_delivery: "Home delivery offered",
   safety_checks_label: "Did you notice any of the following?",
   within_distance: "Within",
+  voting_label: "Is this information correct?",
 };

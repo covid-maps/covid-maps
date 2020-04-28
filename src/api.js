@@ -17,3 +17,13 @@ export async function submit(data) {
   const response = await axios.post(`${BASE_URL}/v1/update`, data);
   return response.data;
 }
+
+export const submitVote = async data => {
+  const response = await axios.post(`${BASE_URL}/v1/vote`, data);
+  return response.data;
+};
+
+export const deleteVote = async data => {
+  const response = await axios.delete(`${BASE_URL}/v1/vote`, { data });
+  return response.data;
+};

@@ -8,6 +8,9 @@ import { FORM_FIELDS } from "../constants";
 import { format, differenceInCalendarDays } from "date-fns";
 import { Collapse } from "@material-ui/core";
 import { ReadOnlyTags } from "../SubmitPage/AvailabilityTags";
+import UpvoteDownvote from "./UpvoteDownvote";
+
+const enableUpvoteDownvote = true;
 
 function Overlay(props) {
   return (
@@ -103,11 +106,10 @@ const SingleEntry = ({ entry, highlightedText, translations }) => {
           </div>
         ) : null}
       </div>
-      <div style={{ fontSize: "0.85em" }}>
-        <small className="text-muted d-inline-block mt-2">
-          Updated <Timestamp {...entry} />
-        </small>
-      </div>
+      <small className="text-muted d-block mt-2">
+        Updated <Timestamp {...entry} />
+      </small>
+      {enableUpvoteDownvote && <UpvoteDownvote entry={entry} />}
     </div>
   );
 };
@@ -150,14 +152,16 @@ class EntriesGroup extends Component {
   }
 
   getPastEntries(entryList) {
-    return entryList.map(entry => (
-      <SingleEntry
-        key={entry[FORM_FIELDS.TIMESTAMP]}
-        entry={entry}
-        highlightedText={this.props.highlightedText}
-        translations={this.props.translations}
-      />
-    ));
+    return entryList.map(entry => {
+      return (
+        <SingleEntry
+          key={entry[FORM_FIELDS.TIMESTAMP]}
+          entry={entry}
+          highlightedText={this.props.highlightedText}
+          translations={this.props.translations}
+        />
+      );
+    });
   }
 
   getToggleButtonContent() {

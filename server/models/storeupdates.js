@@ -24,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
     StoreUpdates.belongsTo(models.StoreInfo, {
       foreignKey: "storeId",
     });
-    // associations can be defined here
+    StoreUpdates.hasMany(models.Votes, { foreignKey: "updateId" });
   };
   return StoreUpdates;
 };

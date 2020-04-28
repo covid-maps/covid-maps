@@ -6,10 +6,10 @@ Express app talking to PostgreSQL. Deployed on Heroku.
 
 This will run the server on localhost:5000. See [DATABASE.md](DATABASE.md) for the local PostgreSQL setup.
 
-```
+```sh
 npm install
 npx sequelize db:migrate
-node index.js
+npx nodemon index.js # or just `node index.js` without hot reload
 ```
 
 ## Deployment
@@ -17,11 +17,13 @@ node index.js
 Deployed on Heroku, with staging and production environments. Some quick notes on the setup.
 
 - Download Heroku CLI, login, and then set the Heroku remotes.
+
   ```
   heroku git:remote -a toilet-paper-app
   ```
 
 - Running 1 web dyno for now
+
   ```
   heroku ps:scale web=1
   ```
@@ -49,6 +51,7 @@ staging https://git.heroku.com/covid-maps-staging.git (push)
 ```
 
 To migrate your existing `heroku` remote to `production`.
+
 ```
 git remote rename heroku production
 ```

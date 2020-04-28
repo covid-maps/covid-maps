@@ -8,6 +8,7 @@ const votes = require("./service/votes");
 const axios = require("axios");
 const Sentry = require("@sentry/node");
 const rateLimit = require("express-rate-limit");
+const CircuitBreaker = require('opossum');
 
 const IS_PRODUCTION = process.env.ERROR_TRACKING; // defined in Procfile
 
@@ -131,6 +132,15 @@ app.get("/v2/queryByStoreId", async (req, res) => {
   res.send({ location: params.location, results });
 });
 
+const cbOptions = {
+  timeout: 3000, // If our function takes longer than 5 seconds, trigger a failure
+  errorThresholdPercentage: 10, // When 50% of requests fail, trip the circuit
+  resetTimeout: 60000 // After 60 seconds, try again.
+};
+
+const breaker = new CircuitBreaker((params) => listing.findStoreListings(params), cbOptions);
+breaker.fallback((params) => stores.findNearbyStores(params));
+breaker.on('fallback', (result) => console.log("Falling back to Stores API due to error: " + result));
 
 app.get("/v3/query", async (req, res) => {
   const { query } = req;
@@ -140,7 +150,8 @@ app.get("/v3/query", async (req, res) => {
     radius: query.radius,
     page: query.page,
   };
-  let results = await listing.findStoreListings(params, false);
+  let results = await breaker.fire(params)
+  //let results = await listing.findStoreListings(params);
   res.send({ location, results });
 });
 

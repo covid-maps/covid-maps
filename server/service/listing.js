@@ -3,7 +3,7 @@ const stores = require("./stores");
 
 const NUMBER_OF_BUCKETS = 5;
 
-async function findStoreListings(params, debug = false){
+async function findStoreListings(params){
     let listings = await stores.findNearbyStores(params);
     addScoringParameters(listings, params);
     let listingsByBucket = groupByBucket(listings);

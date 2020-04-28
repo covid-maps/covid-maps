@@ -11,6 +11,8 @@ import { withGlobalContext } from "../App";
 import { FORM_FIELDS } from "../constants";
 import { shareApiIsAvailable } from "../utils";
 
+const enableDistance = false;
+
 function constructDirectionsUrl({ name, placeId, lat, lng }) {
   if (placeId) {
     return `https://www.google.com/maps/search/?api=1&query=${name}&query_place_id=${placeId}`;
@@ -82,11 +84,13 @@ function ResultBlock(props) {
               textToHighlight={result.name}
             />
           </h5>
-          <small className="text-muted d-block mt-1">
-            <strong>
-              {props.translations.within_distance} {distanceKM} km
-            </strong>
-          </small>
+          {enableDistance && (
+            <small className="text-muted d-block mt-1">
+              <strong>
+                {props.translations.within_distance} {distanceKM} km
+              </strong>
+            </small>
+          )}
           <div></div>
           <EntriesGroup
             highlightedText={props.highlightedText}

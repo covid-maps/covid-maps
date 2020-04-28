@@ -133,8 +133,8 @@ app.get("/v2/queryByStoreId", async (req, res) => {
 });
 
 const cbOptions = {
-  timeout: 3000, // If our function takes longer than 5 seconds, trigger a failure
-  errorThresholdPercentage: 10, // When 50% of requests fail, trip the circuit
+  timeout: 5000, // If our function takes longer than 5 seconds, trigger a failure
+  errorThresholdPercentage: 10, // When 10% of requests fail, trip the circuit
   resetTimeout: 60000 // After 60 seconds, try again.
 };
 

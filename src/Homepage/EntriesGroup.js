@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from "react";
 import PropTypes from "prop-types";
+import cx from "classnames";
 import OverlayTrigger from "react-bootstrap/OverlayTrigger";
 import Tooltip from "react-bootstrap/Tooltip";
 import Button from "react-bootstrap/Button";
@@ -42,9 +43,19 @@ function Timestamp({ Timestamp: value }) {
   return <strong>{time}</strong>;
 }
 
-const SingleEntry = ({ entry, highlightedText, translations }) => {
+const SingleEntry = ({
+  entry,
+  highlightedText,
+  translations,
+  isFirst,
+  isLast,
+}) => {
   return (
-    <div className="mt-3">
+    <div
+      className={cx("mt-3", {
+        "pb-3 border-bottom": !(isFirst || isLast),
+      })}
+    >
       <div>
         {entry[FORM_FIELDS.AVAILABILITY_TAGS] ? (
           <ReadOnlyTags
@@ -118,6 +129,8 @@ SingleEntry.propTypes = {
   entry: PropTypes.object.isRequired,
   highlightedText: PropTypes.string,
   translations: PropTypes.object.isRequired,
+  isFirst: PropTypes.bool.isRequired,
+  isLast: PropTypes.bool.isRequired,
 };
 
 class EntriesGroup extends Component {
@@ -152,9 +165,12 @@ class EntriesGroup extends Component {
   }
 
   getPastEntries(entryList) {
-    return entryList.map(entry => {
+    const totalPastEntries = entryList.length;
+    return entryList.map((entry, index) => {
       return (
         <SingleEntry
+          isFirst={false}
+          isLast={index === totalPastEntries - 1}
           key={entry[FORM_FIELDS.TIMESTAMP]}
           entry={entry}
           highlightedText={this.props.highlightedText}
@@ -186,6 +202,8 @@ class EntriesGroup extends Component {
     return (
       <Fragment>
         <SingleEntry
+          isFirst
+          isLast={false}
           translations={this.props.translations}
           entry={firstEntry}
           highlightedText={this.props.highlightedText}

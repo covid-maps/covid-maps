@@ -45,3 +45,19 @@ export const recordCustomTagAdded = tagName => {
     label: tagName,
   });
 };
+
+export const recordNewVote = voteType => {
+  ReactGA.event({
+    category,
+    action: "new_vote_added",
+    label: voteType,
+  });
+};
+
+export const recordVoteUnselection = voteType => {
+  ReactGA.event({
+    category,
+    action: "vote_unselected",
+    label: voteType,
+  });
+};

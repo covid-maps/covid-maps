@@ -4,6 +4,7 @@ import cx from "classnames";
 import { submitVote, deleteVote } from "../api";
 import { withLocalStorage } from "../withStorage";
 import { withGlobalContext } from "../App";
+import { recordNewVote, recordVoteUnselection } from "../gaEvents";
 import { VOTE } from "../constants";
 
 const { UP, DOWN } = VOTE;
@@ -56,6 +57,8 @@ class UpvoteDownvote extends Component {
   }
 
   handleUnselection(voteType) {
+    recordVoteUnselection(voteType);
+
     const payload = {
       updateId: this.props.entry.id,
       type: voteType,
@@ -76,6 +79,7 @@ class UpvoteDownvote extends Component {
   }
 
   handleNewSelection(newVoteType) {
+    recordNewVote(newVoteType);
     // we have 2 scenarios
     // 1. user hasn't selected anything before
     // 2. user is switching his selection

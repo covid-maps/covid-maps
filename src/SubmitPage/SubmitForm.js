@@ -341,11 +341,7 @@ class SubmitForm extends React.Component {
 
   render() {
     const { translations, location } = this.props;
-    const isUpdate =
-      location &&
-      location.state &&
-      location.state.item &&
-      location.state.item.StoreId;
+    const isUpdate = location && location.state && location.state.item;
     const position = this.state.data.Latitude
       ? {
           lat: parseFloat(this.state.data.Latitude),

@@ -63,7 +63,7 @@ function ResultBlock(props) {
   };
 
   const { result } = props;
-  const distanceKM = (result.distance / 1000).toFixed(1);
+  const distanceKM = (result.distanceToUser / 1000).toFixed(1);
   const entry = result.entries.length ? result.entries[0] : undefined;
   const showShareButton = shareApiIsAvailable();
 

@@ -341,11 +341,7 @@ class SubmitForm extends React.Component {
 
   render() {
     const { translations, location } = this.props;
-    const isUpdate =
-      location &&
-      location.state &&
-      location.state.item &&
-      location.state.item.StoreId;
+    const isStoreNameAndAddressPresent = location && location.state && location.state.item;
     const position = this.state.data.Latitude
       ? {
           lat: parseFloat(this.state.data.Latitude),
@@ -395,7 +391,7 @@ class SubmitForm extends React.Component {
                 value={formData[STORE_NAME]}
                 placeholder={translations.store_name_placeholder}
                 required
-                disabled={isUpdate}
+                disabled={isStoreNameAndAddressPresent}
               />
             </Form.Group>
 
@@ -406,7 +402,7 @@ class SubmitForm extends React.Component {
                 onChange={e => this.onChangeInput(e, STORE_ADDRESS)}
                 value={formData[STORE_ADDRESS]}
                 placeholder={translations.store_address_placeholder}
-                disabled={isUpdate}
+                disabled={isStoreNameAndAddressPresent}
               />
             </Form.Group>
 

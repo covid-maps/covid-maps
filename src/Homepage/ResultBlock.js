@@ -76,22 +76,19 @@ function ResultBlock(props) {
     >
       <div className="card-body p-0">
         <div className="p-3">
-          <h5 className="card-title m-0 p-0 d-inline-block">
-            <Highlighter
-              highlightClassName="highlighted-text"
-              searchWords={[props.highlightedText]}
-              autoEscape={true}
-              textToHighlight={result.name}
-            />
-          </h5>
-          {enableDistance && (
-            <small className="text-muted d-block mt-1">
-              <strong>
-                {props.translations.within_distance} {distanceKM} km
-              </strong>
-            </small>
-          )}
-          <div></div>
+          <div className="d-flex align-items-center justify-content-between">
+            <h5 className="card-title m-0 p-0 d-inline-block">
+              <Highlighter
+                highlightClassName="highlighted-text"
+                searchWords={[props.highlightedText]}
+                autoEscape={true}
+                textToHighlight={result.name}
+              />
+            </h5>
+            {enableDistance && (
+              <strong className="text-info">{distanceKM} km</strong>
+            )}
+          </div>
           <EntriesGroup
             highlightedText={props.highlightedText}
             entries={result.entries}

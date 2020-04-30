@@ -1,4 +1,4 @@
-import React, { Component, createContext } from "react";
+import React, { Component, Fragment, createContext } from "react";
 import PropTypes from "prop-types";
 import { Router, Switch, Route, Link } from "react-router-dom";
 import { createBrowserHistory } from "history";
@@ -35,7 +35,7 @@ if (process.env.NODE_ENV !== "development") {
 
 const AppNavbar = () => {
   return (
-    <>
+    <Fragment>
       <Navbar bg="light" variant="light">
         <Navbar.Brand className="navbar-brand">
           <Link to="/">
@@ -49,7 +49,7 @@ const AppNavbar = () => {
         </Navbar.Brand>
         <PWAInstallButton />
       </Navbar>
-    </>
+    </Fragment>
   );
 };
 
@@ -67,8 +67,13 @@ class App extends Component {
     this.state = {
       language: this.getDefaultLanguage(),
       currentLocation: { latLng: undefined, accuracy: "low" },
+      lastSearchedAddress: "",
     };
   }
+
+  setLastSearchedAddress = lastSearchedAddress => {
+    this.setState({ lastSearchedAddress });
+  };
 
   setLanguage = language => {
     this.persistLastSelectedLanguage(language);
@@ -133,6 +138,8 @@ class App extends Component {
             setLanguage: this.setLanguage,
             currentLocation: this.state.currentLocation,
             setCurrentLocation: this.setCurrentLocation,
+            lastSearchedAddress: this.state.lastSearchedAddress,
+            setLastSearchedAddress: this.setLastSearchedAddress,
           }}
         >
           <div className="App">

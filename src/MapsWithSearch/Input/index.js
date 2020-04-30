@@ -85,7 +85,7 @@ class LocationSearchInput extends React.Component {
     this.setState({ address });
   };
 
-  handleSelect = address => {
+  handleSelect = (address, isTriggeredByUserAction = false) => {
     this.props.setLastSearchedAddress(address);
 
     this.textInput.current.blur();
@@ -94,8 +94,11 @@ class LocationSearchInput extends React.Component {
         this.setState({ address });
         const result = results[0];
         const latLng = await getLatLng(result);
-        console.log("Success", latLng);
-        recordSearchCompleted(result.types);
+
+        if (isTriggeredByUserAction) {
+          recordSearchCompleted(result.types);
+        }
+
         this.props.onSearchSuccess({
           latLng: latLng,
           name: address,
@@ -145,7 +148,8 @@ class LocationSearchInput extends React.Component {
   populateLastSelectedAddress = () => {
     const address = this.props.lastSearchedAddress;
     if (address) {
-      this.handleSelect(address);
+      const isTriggeredByUserAction = false;
+      this.handleSelect(address, isTriggeredByUserAction);
     }
   };
 
@@ -173,7 +177,7 @@ class LocationSearchInput extends React.Component {
       <PlacesAutocomplete
         value={this.state.address}
         onChange={this.handleChange}
-        onSelect={this.handleSelect}
+        onSelect={address => this.handleSelect(address, true)}
         searchOptions={options}
         debounce={750}
       >

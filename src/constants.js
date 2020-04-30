@@ -33,7 +33,6 @@ export const ALERTS_TYPE = {
 
 export const STORAGE_KEYS = {
   LANGUAGE: "userSelectedLanguage",
-  SELECTED_ADDRESS: "userSelectedAddress",
 };
 
 export const SUGGESTED_TAGS = [

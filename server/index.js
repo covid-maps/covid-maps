@@ -144,7 +144,7 @@ breaker.on('fallback', (result) => console.log("Falling back to Stores API due t
 
 app.get("/v3/query", async (req, res) => {
   const { query } = req;
-  let location = await extractLocation(query);
+  let location = await extractLocation(req);
   let params = {
     location,
     radius: query.radius,
@@ -159,7 +159,8 @@ app.post("/v1/vote", async (req, res) => {
   res.send(await votes.addVote(getFormDataWithUserIp(req, "ip")));
 });
 
-async function extractLocation(query){
+async function extractLocation(req){
+  const { query } = req;
   if (query.lat && query.lng) {
     location = { lat: parseFloat(query.lat), lng: parseFloat(query.lng) };
   } else {

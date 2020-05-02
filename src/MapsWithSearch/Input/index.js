@@ -15,9 +15,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTimes, faCrosshairs } from "@fortawesome/free-solid-svg-icons";
 import { recordSearchCompleted } from "../../gaEvents";
 import { withGlobalContext } from "../../App";
-import { ADDRESS_COMPONENTS, STORAGE_KEYS } from "../../constants";
-import { withSessionStorage } from "../../withStorage";
-const { SELECTED_ADDRESS } = STORAGE_KEYS;
+import { ADDRESS_COMPONENTS } from "../../constants";
 
 function GeolocationButton({ isLoading, onClick }) {
   return (
@@ -25,8 +23,8 @@ function GeolocationButton({ isLoading, onClick }) {
       {isLoading ? (
         <Spinner animation="border" size="sm" />
       ) : (
-          <FontAwesomeIcon icon={faCrosshairs} />
-        )}
+        <FontAwesomeIcon icon={faCrosshairs} />
+      )}
     </Button>
   );
 }
@@ -34,10 +32,9 @@ function GeolocationButton({ isLoading, onClick }) {
 class LocationSearchInput extends React.Component {
   static propTypes = {
     translations: PropTypes.object.isRequired,
-    getItemFromStorage: PropTypes.func.isRequired,
-    setItemToStorage: PropTypes.func.isRequired,
-    removeItemFromStorage: PropTypes.func.isRequired,
     setCurrentLocation: PropTypes.func.isRequired,
+    lastSearchedAddress: PropTypes.string.isRequired,
+    setLastSearchedAddress: PropTypes.func.isRequired,
   };
 
   constructor(props) {
@@ -88,12 +85,8 @@ class LocationSearchInput extends React.Component {
     this.setState({ address });
   };
 
-  persistLastSelectedAddress = address => {
-    this.props.setItemToStorage(SELECTED_ADDRESS, address);
-  };
-
-  handleSelect = address => {
-    this.persistLastSelectedAddress(address);
+  handleSelect = (address, isTriggeredByUserAction = false) => {
+    this.props.setLastSearchedAddress(address);
 
     this.textInput.current.blur();
     geocodeByAddress(address)
@@ -101,8 +94,11 @@ class LocationSearchInput extends React.Component {
         this.setState({ address });
         const result = results[0];
         const latLng = await getLatLng(result);
-        console.log("Success", latLng);
-        recordSearchCompleted(result.types);
+
+        if (isTriggeredByUserAction) {
+          recordSearchCompleted(result.types);
+        }
+
         this.props.onSearchSuccess({
           latLng: latLng,
           name: address,
@@ -150,19 +146,18 @@ class LocationSearchInput extends React.Component {
   }
 
   populateLastSelectedAddress = () => {
-    const address = this.props.getItemFromStorage(SELECTED_ADDRESS);
+    const address = this.props.lastSearchedAddress;
     if (address) {
-      this.handleSelect(address);
+      const isTriggeredByUserAction = false;
+      this.handleSelect(address, isTriggeredByUserAction);
     }
   };
 
   clearInput() {
-    this.setState({ address: "" }, this.removeLastSelectedAddress);
+    this.setState({ address: "" }, () => {
+      this.props.setLastSearchedAddress("");
+    });
   }
-
-  removeLastSelectedAddress = () => {
-    this.props.removeItemFromStorage(SELECTED_ADDRESS);
-  };
 
   checkIfSearchIsSticky = () => {
     const pageOffset = window.pageYOffset;
@@ -173,16 +168,16 @@ class LocationSearchInput extends React.Component {
   render() {
     const location = this.props.currentLocation.latLng
       ? new window.google.maps.LatLng(
-        this.props.currentLocation.latLng.lat,
-        this.props.currentLocation.latLng.lng
-      )
+          this.props.currentLocation.latLng.lat,
+          this.props.currentLocation.latLng.lng
+        )
       : undefined;
     const options = location ? { location, radius: 200000 } : undefined;
     return (
       <PlacesAutocomplete
         value={this.state.address}
         onChange={this.handleChange}
-        onSelect={this.handleSelect}
+        onSelect={address => this.handleSelect(address, true)}
         searchOptions={options}
         debounce={750}
       >
@@ -248,4 +243,4 @@ class LocationSearchControl extends React.Component {
   }
 }
 
-export default withSessionStorage(withGlobalContext(LocationSearchControl));
+export default withGlobalContext(LocationSearchControl);

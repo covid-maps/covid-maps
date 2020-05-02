@@ -36,6 +36,12 @@ function searchResultToFormEntry(searchResult) {
 
 class Homepage extends React.Component {
   static propTypes = {
+    translations: PropTypes.object.isRequired,
+    currentLocation: PropTypes.object,
+    setCurrentLocation: PropTypes.func.isRequired,
+    getItemFromStorage: PropTypes.func.isRequired,
+    setItemToStorage: PropTypes.func.isRequired,
+
     // coming from react router
     location: PropTypes.shape({
       search: PropTypes.string.isRequired,
@@ -46,16 +52,6 @@ class Homepage extends React.Component {
     match: PropTypes.shape({
       params: PropTypes.object.isRequired,
     }).isRequired,
-
-    // coming withGlobalContext
-    translations: PropTypes.object.isRequired,
-    currentLocation: PropTypes.object,
-    setCurrentLocation: PropTypes.func.isRequired,
-    setLastSearchedAddress: PropTypes.func.isRequired,
-
-    // coming from withSessionStorage
-    getItemFromStorage: PropTypes.func.isRequired,
-    setItemToStorage: PropTypes.func.isRequired,
   };
 
   state = {
@@ -419,10 +415,7 @@ class Homepage extends React.Component {
                   size="sm"
                   variant="outline-success"
                   className="text-uppercase"
-                  onClick={() => {
-                    this.props.setLastSearchedAddress("");
-                    recordAddNewStore();
-                  }}
+                  onClick={recordAddNewStore}
                 >
                   {translations.add_store}
                 </Button>

@@ -67,6 +67,7 @@ class Homepage extends React.Component {
     showAlert: true,
     showMissing: false,
     usePrevShowMissing: true,
+    showPageLoader: true
   };
 
   toggleAlert = () => {
@@ -163,6 +164,54 @@ class Homepage extends React.Component {
   }
 
   async componentDidMount() {
+    if (this.props.currentLocation.latLng !== undefined) {
+      this.hidePageLoader();
+    }
+    else {
+      if('geolocation' in navigator) {
+        navigator.geolocation.getCurrentPosition(
+          async position => {
+            const location = {
+              lat: position.coords.latitude,
+              lng: position.coords.longitude
+            };
+            await this.props.setCurrentLocation({ latLng: location, accuracy: "high" });
+            this.hidePageLoader();
+          },
+          async err => {
+            await this.getLocationFromIP();
+            this.hidePageLoader();
+          }
+        );
+      }
+      else {
+        await this.getLocationFromIP();
+        this.hidePageLoader();
+      }
+    }
+  }
+
+  async getLocationFromIP() {
+    const response = await api.query({
+      radius: DISTANCE_FILTER,
+    });
+    const { location: locationComingFromServer } = response;
+    await this.props.setCurrentLocation({
+      latLng: locationComingFromServer, accuracy: 'low'
+    });
+  }
+
+  hidePageLoader = () => {
+    this.setState({
+        showPageLoader: false
+      },
+      () => {
+        this.onPageLoad();
+      }
+    );
+  }
+
+  async onPageLoad() {
     const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
     let currentLocation = undefined;
 
@@ -367,7 +416,13 @@ class Homepage extends React.Component {
       lng: Number(res.lng),
     }));
     const { translations } = this.props;
-    return (
+    return this.state.showPageLoader ? (
+      <div className="text-center py-5">
+        <div className="spinner-border text-secondary" role="status">
+          <span className="sr-only">Loading...</span>
+        </div>
+      </div>
+    ) : (
       <div>
         <HomepageAlerts
           {...this.props}

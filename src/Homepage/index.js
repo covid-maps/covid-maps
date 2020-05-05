@@ -41,6 +41,7 @@ class Homepage extends React.Component {
     setCurrentLocation: PropTypes.func.isRequired,
     getItemFromStorage: PropTypes.func.isRequired,
     setItemToStorage: PropTypes.func.isRequired,
+    isCurrentLocationLoading: PropTypes.bool.isRequired,
 
     // coming from react router
     location: PropTypes.shape({
@@ -67,7 +68,6 @@ class Homepage extends React.Component {
     showAlert: true,
     showMissing: false,
     usePrevShowMissing: true,
-    showPageLoader: true
   };
 
   toggleAlert = () => {
@@ -163,52 +163,16 @@ class Homepage extends React.Component {
     );
   }
 
-  async componentDidMount() {
-    if (this.props.currentLocation.latLng !== undefined) {
-      this.hidePageLoader();
-    }
-    else {
-      if('geolocation' in navigator) {
-        navigator.geolocation.getCurrentPosition(
-          async position => {
-            const location = {
-              lat: position.coords.latitude,
-              lng: position.coords.longitude
-            };
-            await this.props.setCurrentLocation({ latLng: location, accuracy: "high" });
-            this.hidePageLoader();
-          },
-          async err => {
-            await this.getLocationFromIP();
-            this.hidePageLoader();
-          }
-        );
-      }
-      else {
-        await this.getLocationFromIP();
-        this.hidePageLoader();
-      }
+  componentDidMount() {
+    if (!this.props.isCurrentLocationLoading) {
+      this.onPageLoad();
     }
   }
 
-  async getLocationFromIP() {
-    const response = await api.query({
-      radius: DISTANCE_FILTER,
-    });
-    const { location: locationComingFromServer } = response;
-    await this.props.setCurrentLocation({
-      latLng: locationComingFromServer, accuracy: 'low'
-    });
-  }
-
-  hidePageLoader = () => {
-    this.setState({
-        showPageLoader: false
-      },
-      () => {
-        this.onPageLoad();
-      }
-    );
+  componentDidUpdate(prevProps) {
+    if(prevProps.isCurrentLocationLoading && !this.props.isCurrentLocationLoading) {
+      this.onPageLoad();
+    }
   }
 
   async onPageLoad() {
@@ -416,13 +380,7 @@ class Homepage extends React.Component {
       lng: Number(res.lng),
     }));
     const { translations } = this.props;
-    return this.state.showPageLoader ? (
-      <div className="text-center py-5">
-        <div className="spinner-border text-secondary" role="status">
-          <span className="sr-only">Loading...</span>
-        </div>
-      </div>
-    ) : (
+    return (
       <div>
         <HomepageAlerts
           {...this.props}

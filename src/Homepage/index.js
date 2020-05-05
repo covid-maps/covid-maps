@@ -41,6 +41,7 @@ class Homepage extends React.Component {
     setCurrentLocation: PropTypes.func.isRequired,
     getItemFromStorage: PropTypes.func.isRequired,
     setItemToStorage: PropTypes.func.isRequired,
+    isCurrentLocationLoading: PropTypes.bool.isRequired,
 
     // coming from react router
     location: PropTypes.shape({
@@ -162,7 +163,19 @@ class Homepage extends React.Component {
     );
   }
 
-  async componentDidMount() {
+  componentDidMount() {
+    if (!this.props.isCurrentLocationLoading) {
+      this.onPageLoad();
+    }
+  }
+
+  componentDidUpdate(prevProps) {
+    if(prevProps.isCurrentLocationLoading && !this.props.isCurrentLocationLoading) {
+      this.onPageLoad();
+    }
+  }
+
+  async onPageLoad() {
     const params = qs.parse(this.props.location.search, { ignoreQueryPrefix: true });
     let currentLocation = undefined;
 

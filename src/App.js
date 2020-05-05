@@ -22,6 +22,8 @@ import {
 import translations from "./translations";
 import { withLocalStorage } from "./withStorage";
 import { recordPwaLaunched } from "./gaEvents";
+import * as api from "./api";
+import PageLoader from "./PageLoader.js";
 
 const history = createBrowserHistory();
 if (process.env.NODE_ENV !== "development") {
@@ -68,6 +70,7 @@ class App extends Component {
       language: this.getDefaultLanguage(),
       currentLocation: { latLng: undefined, accuracy: "low" },
       lastSearchedAddress: "",
+      isCurrentLocationLoading: true,
     };
   }
 
@@ -115,6 +118,7 @@ class App extends Component {
       this.setState(
         {
           currentLocation: { latLng, accuracy },
+          isCurrentLocationLoading: false,
         },
         resolve
       );
@@ -125,6 +129,31 @@ class App extends Component {
     if (isPwa()) {
       recordPwaLaunched();
     }
+    if('geolocation' in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        position => {
+          const location = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+          this.setCurrentLocation({ latLng: location, accuracy: "high" });
+        },
+        err => {
+          this.getLocationFromIP();
+        }
+      );
+    }
+    else {
+      this.getLocationFromIP();
+    }
+  }
+
+  async getLocationFromIP() {
+    const response = await api.query({});
+    const { location: locationComingFromServer } = response;
+    await this.setCurrentLocation({
+      latLng: locationComingFromServer, accuracy: 'low'
+    });
   }
 
   render() {
@@ -140,11 +169,14 @@ class App extends Component {
             setCurrentLocation: this.setCurrentLocation,
             lastSearchedAddress: this.state.lastSearchedAddress,
             setLastSearchedAddress: this.setLastSearchedAddress,
+            isCurrentLocationLoading: this.state.isCurrentLocationLoading,
           }}
         >
           <div className="App">
             <ScrollToTop />
             <AppNavbar />
+            <PageLoader showLoader={this.state.isCurrentLocationLoading}/>
+            {!this.state.isCurrentLocationLoading &&
             <div className="page">
               <Switch>
                 <Route path="/update" component={SubmitPage} />
@@ -153,7 +185,7 @@ class App extends Component {
                 <Route path="/store/:storeId" component={Homepage} />
                 <Route path="/" component={Homepage} />
               </Switch>
-            </div>
+            </div>}
             <footer className="m-0 p-0">
               <div className="container py-4 text-center text-uppercase">
                 <Link to="/">{translations.home}</Link> ·{" "}
